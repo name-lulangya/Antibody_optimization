@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-07-31 16:15:13
+Last updated: 2026-07-31 16:21:08
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -17,6 +17,8 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - Git 远程 `origin` 已配置为 `git@github.com:name-lulangya/Antibody_optimization.git`。
 - 用户计划将项目检出到远程服务器的 `/homes/Tianlab/luly25/` 目录下；实际仓库根目录尚待服务器端检出后核验。
 - 远程服务器的 Conda 环境尚未创建，环境名称、路径和激活命令均未确定。
+- 远程计算使用与参考项目一致的 Slurm 规则：默认 `batch` 分区、至少 1 GPU、每 GPU 配 12 CPU，默认不显式指定内存。
+- 多 GPU 作业仅允许使用 `n1` 或 `n2`；单节点多 GPU 作业须请求一个节点并设置 `--exclude=n3`。
 - 文件大小：537670 bytes。
 - SHA256：`1BC636C28F66AE60EDC658D2E1C4AAD0B07F4141CA5411C78662AA19DA793C4D`。
 - 根据合作者说明，该 ChimeraX 会话包含三个 model：
@@ -40,6 +42,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 建立版本控制忽略规则，并将 ChimeraX 会话文件标记为二进制。
 - 在 `main` 分支初始化本地 Git 仓库。
 - 将 GitHub SSH 地址配置为本地仓库的 `origin`，并记录计划使用的远程服务器父目录与环境待办。
+- 增加与参考项目一致的 Slurm 分区、GPU/CPU、内存及多 GPU 节点约束。
 
 ## Decision-Relevant Cautions
 
@@ -47,7 +50,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 未从会话显式导出并核验前，不应假定上述 model 可由普通结构解析工具直接读取。
 - CDR3 是实验结构与 AF3 预测结构的主要不一致区域；不能在未核验实验密度、缺失区段和编号映射的情况下直接据此设计突变。
 - 当前结构描述来自用户与合作者说明，尚无脚本化检查或定量分析结果。
-- 远程 Conda 环境与实际检出路径尚未建立或核验；在此之前不得编造环境激活命令、服务器路径或调度参数。
+- 远程 Conda 环境与实际检出路径尚未建立或核验；除 `AGENTS.md` 已明确的 Slurm 规则外，不得编造环境激活命令、服务器路径或额外调度参数。
 
 ## Deferred Report Items
 

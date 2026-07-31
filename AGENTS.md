@@ -21,7 +21,8 @@ This project optimizes the experimentally identified NK2R nanobody Nb252 for mul
 - Treat the repository as the primary code, documentation, Codex, and report-editing workspace. Store large datasets, checkpoints, exhaustive prediction tables, and generated experiment outputs only in locations explicitly established by project documentation or the user.
 - The configured Git remote `origin` is `git@github.com:name-lulangya/Antibody_optimization.git`.
 - The project is planned to be checked out under the remote-server parent directory `/homes/Tianlab/luly25/`. Do not assume the final repository root until the server checkout has been created and verified.
-- The remote conda environment has not yet been created. No environment name/path or activation command, remote login alias, scheduler, compute node, partition, or GPU/CPU policy is established. Discover these from concrete project records or ask the user before writing commands or documentation that depend on them.
+- The remote conda environment has not yet been created. No environment name/path, activation command, or remote login alias is established. Discover these from concrete project records or ask the user before writing commands or documentation that depend on them.
+- The remote Slurm resource policy is established in the Long-Task Script Rules below and matches the reference project. Do not deviate from that policy unless the user explicitly changes it for this project or a specific task.
 - Do not run heavy training, exhaustive sequence design, full-library structure prediction, large docking/refinement campaigns, or long inference in an unconfirmed environment. First estimate resource needs and agree on an appropriate execution route.
 - Do not edit generated data or results unless the task explicitly asks for it.
 - Do not overwrite or revert user changes. Check `git status --short` before edits and before any commit.
@@ -141,18 +142,21 @@ This project optimizes the experimentally identified NK2R nanobody Nb252 for mul
 ## Long-Task Script Rules
 
 - Before writing or materially changing a script, estimate expected runtime and identify both whether it is likely to exceed one hour and whether it is likely to exceed five hours.
-- Require a pre-run `--check_only` and a small real-data smoke run only for scripts expected to exceed five hours. For scripts expected to finish within five hours, use static checks and a clear run command; do not add or require a smoke stage by default unless the user explicitly requests one.
+- Require a pre-run `--check_only` and a remote real-data smoke run only for scripts expected to exceed five hours. For scripts expected to finish within five hours, use static checks and a clear run command; do not add or require a smoke stage by default unless the user explicitly requests one.
 - For tasks expected to finish within five hours, do not implement checkpoint resume, partial-output recovery, or per-stage restart state by default. If such a task is interrupted, fix the underlying issue and rerun from the beginning with explicit overwrite behavior.
 - Add resume or partial-output recovery only when the expected runtime exceeds five hours, the workflow contains an independently expensive completed stage that must be preserved, or the user explicitly requests it. Keep the recovery contract narrow and documented.
 - Do not add speculative fallback paths or defensive recovery state machines merely to make a short task appear more robust. Prefer one explicit execution route so it remains clear which logic produced the result.
 - Scripts expected to run longer than one hour must include `tqdm` progress bars around primary long-running loops when feasible. If `tqdm` is unsuitable, emit regular progress logs with comparable visibility.
-- Before launching a long or resource-intensive task, confirm the execution environment, available resources, input/output locations, and scheduling method with concrete project documentation or the user. Do not invent hostnames, partitions, node exclusions, GPU/CPU ratios, memory policies, or environment activation commands.
-- If a batch scheduler or remote execution environment is later established, long-running scripts must be paired with a reproducible submission or launch file that follows the confirmed resource policy.
+- Scripts expected to run longer than one hour must be paired with a Slurm submission file and should run through Slurm on the remote Linux server.
+- Slurm scripts must use `#SBATCH --partition=batch` by default. Do not use `#SBATCH --partition=gpu` unless the user explicitly requests that partition for a specific task.
+- Slurm scripts must request at least one GPU because the current environment cannot request CPU-only jobs separately. Use the project resource convention that one GPU is paired with 12 CPUs. Do not explicitly add `#SBATCH --mem` by default; only specify memory when the user asks for it or a task has a clear non-default memory requirement.
+- Multi-GPU jobs must run only on `n1` or `n2` and must not use `n3`. For single-node multi-GPU wrappers, request one node and add `#SBATCH --exclude=n3`; do not list both `n1,n2` with `--nodelist`, because that can request both nodes while the current `torchrun` launch is single-node.
+- Before launching a long or resource-intensive task, confirm the remote login route, conda environment, actual resource availability, and input/output locations from concrete project documentation or the user. Do not invent hostnames or environment activation commands, and do not deviate from the established Slurm policy silently.
 - Long-running scripts must expose clear input/output paths and explicit overwrite behavior; expose resume behavior only when the runtime and recovery rules above require it.
 - Record enough metadata to reproduce a run: command, arguments, input structures/sequences, model and database versions, checkpoints where relevant, mapping/CDR/alignment definitions, scoring parameters, output directory, software environment, and timestamp.
 - Prefer resumable partial outputs for large library prediction, structure generation, docking, refinement, or design jobs only when they are expected to exceed five hours or contain an independently expensive reusable stage.
 - Emit compact progress and final statistics files for large jobs.
-- Avoid interactive prompts in scripts intended for batch execution.
+- Avoid interactive prompts in scripts intended for remote batch execution.
 
 ## Run Summary Handoff Rules
 
