@@ -1,0 +1,46 @@
+# Python bytecode and test/tool caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local environments and secrets
+.venv/
+venv/
+env/
+.env
+.env.*
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs and temporary files
+*.log
+tmp/
+temp/
+
+# Large generated calculations and model outputs
+output/
+outputs/
+results/
+runs/
+checkpoints/
+predictions/
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+*.npy
+*.npz
+*.h5
+*.hdf5
+*.parquet
+
+# Structural inputs/sessions are intentionally tracked:
+# do not add ignore patterns for *.cxs, *.pdb, or *.cif.
