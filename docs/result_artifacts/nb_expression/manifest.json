@@ -1,0 +1,181 @@
+{
+  "cautions": [
+    "The phenotype is reported yield, not a direct expression-rate measurement; post-purification is explicit only for WCC.",
+    "A 1 L volume does not justify automatically creating an expression_mg_per_l field.",
+    "LTT/LLJ volume is explicit CLI metadata from the original document title; WCC states 1 L per entry.",
+    "TB medium and post-purification stage are explicit only for WCC.",
+    "VHH boundaries, terminal additions, tags, truncations, and construct equivalence remain unresolved.",
+    "Host, induction, purification recovery, batch, replicate count, uncertainty, and cross-provider comparability are undocumented.",
+    "Use sample_uid for stable identity; import source_sample_id as text to prevent spreadsheet auto-coercion."
+  ],
+  "dataset": "collaborator_nanobody_reported_yield_1L",
+  "generated_at": "2026-08-03T12:01:38+08:00",
+  "outputs": {
+    "assay_context.csv": {
+      "sha256": "5b161c9f88e77316a34bc9f9f510746a1827fb1f93f4cf83bea570cbc0d4a9a1",
+      "size_bytes": 529
+    },
+    "nb_expression_qc.svg": {
+      "sha256": "f7d4e18b5093cd436d245a222845fcb0dcc7ce93491375df181366440e8605f2",
+      "size_bytes": 4763
+    },
+    "nb_expression_records.csv": {
+      "sha256": "ef5c9165d1e5f4a1b7995b8733e621ed7e7147cdb73dbfba9a74ce131b3647c9",
+      "size_bytes": 23931
+    },
+    "nb_expression_sequences.fasta": {
+      "sha256": "97918b2647326d0d34444f714bdb42efe1b968ac2259938487daf80448816154",
+      "size_bytes": 9763
+    },
+    "qc_plot_data.csv": {
+      "sha256": "6b167c1fb75f36d77a84792a0890774accba005166a00225bafa58827dead1ef",
+      "size_bytes": 201
+    },
+    "raw_transcription.csv": {
+      "sha256": "a498f9b298cb1f07b852f8dbb8b3dac79306e98e4c5aebeb9c5fd48ab91cbf31",
+      "size_bytes": 14170
+    },
+    "samples.csv": {
+      "sha256": "03647f4a66cc953f50fad0e12d6f6fb5524a0d0118482e5a144901a5daee5541",
+      "size_bytes": 16757
+    },
+    "validation_report.json": {
+      "sha256": "f10a3273188b5c57f04df1e95b023279553e9e0a4c50cdb21bb7154f1504ed5a",
+      "size_bytes": 2116
+    },
+    "yield_observations.csv": {
+      "sha256": "329c6b0fb3b2dbaaca152bdc6b9ccbcba2f926a62245c738592b780234469075",
+      "size_bytes": 6578
+    }
+  },
+  "parser_version": "1.1.0",
+  "record_count": 47,
+  "record_counts_by_source": {
+    "LLJ": 16,
+    "LTT": 23,
+    "WCC": 8
+  },
+  "sequence_integrity": {
+    "all_written_sequence_round_trips": "pass",
+    "alphabet": "20 standard uppercase amino-acid letters",
+    "paragraph_handling": "raw_text preserved; parse_text trims only outer paragraph whitespace for grammar",
+    "per_record_sha256": true,
+    "raw_source_paragraph_round_trip": "pass",
+    "sequence_normalization": "none",
+    "sequence_outer_whitespace_policy": "fail",
+    "unsupported_docx_structures": "tables/text boxes/tabs/breaks/tracked changes/hidden text fail parsing"
+  },
+  "source": {
+    "file": "nb序列及产量（1L）.docx",
+    "sha256": "a6e4022f0978fbd70a0e04dc78f479140ab6f55caaa90b467fb77a62eb5db5d1",
+    "size_bytes": 14172,
+    "storage_layout": "ordered direct body paragraphs; no Word tables"
+  },
+  "tables": {
+    "assay_context.csv": [
+      "assay_id",
+      "provider_code",
+      "culture_volume_l",
+      "volume_evidence",
+      "medium",
+      "yield_stage",
+      "purification_method",
+      "batch_id",
+      "protocol_id",
+      "context_notes"
+    ],
+    "nb_expression_records.csv": [
+      "sample_uid",
+      "provider_code",
+      "source_sample_id",
+      "source_section",
+      "source_header_raw",
+      "sequence_raw",
+      "sequence_length_aa",
+      "sequence_sha256",
+      "sequence_scope",
+      "vhh_region_sequence",
+      "sequence_review_flags",
+      "source_document",
+      "source_sha256",
+      "source_clone_paragraph_index",
+      "source_sequence_paragraph_index",
+      "observation_id",
+      "assay_id",
+      "phenotype_name",
+      "reported_text",
+      "observation_semantics",
+      "value_relation",
+      "point_estimate_mg",
+      "group_anchor_mg",
+      "lower_bound_mg",
+      "lower_bound_inclusive",
+      "upper_bound_mg",
+      "assignment_level",
+      "group_id",
+      "individual_numeric_available",
+      "censoring_type",
+      "censoring_reason",
+      "replicate_count",
+      "uncertainty_value",
+      "uncertainty_type",
+      "source_yield_paragraph_index",
+      "culture_volume_l",
+      "volume_evidence",
+      "medium",
+      "yield_stage"
+    ],
+    "raw_transcription.csv": [
+      "source_nonempty_paragraph_index",
+      "raw_text",
+      "parse_text",
+      "leading_or_trailing_whitespace"
+    ],
+    "samples.csv": [
+      "sample_uid",
+      "provider_code",
+      "source_sample_id",
+      "source_section",
+      "source_header_raw",
+      "sequence_raw",
+      "sequence_length_aa",
+      "sequence_sha256",
+      "sequence_scope",
+      "vhh_region_sequence",
+      "sequence_review_flags",
+      "source_document",
+      "source_sha256",
+      "source_clone_paragraph_index",
+      "source_sequence_paragraph_index"
+    ],
+    "yield_observations.csv": [
+      "observation_id",
+      "sample_uid",
+      "assay_id",
+      "phenotype_name",
+      "reported_text",
+      "observation_semantics",
+      "value_relation",
+      "point_estimate_mg",
+      "group_anchor_mg",
+      "lower_bound_mg",
+      "lower_bound_inclusive",
+      "upper_bound_mg",
+      "assignment_level",
+      "group_id",
+      "individual_numeric_available",
+      "censoring_type",
+      "censoring_reason",
+      "replicate_count",
+      "uncertainty_value",
+      "uncertainty_type",
+      "source_yield_paragraph_index"
+    ]
+  },
+  "yield_semantics": {
+    "do_not_merge_into_one_exact_continuous_label": true,
+    "group_approximate": "LLJ ~10/~2 mg shared anchors with unknown boundaries; point_estimate_mg remains blank.",
+    "group_lower_bound": "LLJ >20 mg shared lower-bound bin; point_estimate_mg remains blank.",
+    "individual_approximate": "LTT/WCC clone-specific approximate yields; stored in point_estimate_mg."
+  }
+}

@@ -1,4 +1,11 @@
 * text=auto
+.gitattributes text eol=lf
+.gitignore text eol=lf
 *.md text eol=lf
 *.py text eol=lf
+*.csv text eol=lf
+*.fasta text eol=lf
+*.json text eol=lf
+*.svg text eol=lf
 *.cxs binary
+*.docx binary

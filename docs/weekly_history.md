@@ -4,4 +4,5 @@
 
 ## 周记录
 
-- [2026-W31](history/2026-W31.md) — 当前周详细记录
+- [2026-W31](history/2026-W31.md) — 完成项目初始化、Git/GitHub 配置、Slurm 资源规则、远程主环境与 PyRosetta/nanoBERT 工具环境记录，并登记结构模型及橙色界面注释风险。
+- [2026-W32](history/2026-W32.md) — 当前周详细记录

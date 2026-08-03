@@ -1,0 +1,100 @@
+{
+  "elapsed_seconds_before_commit": 0.092,
+  "generated_at": "2026-08-03T12:01:38+08:00",
+  "input": {
+    "document_title_culture_volume_l": "1",
+    "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\nb序列及产量（1L）.docx",
+    "sha256": "a6e4022f0978fbd70a0e04dc78f479140ab6f55caaa90b467fb77a62eb5db5d1",
+    "size_bytes": 14172
+  },
+  "invocation": {
+    "argv": [
+      "--source",
+      "nb序列及产量（1L）.docx",
+      "--output-dir",
+      "docs\\result_artifacts\\nb_expression",
+      "--run-summary",
+      "docs\\run_summaries\\nb_expression\\prepare_20260803.json",
+      "--expected-source-sha256",
+      "a6e4022f0978fbd70a0e04dc78f479140ab6f55caaa90b467fb77a62eb5db5d1",
+      "--document-title-culture-volume-l",
+      "1",
+      "--generated-at",
+      "2026-08-03T12:01:38+08:00",
+      "--overwrite"
+    ],
+    "python_executable": "D:\\miniconda\\python.exe",
+    "replay_command_powershell": "& 'D:\\miniconda\\python.exe' 'C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\data_preparation\\prepare_nb_expression_dataset.py' '--source' 'nb序列及产量（1L）.docx' '--output-dir' 'docs\\result_artifacts\\nb_expression' '--run-summary' 'docs\\run_summaries\\nb_expression\\prepare_20260803.json' '--expected-source-sha256' 'a6e4022f0978fbd70a0e04dc78f479140ab6f55caaa90b467fb77a62eb5db5d1' '--document-title-culture-volume-l' '1' '--generated-at' '2026-08-03T12:01:38+08:00' '--overwrite'",
+    "script_path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\data_preparation\\prepare_nb_expression_dataset.py",
+    "shell": "PowerShell",
+    "working_directory": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization"
+  },
+  "models_or_databases": "not_applicable",
+  "numbering_cdr_alignment": "not_applicable",
+  "outputs": {
+    "assay_context": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\assay_context.csv",
+      "sha256": "5b161c9f88e77316a34bc9f9f510746a1827fb1f93f4cf83bea570cbc0d4a9a1",
+      "size_bytes": 529
+    },
+    "fasta": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\nb_expression_sequences.fasta",
+      "sha256": "97918b2647326d0d34444f714bdb42efe1b968ac2259938487daf80448816154",
+      "size_bytes": 9763
+    },
+    "manifest": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\manifest.json",
+      "sha256": "db6d0b386629cfd30ea5f068cbd1b7d2354301c051b63e1c5886cc53c5f30172",
+      "size_bytes": 6007
+    },
+    "qc_figure": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\nb_expression_qc.svg",
+      "sha256": "f7d4e18b5093cd436d245a222845fcb0dcc7ce93491375df181366440e8605f2",
+      "size_bytes": 4763
+    },
+    "qc_plot_data": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\qc_plot_data.csv",
+      "sha256": "6b167c1fb75f36d77a84792a0890774accba005166a00225bafa58827dead1ef",
+      "size_bytes": 201
+    },
+    "raw_transcription": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\raw_transcription.csv",
+      "sha256": "a498f9b298cb1f07b852f8dbb8b3dac79306e98e4c5aebeb9c5fd48ab91cbf31",
+      "size_bytes": 14170
+    },
+    "samples": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\samples.csv",
+      "sha256": "03647f4a66cc953f50fad0e12d6f6fb5524a0d0118482e5a144901a5daee5541",
+      "size_bytes": 16757
+    },
+    "validation": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\validation_report.json",
+      "sha256": "f10a3273188b5c57f04df1e95b023279553e9e0a4c50cdb21bb7154f1504ed5a",
+      "size_bytes": 2116
+    },
+    "wide": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\nb_expression_records.csv",
+      "sha256": "ef5c9165d1e5f4a1b7995b8733e621ed7e7147cdb73dbfba9a74ce131b3647c9",
+      "size_bytes": 23931
+    },
+    "yields": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\yield_observations.csv",
+      "sha256": "329c6b0fb3b2dbaaca152bdc6b9ccbcba2f926a62245c738592b780234469075",
+      "size_bytes": 6578
+    }
+  },
+  "parser_version": "1.1.0",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.13.5",
+  "record_count": 47,
+  "record_counts_by_source": {
+    "LLJ": 16,
+    "LTT": 23,
+    "WCC": 8
+  },
+  "runtime_class": "under_1_hour",
+  "script": "scripts\\data_preparation\\prepare_nb_expression_dataset.py",
+  "sequence_mismatch_count": 0,
+  "status": "success",
+  "unique_sequence_count": 47
+}

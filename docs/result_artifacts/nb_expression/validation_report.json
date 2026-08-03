@@ -1,0 +1,70 @@
+{
+  "generated_at": "2026-08-03T12:01:38+08:00",
+  "record_validation": {
+    "checks": [
+      "unsupported_docx_structure_absence",
+      "source_sha256",
+      "nonempty_paragraph_count",
+      "section_record_counts",
+      "sample_uid_uniqueness",
+      "sequence_uniqueness",
+      "standard_amino_acid_alphabet",
+      "sequence_raw_equals_parser_text",
+      "sequence_length",
+      "per_sequence_sha256",
+      "raw_source_paragraph_round_trip",
+      "yield_semantics_counts",
+      "llj_numeric_field_separation",
+      "target_clone_nb252_presence",
+      "sequence_review_flag_counts"
+    ],
+    "invalid_sequence_count": 0,
+    "paragraphs_with_outer_whitespace": [
+      40,
+      42
+    ],
+    "parser_version": "1.1.0",
+    "record_count": 47,
+    "record_counts_by_source": {
+      "LLJ": 16,
+      "LTT": 23,
+      "WCC": 8
+    },
+    "sequence_review_flag_counts": {
+      "short_literal_sequence_lt115": 6,
+      "single_cysteine_literal_sequence": 2,
+      "wgqgt_motif_absent": 9
+    },
+    "sequence_round_trip_mismatch_count": 0,
+    "source_file": "nb序列及产量（1L）.docx",
+    "source_file_sha256": "a6e4022f0978fbd70a0e04dc78f479140ab6f55caaa90b467fb77a62eb5db5d1",
+    "source_nonempty_paragraph_count": 100,
+    "source_text_round_trip_mismatch_count": 0,
+    "status": "pass",
+    "unique_sample_uid_count": 47,
+    "unique_sequence_count": 47,
+    "yield_semantics_counts": {
+      "group_approximate": 7,
+      "group_lower_bound": 9,
+      "individual_approximate": 31
+    }
+  },
+  "status": "pass",
+  "written_outputs": {
+    "all_csv_fields_compared": true,
+    "approx_group_anchor_only_count": 7,
+    "assay_context_row_count": 3,
+    "csv_sequence_mismatch_count": 0,
+    "fasta_record_count": 47,
+    "fasta_sequence_mismatch_count": 0,
+    "gt20_lower_bound_only_count": 9,
+    "hash_mismatch_count": 0,
+    "individual_point_estimate_only_count": 31,
+    "llj_point_estimate_population_count": 0,
+    "raw_transcription_row_count": 100,
+    "samples_row_count": 47,
+    "status": "pass",
+    "wide_record_row_count": 47,
+    "yield_observation_row_count": 47
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "artifacts_checked": {
+    "nb_expression_records.csv": {
+      "sha256": "ef5c9165d1e5f4a1b7995b8733e621ed7e7147cdb73dbfba9a74ce131b3647c9",
+      "size_bytes": 23931
+    },
+    "nb_expression_sequences.fasta": {
+      "sha256": "97918b2647326d0d34444f714bdb42efe1b968ac2259938487daf80448816154",
+      "size_bytes": 9763
+    },
+    "raw_transcription.csv": {
+      "sha256": "a498f9b298cb1f07b852f8dbb8b3dac79306e98e4c5aebeb9c5fd48ab91cbf31",
+      "size_bytes": 14170
+    },
+    "samples.csv": {
+      "sha256": "03647f4a66cc953f50fad0e12d6f6fb5524a0d0118482e5a144901a5daee5541",
+      "size_bytes": 16757
+    },
+    "yield_observations.csv": {
+      "sha256": "329c6b0fb3b2dbaaca152bdc6b9ccbcba2f926a62245c738592b780234469075",
+      "size_bytes": 6578
+    }
+  },
+  "context_field_mismatch_count": 0,
+  "fasta_mismatch_count": 0,
+  "paragraphs_with_outer_whitespace": [
+    40,
+    42
+  ],
+  "production_parser_imported": false,
+  "raw_transcription_mismatch_count": 0,
+  "record_count": 47,
+  "record_counts_by_source": {
+    "LLJ": 16,
+    "LTT": 23,
+    "WCC": 8
+  },
+  "sequence_hash_mismatch_count": 0,
+  "sequence_length_mismatch_count": 0,
+  "sequence_mismatch_count": 0,
+  "source_file": "nb序列及产量（1L）.docx",
+  "source_nonempty_paragraph_count": 100,
+  "source_sha256": "a6e4022f0978fbd70a0e04dc78f479140ab6f55caaa90b467fb77a62eb5db5d1",
+  "status": "pass",
+  "unique_sample_uid_count": 47,
+  "unique_sequence_count": 47,
+  "verification_implementation": "independent_stdlib_parser_v2",
+  "word_document_xml_sha256": "c781f09dd38a407ff4868032dd360e2514e8dc2f627b05b6e1bdc59744e16c61",
+  "yield_field_mismatch_count": 0
+}

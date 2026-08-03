@@ -1,0 +1,7 @@
+metric,category,count
+source_records,LTT,23
+source_records,WCC,8
+source_records,LLJ,16
+yield_semantics,individual_approximate,31
+yield_semantics,group_lower_bound,9
+yield_semantics,group_approximate,7

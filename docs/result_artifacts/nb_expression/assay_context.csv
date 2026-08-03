@@ -1,0 +1,4 @@
+﻿assay_id,provider_code,culture_volume_l,volume_evidence,medium,yield_stage,purification_method,batch_id,protocol_id,context_notes
+ASSAY__LTT,LTT,1,document_title,,,,,,Volume is explicit metadata from the original document title; other protocol details are unavailable.
+ASSAY__WCC,WCC,1,entry_text,TB,post_purification,,,,Each source entry states 1 L TB and an approximate post-purification yield.
+ASSAY__LLJ,LLJ,1,document_title,,,,,,Volume is explicit metadata from the original document title; yields are shared group bins.

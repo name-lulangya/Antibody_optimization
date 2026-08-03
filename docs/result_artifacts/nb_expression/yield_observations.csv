@@ -1,0 +1,48 @@
+﻿observation_id,sample_uid,assay_id,phenotype_name,reported_text,observation_semantics,value_relation,point_estimate_mg,group_anchor_mg,lower_bound_mg,lower_bound_inclusive,upper_bound_mg,assignment_level,group_id,individual_numeric_available,censoring_type,censoring_reason,replicate_count,uncertainty_value,uncertainty_type,source_yield_paragraph_index
+OBS__LTT__Nb290,LTT__Nb290,ASSAY__LTT,reported_yield,Nb290  ~25 mg,individual_approximate,approx,25,,,,,individual,,True,,,,,,2
+OBS__LTT__Nb270,LTT__Nb270,ASSAY__LTT,reported_yield,Nb270  ~24 mg,individual_approximate,approx,24,,,,,individual,,True,,,,,,4
+OBS__LTT__Nb314,LTT__Nb314,ASSAY__LTT,reported_yield,Nb314  ~17.8 mg,individual_approximate,approx,17.8,,,,,individual,,True,,,,,,6
+OBS__LTT__Nb5,LTT__Nb5,ASSAY__LTT,reported_yield,Nb5  ~17.3 mg,individual_approximate,approx,17.3,,,,,individual,,True,,,,,,8
+OBS__LTT__Nb257,LTT__Nb257,ASSAY__LTT,reported_yield,Nb257  ~16.5 mg,individual_approximate,approx,16.5,,,,,individual,,True,,,,,,10
+OBS__LTT__Nb232,LTT__Nb232,ASSAY__LTT,reported_yield,Nb232  ~16.3 mg,individual_approximate,approx,16.3,,,,,individual,,True,,,,,,12
+OBS__LTT__Nb294,LTT__Nb294,ASSAY__LTT,reported_yield,Nb294  ~16.2 mg,individual_approximate,approx,16.2,,,,,individual,,True,,,,,,14
+OBS__LTT__Nb256,LTT__Nb256,ASSAY__LTT,reported_yield,Nb256  ~10.5 mg,individual_approximate,approx,10.5,,,,,individual,,True,,,,,,16
+OBS__LTT__Nb233,LTT__Nb233,ASSAY__LTT,reported_yield,Nb233  ~10 mg,individual_approximate,approx,10,,,,,individual,,True,,,,,,18
+OBS__LTT__Nb302,LTT__Nb302,ASSAY__LTT,reported_yield,Nb302  ~8.6 mg,individual_approximate,approx,8.6,,,,,individual,,True,,,,,,20
+OBS__LTT__Nb253,LTT__Nb253,ASSAY__LTT,reported_yield,Nb253  ~1.5 mg,individual_approximate,approx,1.5,,,,,individual,,True,,,,,,22
+OBS__LTT__Nb21,LTT__Nb21,ASSAY__LTT,reported_yield,Nb21  ~0.5 mg,individual_approximate,approx,0.5,,,,,individual,,True,,,,,,24
+OBS__LTT__Nb252,LTT__Nb252,ASSAY__LTT,reported_yield,Nb252  ~0.5 mg,individual_approximate,approx,0.5,,,,,individual,,True,,,,,,26
+OBS__LTT__Q1,LTT__Q1,ASSAY__LTT,reported_yield,Q1 ~3.4 mg,individual_approximate,approx,3.4,,,,,individual,,True,,,,,,28
+OBS__LTT__P26,LTT__P26,ASSAY__LTT,reported_yield,P26 ~2 mg,individual_approximate,approx,2,,,,,individual,,True,,,,,,30
+OBS__LTT__Q17,LTT__Q17,ASSAY__LTT,reported_yield,Q17 ~0.5 mg,individual_approximate,approx,0.5,,,,,individual,,True,,,,,,32
+OBS__LTT__P27,LTT__P27,ASSAY__LTT,reported_yield,P27 ~0.46 mg,individual_approximate,approx,0.46,,,,,individual,,True,,,,,,34
+OBS__LTT__S53,LTT__S53,ASSAY__LTT,reported_yield,S53 ~16.7 mg,individual_approximate,approx,16.7,,,,,individual,,True,,,,,,36
+OBS__LTT__S31,LTT__S31,ASSAY__LTT,reported_yield,S31 ~7.9 mg,individual_approximate,approx,7.9,,,,,individual,,True,,,,,,38
+OBS__LTT__S4,LTT__S4,ASSAY__LTT,reported_yield,S4 ~4.1 mg ,individual_approximate,approx,4.1,,,,,individual,,True,,,,,,40
+OBS__LTT__S19,LTT__S19,ASSAY__LTT,reported_yield,S19 ~3.5 mg ,individual_approximate,approx,3.5,,,,,individual,,True,,,,,,42
+OBS__LTT__S73,LTT__S73,ASSAY__LTT,reported_yield,S73 ~2.2 mg,individual_approximate,approx,2.2,,,,,individual,,True,,,,,,44
+OBS__LTT__S26,LTT__S26,ASSAY__LTT,reported_yield,S26 ~1.2 mg,individual_approximate,approx,1.2,,,,,individual,,True,,,,,,46
+OBS__WCC__4-7,WCC__4-7,ASSAY__WCC,reported_yield,>4-7    1L TB纯化得到约15mg,individual_approximate,approx,15,,,,,individual,,True,,,,,,49
+OBS__WCC__4-34,WCC__4-34,ASSAY__WCC,reported_yield,>4-34   1L TB纯化得到约11.3mg,individual_approximate,approx,11.3,,,,,individual,,True,,,,,,51
+OBS__WCC__4-1,WCC__4-1,ASSAY__WCC,reported_yield,>4-1    1L TB纯化得到约2mg,individual_approximate,approx,2,,,,,individual,,True,,,,,,53
+OBS__WCC__4-28,WCC__4-28,ASSAY__WCC,reported_yield,>4-28    1L TB纯化得到约2mg,individual_approximate,approx,2,,,,,individual,,True,,,,,,55
+OBS__WCC__4-11,WCC__4-11,ASSAY__WCC,reported_yield,>4-11    1L TB纯化得到约0.4mg,individual_approximate,approx,0.4,,,,,individual,,True,,,,,,57
+OBS__WCC__4-40,WCC__4-40,ASSAY__WCC,reported_yield,>4-40    1L TB纯化得到约0.3mg,individual_approximate,approx,0.3,,,,,individual,,True,,,,,,59
+OBS__WCC__4-36,WCC__4-36,ASSAY__WCC,reported_yield,>4-36    1L TB纯化得到约0.2mg,individual_approximate,approx,0.2,,,,,individual,,True,,,,,,61
+OBS__WCC__4-42,WCC__4-42,ASSAY__WCC,reported_yield,>4-42    1L TB纯化得到约0.2mg,individual_approximate,approx,0.2,,,,,individual,,True,,,,,,63
+OBS__LLJ__1G7,LLJ__1G7,ASSAY__LLJ,reported_yield,>20 mg,group_lower_bound,gt,,,20,False,,group,LLJ_GT20,False,right_censored,unknown,,,,66
+OBS__LLJ__2A4,LLJ__2A4,ASSAY__LLJ,reported_yield,>20 mg,group_lower_bound,gt,,,20,False,,group,LLJ_GT20,False,right_censored,unknown,,,,66
+OBS__LLJ__2C8,LLJ__2C8,ASSAY__LLJ,reported_yield,>20 mg,group_lower_bound,gt,,,20,False,,group,LLJ_GT20,False,right_censored,unknown,,,,66
+OBS__LLJ__1E2,LLJ__1E2,ASSAY__LLJ,reported_yield,>20 mg,group_lower_bound,gt,,,20,False,,group,LLJ_GT20,False,right_censored,unknown,,,,66
+OBS__LLJ__2E11,LLJ__2E11,ASSAY__LLJ,reported_yield,>20 mg,group_lower_bound,gt,,,20,False,,group,LLJ_GT20,False,right_censored,unknown,,,,66
+OBS__LLJ__1H7,LLJ__1H7,ASSAY__LLJ,reported_yield,>20 mg,group_lower_bound,gt,,,20,False,,group,LLJ_GT20,False,right_censored,unknown,,,,66
+OBS__LLJ__2C6,LLJ__2C6,ASSAY__LLJ,reported_yield,>20 mg,group_lower_bound,gt,,,20,False,,group,LLJ_GT20,False,right_censored,unknown,,,,66
+OBS__LLJ__2E2,LLJ__2E2,ASSAY__LLJ,reported_yield,>20 mg,group_lower_bound,gt,,,20,False,,group,LLJ_GT20,False,right_censored,unknown,,,,66
+OBS__LLJ__1G11,LLJ__1G11,ASSAY__LLJ,reported_yield,>20 mg,group_lower_bound,gt,,,20,False,,group,LLJ_GT20,False,right_censored,unknown,,,,66
+OBS__LLJ__1H6,LLJ__1H6,ASSAY__LLJ,reported_yield,~ 10 mg,group_approximate,approx,,10,,,,group,LLJ_APPROX10,False,,,,,,85
+OBS__LLJ__1F12,LLJ__1F12,ASSAY__LLJ,reported_yield,~ 10 mg,group_approximate,approx,,10,,,,group,LLJ_APPROX10,False,,,,,,85
+OBS__LLJ__2H8,LLJ__2H8,ASSAY__LLJ,reported_yield,~ 10 mg,group_approximate,approx,,10,,,,group,LLJ_APPROX10,False,,,,,,85
+OBS__LLJ__1B11,LLJ__1B11,ASSAY__LLJ,reported_yield,~ 10 mg,group_approximate,approx,,10,,,,group,LLJ_APPROX10,False,,,,,,85
+OBS__LLJ__2F12,LLJ__2F12,ASSAY__LLJ,reported_yield,~ 10 mg,group_approximate,approx,,10,,,,group,LLJ_APPROX10,False,,,,,,85
+OBS__LLJ__2G7,LLJ__2G7,ASSAY__LLJ,reported_yield,~ 10 mg,group_approximate,approx,,10,,,,group,LLJ_APPROX10,False,,,,,,85
+OBS__LLJ__1G4,LLJ__1G4,ASSAY__LLJ,reported_yield,~ 2 mg,group_approximate,approx,,2,,,,group,LLJ_APPROX2,False,,,,,,98
