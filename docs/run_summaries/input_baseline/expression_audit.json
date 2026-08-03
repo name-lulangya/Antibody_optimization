@@ -1,0 +1,100 @@
+{
+  "audit_version": "1.0.0",
+  "elapsed_seconds_before_commit": 0.064,
+  "gates": {
+    "cross_assay_pooling_gate": "blocked",
+    "expression_audit_gate": "pass",
+    "nb252_transfer_gate": "blocked",
+    "stage_1_baseline_gate": "pending_structure_baseline"
+  },
+  "generated_at": "2026-08-03T20:33:44+08:00",
+  "inputs": {
+    "assay_context.csv": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\assay_context.csv",
+      "sha256": "5b161c9f88e77316a34bc9f9f510746a1827fb1f93f4cf83bea570cbc0d4a9a1"
+    },
+    "manifest.json": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\manifest.json",
+      "sha256": "db6d0b386629cfd30ea5f068cbd1b7d2354301c051b63e1c5886cc53c5f30172"
+    },
+    "nb_expression_records.csv": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\nb_expression_records.csv",
+      "sha256": "ef5c9165d1e5f4a1b7995b8733e621ed7e7147cdb73dbfba9a74ce131b3647c9"
+    },
+    "sequence_audit_summary": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_manifest.json",
+      "sha256": "6d813bd9353324c6e2f24c60bca23269f0d9b51aa31ad0701186151ecce48184"
+    }
+  },
+  "invocation": {
+    "argv": [
+      "--records",
+      "docs/result_artifacts/nb_expression/nb_expression_records.csv",
+      "--assay-context",
+      "docs/result_artifacts/nb_expression/assay_context.csv",
+      "--manifest",
+      "docs/result_artifacts/nb_expression/manifest.json",
+      "--sequence-audit-summary",
+      "docs/result_artifacts/input_baseline/sequence/sequence_numbering_manifest.json",
+      "--output-dir",
+      "docs/result_artifacts/input_baseline/expression",
+      "--run-summary",
+      "docs/run_summaries/input_baseline/expression_audit.json",
+      "--generated-at",
+      "2026-08-03T20:33:44+08:00",
+      "--overwrite"
+    ],
+    "python_executable": "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "replay_command_powershell": "& 'D:\\miniconda\\envs\\ab_optim\\python.exe' 'C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\input_baseline\\build_expression_audit.py' '--records' 'docs/result_artifacts/nb_expression/nb_expression_records.csv' '--assay-context' 'docs/result_artifacts/nb_expression/assay_context.csv' '--manifest' 'docs/result_artifacts/nb_expression/manifest.json' '--sequence-audit-summary' 'docs/result_artifacts/input_baseline/sequence/sequence_numbering_manifest.json' '--output-dir' 'docs/result_artifacts/input_baseline/expression' '--run-summary' 'docs/run_summaries/input_baseline/expression_audit.json' '--generated-at' '2026-08-03T20:33:44+08:00' '--overwrite'",
+    "script_path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\input_baseline\\build_expression_audit.py",
+    "shell": "PowerShell",
+    "working_directory": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization"
+  },
+  "models_or_databases": "not_applicable",
+  "numbering_cdr_alignment": "provisional sequence-audit summary joined; no numbering inferred here",
+  "outputs": {
+    "allowed_use_manifest": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\expression\\allowed_use_manifest.json",
+      "sha256": "0b011d18ac91f3b9fbdaa6464176dcec9545fa8bb3f5ca2ae1a8cb4387e269e4",
+      "size_bytes": 4823
+    },
+    "assay_metadata": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\expression\\assay_metadata_review.csv",
+      "sha256": "b3943af55b2a37ec95ebcff0e75dc99119d205c8ad87e8af36d92b1ebf37530f",
+      "size_bytes": 11040
+    },
+    "sample_review": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\expression\\sample_comparability_review.csv",
+      "sha256": "96141994f9f04237d4cb0e6a94ae2cca7e2db6df3c8b336e66d7748888f09762",
+      "size_bytes": 36560
+    },
+    "view": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\expression\\expression_comparability_view.csv",
+      "sha256": "59303f913db8120d9b9fc9d139e0958ef461b938229ba471920bb9d686b64eaa",
+      "size_bytes": 27504
+    }
+  },
+  "platform": "Windows-10-10.0.26200-SP0",
+  "python": "3.11.15",
+  "runtime_class": "under_1_hour",
+  "script": "scripts\\input_baseline\\build_expression_audit.py",
+  "status": "success",
+  "validation": {
+    "assay_metadata_row_count": 78,
+    "cross_assay_pooling_blocked_count": 47,
+    "nb252_transfer_blocked_count": 47,
+    "provider_counts": {
+      "LLJ": 16,
+      "LTT": 23,
+      "WCC": 8
+    },
+    "sample_review_row_count": 47,
+    "semantics_counts": {
+      "group_approximate": 7,
+      "group_lower_bound": 9,
+      "individual_approximate": 31
+    },
+    "status": "pass",
+    "view_row_count": 47
+  }
+}

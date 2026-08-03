@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "stage": "temporary_interface",
+  "status": "blocked",
+  "generated_at": "2026-08-03T21:24:10+08:00",
+  "elapsed_seconds": 0.005098299589008093,
+  "script": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\input_baseline\\calculate_temporary_interface.py",
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\input_baseline\\calculate_temporary_interface.py",
+    "--structure-baseline-manifest",
+    "docs\\result_artifacts\\input_baseline\\structure_precheck\\structure_baseline_manifest.json",
+    "--confirmed-review",
+    "docs\\result_artifacts\\input_baseline\\structure_precheck\\baseline_review.json",
+    "--output-dir",
+    "docs\\result_artifacts\\input_baseline\\interface_precheck",
+    "--run-summary",
+    "docs\\run_summaries\\input_baseline\\interface_precheck.json",
+    "--generated-at",
+    "2026-08-03T21:24:10+08:00"
+  ],
+  "working_directory": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization",
+  "python": "3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "inputs": {
+    "structure_baseline_manifest": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_precheck\\structure_baseline_manifest.json",
+      "sha256": "666f5e73c90bca8fb836cde856bf9f11136146a946e4fc22d2cc20350b519c9f",
+      "size_bytes": 2849,
+      "mtime_ns": 1785764859201447300
+    }
+  },
+  "outputs": {},
+  "manifest": {
+    "path": "docs\\result_artifacts\\input_baseline\\interface_precheck\\interface_manifest.json",
+    "sha256": "260e3556a605734f8854e8d60eb590831e0db80f503d338aa86f33ffa8413734",
+    "size_bytes": 1643
+  },
+  "parameters": {
+    "name": "temporary_heavy_atom_interface_lt4A",
+    "distance": "literal atom-center Cartesian Euclidean distance strictly < 4.0 angstrom",
+    "atoms": "positive-occupancy polymer heavy atoms; H and D excluded",
+    "altloc_compatibility": "blank with any, or equal nonblank identifiers",
+    "candidate_search": "Gemmi NeighborSearch on an in-memory clone with cleared unit cell and space group",
+    "strict_verification": "independent literal Cartesian pair distance",
+    "periodic_or_symmetry_images": false,
+    "scientific_scope": "temporary geometric interface; not an energetic or functional claim",
+    "temporary_protection_set": "confirmed collaborator orange union strict temporary <4.0 A set; a conservative mutation-protection flag, not an energetic hotspot set"
+  },
+  "blockers": [
+    "structure baseline gates are not pass: ['export_status', 'inventory_status', 'chain_role_status', 'residue_mapping_status']"
+  ]
+}

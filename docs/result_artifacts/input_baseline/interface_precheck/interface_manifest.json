@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "script_version": "1.0.0",
+  "contact_library_version": "1.0.0",
+  "generated_at": "2026-08-03T21:24:10+08:00",
+  "status": "blocked",
+  "interface_status": "blocked",
+  "orange_annotation_status": "blocked",
+  "orange_vs_4A_comparison_status": "blocked",
+  "blockers": [
+    "structure baseline gates are not pass: ['export_status', 'inventory_status', 'chain_role_status', 'residue_mapping_status']"
+  ],
+  "outputs": {},
+  "definition": {
+    "name": "temporary_heavy_atom_interface_lt4A",
+    "distance": "literal atom-center Cartesian Euclidean distance strictly < 4.0 angstrom",
+    "atoms": "positive-occupancy polymer heavy atoms; H and D excluded",
+    "altloc_compatibility": "blank with any, or equal nonblank identifiers",
+    "candidate_search": "Gemmi NeighborSearch on an in-memory clone with cleared unit cell and space group",
+    "strict_verification": "independent literal Cartesian pair distance",
+    "periodic_or_symmetry_images": false,
+    "scientific_scope": "temporary geometric interface; not an energetic or functional claim",
+    "temporary_protection_set": "confirmed collaborator orange union strict temporary <4.0 A set; a conservative mutation-protection flag, not an energetic hotspot set"
+  },
+  "inputs": {
+    "structure_baseline_manifest": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_precheck\\structure_baseline_manifest.json",
+      "sha256": "666f5e73c90bca8fb836cde856bf9f11136146a946e4fc22d2cc20350b519c9f",
+      "size_bytes": 2849,
+      "mtime_ns": 1785764859201447300
+    }
+  }
+}

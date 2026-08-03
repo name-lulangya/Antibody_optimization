@@ -1,0 +1,895 @@
+{
+  "acceptance": {
+    "expected_record_count": 47,
+    "failed_sample_uid": "WCC__4-28",
+    "nb252": {
+      "chain_type": "H",
+      "first_numbered_imgt_position": "1",
+      "last_numbered_imgt_position": "128",
+      "numbered_non_gap_count": 126,
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "af91c2d4150382c297347541d367e593f6600b0476f01f8b0ef6597de8871b08",
+      "query_end_0based_inclusive": 125,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__Nb252",
+      "scheme": "imgt",
+      "unnumbered_c_sequence": "GS",
+      "unnumbered_n_sequence": ""
+    },
+    "numbering_failed_count": 1,
+    "numbering_pass_count": 46,
+    "score_assertion_policy": "scores recorded but no exact score asserted",
+    "status": "pass",
+    "successful_chain_type_counts": {
+      "H": 45,
+      "L": 1
+    }
+  },
+  "artifact_type": "provisional_imgt_sequence_numbering_review",
+  "generated_at": "2026-08-03T20:33:11+08:00",
+  "input": {
+    "manifest": {
+      "path": "docs\\result_artifacts\\nb_expression\\manifest.json",
+      "sha256": "db6d0b386629cfd30ea5f068cbd1b7d2354301c051b63e1c5886cc53c5f30172",
+      "size_bytes": 6007
+    },
+    "records": {
+      "path": "docs\\result_artifacts\\nb_expression\\nb_expression_records.csv",
+      "sha256": "ef5c9165d1e5f4a1b7995b8733e621ed7e7147cdb73dbfba9a74ce131b3647c9",
+      "size_bytes": 23931
+    },
+    "validated_upstream_provenance": {
+      "dataset": "collaborator_nanobody_reported_yield_1L",
+      "parser_version": "1.1.0",
+      "per_record_sha256": true,
+      "record_count": 47,
+      "records_sha256": "ef5c9165d1e5f4a1b7995b8733e621ed7e7147cdb73dbfba9a74ce131b3647c9",
+      "records_size_bytes": 23931
+    }
+  },
+  "numbering_semantics": {
+    "chain_type_caution": "ANARCII chain_type is a tool output, not experimentally validated identity",
+    "numbering_status_values": {
+      "failed": "ANARCII returned no numbering; no span or positions were invented",
+      "pass": "ANARCII returned a span that exactly reconstructs the input slice"
+    },
+    "position_mapping": "sequence_index_0based and sequence_index_1based map each non-gap ANARCII residue to the literal input sequence; gap rows are blank",
+    "query_bounds": "zero-based inclusive indices into sequence_raw",
+    "region_definition": "provisional IMGT numeric ranges: FR1 1-26, CDR1 27-38, FR2 39-55, CDR2 56-65, FR3 66-104, CDR3 105-117, FR4 118-128",
+    "scheme": "IMGT",
+    "score_caution": "ANARCII score is retained as a model-specific output; no exact score is asserted by the acceptance gate",
+    "sequence_scope_status_values": {
+      "provisional_numbered_domain": "ANARCII-numbered span only; not an authoritative construct/VHH boundary",
+      "unresolved": "no numbered span is available"
+    },
+    "vhh_region_sequence_policy": "upstream field is integrity-checked as input metadata but is never populated or written back"
+  },
+  "outputs": {
+    "positions": {
+      "encoding": "utf-8-sig",
+      "path": "docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_positions.csv",
+      "sha256": "d0249e11fa9800b769a7d2db28d6da453dc8d964029414fd444146ee2772266d",
+      "size_bytes": 1351886
+    },
+    "sequence_review": {
+      "encoding": "utf-8-sig",
+      "path": "docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_review.csv",
+      "sha256": "d513ad96e9fdb0e9dbdc423155c10414b27c1eed2b0e267bc6904e05053f985d",
+      "size_bytes": 26086
+    }
+  },
+  "samples": [
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "d4c8400a01b3f0886c3f8dbee7deb7b3bc798bd04cb84f3194776fe92ed4c0c7",
+      "query_end_0based_inclusive": 116,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__Nb290",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "d0d1113ec285797d1e6b0d464c6b7c73fce9986b4f2ed7fd3e8f782a9ffe1e91"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "7d0261129e0b8c4aaacaaa3beedbcdb2b98704a5c93ebca5b1d42b241fd7b494",
+      "query_end_0based_inclusive": 117,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__Nb270",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "348028bf1b17a4cd729ff9f1fb81c278fc2aae60e51ad90078f399aedcdaa435"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "30a78938a736afcea9f4e081c36180a89b54ea8032eb32190b2de4e3c026bc69",
+      "query_end_0based_inclusive": 120,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__Nb314",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "aaea6c26abb9407952267f2cc4271b691aa38d68995e4a56724b56401a8cdf46"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "1b1d0f34087e697a5412a33a7e6ead0264d3958d102ea472e851194d90e13395",
+      "query_end_0based_inclusive": 108,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__Nb5",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "9e59630f1d4afc857a795a3ac434449f17a8d1f15f1626ff12f2272a6bfc4d59"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "86b148019d04840aa7ee034465e7c1df7ab93ff32a8bfc9a1b0a467355aaf2e2",
+      "query_end_0based_inclusive": 116,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__Nb257",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "e02292d09e7392207b19d793ae1d344658c6a517a54efc41a977f335c2b5224e"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "e284fa3a867780f0732a0571065335ae00c1dc37e8c067052b2b93adbf171447",
+      "query_end_0based_inclusive": 125,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__Nb232",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "b1c3aa6047ffc1cb358d982bc4de9a77dde00871291ced9a8deeab289c87b15a"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "2d2cfd3d6f5b030ba4e2b319b6727f9783f555e593866e3120fcba7faea090b8",
+      "query_end_0based_inclusive": 117,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__Nb294",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "f7955fa588eb5bdf94cd437116a46b1668716575939913bd956abab2802e2742"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "de06d8090ef571de9ebc20441ba7f7e0f24afbf7a9bac5f1c554002bd5f355c8",
+      "query_end_0based_inclusive": 121,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__Nb256",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "1c57486ec1f9da54802224ef504fbd020eeca55a41f7cc8b89f4e7230b7ba956"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "3109f39c29039903b5c7bd9b87aa009f7ce289ab76b1e285380f58dd1791d3fc",
+      "query_end_0based_inclusive": 117,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__Nb233",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "aa37ad90cae53f300c30a8f2cb30de151af0b922fed34b7227d9947875dda51e"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "5de78806990e246e86b34a15fadfbe11a623c113ae8cb17b0e4062a5b1fb1bc3",
+      "query_end_0based_inclusive": 108,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__Nb302",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "cd9a5172aab5533f4d166b95ad5f00b4816f479c78daaae31715f3e75eb1d236"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "81832c3adc13eb4a679fcee62c931e36c6171178429bd2eae4b5e643c8bde002",
+      "query_end_0based_inclusive": 108,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__Nb253",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "3db2bda3e261a5f63a6d31fe864cbbe7ba750c8aaaf58c689bb10ae7e2601835"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "8e517d70f69909797ce4c7082bcdf823bec402e8d29d2a607ee2fb16077ab121",
+      "query_end_0based_inclusive": 117,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__Nb21",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "526b4d19086835465df72a732dc04e16392e35ac7c937f24e0719056175667bc"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "af91c2d4150382c297347541d367e593f6600b0476f01f8b0ef6597de8871b08",
+      "query_end_0based_inclusive": 125,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__Nb252",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "df5b83ddde8a3486383c12afe45e22af6a358f507eab5503d5dbd4430710288d"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "06aba414eee7016ac493e964b8b7b732ff4a46ee74932be7e8043ba989bf08c2",
+      "query_end_0based_inclusive": 116,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__Q1",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "3d12738f35e235644506a2e02dc1345cd5736558b54a13dfe2e4de67c0805a67"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "71b73c49f971bbd04e4eb7392fbcf2273944eced649110a1c4dd92b5f494a8d7",
+      "query_end_0based_inclusive": 129,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__P26",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "ae9a8435f7d594837c8953062d9f871ca0d688e0b2292e818811dd0319575ff7"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "c6d1e78f17ba946923704ae4833aa1545fdc8e6220ef8a6e328e97c2c723472f",
+      "query_end_0based_inclusive": 129,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__Q17",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "c74b77448049824694eb9056436f70cedf11d736f36e730b646c7877a57ca9c0"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "d93b7e4fe4c9b6ea84e97d6a86a210a37af0368808647a77d058bdd29a68ad31",
+      "query_end_0based_inclusive": 126,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__P27",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "d3177d45937de5942eee358944d74c0be5bffcc1896389e19b1d1a2fcae90441"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "36e58942399317d2357e9a9e8efc951fa629a2927e7715fb74f66e1e6827a8e0",
+      "query_end_0based_inclusive": 121,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__S53",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "3e767a7079e7eee7fafb8dbfef5e751f30981accb6463f6178e035346244f6c3"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "c274898350a8f438b10997edb9f7642d0db386005895be1cdeaa0cb931e4db36",
+      "query_end_0based_inclusive": 127,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__S31",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "3cd2dc40768955672746fcd9142323efd2d382f50e0aa981cf6170e2b1216237"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "faf204eeb59d96ecda31af2a043e350ceb0ddbda66fead444b179a26785a3751",
+      "query_end_0based_inclusive": 126,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__S4",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "d1a5393ddac740dee11c5fd8798d9996e20bfe6c53d4fbda56019c785d1bd16d"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "2a3de87c1c120249acd402314836ccff3df1df8e89b37607d69ef7ecd1e21995",
+      "query_end_0based_inclusive": 119,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__S19",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "8e9881f684682de82dbd7f67603c880d3189a42e0e75982fdc820df6108a0ee0"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "7c61e93a74741961ef3086f71b088f9b187cbe4a214e238077aa0dd6123a45e1",
+      "query_end_0based_inclusive": 126,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__S73",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "37ca6e745dcb572928b076c76711d7734ea9149a944d9d32eeac5fd577a6ccdc"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "7a431ed45f2b1ffeb034b27706bbd7fa0047fd7d2acbdf896a257b5888ce3f81",
+      "query_end_0based_inclusive": 130,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LTT__S26",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "33eaab8ad82fafa49e718ca7271741b6163d0f4a9670f84361fcf49301cc6ef7"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_n_terminal_residues",
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "51def8255bf3fee39febee0a9d7a8f485992cb66a677b3f8a3873d178fb47bd2",
+      "query_end_0based_inclusive": 126,
+      "query_start_0based_inclusive": 2,
+      "sample_uid": "WCC__4-7",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "0fbb4596c8bccafcd48670f7316713a458b866c32b0ececcd880734744c732f2"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_n_terminal_residues",
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "30dcbc6e630107676fae6fd708e8b122c54de262a04f70ff4cfa306e91527b87",
+      "query_end_0based_inclusive": 120,
+      "query_start_0based_inclusive": 2,
+      "sample_uid": "WCC__4-34",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "874f816eb5f5eef64172027048d9ada0bdca5599e6ed2fbc4ba1eb420980b6f1"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_n_terminal_residues",
+        "unnumbered_c_terminal_residues",
+        "last_numbered_imgt_position_not_128"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "ced25530e1a939c824a33a700d0a346c8515ff53efeff30f2b3a4d0370884cbb",
+      "query_end_0based_inclusive": 88,
+      "query_start_0based_inclusive": 2,
+      "sample_uid": "WCC__4-1",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "2b39ce7bc6025e86d7da6b0b5cf593acdfadec04a33c5a38209ae96702dcc866"
+    },
+    {
+      "chain_type": "F",
+      "error": "Score less than cut off.",
+      "numbering_review_flags": [
+        "anarcii_numbering_failed"
+      ],
+      "numbering_status": "failed",
+      "provisional_numbered_span_sha256": null,
+      "query_end_0based_inclusive": null,
+      "query_start_0based_inclusive": null,
+      "sample_uid": "WCC__4-28",
+      "scheme": "imgt",
+      "sequence_scope_status": "unresolved",
+      "sequence_sha256": "3c5bf8e82ea4e933d862a41e4849932b19b2047ac86ef301c192b98bfddeb876"
+    },
+    {
+      "chain_type": "L",
+      "error": null,
+      "numbering_review_flags": [
+        "anarcii_chain_type_L",
+        "unnumbered_n_terminal_residues",
+        "unnumbered_c_terminal_residues",
+        "last_numbered_imgt_position_not_128"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "3cc0fadf03929cb2ff844aa62ba62cedcf556379bf092b45b9fd7fb99ec142e8",
+      "query_end_0based_inclusive": 106,
+      "query_start_0based_inclusive": 2,
+      "sample_uid": "WCC__4-11",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "f2341d2d8957eedc4aa5d54fd2d74604d64846295d82908bb5c1e901208d3358"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_n_terminal_residues",
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "478d2704b9472962adc992e88d8aea7c3e4f289d6e135d3a17e8f3f0a5f14d84",
+      "query_end_0based_inclusive": 125,
+      "query_start_0based_inclusive": 2,
+      "sample_uid": "WCC__4-40",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "29c4aabc39dcaa69b332678082ffa2a327ed2e026ce78a71b83766d722ba4c28"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_n_terminal_residues",
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "55bab05c24bae88754385fb19d8e2a2a394d9015ae79e69df4d9ebaeebb87ad6",
+      "query_end_0based_inclusive": 122,
+      "query_start_0based_inclusive": 2,
+      "sample_uid": "WCC__4-36",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "dd492b0f7322053ed6c1426e22214d013f5a6e3e4f2d19cfe51267170eb35627"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_n_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "ffe2beabe5605bec10db002c282214fdacbe99968c4d404d1b4372cfb44ec704",
+      "query_end_0based_inclusive": 122,
+      "query_start_0based_inclusive": 2,
+      "sample_uid": "WCC__4-42",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "5004f2043d3fd0a6f9e36882617ef9b24dc288503650c0e59c5ecaf5477375f9"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "b28b6e5f56e8484c88c6f6d5b54d5e367fbf3527a8b2d38b82cd1e9b1492cad9",
+      "query_end_0based_inclusive": 125,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LLJ__1G7",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "c2a63c428048f6bf8d38dbbe6a83e796cac48d22036d9d4caf000753d293cbe7"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "bc5efa70baaf12f40802c300c0b8f7463b5e3909cec854025ee10a0412dc6e34",
+      "query_end_0based_inclusive": 121,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LLJ__2A4",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "5632e4c0ef411be117dd9437bd5eaa2ef8b69b2a70cc72f301713975ff6c39b2"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "a45a7ae191f8217a9187de0b7aed96a0924bc8ceb4eb27185d63822545add286",
+      "query_end_0based_inclusive": 125,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LLJ__2C8",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "fee33ae1caa961a5f387733c6fc4bdbd3821213920e317131abe4b2144e80abe"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "a1d3bc834093d8f038f8f4a9fdadf49633f2b239ab5b8d93584f17999cd0ab0f",
+      "query_end_0based_inclusive": 117,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LLJ__1E2",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "e2d1716daf1aa6af6aa4177d02e95798bb04017f2780ff4c6e8204a45c9596ad"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "3721efc4aff8e792c63be169f9952ee7de315a23b4f804999116bddd92a27d3c",
+      "query_end_0based_inclusive": 125,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LLJ__2E11",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "4fd0edeac7e7f600c2faaed87ddf350f4738dc70f2f94d168775d6772fa21b71"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "5deab07e76e9bcc9264f988f6f10d1ec177dedd60cd193e13ab6d7011ed9ad02",
+      "query_end_0based_inclusive": 125,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LLJ__1H7",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "4caff40bc091e221f5c26f5d182dc7d84d3dd37c35990c24310a8c23b9a8768d"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "fea6a6d6528d9e070a95e88c11247bddca99dfa85b73164864a93328c38e3ce3",
+      "query_end_0based_inclusive": 125,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LLJ__2C6",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "b83a56e9355cf228a39f156e9b6e915f47ec3cf9e9e6306b3825ef735036833b"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "7c5a21dacbe5e2a41f96f99f966f500e192c8be29e812ca7f590f6d7f2363314",
+      "query_end_0based_inclusive": 121,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LLJ__2E2",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "b9fe75eccd1a2ec79e36c68768168949170880fb9e24c56a7144170b493a399f"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "cb896a7cf59a3c5cb8a0aa99a25c74dc43e5c720594bc5e56fef76d27da739b7",
+      "query_end_0based_inclusive": 123,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LLJ__1G11",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "676df723071f4e625288e733d2f8b34d1081b76fd69c21ec0f738f3417f8d5c2"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "e6e56342f18facd7b31026da1623812c2da31c9414edfc7125aea046568cfbc4",
+      "query_end_0based_inclusive": 125,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LLJ__1H6",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "75c68b32aca46a67b7f8192e3d8f08cc338a57330a6e1251d1134b29092fc464"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "a00ef36eccaa42a88a7f6df2ff3e9d1bf5e01b10c197c94ad8ca4c558ce2372c",
+      "query_end_0based_inclusive": 121,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LLJ__1F12",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "158f8a5d172291bc71e6bb39def4335e7cc37839c4984a4598d8fe255327ce9e"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "64fd721c6dd1607223ab600a37265e0cb46ac9ee8bfb70ddceec3b3e818f9a0e",
+      "query_end_0based_inclusive": 121,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LLJ__2H8",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "441a4527e34a1e9b429b389eed4e27c1bce2216331227f9acbb7476a997b79ff"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "f9a609bf1a575b1170081379ca4dd74bb3f349d244e67198b23cb9a3f01eea90",
+      "query_end_0based_inclusive": 121,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LLJ__1B11",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "7aebcbb2c68d48fdbe74388e3bfa86e0edb3507e6a8aa43cdb47e19a5df77d94"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "4efad6baf4fc5a8170d9a0b5c2a7cc166c4e6e45ba3c72f51c81e9c6a94f61d1",
+      "query_end_0based_inclusive": 124,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LLJ__2F12",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "3fd8d914b8c1c175da8217f2ddba16fa01e4127dc9d01979c00c1758766ca36f"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "6ef97bf6a0345a9a345d68cab7e423de03131c6c80375ba1534810841be3e36c",
+      "query_end_0based_inclusive": 121,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LLJ__2G7",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "9bd838fb19011ea69e6e327629ca09e72681c64440448b0a97cd0e551573ed9a"
+    },
+    {
+      "chain_type": "H",
+      "error": null,
+      "numbering_review_flags": [
+        "unnumbered_c_terminal_residues"
+      ],
+      "numbering_status": "pass",
+      "provisional_numbered_span_sha256": "7d66b2e5bfd30fa0169b65e118e7b9dfc38f136e188f5bc0d3c9f0c98825d110",
+      "query_end_0based_inclusive": 121,
+      "query_start_0based_inclusive": 0,
+      "sample_uid": "LLJ__1G4",
+      "scheme": "imgt",
+      "sequence_scope_status": "provisional_numbered_domain",
+      "sequence_sha256": "413068b9bf60e75a40e4a370fef19a4f7adb6e4c1e0576c57bcf5f6f59f691c8"
+    }
+  ],
+  "statistics": {
+    "chain_type_counts_all_results": {
+      "F": 1,
+      "H": 45,
+      "L": 1
+    },
+    "chain_type_counts_successful_results": {
+      "H": 45,
+      "L": 1
+    },
+    "failed_samples": [
+      {
+        "chain_type": "F",
+        "error": "Score less than cut off.",
+        "sample_uid": "WCC__4-28"
+      }
+    ],
+    "first_numbered_imgt_position_counts": {
+      "1": 46
+    },
+    "last_numbered_imgt_position_counts": {
+      "102": 1,
+      "117": 1,
+      "128": 44
+    },
+    "multi_domain_output_status": "not_observed_with_scfv_false",
+    "numbered_non_gap_position_count": 5566,
+    "numbering_status_counts": {
+      "failed": 1,
+      "pass": 46
+    },
+    "position_row_count": 6061,
+    "provider_numbering_status_counts": {
+      "LLJ": {
+        "pass": 16
+      },
+      "LTT": {
+        "pass": 23
+      },
+      "WCC": {
+        "failed": 1,
+        "pass": 7
+      }
+    },
+    "query_end_0based_inclusive_counts": {
+      "106": 1,
+      "108": 3,
+      "116": 3,
+      "117": 5,
+      "119": 1,
+      "120": 2,
+      "121": 9,
+      "122": 2,
+      "123": 1,
+      "124": 1,
+      "125": 9,
+      "126": 4,
+      "127": 1,
+      "129": 2,
+      "130": 1,
+      "88": 1
+    },
+    "query_start_0based_inclusive_counts": {
+      "0": 39,
+      "2": 7
+    },
+    "record_count": 47,
+    "sequence_scope_status_counts": {
+      "provisional_numbered_domain": 46,
+      "unresolved": 1
+    },
+    "unnumbered_c_length_counts": {
+      "0": 1,
+      "15": 1,
+      "2": 41,
+      "20": 1,
+      "23": 1,
+      "5": 1
+    },
+    "unnumbered_n_length_counts": {
+      "0": 39,
+      "2": 7
+    }
+  },
+  "status": "pass",
+  "tool": {
+    "name": "ANARCII",
+    "parameters": {
+      "batch_size": 8,
+      "cpu": true,
+      "mode": "accuracy",
+      "ncpu": 1,
+      "scfv": false,
+      "scheme": "imgt",
+      "seq_type": "antibody"
+    },
+    "version": "2.0.8"
+  }
+}

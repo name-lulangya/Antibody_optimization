@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "script_version": "1.0.0",
+  "generated_at": "2026-08-03T21:24:00+08:00",
+  "status": "blocked",
+  "export_status": "blocked",
+  "inventory_status": "blocked",
+  "chain_role_status": "blocked",
+  "residue_mapping_status": "blocked",
+  "authoritative_sequence_status": "blocked",
+  "blockers": [
+    "verified ChimeraX export manifest is absent; run the GUI runscript first"
+  ],
+  "outputs": {},
+  "mapping_policy": {
+    "route": "exact-first_then_fixed_global_if_required",
+    "exact_branch": "unique identity-consistent order-preserving mapping",
+    "global_branch": {
+      "mode": "global",
+      "substitution_matrix": "BLOSUM62",
+      "open_gap_score": -10.0,
+      "extend_gap_score": -0.5,
+      "terminal_gap_score": 0.0
+    },
+    "acceptance": "all optimal global alignments must imply the same complete observed-to-reference mapping and every mapped residue must match WT",
+    "no_automatic_fallback_beyond_global_gate": true
+  },
+  "component_versions": {
+    "structure_inventory": "1.0.0",
+    "residue_mapping": "1.0.0",
+    "polymer_mapping": "1.0.0"
+  },
+  "execution": {
+    "script": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\input_baseline\\build_structure_baseline.py",
+    "command_argv": [
+      "D:\\miniconda\\envs\\ab_optim\\python.exe",
+      "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\input_baseline\\build_structure_baseline.py",
+      "--cxs-export-dir",
+      "data\\structures\\cxs_exports",
+      "--expression-records",
+      "docs\\result_artifacts\\nb_expression\\nb_expression_records.csv",
+      "--numbering-positions",
+      "docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_positions.csv",
+      "--output-dir",
+      "docs\\result_artifacts\\input_baseline\\structure_precheck",
+      "--run-summary",
+      "docs\\run_summaries\\input_baseline\\structure_precheck.json",
+      "--generated-at",
+      "2026-08-03T21:24:00+08:00"
+    ],
+    "working_directory": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization"
+  },
+  "inputs": {
+    "cxs_export_directory": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\data\\structures\\cxs_exports",
+    "expression_records": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\nb_expression_records.csv",
+      "sha256": "ef5c9165d1e5f4a1b7995b8733e621ed7e7147cdb73dbfba9a74ce131b3647c9",
+      "size_bytes": 23931
+    },
+    "numbering_positions": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_positions.csv",
+      "sha256": "d0249e11fa9800b769a7d2db28d6da453dc8d964029414fd444146ee2772266d",
+      "size_bytes": 1351886
+    }
+  }
+}

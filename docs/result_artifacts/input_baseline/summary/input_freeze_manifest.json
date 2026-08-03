@@ -1,0 +1,321 @@
+{
+  "generated_at": "2026-08-03T21:24:20+08:00",
+  "schema_version": 1,
+  "scientific_scope": {
+    "assay_equivalence_inferred": false,
+    "chain_roles_inferred": false,
+    "construct_boundary_confirmed": false,
+    "reported_nb252_is_provisional": true
+  },
+  "sequence_identity": {
+    "literal_sequence_policy": "no normalization, trimming, or substitution",
+    "per_sample": [
+      {
+        "sample_uid": "LLJ__1B11",
+        "sequence_length_aa": 124,
+        "sequence_sha256": "7aebcbb2c68d48fdbe74388e3bfa86e0edb3507e6a8aa43cdb47e19a5df77d94"
+      },
+      {
+        "sample_uid": "LLJ__1E2",
+        "sequence_length_aa": 120,
+        "sequence_sha256": "e2d1716daf1aa6af6aa4177d02e95798bb04017f2780ff4c6e8204a45c9596ad"
+      },
+      {
+        "sample_uid": "LLJ__1F12",
+        "sequence_length_aa": 124,
+        "sequence_sha256": "158f8a5d172291bc71e6bb39def4335e7cc37839c4984a4598d8fe255327ce9e"
+      },
+      {
+        "sample_uid": "LLJ__1G11",
+        "sequence_length_aa": 126,
+        "sequence_sha256": "676df723071f4e625288e733d2f8b34d1081b76fd69c21ec0f738f3417f8d5c2"
+      },
+      {
+        "sample_uid": "LLJ__1G4",
+        "sequence_length_aa": 124,
+        "sequence_sha256": "413068b9bf60e75a40e4a370fef19a4f7adb6e4c1e0576c57bcf5f6f59f691c8"
+      },
+      {
+        "sample_uid": "LLJ__1G7",
+        "sequence_length_aa": 128,
+        "sequence_sha256": "c2a63c428048f6bf8d38dbbe6a83e796cac48d22036d9d4caf000753d293cbe7"
+      },
+      {
+        "sample_uid": "LLJ__1H6",
+        "sequence_length_aa": 128,
+        "sequence_sha256": "75c68b32aca46a67b7f8192e3d8f08cc338a57330a6e1251d1134b29092fc464"
+      },
+      {
+        "sample_uid": "LLJ__1H7",
+        "sequence_length_aa": 128,
+        "sequence_sha256": "4caff40bc091e221f5c26f5d182dc7d84d3dd37c35990c24310a8c23b9a8768d"
+      },
+      {
+        "sample_uid": "LLJ__2A4",
+        "sequence_length_aa": 124,
+        "sequence_sha256": "5632e4c0ef411be117dd9437bd5eaa2ef8b69b2a70cc72f301713975ff6c39b2"
+      },
+      {
+        "sample_uid": "LLJ__2C6",
+        "sequence_length_aa": 128,
+        "sequence_sha256": "b83a56e9355cf228a39f156e9b6e915f47ec3cf9e9e6306b3825ef735036833b"
+      },
+      {
+        "sample_uid": "LLJ__2C8",
+        "sequence_length_aa": 128,
+        "sequence_sha256": "fee33ae1caa961a5f387733c6fc4bdbd3821213920e317131abe4b2144e80abe"
+      },
+      {
+        "sample_uid": "LLJ__2E11",
+        "sequence_length_aa": 128,
+        "sequence_sha256": "4fd0edeac7e7f600c2faaed87ddf350f4738dc70f2f94d168775d6772fa21b71"
+      },
+      {
+        "sample_uid": "LLJ__2E2",
+        "sequence_length_aa": 124,
+        "sequence_sha256": "b9fe75eccd1a2ec79e36c68768168949170880fb9e24c56a7144170b493a399f"
+      },
+      {
+        "sample_uid": "LLJ__2F12",
+        "sequence_length_aa": 127,
+        "sequence_sha256": "3fd8d914b8c1c175da8217f2ddba16fa01e4127dc9d01979c00c1758766ca36f"
+      },
+      {
+        "sample_uid": "LLJ__2G7",
+        "sequence_length_aa": 124,
+        "sequence_sha256": "9bd838fb19011ea69e6e327629ca09e72681c64440448b0a97cd0e551573ed9a"
+      },
+      {
+        "sample_uid": "LLJ__2H8",
+        "sequence_length_aa": 124,
+        "sequence_sha256": "441a4527e34a1e9b429b389eed4e27c1bce2216331227f9acbb7476a997b79ff"
+      },
+      {
+        "sample_uid": "LTT__Nb21",
+        "sequence_length_aa": 120,
+        "sequence_sha256": "526b4d19086835465df72a732dc04e16392e35ac7c937f24e0719056175667bc"
+      },
+      {
+        "sample_uid": "LTT__Nb232",
+        "sequence_length_aa": 128,
+        "sequence_sha256": "b1c3aa6047ffc1cb358d982bc4de9a77dde00871291ced9a8deeab289c87b15a"
+      },
+      {
+        "sample_uid": "LTT__Nb233",
+        "sequence_length_aa": 120,
+        "sequence_sha256": "aa37ad90cae53f300c30a8f2cb30de151af0b922fed34b7227d9947875dda51e"
+      },
+      {
+        "sample_uid": "LTT__Nb252",
+        "sequence_length_aa": 128,
+        "sequence_sha256": "df5b83ddde8a3486383c12afe45e22af6a358f507eab5503d5dbd4430710288d"
+      },
+      {
+        "sample_uid": "LTT__Nb253",
+        "sequence_length_aa": 111,
+        "sequence_sha256": "3db2bda3e261a5f63a6d31fe864cbbe7ba750c8aaaf58c689bb10ae7e2601835"
+      },
+      {
+        "sample_uid": "LTT__Nb256",
+        "sequence_length_aa": 124,
+        "sequence_sha256": "1c57486ec1f9da54802224ef504fbd020eeca55a41f7cc8b89f4e7230b7ba956"
+      },
+      {
+        "sample_uid": "LTT__Nb257",
+        "sequence_length_aa": 119,
+        "sequence_sha256": "e02292d09e7392207b19d793ae1d344658c6a517a54efc41a977f335c2b5224e"
+      },
+      {
+        "sample_uid": "LTT__Nb270",
+        "sequence_length_aa": 120,
+        "sequence_sha256": "348028bf1b17a4cd729ff9f1fb81c278fc2aae60e51ad90078f399aedcdaa435"
+      },
+      {
+        "sample_uid": "LTT__Nb290",
+        "sequence_length_aa": 119,
+        "sequence_sha256": "d0d1113ec285797d1e6b0d464c6b7c73fce9986b4f2ed7fd3e8f782a9ffe1e91"
+      },
+      {
+        "sample_uid": "LTT__Nb294",
+        "sequence_length_aa": 120,
+        "sequence_sha256": "f7955fa588eb5bdf94cd437116a46b1668716575939913bd956abab2802e2742"
+      },
+      {
+        "sample_uid": "LTT__Nb302",
+        "sequence_length_aa": 111,
+        "sequence_sha256": "cd9a5172aab5533f4d166b95ad5f00b4816f479c78daaae31715f3e75eb1d236"
+      },
+      {
+        "sample_uid": "LTT__Nb314",
+        "sequence_length_aa": 123,
+        "sequence_sha256": "aaea6c26abb9407952267f2cc4271b691aa38d68995e4a56724b56401a8cdf46"
+      },
+      {
+        "sample_uid": "LTT__Nb5",
+        "sequence_length_aa": 111,
+        "sequence_sha256": "9e59630f1d4afc857a795a3ac434449f17a8d1f15f1626ff12f2272a6bfc4d59"
+      },
+      {
+        "sample_uid": "LTT__P26",
+        "sequence_length_aa": 132,
+        "sequence_sha256": "ae9a8435f7d594837c8953062d9f871ca0d688e0b2292e818811dd0319575ff7"
+      },
+      {
+        "sample_uid": "LTT__P27",
+        "sequence_length_aa": 129,
+        "sequence_sha256": "d3177d45937de5942eee358944d74c0be5bffcc1896389e19b1d1a2fcae90441"
+      },
+      {
+        "sample_uid": "LTT__Q1",
+        "sequence_length_aa": 119,
+        "sequence_sha256": "3d12738f35e235644506a2e02dc1345cd5736558b54a13dfe2e4de67c0805a67"
+      },
+      {
+        "sample_uid": "LTT__Q17",
+        "sequence_length_aa": 132,
+        "sequence_sha256": "c74b77448049824694eb9056436f70cedf11d736f36e730b646c7877a57ca9c0"
+      },
+      {
+        "sample_uid": "LTT__S19",
+        "sequence_length_aa": 122,
+        "sequence_sha256": "8e9881f684682de82dbd7f67603c880d3189a42e0e75982fdc820df6108a0ee0"
+      },
+      {
+        "sample_uid": "LTT__S26",
+        "sequence_length_aa": 133,
+        "sequence_sha256": "33eaab8ad82fafa49e718ca7271741b6163d0f4a9670f84361fcf49301cc6ef7"
+      },
+      {
+        "sample_uid": "LTT__S31",
+        "sequence_length_aa": 130,
+        "sequence_sha256": "3cd2dc40768955672746fcd9142323efd2d382f50e0aa981cf6170e2b1216237"
+      },
+      {
+        "sample_uid": "LTT__S4",
+        "sequence_length_aa": 129,
+        "sequence_sha256": "d1a5393ddac740dee11c5fd8798d9996e20bfe6c53d4fbda56019c785d1bd16d"
+      },
+      {
+        "sample_uid": "LTT__S53",
+        "sequence_length_aa": 124,
+        "sequence_sha256": "3e767a7079e7eee7fafb8dbfef5e751f30981accb6463f6178e035346244f6c3"
+      },
+      {
+        "sample_uid": "LTT__S73",
+        "sequence_length_aa": 129,
+        "sequence_sha256": "37ca6e745dcb572928b076c76711d7734ea9149a944d9d32eeac5fd577a6ccdc"
+      },
+      {
+        "sample_uid": "WCC__4-1",
+        "sequence_length_aa": 112,
+        "sequence_sha256": "2b39ce7bc6025e86d7da6b0b5cf593acdfadec04a33c5a38209ae96702dcc866"
+      },
+      {
+        "sample_uid": "WCC__4-11",
+        "sequence_length_aa": 112,
+        "sequence_sha256": "f2341d2d8957eedc4aa5d54fd2d74604d64846295d82908bb5c1e901208d3358"
+      },
+      {
+        "sample_uid": "WCC__4-28",
+        "sequence_length_aa": 105,
+        "sequence_sha256": "3c5bf8e82ea4e933d862a41e4849932b19b2047ac86ef301c192b98bfddeb876"
+      },
+      {
+        "sample_uid": "WCC__4-34",
+        "sequence_length_aa": 141,
+        "sequence_sha256": "874f816eb5f5eef64172027048d9ada0bdca5599e6ed2fbc4ba1eb420980b6f1"
+      },
+      {
+        "sample_uid": "WCC__4-36",
+        "sequence_length_aa": 125,
+        "sequence_sha256": "dd492b0f7322053ed6c1426e22214d013f5a6e3e4f2d19cfe51267170eb35627"
+      },
+      {
+        "sample_uid": "WCC__4-40",
+        "sequence_length_aa": 128,
+        "sequence_sha256": "29c4aabc39dcaa69b332678082ffa2a327ed2e026ce78a71b83766d722ba4c28"
+      },
+      {
+        "sample_uid": "WCC__4-42",
+        "sequence_length_aa": 123,
+        "sequence_sha256": "5004f2043d3fd0a6f9e36882617ef9b24dc288503650c0e59c5ecaf5477375f9"
+      },
+      {
+        "sample_uid": "WCC__4-7",
+        "sequence_length_aa": 142,
+        "sequence_sha256": "0fbb4596c8bccafcd48670f7316713a458b866c32b0ececcd880734744c732f2"
+      }
+    ],
+    "record_count": 47,
+    "unique_sample_uid_count": 47
+  },
+  "software_contract": {
+    "anarcii": "2.0.8",
+    "chimerax_export_required": "1.12",
+    "gemmi": "0.7.5",
+    "python": "3.11.15",
+    "python_required_major_minor": "3.11",
+    "source_session_generator": {
+      "chimerax": "1.9",
+      "evidence_status": "user_provided",
+      "platform": "macOS"
+    }
+  },
+  "sources": {
+    "collaborator_cxs": {
+      "mtime_ns": 1785479308801468100,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\Nb252-optimization.cxs",
+      "sha256": "1bc636c28f66ae60edc658d2e1c4aad0b07f4141ca5411c78662aa19da793c4d",
+      "size_bytes": 537670
+    },
+    "expression_audit_manifest": {
+      "mtime_ns": 1785763883673774900,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\expression\\allowed_use_manifest.json",
+      "sha256": "0b011d18ac91f3b9fbdaa6464176dcec9545fa8bb3f5ca2ae1a8cb4387e269e4",
+      "size_bytes": 4823
+    },
+    "expression_manifest": {
+      "mtime_ns": 1785740936522894400,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\manifest.json",
+      "sha256": "db6d0b386629cfd30ea5f068cbd1b7d2354301c051b63e1c5886cc53c5f30172",
+      "size_bytes": 6007
+    },
+    "expression_records": {
+      "mtime_ns": 1785740936517894800,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\nb_expression_records.csv",
+      "sha256": "ef5c9165d1e5f4a1b7995b8733e621ed7e7147cdb73dbfba9a74ce131b3647c9",
+      "size_bytes": 23931
+    },
+    "reported_yield_docx": {
+      "mtime_ns": 1785724969828658000,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\nb序列及产量（1L）.docx",
+      "sha256": "a6e4022f0978fbd70a0e04dc78f479140ab6f55caaa90b467fb77a62eb5db5d1",
+      "size_bytes": 14172
+    },
+    "sample_comparability_review": {
+      "mtime_ns": 1785763883671774100,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\expression\\sample_comparability_review.csv",
+      "sha256": "96141994f9f04237d4cb0e6a94ae2cca7e2db6df3c8b336e66d7748888f09762",
+      "size_bytes": 36560
+    },
+    "sequence_numbering_manifest": {
+      "mtime_ns": 1785763881926849000,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_manifest.json",
+      "sha256": "6d813bd9353324c6e2f24c60bca23269f0d9b51aa31ad0701186151ecce48184",
+      "size_bytes": 32988
+    },
+    "sequence_numbering_positions": {
+      "mtime_ns": 1785763881926342300,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_positions.csv",
+      "sha256": "d0249e11fa9800b769a7d2db28d6da453dc8d964029414fd444146ee2772266d",
+      "size_bytes": 1351886
+    },
+    "sequence_numbering_review": {
+      "mtime_ns": 1785763881924341900,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_review.csv",
+      "sha256": "d513ad96e9fdb0e9dbdc423155c10414b27c1eed2b0e267bc6904e05053f985d",
+      "size_bytes": 26086
+    }
+  },
+  "status": "pass"
+}

@@ -1,0 +1,5 @@
+﻿metric,category,count
+numbering_status,failed,1
+numbering_status,pass,46
+highest_allowed_use,within_assay_numeric_exploratory,31
+highest_allowed_use,within_assay_ordinal_exploratory,16

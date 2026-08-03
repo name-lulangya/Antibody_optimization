@@ -26,3 +26,90 @@
   - 主要返回：通过后的规范化路径，或完成全部替换；不返回部分成功状态。
   - 算法假设：最终目标必须位于项目根内，已存在目标必须是普通非符号链接文件，父目录必须存在；提交前需为全部 staged 文件保留一份同目录候选空间。Windows 候选继承目标父目录 ACL，POSIX 候选保留 staged 文件 mode。
   - 明确不支持：跨项目根写出、目录替换、符号链接目标、时间戳/xattr/显式 ACL 复制和操作系统崩溃级持久性保证；运行期替换失败会尽力完整回滚并显式报告不完整 rollback。
+- `antibody_optimization.input_integrity`
+  - 用途：把原始 CXS、DOCX、47 行表达记录及本阶段派生 manifest 绑定为可机读的输入冻结记录，校验 SHA-256、大小、mtime、序列字面值、逐样本哈希及已锁定软件版本。
+  - 主要输入/返回：具体源文件、表达记录与对应 manifest、序列和表达审核 manifest；返回输入身份 manifest 及单文件身份/不变性校验结果。
+  - 算法假设：以具体字节与 manifest 中的已记录输出为权威技术身份；运行前后的大小、mtime 和哈希都必须一致。
+  - 明确不支持：推断 VHH 构建体边界、链角色、实验等价性或结构来源，也不修复或替换不一致的输入。
+- `antibody_optimization.sequence_numbering`
+  - 用途：规范化并校验 ANARCII 的 provisional IMGT 结果，明确分离合作者原序列、可编号区间与尚未确认的生物学构建体边界。
+  - 主要输入/返回：47 条已验证的原序列行与 ANARCII 结果；返回序列级 `NumberingAudit`、位点级 `NumberingPosition` 和稳定的 FR/CDR 标签。
+  - 算法假设：固定 ANARCII 2.0.8、`antibody/accuracy/IMGT`、CPU 单进程、batch 8、`scfv=False`；IMGT 区间按 1–26/27–38/39–55/56–65/66–104/105–117/118–128 分区，保留插入码。
+  - 明确不支持：将 chain type 当作实验链身份、自创 score 阈值、自动裁剪未编号端、回写 `vhh_region_sequence` 或宣布成熟 VHH 边界。
+- `antibody_optimization.sequence_numbering_artifacts`
+  - 用途：验证上游表达 manifest，把编号审核写成固定列顺序的序列表、位点表、manifest 与统计摘要。
+  - 主要输入/返回：已验证的表达 CSV/manifest 和 `NumberingAudit` 列表；返回 UTF-8 with BOM CSV 行、逐样本摘要和 UTF-8 JSON。
+  - 算法假设：严格保留 47 条原序列和哈希，所有人工阅读 CSV 使用 BOM、LF 与固定字段顺序。
+  - 明确不支持：调用 ANARCII、推断序列边界、改动源表或用编号结果覆盖原始字段。
+- `antibody_optimization.sequence_numbering_runtime`
+  - 用途：作为唯一 ANARCII 可执行适配层，将固定调用交给纯规范化/校验逻辑。
+  - 主要输入/返回：`InputSequence` 列表；返回经语义校验的 `NumberingAudit` 元组。
+  - 算法假设：安装版本必须精确为 2.0.8，不自动改用其他版本、设备、模型模式或编号方案。
+  - 明确不支持：序列 I/O、制品写出、GPU/多进程选路和 ANARCII 之外的备用编号器。
+- `antibody_optimization.expression_audit`
+  - 用途：保留 reported-yield 原语义，构建 assay 元数据审核、逐样本可比性审核、浏览视图与允许用途 manifest。
+  - 主要输入/返回：冻结表达记录、assay context、源 manifest 和可选序列审核摘要；返回 3 类规范表及机器可读的 allowed-use 决策。
+  - 算法假设：LTT/WCC 只允许来源内探索性数值使用，LLJ 只允许来源内分档/删失探索；跨来源 pooling 与向 Nb252 迁移在证据不足时明确 `blocked`。
+  - 明确不支持：将 reported yield 归一化为统一 mg/L、对 LLJ 插值个体点估计、补齐未报告协议、训练表达量模型或宣布跨 assay 等价。
+- `antibody_optimization.structure_inventory`
+  - 用途：用 Gemmi 读回 ChimeraX mmCIF 导出，保留 auth/label 链和残基标识、entity、altloc、occupancy 与坐标状态，生成链/残基清单并验证 native/reference-frame 的拓扑和刚体关系。
+  - 主要输入/返回：已由 export manifest 绑定的单模型 mmCIF 和显式 `ChainSelector`；返回 Gemmi 结构、inventory 行、`StructureResidue`、原子位点分类计数、拓扑签名及全原子 Kabsch 刚体变换/残差。
+  - 算法假设：`setup_entities()`/子链标签分配只在分析内存副本上作为显式记录的启发式步骤，导出文件不被覆盖；native/reference-frame 必须具有完全相同的原子位点拓扑且可由一个有限刚体变换解释。
+  - 明确不支持：按链顺序/空间位置分配角色、重编号、补残基、修改/写回结构，或把启发式 entity 当作源文件事实。
+- `antibody_optimization.source_mmcif_evidence`
+  - 用途：直接读取原始 mmCIF 的 `_entity`、`_entity_poly`、`_entity_poly_seq`、`_struct_asym` 与 `_pdbx_poly_seq_scheme`，形成不依赖 Gemmi entity 推断的 polymer 序列、entity 描述和 auth/label 编号证据。
+  - 主要输入/返回：单一 data block 的源 mmCIF 与明确 `label_asym_id`；返回 `SourcePolymerEvidence` 和逐位 `PolySeqSchemeRow`，保留原始类别来源、插入码、auth 编号与序列哈希。
+  - 算法假设：相关源类别一旦存在就必须内部一致、编号连续且残基身份可核验；缺失类别保持 `absent`，不会由分析副本补写。
+  - 明确不支持：分配链角色、序列比对、生成 label ID、修改 mmCIF，或用 Gemmi 启发式结果覆盖冲突的源注释。
+- `antibody_optimization.polymer_mapping`
+  - 用途：按证据优先级组合 source polymer→reported Nb252 与 observed coordinates→source polymer 的可逆映射，并记录每一步的方法、fallback 原因和来源。
+  - 主要输入/返回：128-aa reported Nb252、可选 `SourcePolymerEvidence`、结构观测残基及 label-ID 来源；返回 `PolymerMappingResult` 和逐观测残基的 reported 序列索引。
+  - 算法假设：先使用源 polymer 序列，再使用源 label/auth scheme；只有对应源标识缺失时才允许固定 exact-first/BLOSUM62 序列 fallback。已存在但冲突的源证据必须阻断，Gemmi 启发式 label ID 只能用于一致性核验。
+  - 明确不支持：把 128-aa reported 参考自动称为已确认 authoritative construct、忽略 WT/编号冲突、随机打破重复最佳比对，或在源证据冲突时静默 fallback。
+- `antibody_optimization.structure_baseline_support`
+  - 用途：集中验证 CXS 导出集合/哈希、ChimeraX–Gemmi atom-site 与 model/chain/residue/atom 计数合同、颜色表绑定，并给结构清单补充 source-polymer 证据及 raw/heuristic label-ID 来源。
+  - 主要输入/返回：CXS export manifest/目录、native mmCIF、结构 inventory 与明确 chain selector；返回已核验的导出路径、计数字典、颜色表路径和映射输入残基。
+  - 算法假设：exact export set、声明哈希和跨工具计数必须一致；Gemmi `setup_entities()` 后信息始终标记为分析副本启发式元数据。
+  - 明确不支持：分配链角色、修改结构、生成科学结论，或把 Gemmi 启发式 entity/label ID 提升为源文件证据。
+- `antibody_optimization.baseline_review`
+  - 用途：统一生成并验证结构基线的链角色、橙色注释和权威构建体 review；同时为结构清单和临时界面入口提供相同的角色键、链选择器及精确 RGBA/显示通道解析。
+  - 主要输入/返回：链清单、ChimeraX 残基颜色表、reported Nb252 序列、`source_binding` 和人工确认的 `baseline_review.json`；返回待审核模板、经验证的角色记录、橙色证据、严格构建体确认及显式 `ChainSelector`。
+  - 算法假设：候选橙色仅接受 RGB 精确等于 `(255,165,0)` 的实际导出 RGBA 类，原样保留 alpha；确认文件必须与当前清单/颜色哈希绑定，且确认的 RGBA/通道必须真实存在于导出表。构建体确认必须绑定 reported 序列哈希、连续字面序列及其 SHA-256、1-based inclusive 边界、`mature_vhh`/`full_expression_construct` scope、末端 `GS` 处置、确认人、带时区时间、说明和证据。
+  - 明确不支持：自动推断链角色或构建体边界、仅凭 reviewer 名称通过构建体门、模糊颜色或近邻色匹配、把选择状态当颜色，或把橙色/距离接触解释为能量热点。
+- `antibody_optimization.residue_mapping`
+  - 用途：建立 Nb252 原序列/IMGT/实验与 AF3 坐标残基的可逆映射，并以共同、唯一映射的 framework Cα 计算刚体拟合和分区位移。
+  - 主要输入/返回：权威/暂定原序列、结构观测残基、IMGT 位点表及明确的 reference/mobile 链；返回映射行、`ExactSequenceMapping`、Kabsch 变换、RMSD 和 FR/CDR Cα 位移摘要。
+  - 算法假设：先尝试唯一、WT 一致的 exact/order-preserving 映射；必要时才用 BLOSUM62 全局比对（gap-open -10、gap-extension -0.5、端点 gap 0），且所有最优比对必须得到同一完整映射；拟合无 outlier rejection，CDR3 不参与 framework 拟合。
+  - 明确不支持：接受 WT 冲突、随机打破平局、在不同模型间复制接触/CDR 注释、非刚体拟合或对缺失坐标做假值。
+- `antibody_optimization.interface_contacts`
+  - 用途：在经人工确认的同一实验模型 VHH/NK2R 链之间计算严格非周期性重原子接触，并聚合为 VHH 残基摘要。
+  - 主要输入/返回：单模型 Gemmi 结构、明确 VHH/receptor `ChainSelector` 和 cutoff；返回 `ContactPair`、`InterfaceResidueSummary` 与候选搜索元数据。
+  - 算法假设：Gemmi `NeighborSearch` 只生成候选；清空内存副本的 unit cell/space group、只接受 image 0，再以笛卡尔坐标重算并执行严格 `distance < 4.0 Å`；排除 H/D、非 polymer、occupancy <= 0、非有限坐标和不兼容 altloc。
+  - 明确不支持：晶体对称/NCS 副本、水/配体/糖/离子接触、氢键/盐桥/能量热点解释，也不把未解析残基判为非界面。
+- `antibody_optimization.baseline_summary`
+  - 用途：联接已验证的序列、表达审核与可选结构/界面制品，生成 Nb252 128 位点绘图表和 47 条序列的审核计数表。
+  - 主要输入/返回：冻结表达记录、编号表、样本可比性表及可选映射/界面表；返回具有固定 schema 的紧凑 CSV 行。
+  - 算法假设：必须由原序列、provisional IMGT 区间及未编号前后缀重建完整 128 aa；结构、橙色和 `<4 Å` 栏只在对应证据通过时填充。
+  - 明确不支持：评估 stage gate、绘图、推断缺失链/构建体/橙色事实，或从叙述手工补数。
+- `antibody_optimization.stage_gates`
+  - 用途：分开评估输入冻结、序列/表达审核、结构身份、映射、界面及表达 pooling 证据，输出本地基线、候选设计和合并表达模型三层门。
+  - 主要输入/返回：47 行编号/可比性审核与 input/structure/interface manifests；返回每个子门状态、release-specific blocker 列表和三个顶层状态。
+  - 算法假设：ANARCII 显式失败可以是已闭合的 inventory 结果；结构、链身份、映射、构建体或界面证据缺失则保持对应科学发布门 `blocked`。
+  - 明确不支持：把上游 absent/blocked/pending 提升为 pass、用复合分隐藏子门，或将工程完成与候选设计发布混为一个状态。
+- `antibody_optimization.baseline_plot`
+  - 用途：仅从紧凑绘图表与状态计数表重现两面板基线图。
+  - 主要输入/返回：128 行 Nb252 位点表、47 序列审核计数及固定时间戳；写出带可复现 metadata 的 600 dpi PNG 和 SVG。
+  - 算法假设：图中序列/IMGT、实验/AF3 覆盖、橙色注释和临时界面均直接来自紧凑数据；SVG hashsalt 固定，保存后确定性规范为 LF-only、无行尾空格/Tab 且只有一个终止换行。
+  - 明确不支持：从原始结构/序列提取事实、评估 gate、修改紧凑数据或解释结果。
+
+## 第一阶段活动入口
+
+下列入口均位于 `scripts/input_baseline/`，常规 Python 入口在本地 `ab_optim` 中运行；ChimeraX 导出入口必须在 ChimeraX 1.12 已打开但未重新保存的原会话中以 `runscript` 运行。所有入口默认拒绝覆盖；仅明确提供 `--overwrite` 的入口可事务性替换本流程已知输出。
+
+- `build_sequence_review.py`：验证表达记录/manifest，运行固定 ANARCII/IMGT 审核；输出 `sequence_numbering_review.csv`、`sequence_numbering_positions.csv`、`sequence_numbering_manifest.json` 及独立 run summary。
+- `build_expression_audit.py`：联接冻结表达数据、assay context 与可选序列审核摘要；输出 `assay_metadata_review.csv`、`sample_comparability_review.csv`、`expression_comparability_view.csv`、`allowed_use_manifest.json` 及 run summary。
+- `export_cxs_session_chimerax.py`：按模型名唯一匹配已打开会话中的 3 个 `AtomicStructure`，导出 3 个 native-frame mmCIF、2 个 experimental-reference-frame mmCIF、`cxs_residue_colors.csv`、`cxs_export_manifest.json` 和 `cxs_export_run_summary.json`；manifest 的 `session_model_inventory` 同时列出全部会话模型（包括 surface/group/child 等非原子模型）的 ID、名称、Python class、父子关系和显示状态。非原子模型允许存在但不会被静默遗漏；目标 `AtomicStructure` 必须恰好唯一匹配。目标目录必须不存在，无覆盖选项。
+- `build_structure_baseline.py`：用 Gemmi 读回并核验导出、生成链/残基清单和单一 `baseline_review_template.json`；首跑会以 blocked 状态保留清单/模板，人工复制为 `baseline_review.json`，保留与 inventory/颜色表哈希绑定的 `source_binding`，并在同一文件中审核全量链角色、橙色 RGB/RGBA/显示渠道和权威构建体。链/橙色可确认而构建体保持 pending：此时可生成映射、对齐并继续临时界面，但 `candidate_design_release` 仍被权威序列门阻断。映射始终以 reported 128-aa Nb252 为可逆参考，confirmed construct 是独立发布门。首跑有真实导出时输出 inventory、residue inventory、review template 和 blocked manifest；review 后再增加 `nb252_sequence_structure_mapping.csv` 与 `structure_alignment_summary.json`。若 export manifest 缺失，则只生成 blocked manifest。目标目录/run summary 必须不存在，每次重跑使用新目录。
+- `calculate_temporary_interface.py`：只消费 passed 结构 baseline 及与其哈希绑定的同一 `baseline_review.json`，通过 CXS manifest 追溯颜色表并重算严格 `<4.0 Å` 界面；输出 `temporary_interface_atom_contacts.csv`、`temporary_interface_residues.csv`、`orange_vs_4A.csv`、`interface_manifest.json` 及 run summary。`orange_vs_4A.csv.temporary_protected_union` 与 manifest 中的 reported 序列索引/IMGT 标签表示“confirmed orange ∪ strict `<4.0 Å`”；`not_evaluable` 不会被改写为 false，该并集只是保守突变保护标志，不是能量热点。目标目录/run summary 必须不存在。
+- `finalize_input_baseline.py`：冻结全部上游输入，联接可选结构/界面证据并评估分层门；输出 `input_freeze_manifest.json`、`nb252_baseline_plot_data.csv`、`baseline_status_counts.csv`、`stage1_gate.json`、`input_baseline_qc.png/.svg`、`summary_manifest.json` 及 run summary。
+- `plot_input_baseline.py`：从上述两个精确紧凑 CSV 重绘 PNG/SVG 并写 run summary；需固定 `--generated-at`，不允许绕过 `finalize_input_baseline.py` 直接覆盖与 `summary_manifest.json` 绑定的正式基线图。

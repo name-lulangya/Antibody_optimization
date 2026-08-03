@@ -1,69 +1,80 @@
 # Codex 项目交接
 
-Last updated: 2026-08-03 16:41:09
+Last updated: 2026-08-03 21:35:46
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
-> 本文件是 replace-in-place 的当前状态快照；状态变化时应重写过期内容，而不是追加日记。
+> 本文件是 replace-in-place 的当前状态快照；状态变化时重写过期内容，不追加日记。
 
 ## Project Goal
 
-优化实验筛选获得的 NK2R 纳米抗体 Nb252，重点改善亲和力、稳定性和 reported yield/表达相关性质，同时保留可追溯的结构、序列和实验依据。
+优化实验筛选获得的 NK2R 纳米抗体 Nb252 的亲和力、稳定性和 reported yield/表达相关性质，同时保留可追溯的结构、序列、实验依据和发布门。
 
-## Current Project Status
+## Current Status
 
-- Git 分支为 `main`，同步目标为 `origin/main`；远程地址为 `git@github.com:name-lulangya/Antibody_optimization.git`。
-- 计划在远程服务器父目录 `/homes/Tianlab/luly25/` 下检出项目；实际仓库根目录和登录别名仍待核验。
-- 本地 Windows 项目专属 Conda 环境为 `ab_optim`，当前解析到 `D:\miniconda\envs\ab_optim`，Python 3.11.15。已安装 CPU-only PyTorch/ANARCII、NumPy/pandas/SciPy/scikit-learn/statsmodels、Biopython/Gemmi、Matplotlib/seaborn、PyYAML/tqdm/pytest；精确直接版本与完整快照分别记录在 `requirements-local.txt` 和 `requirements-local.lock.txt`。
-- 远程服务器项目主 Conda 环境为 `/data/software/env/luly25/ab_optim`。它与本地同名环境彼此独立，不能假定软件包同步；AF3、PyRosetta、nanoBERT、Linux-only/许可证受限工具和不兼容的 CUDA/PyTorch 栈仍使用经核验的远程或工具专属环境。
-- PyRosetta 工具环境为 `/data/software/env/luly25/multi_ligand`：Python 3.10.20、PyRosetta 2026.03、Rosetta commit `5e498f1409c68ade56c8ce5842bf79e1b02e8db4`。
-- nanoBERT 工具环境为 `/data/software/env/luly25/vhh-lm`：`NaturalAntibody/nanoBERT` revision `edc8182ad89a827f8737fa572c6b5fac6197e6b0`，使用已记录的本地缓存和离线模式。
-- Slurm 默认使用 `batch`，至少 1 GPU、每 GPU 12 CPU，默认不显式指定内存；多 GPU 只用 `n1`/`n2`，单节点多 GPU 设置 `--exclude=n3`。
-- 结构输入 `Nb252-optimization.cxs` 为 537670 bytes，SHA-256 `1BC636C28F66AE60EDC658D2E1C4AAD0B07F4141CA5411C78662AA19DA793C4D`。
-- 新增表达量源文件 `nb序列及产量（1L）.docx`，14172 bytes，SHA-256 `a6e4022f0978fbd70a0e04dc78f479140ab6f55caaa90b467fb77a62eb5db5d1`；源文件未被改写。
-- DOCX 已自动提取为 47 条记录：LTT 23、WCC 8、LLJ 16。全部序列逐段回读、长度和 SHA-256 校验通过，47 条均唯一且 mismatch 为 0。
-- Git 跟踪制品位于 `docs/result_artifacts/nb_expression/`，包括分表 CSV、宽表、原文转录、FASTA、manifest、validation、数据字典和 QC SVG；run summaries 位于 `docs/run_summaries/nb_expression/`。
-- 已修复 Windows 文件访问权限：事务安装先复制到最终父目录内的候选文件，使结果继承项目 ACL。当前全部结果制品和 run summary 均允许交互账号 `Tian_lab_luly25\\16217` 访问，且不是只读；修复前后文件内容哈希一致。
-- `LTT__Nb252` 序列长 128 aa，SHA-256 `df5b83ddde8a3486383c12afe45e22af6a358f507eab5503d5dbd4430710288d`，reported yield 为个体近似 `~0.5 mg`。
-- ANARCII CPU 实测将 Nb252 识别为重链、IMGT 编号无错误，query 范围为原始索引 0–125；末端两个 `GS` 未纳入编号域。该结果是待构建体核验的 provisional 边界，不是正式裁剪决定。
+- Git 分支为 `main`，远程为 `git@github.com:name-lulangya/Antibody_optimization.git`；本轮第一阶段实现纳入当前 Git HEAD，并以 `origin/main` 为同步目标。
+- 本地项目环境：`D:\miniconda\envs\ab_optim`，Python 3.11.15、ANARCII 2.0.8、Gemmi 0.7.5。完整本地依赖见 `requirements-local*.txt`。
+- 远程项目环境：`/data/software/env/luly25/ab_optim`；计划检出父目录为 `/homes/Tianlab/luly25/`，登录别名和实际仓库根仍待核验。
+- PyRosetta 工具环境：`/data/software/env/luly25/multi_ligand`，Python 3.10.20、PyRosetta 2026.03、Rosetta commit `5e498f1409c68ade56c8ce5842bf79e1b02e8db4`。
+- nanoBERT 工具环境：`/data/software/env/luly25/vhh-lm`，模型 `NaturalAntibody/nanoBERT` revision `edc8182ad89a827f8737fa572c6b5fac6197e6b0`，使用已记录的离线缓存。
+- 本阶段没有运行 AF3、PyRosetta、nanoBERT、候选生成、突变设计或表达量模型训练。
 
-## Active Workflows
+## Frozen Inputs and Completed Local Artifacts
 
-- `scripts/data_preparation/prepare_nb_expression_dataset.py`：从冻结哈希的 DOCX 和显式文档标题体积元数据生成可审计数据集；默认拒绝覆盖，覆盖时使用备份/rollback 事务。
-- `scripts/data_preparation/verify_nb_expression_outputs.py`：不导入生产解析器，以独立状态机复核全部序列与产量字段。
-- `tests/`：28 个测试中 27 个通过；1 个真实符号链接测试因当前 Windows 权限跳过。已覆盖真实源文件、所有序列、CLI 路径碰撞、词法符号链接终点、事务 rollback、同目录安装候选、Windows ACL 继承、固定时间双跑字节一致和隐式时间戳重放。
-- 尚未启动突变设计、结构打分、nanoBERT/PyRosetta 预测或实验候选排序。
+- `Nb252-optimization.cxs`：537670 bytes，SHA-256 `1BC636C28F66AE60EDC658D2E1C4AAD0B07F4141CA5411C78662AA19DA793C4D`，mtime 未改变。
+- `nb序列及产量（1L）.docx`：14172 bytes，SHA-256 `a6e4022f0978fbd70a0e04dc78f479140ab6f55caaa90b467fb77a62eb5db5d1`，mtime 未改变。
+- `docs/result_artifacts/input_baseline/sequence/`：47 条真实序列 provisional IMGT 审核；46 pass、1 failed。唯一失败为 `WCC__4-28`（`Score less than cut off.`）。成功结果为 H=45、L=1；chain type 只是工具输出。
+- Nb252：ANARCII H，原索引 0–125，共 126 aa 进入编号，IMGT 1–128，末端 `GS` 未编号；仍是 provisional 边界。
+- `WCC__4-11`：ANARCII L、止于 IMGT117，必须人工复核，不能据此宣称真实轻链。`WCC__4-1` 仅编号 87 aa、止于 IMGT102。
+- `docs/result_artifacts/input_baseline/expression/`：78 行 assay 字段审核和 47 行样本审核。LTT/WCC 31 条只允许来源内 exploratory numeric；LLJ 16 条只允许来源内 ordinal/censored；47 条全部禁止跨来源 pooling 和向 Nb252 转移。
+- `docs/result_artifacts/input_baseline/summary/`：输入冻结、128 位点绘图数据、状态计数、600 dpi PNG、SVG、summary manifest 和 `stage1_gate.json` 已生成。图中结构轨道当前全为 `not_available`，橙色/临时界面为空，不能解释为实测结构覆盖。
+- 固定时间戳真实数据双跑时，序列、表达审核和 summary 的正式数据/图制品逐字节一致；run summary 的耗时字段属于运行遥测，不要求逐字节固定。
+- 所有人工 CSV 为 UTF-8 with BOM、LF、固定列序；PowerShell `Import-Csv` 可读，全部新增制品继承项目 ACL 且不是只读。
 
-## Data Semantics and Cautions
+## Current Gates
 
-- 表型统一命名为 `reported_yield`，不是已校准的表达速率，也未自动换算为 `expression_mg_per_l`。
-- LTT/WCC 的 31 条是个体近似值；LLJ 是共享分档：9 条 `>20 mg` 只存下界，6 条 `~10 mg` 和 1 条 `~2 mg` 只存组级锚点。LLJ 个体点估计全部留空。
-- WCC 明确记录 1 L TB 和纯化后近似产量；LTT/LLJ 的 1 L 仅来自原文档标题，并作为显式 CLI 元数据传入，不从文件名推断。跨来源协议、构建体、批次、重复、回收率和误差尚未核实。
-- 所有序列均按文档完整保留，`sequence_scope=unknown`；未裁剪 VHH。WCC 的来源特异末端可能造成建模泄漏。
-- 原始段落与解析段落分列保存；只有标题段落 40、42 含尾随空白，序列段落均未做空白归一化。可能隐藏/拆分内容的 Word 结构会触发失败。
-- 6 条序列短于 115 aa，`Nb257` 与 WCC `4-11` 各仅有一个字面 Cys，9 条不含 `WGQGT`；这些是人工复核标记，不是自动错误判定。
-- CSV 使用安全 `sample_uid`；导入 Excel 时仍需把 `source_sample_id` 设为文本，避免 `1E2`/`4-7` 自动转型。
-- 当前会话未提供合规的 `@oai/artifact-tool` 运行时，因此未生成 XLSX，也未使用未经授权的替代 Excel 库。
+- `input_freeze_manifest.status=pass`。其中 `construct_boundary_confirmed=false` 表示冻结源输入本身不能证明边界，不是动态 review 状态。
+- `local_baseline_build=blocked`：缺 structure export、inventory、chain identity、residue mapping 和 interface safety。
+- `candidate_design_release=blocked`：上述五项之外还缺 authoritative Nb252 sequence/construct confirmation。
+- `pooled_expression_model_release=blocked`：缺跨 assay 协议等价证据。
+- Finalizer 的 `status=pass` 只表示汇总程序成功，不表示任何 blocked 科学发布门已通过。
 
-## Structural Context and Cautions
+## Structure and Interface State
 
-- `.cxs` 内模型名：`NK2R-252.pdb`（实验 NK2R–Nb252）、`NK2R-NKA.pdb`（NKA 结合背景）、`fold_2r_252_nomg_model_0.cif`（AF3 VHH）；它们尚不是仓库中的独立结构文件。
-- 实验 VHH 有未搭建区域；用户/合作者目视观察称除 CDR3 外 AF3 与实验结构总体对齐良好，尚未定量核验，AF3 不能替代实验构象证据。
-- `NK2R-252` 中橙色 VHH 残基是合作者留下的推定界面注释；“<4 Å”的原子/距离定义、确切残基和编号映射仍未知，突变前必须重新计算并谨慎处理。
+- CXS 中三个目标模型名为 `NK2R-252.pdb`、`NK2R-NKA.pdb`、`fold_2r_252_nomg_model_0.cif`；当前 `data/structures/cxs_exports/` 尚不存在。
+- 源会话由 ChimeraX 1.9/macOS 生成是 `user_provided` 信息；本轮尚未从会话自动验证。导出必须使用本机 ChimeraX 1.12。
+- `structure_precheck/structure_baseline_manifest.json` 和 `interface_precheck/interface_manifest.json` 是诚实的 blocked precheck；尚未导出结构、确认链角色、建立真实结构映射或得到界面残基。
+- 导出器会清单化全部 session model（包括 surface/group/child），但仅要求三个目标 `AtomicStructure` 恰好唯一匹配；保存 native/reference-frame mmCIF、变换、计数、颜色/显示/选择和 surface 回映信息。
+- source-aware mapping 直接读取 mmCIF `_entity*`、`_struct_asym` 和 `_pdbx_poly_seq_scheme`，优先源 polymer/entity 与源 label/auth 编号；源证据存在但冲突时阻断，只在对应证据缺失时允许固定参数序列 fallback。
+- 单一 `baseline_review.json` 分别审核链角色、精确 orange RGBA/渠道和 authoritative construct。chain/orange 可先确认而 construct 保持 pending；前者允许完成结构/界面基线，后者继续阻断候选设计。
+- 临时保护集合定义为“confirmed orange ∪ strict non-H/D atom-center `<4.0 Å`”；`not_evaluable` 不等于 false，该集合不是能量热点。功能已实现但当前没有实际残基集合。
 
-## Recent Changes
+## Active Entry Points
 
-- 完成 47 条合作者序列与 reported-yield 数据的无手工转录提取；按样本、观察和实验上下文分表，保留完整序列哈希、源段落和复核标记，并严格区分 LTT/WCC 个体值与 LLJ 组级语义。
-- 将解析、制品写出和文件事务拆成聚焦模块，新增独立验证器、完整字段回读、28 个安全/回归测试、manifest、validation 和 run summaries。
-- 加入输出路径碰撞检查、词法符号链接终点拒绝、多文件备份/rollback、结构化重放命令和实际运行时间记录。
-- 修复私有 staging 文件经 Windows `os.replace` 后无法由 VSCode/Excel 读取的问题；最终文件现在通过同目录候选安装并继承目标目录 ACL，全部数据哈希保持不变。
-- 新增数据字典与只展示提取计数/语义的可复现 QC SVG。
-- 在本地 `ab_optim` 安装并锁定第一阶段 CPU 工具链；真实 Nb252 的 ANARCII/IMGT smoke test 和现有 28 个回归测试均通过。
+- `build_sequence_review.py`：ANARCII/IMGT 审核。
+- `build_expression_audit.py`：assay 与样本可比性审核。
+- `export_cxs_session_chimerax.py`：ChimeraX 1.12 会话导出，无覆盖。
+- `build_structure_baseline.py`：Gemmi 清单、source-aware 映射和 FR-only Cα 定量对齐；每轮用新输出目录。
+- `calculate_temporary_interface.py`：review 后的严格 `<4.0 Å` 接触和橙色比较；每轮用新输出目录。
+- `finalize_input_baseline.py`：冻结、stage gates、紧凑绘图数据和正式图。
+- `plot_input_baseline.py`：只从紧凑 CSV 复现图。
+- 详细接口、假设和不支持范围见 `src/README.md`；实际运行摘要在 `docs/run_summaries/input_baseline/`。
 
-## Suggested Next Steps
+## Verification
 
-1. 建立输入身份基线：冻结现有哈希，对 47 条原始序列运行 provisional ANARCII/IMGT 编号，保留 domain start/end/error，并人工复核异常边界，不回写正式 `vhh_region_sequence`。
-2. 向合作者确认 Nb252 成熟 VHH/完整表达构建体边界、末端 `GS` 来源，以及 LTT/WCC/LLJ 的宿主、载体、标签、诱导、纯化、定量、批次、重复和误差。
-3. 从 `.cxs` 导出并读回核验三个独立模型，同时在导出前保存橙色残基、model/chain/source residue ID 和颜色信息。
-4. 建立 Nb252 原始序列索引、IMGT 编号、实验/AF3 结构编号、缺失坐标和接口注释的可逆映射，再确定受保护与可设计位置。
-5. 仅在上述身份、边界、链和实验语义得到确认后，启动 nanoBERT/AntiFold/PyRosetta 候选生成和多目标排序。
+- 全套测试：91 passed、1 skipped、4 subtests passed；跳过项仍是 Windows 真实 symlink 权限测试。
+- `pip check`、`python -m compileall -q src scripts tests`、`git diff --check` 均通过。
+- CXS 真实集成验收尚未执行，因为它要求用户保存其他 ChimeraX 工作、视觉核验会话并明确确认链/橙色；不得用自动猜测补过该门。
+
+## Required Next Local Steps
+
+1. 用户先保存任何现有 ChimeraX 工作；在 ChimeraX 1.12 中打开原始 CXS，视觉确认三个原子模型和橙色注释，不重新保存会话。
+2. 在 ChimeraX 命令行运行：
+
+```text
+runscript "C:\Users\16217\Desktop\Codex Projects\Antibody_optimization\scripts\input_baseline\export_cxs_session_chimerax.py" --source-cxs "C:\Users\16217\Desktop\Codex Projects\Antibody_optimization\Nb252-optimization.cxs" --expected-source-sha256 1BC636C28F66AE60EDC658D2E1C4AAD0B07F4141CA5411C78662AA19DA793C4D --output-dir "C:\Users\16217\Desktop\Codex Projects\Antibody_optimization\data\structures\cxs_exports"
+```
+
+3. 在全新目录首跑 `build_structure_baseline.py`，取得 inventory 和 `baseline_review_template.json`；复制为 `baseline_review.json`，确认所有链角色及唯一 orange RGBA/渠道。没有合作者证据时，`authoritative_construct_review` 保持 pending。
+4. 在另一全新目录以 `--confirmed-review` 重跑 structure baseline；其通过后在新目录运行 interface 入口。然后给 finalizer 增加真实 structure mapping、interface manifest 和 `orange_vs_4A.csv`，用 `--overwrite` 更新 canonical summary/gates。
+5. 向合作者确认 Nb252 成熟 VHH/完整表达构建体边界、末端 `GS` 来源，以及 LTT/WCC/LLJ 的宿主、载体、信号肽、标签、诱导、表达区室、纯化、定量、批次、重复、误差和跨来源协议等价性。

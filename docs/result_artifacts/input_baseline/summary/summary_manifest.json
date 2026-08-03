@@ -1,0 +1,110 @@
+{
+  "figure_semantics": "Reported Nb252 sequence with provisional IMGT numbering; structural and interface tracks are populated only from verified supplied artifacts.",
+  "gate_status": {
+    "candidate_design_release": "blocked",
+    "local_baseline_build": "blocked",
+    "pooled_expression_model_release": "blocked"
+  },
+  "generated_at": "2026-08-03T21:24:20+08:00",
+  "inputs": {
+    "expression_audit_manifest": {
+      "mtime_ns": 1785763883673774900,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\expression\\allowed_use_manifest.json",
+      "sha256": "0b011d18ac91f3b9fbdaa6464176dcec9545fa8bb3f5ca2ae1a8cb4387e269e4",
+      "size_bytes": 4823
+    },
+    "expression_records": {
+      "mtime_ns": 1785740936517894800,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\nb_expression_records.csv",
+      "sha256": "ef5c9165d1e5f4a1b7995b8733e621ed7e7147cdb73dbfba9a74ce131b3647c9",
+      "size_bytes": 23931
+    },
+    "expression_source_manifest": {
+      "mtime_ns": 1785740936522894400,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\manifest.json",
+      "sha256": "db6d0b386629cfd30ea5f068cbd1b7d2354301c051b63e1c5886cc53c5f30172",
+      "size_bytes": 6007
+    },
+    "interface_manifest": {
+      "mtime_ns": 1785764866978126100,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\interface_precheck\\interface_manifest.json",
+      "sha256": "260e3556a605734f8854e8d60eb590831e0db80f503d338aa86f33ffa8413734",
+      "size_bytes": 1643
+    },
+    "numbering_positions": {
+      "mtime_ns": 1785763881926342300,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_positions.csv",
+      "sha256": "d0249e11fa9800b769a7d2db28d6da453dc8d964029414fd444146ee2772266d",
+      "size_bytes": 1351886
+    },
+    "numbering_review": {
+      "mtime_ns": 1785763881924341900,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_review.csv",
+      "sha256": "d513ad96e9fdb0e9dbdc423155c10414b27c1eed2b0e267bc6904e05053f985d",
+      "size_bytes": 26086
+    },
+    "sample_comparability": {
+      "mtime_ns": 1785763883671774100,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\expression\\sample_comparability_review.csv",
+      "sha256": "96141994f9f04237d4cb0e6a94ae2cca7e2db6df3c8b336e66d7748888f09762",
+      "size_bytes": 36560
+    },
+    "sequence_manifest": {
+      "mtime_ns": 1785763881926849000,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_manifest.json",
+      "sha256": "6d813bd9353324c6e2f24c60bca23269f0d9b51aa31ad0701186151ecce48184",
+      "size_bytes": 32988
+    },
+    "source_cxs": {
+      "mtime_ns": 1785479308801468100,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\Nb252-optimization.cxs",
+      "sha256": "1bc636c28f66ae60edc658d2e1c4aad0b07f4141ca5411c78662aa19da793c4d",
+      "size_bytes": 537670
+    },
+    "source_docx": {
+      "mtime_ns": 1785724969828658000,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\nb序列及产量（1L）.docx",
+      "sha256": "a6e4022f0978fbd70a0e04dc78f479140ab6f55caaa90b467fb77a62eb5db5d1",
+      "size_bytes": 14172
+    },
+    "structure_manifest": {
+      "mtime_ns": 1785764859201447300,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_precheck\\structure_baseline_manifest.json",
+      "sha256": "666f5e73c90bca8fb836cde856bf9f11136146a946e4fc22d2cc20350b519c9f",
+      "size_bytes": 2849
+    }
+  },
+  "outputs": {
+    "figure_png": {
+      "file": "input_baseline_qc.png",
+      "sha256": "427ea6b40d8f8c41776b5a83f720b885ad0526cc4c5ee419264a449031b3568b",
+      "size_bytes": 614831
+    },
+    "figure_svg": {
+      "file": "input_baseline_qc.svg",
+      "sha256": "a485f357384599b20115a1eb0df8ec0b64d41d71cd015632247e97c893c2b167",
+      "size_bytes": 184293
+    },
+    "freeze": {
+      "file": "input_freeze_manifest.json",
+      "sha256": "bd32644f22f625646feeae822d82e947451b6eefbd3004171b0831934d7dacdb",
+      "size_bytes": 12329
+    },
+    "gate": {
+      "file": "stage1_gate.json",
+      "sha256": "667f2093eed086e3e5b981690e1c4502a3f5be52330ea58e80443d9373afa00a",
+      "size_bytes": 3362
+    },
+    "plot_data": {
+      "file": "nb252_baseline_plot_data.csv",
+      "sha256": "112b38c63c7af8e7c4bf01bf857c7ee0dd4c6df0093b431cfd812076039d0fe1",
+      "size_bytes": 8301
+    },
+    "status_counts": {
+      "file": "baseline_status_counts.csv",
+      "sha256": "7a406ee5e69835b5e4918ffc8f0fd8e4ebbc3d3201f57f68790ce2a1671f9677",
+      "size_bytes": 188
+    }
+  },
+  "schema_version": 1
+}
