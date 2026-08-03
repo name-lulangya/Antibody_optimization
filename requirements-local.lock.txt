@@ -1,0 +1,47 @@
+# Full pip snapshot validated on Windows AMD64 with Python 3.11.15.
+# Install into the local `ab_optim` environment, not the remote environments.
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+anarcii==2.0.8
+biopython==1.87
+colorama==0.4.6
+contourpy==1.3.3
+cycler==0.12.1
+filelock==3.29.0
+fonttools==4.63.0
+fsspec==2026.4.0
+gemmi==0.7.5
+iniconfig==2.3.0
+Jinja2==3.1.6
+joblib==1.5.3
+kiwisolver==1.5.0
+MarkupSafe==3.0.3
+matplotlib==3.11.1
+mpmath==1.3.0
+msgpack==1.2.1
+narwhals==2.24.0
+networkx==3.6.1
+numpy==2.4.6
+packaging==26.0
+pandas==3.0.5
+patsy==1.0.2
+pillow==12.3.0
+pluggy==1.6.0
+psutil==7.2.2
+Pygments==2.20.0
+pyparsing==3.3.2
+pytest==9.1.1
+python-dateutil==2.9.0.post0
+PyYAML==6.0.3
+scikit-learn==1.9.0
+scipy==1.17.1
+seaborn==0.13.2
+six==1.17.0
+sortedcontainers==2.4.0
+statsmodels==0.14.6
+sympy==1.14.0
+threadpoolctl==3.6.0
+torch==2.13.0+cpu
+tqdm==4.70.0
+typing_extensions==4.15.0
+tzdata==2026.3

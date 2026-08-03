@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-03 16:02:31
+Last updated: 2026-08-03 16:41:09
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -12,9 +12,9 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Current Project Status
 
-- Git 分支为 `main`，同步目标为 `origin/main`；远程地址为 `git@github.com:name-lulangya/Antibody_optimization.git`。本轮表达量数据提取与权限修复也以该分支为同步目标。
+- Git 分支为 `main`，同步目标为 `origin/main`；远程地址为 `git@github.com:name-lulangya/Antibody_optimization.git`。
 - 计划在远程服务器父目录 `/homes/Tianlab/luly25/` 下检出项目；实际仓库根目录和登录别名仍待核验。
-- 本地 Windows 项目专属 Conda 环境为 `ab_optim`，当前解析到 `D:\miniconda\envs\ab_optim`，由 `conda create -n ab_optim python=3.11` 创建；2026-08-03 核验 Python 为 3.11.15。后续与 Windows/Python 3.11 兼容的本地项目包和工具默认安装到该环境。
+- 本地 Windows 项目专属 Conda 环境为 `ab_optim`，当前解析到 `D:\miniconda\envs\ab_optim`，Python 3.11.15。已安装 CPU-only PyTorch/ANARCII、NumPy/pandas/SciPy/scikit-learn/statsmodels、Biopython/Gemmi、Matplotlib/seaborn、PyYAML/tqdm/pytest；精确直接版本与完整快照分别记录在 `requirements-local.txt` 和 `requirements-local.lock.txt`。
 - 远程服务器项目主 Conda 环境为 `/data/software/env/luly25/ab_optim`。它与本地同名环境彼此独立，不能假定软件包同步；AF3、PyRosetta、nanoBERT、Linux-only/许可证受限工具和不兼容的 CUDA/PyTorch 栈仍使用经核验的远程或工具专属环境。
 - PyRosetta 工具环境为 `/data/software/env/luly25/multi_ligand`：Python 3.10.20、PyRosetta 2026.03、Rosetta commit `5e498f1409c68ade56c8ce5842bf79e1b02e8db4`。
 - nanoBERT 工具环境为 `/data/software/env/luly25/vhh-lm`：`NaturalAntibody/nanoBERT` revision `edc8182ad89a827f8737fa572c6b5fac6197e6b0`，使用已记录的本地缓存和离线模式。
@@ -25,6 +25,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - Git 跟踪制品位于 `docs/result_artifacts/nb_expression/`，包括分表 CSV、宽表、原文转录、FASTA、manifest、validation、数据字典和 QC SVG；run summaries 位于 `docs/run_summaries/nb_expression/`。
 - 已修复 Windows 文件访问权限：事务安装先复制到最终父目录内的候选文件，使结果继承项目 ACL。当前全部结果制品和 run summary 均允许交互账号 `Tian_lab_luly25\\16217` 访问，且不是只读；修复前后文件内容哈希一致。
 - `LTT__Nb252` 序列长 128 aa，SHA-256 `df5b83ddde8a3486383c12afe45e22af6a358f507eab5503d5dbd4430710288d`，reported yield 为个体近似 `~0.5 mg`。
+- ANARCII CPU 实测将 Nb252 识别为重链、IMGT 编号无错误，query 范围为原始索引 0–125；末端两个 `GS` 未纳入编号域。该结果是待构建体核验的 provisional 边界，不是正式裁剪决定。
 
 ## Active Workflows
 
@@ -52,20 +53,17 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Recent Changes
 
-- 完成 47 条合作者序列与 reported-yield 数据的无手工转录提取。
-- 将样本、产量观察和实验上下文分表，并提供方便使用的宽表与 FASTA。
-- 为每条序列加入长度、完整 SHA-256、源段落索引和非破坏性人工复核标记。
-- 严格区分 LTT/WCC 个体近似值与 LLJ 组级下界/近似锚点。
-- 将解析与制品写出拆成聚焦模块，并新增独立验证器、完整字段回读、28 个安全/回归测试、manifest、validation 和 run summaries。
-- 加入输出路径碰撞检查、词法符号链接终点拒绝和多文件备份/rollback 事务；run summary 改为结构化 argv 与 PowerShell 重放命令，省略 `--generated-at` 时也会记录实际时间以便确定性重放。
+- 完成 47 条合作者序列与 reported-yield 数据的无手工转录提取；按样本、观察和实验上下文分表，保留完整序列哈希、源段落和复核标记，并严格区分 LTT/WCC 个体值与 LLJ 组级语义。
+- 将解析、制品写出和文件事务拆成聚焦模块，新增独立验证器、完整字段回读、28 个安全/回归测试、manifest、validation 和 run summaries。
+- 加入输出路径碰撞检查、词法符号链接终点拒绝、多文件备份/rollback、结构化重放命令和实际运行时间记录。
 - 修复私有 staging 文件经 Windows `os.replace` 后无法由 VSCode/Excel 读取的问题；最终文件现在通过同目录候选安装并继承目标目录 ACL，全部数据哈希保持不变。
 - 新增数据字典与只展示提取计数/语义的可复现 QC SVG。
-- 核验并记录本地项目 Conda 环境 `ab_optim`（Python 3.11.15），明确其与远程同名项目环境及既有工具专属环境相互独立。
+- 在本地 `ab_optim` 安装并锁定第一阶段 CPU 工具链；真实 Nb252 的 ANARCII/IMGT smoke test 和现有 28 个回归测试均通过。
 
 ## Suggested Next Steps
 
-1. 向合作者确认 LTT/WCC/LLJ 是否共享宿主、载体、标签、诱导、纯化、定量和批次条件，以及每条数据的重复与误差。
-2. 回查短序列、单 Cys 和缺少 `WGQGT` 的记录，确认测序与构建体边界；在不改原序列的前提下生成经验证的统一 VHH 区域。
-3. 建立抗体编号/CDR 注释，并按来源或批次分层设计表达相关建模与验证拆分，避免构建体/来源泄漏。
-4. 导出并核验 `.cxs` 中的独立结构、链 ID、缺失残基、编号映射和橙色界面残基定义，再开展 Nb252 突变设计。
-5. 在 `@oai/artifact-tool` 合规运行时可用后，补充 ID 列强制文本格式、分表和数据字典工作表的 XLSX。
+1. 建立输入身份基线：冻结现有哈希，对 47 条原始序列运行 provisional ANARCII/IMGT 编号，保留 domain start/end/error，并人工复核异常边界，不回写正式 `vhh_region_sequence`。
+2. 向合作者确认 Nb252 成熟 VHH/完整表达构建体边界、末端 `GS` 来源，以及 LTT/WCC/LLJ 的宿主、载体、标签、诱导、纯化、定量、批次、重复和误差。
+3. 从 `.cxs` 导出并读回核验三个独立模型，同时在导出前保存橙色残基、model/chain/source residue ID 和颜色信息。
+4. 建立 Nb252 原始序列索引、IMGT 编号、实验/AF3 结构编号、缺失坐标和接口注释的可逆映射，再确定受保护与可设计位置。
+5. 仅在上述身份、边界、链和实验语义得到确认后，启动 nanoBERT/AntiFold/PyRosetta 候选生成和多目标排序。

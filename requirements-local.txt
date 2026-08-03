@@ -1,0 +1,18 @@
+# Direct dependencies for the local Windows/Python 3.11 `ab_optim` environment.
+# The extra index is required only for the pinned CPU-only PyTorch build.
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+torch==2.13.0+cpu
+anarcii==2.0.8
+biopython==1.87
+gemmi==0.7.5
+matplotlib==3.11.1
+numpy==2.4.6
+pandas==3.0.5
+pytest==9.1.1
+PyYAML==6.0.3
+scikit-learn==1.9.0
+scipy==1.17.1
+seaborn==0.13.2
+statsmodels==0.14.6
+tqdm==4.70.0

@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-03T16:41:09+08:00",
+  "environment": {
+    "name": "ab_optim",
+    "path": "D:\\miniconda\\envs\\ab_optim",
+    "platform": "Windows AMD64",
+    "python": "3.11.15",
+    "torch": "2.13.0+cpu",
+    "torch_cuda_available": false
+  },
+  "installation": {
+    "cpu_torch_command": "conda run -n ab_optim python -m pip install \"torch==2.13.0+cpu\" --index-url https://download.pytorch.org/whl/cpu",
+    "project_packages_command": "conda run -n ab_optim python -m pip install --only-binary=:all: numpy pandas biopython gemmi matplotlib \"anarcii==2.0.8\"",
+    "analysis_packages_command": "conda run -n ab_optim python -m pip install --only-binary=:all: scipy scikit-learn statsmodels seaborn pyyaml tqdm pytest",
+    "direct_requirements": "requirements-local.txt",
+    "full_snapshot": "requirements-local.lock.txt",
+    "locked_package_count": 43,
+    "lock_matches_pip_freeze": true,
+    "offline_lock_dry_run": "all requirements satisfied",
+    "pip_check": "No broken requirements found"
+  },
+  "direct_package_versions": {
+    "anarcii": "2.0.8",
+    "biopython": "1.87",
+    "gemmi": "0.7.5",
+    "matplotlib": "3.11.1",
+    "numpy": "2.4.6",
+    "pandas": "3.0.5",
+    "pytest": "9.1.1",
+    "pyyaml": "6.0.3",
+    "scikit-learn": "1.9.0",
+    "scipy": "1.17.1",
+    "seaborn": "0.13.2",
+    "statsmodels": "0.14.6",
+    "torch": "2.13.0+cpu",
+    "tqdm": "4.70.0"
+  },
+  "anarcii_smoke": {
+    "command": "conda run -n ab_optim anarcii --cpu <LTT__Nb252.sequence_raw>",
+    "sample_uid": "LTT__Nb252",
+    "sequence_length_aa": 128,
+    "sequence_sha256": "df5b83ddde8a3486383c12afe45e22af6a358f507eab5503d5dbd4430710288d",
+    "device": "CPU",
+    "chain_type": "H",
+    "scheme": "imgt",
+    "query_start_zero_based": 0,
+    "query_end_zero_based_inclusive": 125,
+    "error": null,
+    "status": "passed",
+    "interpretation": "Installation acceptance only. The apparent exclusion of the final GS is provisional until the expression construct boundary is confirmed."
+  },
+  "regression_tests": {
+    "command": "conda run -n ab_optim python -m unittest discover -s tests -v",
+    "tests_run": 28,
+    "passed": 27,
+    "skipped": 1,
+    "failed": 0,
+    "status": "passed"
+  },
+  "excluded_from_local_environment": [
+    "AF3",
+    "PyRosetta",
+    "nanoBERT",
+    "CUDA tool stacks",
+    "server-only or licensed binaries"
+  ]
+}
