@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-03 15:09:46
+Last updated: 2026-08-03 16:02:31
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -14,7 +14,8 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 - Git 分支为 `main`，同步目标为 `origin/main`；远程地址为 `git@github.com:name-lulangya/Antibody_optimization.git`。本轮表达量数据提取与权限修复也以该分支为同步目标。
 - 计划在远程服务器父目录 `/homes/Tianlab/luly25/` 下检出项目；实际仓库根目录和登录别名仍待核验。
-- 项目主 Conda 环境为 `/data/software/env/luly25/ab_optim`。
+- 本地 Windows 项目专属 Conda 环境为 `ab_optim`，当前解析到 `D:\miniconda\envs\ab_optim`，由 `conda create -n ab_optim python=3.11` 创建；2026-08-03 核验 Python 为 3.11.15。后续与 Windows/Python 3.11 兼容的本地项目包和工具默认安装到该环境。
+- 远程服务器项目主 Conda 环境为 `/data/software/env/luly25/ab_optim`。它与本地同名环境彼此独立，不能假定软件包同步；AF3、PyRosetta、nanoBERT、Linux-only/许可证受限工具和不兼容的 CUDA/PyTorch 栈仍使用经核验的远程或工具专属环境。
 - PyRosetta 工具环境为 `/data/software/env/luly25/multi_ligand`：Python 3.10.20、PyRosetta 2026.03、Rosetta commit `5e498f1409c68ade56c8ce5842bf79e1b02e8db4`。
 - nanoBERT 工具环境为 `/data/software/env/luly25/vhh-lm`：`NaturalAntibody/nanoBERT` revision `edc8182ad89a827f8737fa572c6b5fac6197e6b0`，使用已记录的本地缓存和离线模式。
 - Slurm 默认使用 `batch`，至少 1 GPU、每 GPU 12 CPU，默认不显式指定内存；多 GPU 只用 `n1`/`n2`，单节点多 GPU 设置 `--exclude=n3`。
@@ -59,6 +60,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 加入输出路径碰撞检查、词法符号链接终点拒绝和多文件备份/rollback 事务；run summary 改为结构化 argv 与 PowerShell 重放命令，省略 `--generated-at` 时也会记录实际时间以便确定性重放。
 - 修复私有 staging 文件经 Windows `os.replace` 后无法由 VSCode/Excel 读取的问题；最终文件现在通过同目录候选安装并继承目标目录 ACL，全部数据哈希保持不变。
 - 新增数据字典与只展示提取计数/语义的可复现 QC SVG。
+- 核验并记录本地项目 Conda 环境 `ab_optim`（Python 3.11.15），明确其与远程同名项目环境及既有工具专属环境相互独立。
 
 ## Suggested Next Steps
 
