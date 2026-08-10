@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "review_type": "expression_cross_provider_comparability",
+  "status": "confirmed",
+  "scope": "all_47_LTT_WCC_LLJ_reported_yield_observations",
+  "cross_provider_reported_yield_directly_comparable": true,
+  "preserve_observation_semantics": true,
+  "confirmed_by": "collaborator_via_project_user",
+  "confirmed_at": "2026-08-10T12:02:36+08:00",
+  "confirmation_note": "Collaborator confirmed that reported yield values from the different sources are directly comparable.",
+  "evidence": "Project user relayed explicit collaborator confirmation in the project conversation on 2026-08-10.",
+  "limitations": [
+    "LLJ group-level approximate and lower-bound observations remain censored or ordinal rather than individual point estimates.",
+    "Comparability does not by itself validate prediction accuracy for unseen Nb252 mutants."
+  ]
+}

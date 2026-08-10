@@ -2,22 +2,29 @@
   "allowed_uses": {
     "LLJ": "conditional within-assay ordinal/censored exploration only",
     "LTT_WCC": "conditional within-assay numeric exploration only",
+    "cross_assay": "semantics-aware exploratory pooling; preserve LLJ censoring/group labels",
     "sequence": "descriptive numbering and leakage audit only"
   },
   "audit": "nb_expression_comparability",
-  "audit_version": "1.0.0",
+  "audit_version": "1.1.0",
   "blocked_uses": [
-    "cross_assay_pooling",
     "pooled_continuous_yield_model",
     "nb252_candidate_transfer_or_ranking",
     "conversion_to_expression_mg_per_l",
     "conversion_of_LLJ_group_bins_to_exact_individual_values"
   ],
+  "comparability_confirmation": {
+    "confirmation_note": "Collaborator confirmed that reported yield values from the different sources are directly comparable.",
+    "confirmed_at": "2026-08-10T12:02:36+08:00",
+    "confirmed_by": "collaborator_via_project_user",
+    "evidence": "Project user relayed explicit collaborator confirmation in the project conversation on 2026-08-10.",
+    "scope": "all_47_LTT_WCC_LLJ_reported_yield_observations",
+    "status": "confirmed"
+  },
   "counts": {
     "assay_metadata_rows": 78,
     "by_highest_allowed_use": {
-      "within_assay_numeric_exploratory": 31,
-      "within_assay_ordinal_exploratory": 16
+      "cross_assay_semantics_aware_exploratory": 47
     },
     "by_observation_semantics": {
       "group_approximate": 7,
@@ -33,18 +40,18 @@
     "view_rows": 47
   },
   "evidence_policy": {
-    "cross_provider_protocol_equivalence": "unknown_not_reported",
+    "cross_provider_protocol_equivalence": "collaborator_confirmed_reported_yield_comparability",
     "one_liter_implies_mg_per_l_expression": false,
     "reported_yield_is_expression_rate": false,
     "same_system_claim": "user_provided_summary_only"
   },
   "gates": {
-    "cross_assay_pooling_gate": "blocked",
+    "cross_assay_pooling_gate": "pass",
     "expression_audit_gate": "pass",
     "nb252_transfer_gate": "blocked",
     "stage_1_baseline_gate": "pending_structure_baseline"
   },
-  "generated_at": "2026-08-03T20:33:44+08:00",
+  "generated_at": "2026-08-10T12:02:36+08:00",
   "inputs": {
     "assay_context.csv": "5b161c9f88e77316a34bc9f9f510746a1827fb1f93f4cf83bea570cbc0d4a9a1",
     "manifest.json": "db6d0b386629cfd30ea5f068cbd1b7d2354301c051b63e1c5886cc53c5f30172",
@@ -52,9 +59,9 @@
     "sequence_audit_summary": "6d813bd9353324c6e2f24c60bca23269f0d9b51aa31ad0701186151ecce48184"
   },
   "outputs": {
-    "assay_metadata_review.csv": "b3943af55b2a37ec95ebcff0e75dc99119d205c8ad87e8af36d92b1ebf37530f",
-    "expression_comparability_view.csv": "59303f913db8120d9b9fc9d139e0958ef461b938229ba471920bb9d686b64eaa",
-    "sample_comparability_review.csv": "96141994f9f04237d4cb0e6a94ae2cca7e2db6df3c8b336e66d7748888f09762"
+    "assay_metadata_review.csv": "609bfdcbbc9781e350921f90ed818777e2ecb6f2d4d3e47c3f1600afd9fb0389",
+    "expression_comparability_view.csv": "9d8a9b344767f4a8e40cf63f7f25118987e2a78835e12bd888f49055be1a8c15",
+    "sample_comparability_review.csv": "314c7b406261daf2dd93e34e25d604009bf4bbaa9d5c5f31f479ced2fe03c7bf"
   },
   "schemas": {
     "assay_metadata_review.csv": [

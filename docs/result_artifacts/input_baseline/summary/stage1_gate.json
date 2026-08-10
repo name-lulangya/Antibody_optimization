@@ -1,22 +1,18 @@
 {
   "blocking_gates": [
-    "authoritative_nb252_sequence",
-    "cross_assay_pooling",
     "nb252_expression_transfer"
   ],
-  "candidate_design_release": "blocked",
-  "candidate_design_release_blockers": [
-    "authoritative_nb252_sequence"
-  ],
+  "candidate_design_release": "pass",
+  "candidate_design_release_blockers": [],
   "expression_review_record_count": 47,
   "gates": {
     "authoritative_nb252_sequence": {
-      "reason": "The reported Nb252 sequence remains provisional until construct confirmation Observed=blocked. Upstream blockers: reported Nb252 construct sequence has not been authoritatively confirmed",
-      "status": "blocked"
+      "reason": "The reported Nb252 sequence remains provisional until construct confirmation Observed=pass.",
+      "status": "pass"
     },
     "cross_assay_pooling": {
       "reason": "All 47 samples require an explicit pass for cross-assay pooling",
-      "status": "blocked"
+      "status": "pass"
     },
     "expression_audit": {
       "reason": "All sample-level use decisions are closed or explicitly blocked",
@@ -35,7 +31,7 @@
       "status": "blocked"
     },
     "residue_mapping": {
-      "reason": "Unique reversible sequence/IMGT/structure mapping is required Observed=pass. Upstream blockers: reported Nb252 construct sequence has not been authoritatively confirmed",
+      "reason": "Unique reversible sequence/IMGT/structure mapping is required Observed=pass.",
       "status": "pass"
     },
     "sequence_numbering_inventory": {
@@ -43,26 +39,24 @@
       "status": "pass"
     },
     "structure_export": {
-      "reason": "Verified ChimeraX export is required Observed=pass. Upstream blockers: reported Nb252 construct sequence has not been authoritatively confirmed",
+      "reason": "Verified ChimeraX export is required Observed=pass.",
       "status": "pass"
     },
     "structure_identity": {
-      "reason": "VHH and NK2R chain roles require explicit review Observed=pass. Upstream blockers: reported Nb252 construct sequence has not been authoritatively confirmed",
+      "reason": "VHH and NK2R chain roles require explicit review Observed=pass.",
       "status": "pass"
     },
     "structure_inventory": {
-      "reason": "Gemmi read-back inventory is required Observed=pass. Upstream blockers: reported Nb252 construct sequence has not been authoritatively confirmed",
+      "reason": "Gemmi read-back inventory is required Observed=pass.",
       "status": "pass"
     }
   },
-  "generated_at": "2026-08-10T10:28:00+08:00",
+  "generated_at": "2026-08-10T12:02:36+08:00",
   "interpretation": "A blocked scientific release is an evidence state, not an implementation failure.",
   "local_baseline_build": "pass",
   "local_baseline_build_blockers": [],
   "numbering_record_count": 47,
-  "pooled_expression_model_release": "blocked",
-  "pooled_expression_model_release_blockers": [
-    "cross_assay_pooling"
-  ],
+  "pooled_expression_model_release": "pass",
+  "pooled_expression_model_release_blockers": [],
   "schema_version": 1
 }

@@ -1,17 +1,21 @@
 {
-  "audit_version": "1.0.0",
-  "elapsed_seconds_before_commit": 0.064,
+  "audit_version": "1.1.0",
+  "elapsed_seconds_before_commit": 0.065,
   "gates": {
-    "cross_assay_pooling_gate": "blocked",
+    "cross_assay_pooling_gate": "pass",
     "expression_audit_gate": "pass",
     "nb252_transfer_gate": "blocked",
     "stage_1_baseline_gate": "pending_structure_baseline"
   },
-  "generated_at": "2026-08-03T20:33:44+08:00",
+  "generated_at": "2026-08-10T12:02:36+08:00",
   "inputs": {
     "assay_context.csv": {
       "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\assay_context.csv",
       "sha256": "5b161c9f88e77316a34bc9f9f510746a1827fb1f93f4cf83bea570cbc0d4a9a1"
+    },
+    "comparability_confirmation": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\reviews\\expression_cross_provider_confirmation.json",
+      "sha256": "edacb2e4a653bbc766fa3836493a46bb8ab467b72618137023ff4b489e636703"
     },
     "manifest.json": {
       "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\manifest.json",
@@ -29,23 +33,25 @@
   "invocation": {
     "argv": [
       "--records",
-      "docs/result_artifacts/nb_expression/nb_expression_records.csv",
+      "docs\\result_artifacts\\nb_expression\\nb_expression_records.csv",
       "--assay-context",
-      "docs/result_artifacts/nb_expression/assay_context.csv",
+      "docs\\result_artifacts\\nb_expression\\assay_context.csv",
       "--manifest",
-      "docs/result_artifacts/nb_expression/manifest.json",
+      "docs\\result_artifacts\\nb_expression\\manifest.json",
       "--sequence-audit-summary",
-      "docs/result_artifacts/input_baseline/sequence/sequence_numbering_manifest.json",
+      "docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_manifest.json",
+      "--comparability-confirmation",
+      "docs\\result_artifacts\\input_baseline\\reviews\\expression_cross_provider_confirmation.json",
       "--output-dir",
-      "docs/result_artifacts/input_baseline/expression",
+      "docs\\result_artifacts\\input_baseline\\expression",
       "--run-summary",
-      "docs/run_summaries/input_baseline/expression_audit.json",
+      "docs\\run_summaries\\input_baseline\\expression_audit.json",
       "--generated-at",
-      "2026-08-03T20:33:44+08:00",
+      "2026-08-10T12:02:36+08:00",
       "--overwrite"
     ],
     "python_executable": "D:\\miniconda\\envs\\ab_optim\\python.exe",
-    "replay_command_powershell": "& 'D:\\miniconda\\envs\\ab_optim\\python.exe' 'C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\input_baseline\\build_expression_audit.py' '--records' 'docs/result_artifacts/nb_expression/nb_expression_records.csv' '--assay-context' 'docs/result_artifacts/nb_expression/assay_context.csv' '--manifest' 'docs/result_artifacts/nb_expression/manifest.json' '--sequence-audit-summary' 'docs/result_artifacts/input_baseline/sequence/sequence_numbering_manifest.json' '--output-dir' 'docs/result_artifacts/input_baseline/expression' '--run-summary' 'docs/run_summaries/input_baseline/expression_audit.json' '--generated-at' '2026-08-03T20:33:44+08:00' '--overwrite'",
+    "replay_command_powershell": "& 'D:\\miniconda\\envs\\ab_optim\\python.exe' 'C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\input_baseline\\build_expression_audit.py' '--records' 'docs\\result_artifacts\\nb_expression\\nb_expression_records.csv' '--assay-context' 'docs\\result_artifacts\\nb_expression\\assay_context.csv' '--manifest' 'docs\\result_artifacts\\nb_expression\\manifest.json' '--sequence-audit-summary' 'docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_manifest.json' '--comparability-confirmation' 'docs\\result_artifacts\\input_baseline\\reviews\\expression_cross_provider_confirmation.json' '--output-dir' 'docs\\result_artifacts\\input_baseline\\expression' '--run-summary' 'docs\\run_summaries\\input_baseline\\expression_audit.json' '--generated-at' '2026-08-10T12:02:36+08:00' '--overwrite'",
     "script_path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\input_baseline\\build_expression_audit.py",
     "shell": "PowerShell",
     "working_directory": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization"
@@ -55,23 +61,23 @@
   "outputs": {
     "allowed_use_manifest": {
       "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\expression\\allowed_use_manifest.json",
-      "sha256": "0b011d18ac91f3b9fbdaa6464176dcec9545fa8bb3f5ca2ae1a8cb4387e269e4",
-      "size_bytes": 4823
+      "sha256": "19f7d664ee599169f0897729140e9113ad16abc9798690c77907da2e2113dba4",
+      "size_bytes": 5358
     },
     "assay_metadata": {
       "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\expression\\assay_metadata_review.csv",
-      "sha256": "b3943af55b2a37ec95ebcff0e75dc99119d205c8ad87e8af36d92b1ebf37530f",
-      "size_bytes": 11040
+      "sha256": "609bfdcbbc9781e350921f90ed818777e2ecb6f2d4d3e47c3f1600afd9fb0389",
+      "size_bytes": 11457
     },
     "sample_review": {
       "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\expression\\sample_comparability_review.csv",
-      "sha256": "96141994f9f04237d4cb0e6a94ae2cca7e2db6df3c8b336e66d7748888f09762",
-      "size_bytes": 36560
+      "sha256": "314c7b406261daf2dd93e34e25d604009bf4bbaa9d5c5f31f479ced2fe03c7bf",
+      "size_bytes": 36607
     },
     "view": {
       "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\expression\\expression_comparability_view.csv",
-      "sha256": "59303f913db8120d9b9fc9d139e0958ef461b938229ba471920bb9d686b64eaa",
-      "size_bytes": 27504
+      "sha256": "9d8a9b344767f4a8e40cf63f7f25118987e2a78835e12bd888f49055be1a8c15",
+      "size_bytes": 26094
     }
   },
   "platform": "Windows-10-10.0.26200-SP0",
@@ -81,7 +87,7 @@
   "status": "success",
   "validation": {
     "assay_metadata_row_count": 78,
-    "cross_assay_pooling_blocked_count": 47,
+    "cross_assay_pooling_blocked_count": 0,
     "nb252_transfer_blocked_count": 47,
     "provider_counts": {
       "LLJ": 16,

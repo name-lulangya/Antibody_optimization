@@ -48,9 +48,9 @@
   - 明确不支持：序列 I/O、制品写出、GPU/多进程选路和 ANARCII 之外的备用编号器。
 - `antibody_optimization.expression_audit`
   - 用途：保留 reported-yield 原语义，构建 assay 元数据审核、逐样本可比性审核、浏览视图与允许用途 manifest。
-  - 主要输入/返回：冻结表达记录、assay context、源 manifest 和可选序列审核摘要；返回 3 类规范表及机器可读的 allowed-use 决策。
-  - 算法假设：LTT/WCC 只允许来源内探索性数值使用，LLJ 只允许来源内分档/删失探索；跨来源 pooling 与向 Nb252 迁移在证据不足时明确 `blocked`。
-  - 明确不支持：将 reported yield 归一化为统一 mg/L、对 LLJ 插值个体点估计、补齐未报告协议、训练表达量模型或宣布跨 assay 等价。
+  - 主要输入/返回：冻结表达记录、assay context、源 manifest、可选序列审核摘要和可选的显式合作者跨来源可比性确认；返回 3 类规范表及机器可读的 allowed-use 决策。
+  - 算法假设：无确认时维持既有保守阻断；确认不同来源 reported yield 可直接比较后，允许保留原观测语义的跨来源探索性 pooling。LTT/WCC 保留个体近似数值，LLJ 仍仅作为分档/删失信息；向未见 Nb252 突变迁移继续 `blocked`。
+  - 明确不支持：将 reported yield 归一化为统一 mg/L、对 LLJ 插值个体点估计、补齐未报告协议、训练表达量模型，或把“数值可比”扩张为对新突变预测准确性的验证。
 - `antibody_optimization.structure_inventory`
   - 用途：用 Gemmi 读回 ChimeraX mmCIF 导出，保留 auth/label 链和残基标识、entity、altloc、occupancy 与坐标状态，生成链/残基清单并验证 native/reference-frame 的拓扑和刚体关系。
   - 主要输入/返回：已由 export manifest 绑定的单模型 mmCIF 和显式 `ChainSelector`；返回 Gemmi 结构、inventory 行、`StructureResidue`、原子位点分类计数、拓扑签名及全原子 Kabsch 刚体变换/残差。
@@ -107,7 +107,7 @@
 下列入口均位于 `scripts/input_baseline/`，常规 Python 入口在本地 `ab_optim` 中运行；ChimeraX 导出入口必须在 ChimeraX 1.12 已打开但未重新保存的原会话中以 `runscript` 运行。所有入口默认拒绝覆盖；仅明确提供 `--overwrite` 的入口可事务性替换本流程已知输出。
 
 - `build_sequence_review.py`：验证表达记录/manifest，运行固定 ANARCII/IMGT 审核；输出 `sequence_numbering_review.csv`、`sequence_numbering_positions.csv`、`sequence_numbering_manifest.json` 及独立 run summary。
-- `build_expression_audit.py`：联接冻结表达数据、assay context 与可选序列审核摘要；输出 `assay_metadata_review.csv`、`sample_comparability_review.csv`、`expression_comparability_view.csv`、`allowed_use_manifest.json` 及 run summary。
+- `build_expression_audit.py`：联接冻结表达数据、assay context、可选序列审核摘要与 `--comparability-confirmation`；输出 `assay_metadata_review.csv`、`sample_comparability_review.csv`、`expression_comparability_view.csv`、`allowed_use_manifest.json` 及 run summary。
 - `export_cxs_session_chimerax.py`：按模型名唯一匹配已打开会话中的 3 个 `AtomicStructure`，导出 3 个 native-frame mmCIF、2 个 experimental-reference-frame mmCIF、`cxs_residue_colors.csv`、`cxs_export_manifest.json` 和 `cxs_export_run_summary.json`；manifest 的 `session_model_inventory` 同时列出全部会话模型（包括 surface/group/child 等非原子模型）的 ID、名称、Python class、父子关系和显示状态。非原子模型允许存在但不会被静默遗漏；目标 `AtomicStructure` 必须恰好唯一匹配。目标目录必须不存在，无覆盖选项。
 - `build_structure_baseline.py`：用 Gemmi 读回并核验导出、生成链/残基清单和单一 `baseline_review_template.json`；首跑会以 blocked 状态保留清单/模板，人工复制为 `baseline_review.json`，保留与 inventory/颜色表哈希绑定的 `source_binding`，并在同一文件中审核全量链角色、橙色 RGB/RGBA/显示渠道和权威构建体。链/橙色可确认而构建体保持 pending：此时可生成映射、对齐并继续临时界面，但 `candidate_design_release` 仍被权威序列门阻断。映射始终以 reported 128-aa Nb252 为可逆参考，confirmed construct 是独立发布门。首跑有真实导出时输出 inventory、residue inventory、review template 和 blocked manifest；review 后再增加 `nb252_sequence_structure_mapping.csv` 与 `structure_alignment_summary.json`。若 export manifest 缺失，则只生成 blocked manifest。目标目录/run summary 必须不存在，每次重跑使用新目录。
 - `calculate_temporary_interface.py`：只消费 passed 结构 baseline 及与其哈希绑定的同一 `baseline_review.json`，通过 CXS manifest 追溯颜色表并重算严格 `<4.0 Å` 界面；输出 `temporary_interface_atom_contacts.csv`、`temporary_interface_residues.csv`、`orange_vs_4A.csv`、`interface_manifest.json` 及 run summary。`orange_vs_4A.csv.temporary_protected_union` 与 manifest 中的 reported 序列索引/IMGT 标签表示“confirmed orange ∪ strict `<4.0 Å`”；`not_evaluable` 不会被改写为 false，该并集只是保守突变保护标志，不是能量热点。目标目录/run summary 必须不存在。

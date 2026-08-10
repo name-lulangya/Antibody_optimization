@@ -90,7 +90,7 @@ class BaselineCliTests(unittest.TestCase):
             check=False,
         )
 
-    def test_real_finalizer_is_transactional_reproducible_and_blocked_honestly(self) -> None:
+    def test_real_finalizer_is_transactional_reproducible_and_reports_independent_gates(self) -> None:
         source_hashes = {key: digest(path) for key, path in SOURCES.items()}
         with tempfile.TemporaryDirectory(
             prefix=".baseline-cli-test-", dir=PROJECT_ROOT
@@ -121,7 +121,7 @@ class BaselineCliTests(unittest.TestCase):
             gate = json.loads((output / "stage1_gate.json").read_text(encoding="utf-8"))
             self.assertEqual(gate["local_baseline_build"], "blocked")
             self.assertEqual(gate["candidate_design_release"], "blocked")
-            self.assertEqual(gate["pooled_expression_model_release"], "blocked")
+            self.assertEqual(gate["pooled_expression_model_release"], "pass")
             self.assertIn(
                 "structure_export", gate["local_baseline_build_blockers"]
             )
@@ -129,10 +129,7 @@ class BaselineCliTests(unittest.TestCase):
                 "authoritative_nb252_sequence",
                 gate["candidate_design_release_blockers"],
             )
-            self.assertEqual(
-                gate["pooled_expression_model_release_blockers"],
-                ["cross_assay_pooling"],
-            )
+            self.assertEqual(gate["pooled_expression_model_release_blockers"], [])
 
             freeze = json.loads(
                 (output / "input_freeze_manifest.json").read_text(encoding="utf-8")

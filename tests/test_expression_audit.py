@@ -28,6 +28,7 @@ from antibody_optimization.expression_audit import (  # noqa: E402
     build_comparability_view,
     build_sample_review_rows,
     load_and_validate_inputs,
+    load_cross_provider_confirmation,
     sha256_file,
     validate_written_audit,
     write_csv,
@@ -38,6 +39,14 @@ ARTIFACTS = ROOT / "docs" / "result_artifacts" / "nb_expression"
 RECORDS = ARTIFACTS / "nb_expression_records.csv"
 CONTEXT = ARTIFACTS / "assay_context.csv"
 MANIFEST = ARTIFACTS / "manifest.json"
+CONFIRMATION = (
+    ROOT
+    / "docs"
+    / "result_artifacts"
+    / "input_baseline"
+    / "reviews"
+    / "expression_cross_provider_confirmation.json"
+)
 SCRIPT = ROOT / "scripts" / "input_baseline" / "build_expression_audit.py"
 FIXED_TIME = "2026-08-03T18:00:00+08:00"
 
@@ -93,7 +102,7 @@ class ExpressionAuditTests(unittest.TestCase):
             all(row["cross_assay_pooling_status"] == "blocked" for row in self.samples)
         )
         self.assertTrue(all(row["nb252_transfer_status"] == "blocked" for row in self.samples))
-        self.assertTrue(all(row["review_version"] == "1.0.0" for row in self.samples))
+        self.assertTrue(all(row["review_version"] == "1.1.0" for row in self.samples))
         individual = [row for row in self.samples if row["provider_code"] in {"LTT", "WCC"}]
         llj = [row for row in self.samples if row["provider_code"] == "LLJ"]
         self.assertEqual(len(individual), 31)
@@ -121,6 +130,39 @@ class ExpressionAuditTests(unittest.TestCase):
             manifest["sequence_audit_summary"]["numbering_status_counts"],
             {"pending": 47},
         )
+
+    def test_collaborator_confirmation_passes_semantics_aware_pooling_only(self) -> None:
+        confirmation = load_cross_provider_confirmation(CONFIRMATION)
+        metadata = build_assay_metadata_rows(
+            self.inputs.assay_contexts,
+            generated_at=FIXED_TIME,
+            comparability_confirmation=confirmation,
+        )
+        samples = build_sample_review_rows(
+            self.inputs, comparability_confirmation=confirmation
+        )
+        view = build_comparability_view(samples, metadata)
+        manifest = build_allowed_use_manifest(
+            inputs=self.inputs,
+            metadata_rows=metadata,
+            sample_rows=samples,
+            view_rows=view,
+            generated_at=FIXED_TIME,
+            output_hashes={},
+            comparability_confirmation=confirmation,
+        )
+
+        self.assertTrue(
+            all(row["cross_assay_pooling_status"] == "pass" for row in samples)
+        )
+        self.assertTrue(all(row["nb252_transfer_status"] == "blocked" for row in samples))
+        self.assertEqual(manifest["gates"]["cross_assay_pooling_gate"], "pass")
+        self.assertEqual(manifest["gates"]["nb252_transfer_gate"], "blocked")
+        self.assertEqual(
+            manifest["comparability_confirmation"]["status"], "confirmed"
+        )
+        self.assertIn("pooled_continuous_yield_model", manifest["blocked_uses"])
+        self.assertNotIn("cross_assay_pooling", manifest["blocked_uses"])
 
     def test_optional_sequence_summary_is_joined_but_not_promoted(self) -> None:
         sample = self.inputs.records[0]

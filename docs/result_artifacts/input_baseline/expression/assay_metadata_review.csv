@@ -1,79 +1,79 @@
 ﻿assay_id,provider_code,field_name,field_value,unit,evidence_status,evidence_source,source_locator,review_note,reviewed_at
-ASSAY__LTT,LTT,culture_volume_l,1,L,source_explicit,source_document,document_title,Volume evidence is retained at its original document scope.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,medium,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,host_species,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,host_strain,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,vector_backbone,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,promoter,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,signal_peptide,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,construct_boundary_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,terminal_tags_or_linkers,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,expression_compartment,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,induction_agent,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,induction_concentration,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,induction_temperature_c,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,induction_duration_h,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,harvest_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,yield_stage,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,purification_method,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,purification_recovery,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,quantification_method,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,batch_id,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,protocol_id,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,replicate_design,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,replicate_count,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,uncertainty_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,system_equivalence_claim,same_system,,user_provided,user_statement,project conversation,High-level claim only; it does not establish field-level protocol or construct equivalence.,2026-08-03T20:33:44+08:00
-ASSAY__LTT,LTT,cross_provider_protocol_equivalence,,,unknown_not_reported,,,"Unknown until host, construct, induction, yield stage, purification, quantification, batch, and replicate metadata are reconciled.",2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,culture_volume_l,1,L,source_explicit,source_document,entry_text,Volume evidence is retained at its original document scope.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,medium,TB,,source_explicit,source_document,entry_text,Explicit only for WCC entries; not propagated to other sources.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,host_species,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,host_strain,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,vector_backbone,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,promoter,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,signal_peptide,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,construct_boundary_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,terminal_tags_or_linkers,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,expression_compartment,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,induction_agent,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,induction_concentration,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,induction_temperature_c,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,induction_duration_h,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,harvest_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,yield_stage,post_purification,,source_explicit,source_document,entry_text,Explicit only for WCC entries; not propagated to other sources.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,purification_method,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,purification_recovery,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,quantification_method,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,batch_id,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,protocol_id,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,replicate_design,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,replicate_count,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,uncertainty_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,system_equivalence_claim,same_system,,user_provided,user_statement,project conversation,High-level claim only; it does not establish field-level protocol or construct equivalence.,2026-08-03T20:33:44+08:00
-ASSAY__WCC,WCC,cross_provider_protocol_equivalence,,,unknown_not_reported,,,"Unknown until host, construct, induction, yield stage, purification, quantification, batch, and replicate metadata are reconciled.",2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,culture_volume_l,1,L,source_explicit,source_document,document_title,Volume evidence is retained at its original document scope.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,medium,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,host_species,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,host_strain,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,vector_backbone,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,promoter,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,signal_peptide,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,construct_boundary_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,terminal_tags_or_linkers,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,expression_compartment,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,induction_agent,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,induction_concentration,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,induction_temperature_c,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,induction_duration_h,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,harvest_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,yield_stage,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,purification_method,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,purification_recovery,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,quantification_method,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,batch_id,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,protocol_id,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,replicate_design,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,replicate_count,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,uncertainty_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,system_equivalence_claim,same_system,,user_provided,user_statement,project conversation,High-level claim only; it does not establish field-level protocol or construct equivalence.,2026-08-03T20:33:44+08:00
-ASSAY__LLJ,LLJ,cross_provider_protocol_equivalence,,,unknown_not_reported,,,"Unknown until host, construct, induction, yield stage, purification, quantification, batch, and replicate metadata are reconciled.",2026-08-03T20:33:44+08:00
+ASSAY__LTT,LTT,culture_volume_l,1,L,source_explicit,source_document,document_title,Volume evidence is retained at its original document scope.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,medium,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,host_species,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,host_strain,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,vector_backbone,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,promoter,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,signal_peptide,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,construct_boundary_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,terminal_tags_or_linkers,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,expression_compartment,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,induction_agent,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,induction_concentration,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,induction_temperature_c,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,induction_duration_h,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,harvest_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,yield_stage,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,purification_method,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,purification_recovery,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,quantification_method,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,batch_id,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,protocol_id,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,replicate_design,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,replicate_count,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,uncertainty_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,system_equivalence_claim,same_system,,user_provided,user_statement,project conversation,High-level claim only; it does not establish field-level protocol or construct equivalence.,2026-08-10T12:02:36+08:00
+ASSAY__LTT,LTT,cross_provider_protocol_equivalence,reported_yield_values_directly_comparable,,collaborator_confirmed,collaborator_via_project_user,Project user relayed explicit collaborator confirmation in the project conversation on 2026-08-10.,Collaborator confirmed that reported yield values from the different sources are directly comparable.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,culture_volume_l,1,L,source_explicit,source_document,entry_text,Volume evidence is retained at its original document scope.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,medium,TB,,source_explicit,source_document,entry_text,Explicit only for WCC entries; not propagated to other sources.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,host_species,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,host_strain,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,vector_backbone,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,promoter,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,signal_peptide,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,construct_boundary_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,terminal_tags_or_linkers,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,expression_compartment,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,induction_agent,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,induction_concentration,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,induction_temperature_c,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,induction_duration_h,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,harvest_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,yield_stage,post_purification,,source_explicit,source_document,entry_text,Explicit only for WCC entries; not propagated to other sources.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,purification_method,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,purification_recovery,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,quantification_method,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,batch_id,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,protocol_id,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,replicate_design,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,replicate_count,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,uncertainty_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,system_equivalence_claim,same_system,,user_provided,user_statement,project conversation,High-level claim only; it does not establish field-level protocol or construct equivalence.,2026-08-10T12:02:36+08:00
+ASSAY__WCC,WCC,cross_provider_protocol_equivalence,reported_yield_values_directly_comparable,,collaborator_confirmed,collaborator_via_project_user,Project user relayed explicit collaborator confirmation in the project conversation on 2026-08-10.,Collaborator confirmed that reported yield values from the different sources are directly comparable.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,culture_volume_l,1,L,source_explicit,source_document,document_title,Volume evidence is retained at its original document scope.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,medium,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,host_species,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,host_strain,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,vector_backbone,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,promoter,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,signal_peptide,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,construct_boundary_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,terminal_tags_or_linkers,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,expression_compartment,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,induction_agent,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,induction_concentration,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,induction_temperature_c,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,induction_duration_h,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,harvest_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,yield_stage,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,purification_method,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,purification_recovery,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,quantification_method,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,batch_id,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,protocol_id,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,replicate_design,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,replicate_count,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,uncertainty_definition,,,unknown_not_reported,,,Not reported in the current source artifacts.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,system_equivalence_claim,same_system,,user_provided,user_statement,project conversation,High-level claim only; it does not establish field-level protocol or construct equivalence.,2026-08-10T12:02:36+08:00
+ASSAY__LLJ,LLJ,cross_provider_protocol_equivalence,reported_yield_values_directly_comparable,,collaborator_confirmed,collaborator_via_project_user,Project user relayed explicit collaborator confirmation in the project conversation on 2026-08-10.,Collaborator confirmed that reported yield values from the different sources are directly comparable.,2026-08-10T12:02:36+08:00

@@ -12,12 +12,13 @@ import hashlib
 import json
 from collections import Counter
 from dataclasses import dataclass
+from datetime import datetime
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Iterable, Mapping, Sequence
 
 
-AUDIT_VERSION = "1.0.0"
+AUDIT_VERSION = "1.1.0"
 EXPECTED_SOURCE_COUNTS = {"LTT": 23, "WCC": 8, "LLJ": 16}
 EXPECTED_SEMANTICS_COUNTS = {
     "individual_approximate": 31,
@@ -174,6 +175,43 @@ class AuditInputs:
     input_sha256: Mapping[str, str]
 
 
+def load_cross_provider_confirmation(path: Path) -> dict[str, object]:
+    """Load explicit collaborator confirmation without broadening its scope."""
+
+    payload = json.loads(path.read_text(encoding="utf-8-sig"))
+    if not isinstance(payload, dict):
+        raise ExpressionAuditError("Comparability confirmation must be a JSON object")
+    required = {
+        "schema_version": 1,
+        "review_type": "expression_cross_provider_comparability",
+        "status": "confirmed",
+        "scope": "all_47_LTT_WCC_LLJ_reported_yield_observations",
+        "cross_provider_reported_yield_directly_comparable": True,
+        "preserve_observation_semantics": True,
+    }
+    for key, expected in required.items():
+        if payload.get(key) != expected:
+            raise ExpressionAuditError(
+                f"Comparability confirmation field {key!r} must equal {expected!r}"
+            )
+    for key in ("confirmed_by", "confirmed_at", "confirmation_note", "evidence"):
+        if not isinstance(payload.get(key), str) or not payload[key].strip():
+            raise ExpressionAuditError(
+                f"Comparability confirmation field {key!r} is required"
+            )
+    try:
+        confirmed_at = datetime.fromisoformat(str(payload["confirmed_at"]))
+    except ValueError as exc:
+        raise ExpressionAuditError(
+            "Comparability confirmation confirmed_at must be ISO-8601"
+        ) from exc
+    if confirmed_at.tzinfo is None:
+        raise ExpressionAuditError(
+            "Comparability confirmation confirmed_at must include a UTC offset"
+        )
+    return payload
+
+
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -224,6 +262,7 @@ def build_assay_metadata_rows(
     contexts: Sequence[Mapping[str, str]],
     *,
     generated_at: str,
+    comparability_confirmation: Mapping[str, object] | None = None,
 ) -> list[dict[str, str]]:
     """Expand three source-level contexts into evidence-bearing metadata rows."""
 
@@ -262,10 +301,17 @@ def build_assay_metadata_rows(
                     "or construct equivalence."
                 )
             elif field_name == "cross_provider_protocol_equivalence":
-                note = (
-                    "Unknown until host, construct, induction, yield stage, purification, "
-                    "quantification, batch, and replicate metadata are reconciled."
-                )
+                if comparability_confirmation is not None:
+                    value = "reported_yield_values_directly_comparable"
+                    status = "collaborator_confirmed"
+                    source = "collaborator_via_project_user"
+                    locator = str(comparability_confirmation["evidence"])
+                    note = str(comparability_confirmation["confirmation_note"])
+                else:
+                    note = (
+                        "Unknown until host, construct, induction, yield stage, purification, "
+                        "quantification, batch, and replicate metadata are reconciled."
+                    )
             rows.append(
                 {
                     "assay_id": context["assay_id"],
@@ -283,7 +329,11 @@ def build_assay_metadata_rows(
     return rows
 
 
-def build_sample_review_rows(inputs: AuditInputs) -> list[dict[str, str]]:
+def build_sample_review_rows(
+    inputs: AuditInputs,
+    *,
+    comparability_confirmation: Mapping[str, object] | None = None,
+) -> list[dict[str, str]]:
     """Assign conservative per-sample use gates without changing source values."""
 
     rows: list[dict[str, str]] = []
@@ -303,6 +353,9 @@ def build_sample_review_rows(inputs: AuditInputs) -> list[dict[str, str]]:
             "replicate_count",
             "uncertainty_definition",
         }
+        cross_provider_comparable = comparability_confirmation is not None
+        if cross_provider_comparable:
+            common_blockers.discard("cross_provider_protocol_equivalence")
         if numbering_status != "pass":
             common_blockers.add("numbering_status")
         if scope_status not in {"confirmed", "confirmed_mature_vhh"}:
@@ -315,7 +368,12 @@ def build_sample_review_rows(inputs: AuditInputs) -> list[dict[str, str]]:
             highest = "within_assay_numeric_exploratory"
             reasons = (
                 "individual_approximate_numeric_but_protocol_incomplete;"
-                "cross_source_pooling_not_authorized;"
+                + (
+                    "cross_source_reported_yield_comparability_collaborator_confirmed;"
+                    if cross_provider_comparable
+                    else "cross_source_pooling_not_authorized;"
+                )
+                +
                 "nb252_transfer_not_authorized"
             )
         else:
@@ -324,7 +382,12 @@ def build_sample_review_rows(inputs: AuditInputs) -> list[dict[str, str]]:
             reasons = (
                 "group_level_label_not_continuous_target;"
                 "ordinal_or_censored_use_only;"
-                "cross_source_pooling_not_authorized;"
+                + (
+                    "cross_source_reported_yield_comparability_collaborator_confirmed;"
+                    if cross_provider_comparable
+                    else "cross_source_pooling_not_authorized;"
+                )
+                +
                 "nb252_transfer_not_authorized"
             )
         row = {field: record.get(field, "") for field in SAMPLE_REVIEW_FIELDS}
@@ -333,13 +396,21 @@ def build_sample_review_rows(inputs: AuditInputs) -> list[dict[str, str]]:
                 "sequence_scope_status": scope_status,
                 "numbering_status": numbering_status,
                 "provisional_numbered_span_sha256": span_hash,
-                "construct_comparability_status": "pending",
+                "construct_comparability_status": (
+                    "conditional" if cross_provider_comparable else "pending"
+                ),
                 "protocol_completeness_status": "blocked",
                 "within_assay_numeric_use_status": numeric_status,
                 "within_assay_ordinal_use_status": ordinal_status,
-                "cross_assay_pooling_status": "blocked",
+                "cross_assay_pooling_status": (
+                    "pass" if cross_provider_comparable else "blocked"
+                ),
                 "nb252_transfer_status": "blocked",
-                "highest_allowed_use": highest,
+                "highest_allowed_use": (
+                    "cross_assay_semantics_aware_exploratory"
+                    if cross_provider_comparable
+                    else highest
+                ),
                 "blocking_fields": ";".join(sorted(common_blockers)),
                 "decision_reasons": reasons,
                 "review_version": AUDIT_VERSION,
@@ -394,6 +465,7 @@ def build_allowed_use_manifest(
     view_rows: Sequence[Mapping[str, str]],
     generated_at: str,
     output_hashes: Mapping[str, str],
+    comparability_confirmation: Mapping[str, object] | None = None,
 ) -> dict[str, object]:
     """Describe evidence, allowed uses, blocked uses, and the expression sub-gate."""
 
@@ -427,25 +499,56 @@ def build_allowed_use_manifest(
         },
         "evidence_policy": {
             "same_system_claim": "user_provided_summary_only",
-            "cross_provider_protocol_equivalence": "unknown_not_reported",
+            "cross_provider_protocol_equivalence": (
+                "collaborator_confirmed_reported_yield_comparability"
+                if comparability_confirmation is not None
+                else "unknown_not_reported"
+            ),
             "reported_yield_is_expression_rate": False,
             "one_liter_implies_mg_per_l_expression": False,
         },
+        "comparability_confirmation": (
+            {
+                key: comparability_confirmation[key]
+                for key in (
+                    "status",
+                    "scope",
+                    "confirmed_by",
+                    "confirmed_at",
+                    "confirmation_note",
+                    "evidence",
+                )
+            }
+            if comparability_confirmation is not None
+            else {"status": "not_provided"}
+        ),
         "allowed_uses": {
             "LTT_WCC": "conditional within-assay numeric exploration only",
             "LLJ": "conditional within-assay ordinal/censored exploration only",
             "sequence": "descriptive numbering and leakage audit only",
+            "cross_assay": (
+                "semantics-aware exploratory pooling; preserve LLJ censoring/group labels"
+                if comparability_confirmation is not None
+                else "blocked"
+            ),
         },
-        "blocked_uses": [
+        "blocked_uses": ([
+            "pooled_continuous_yield_model",
+            "nb252_candidate_transfer_or_ranking",
+            "conversion_to_expression_mg_per_l",
+            "conversion_of_LLJ_group_bins_to_exact_individual_values",
+        ] if comparability_confirmation is not None else [
             "cross_assay_pooling",
             "pooled_continuous_yield_model",
             "nb252_candidate_transfer_or_ranking",
             "conversion_to_expression_mg_per_l",
             "conversion_of_LLJ_group_bins_to_exact_individual_values",
-        ],
+        ]),
         "gates": {
             "expression_audit_gate": "pass",
-            "cross_assay_pooling_gate": "blocked",
+            "cross_assay_pooling_gate": (
+                "pass" if comparability_confirmation is not None else "blocked"
+            ),
             "nb252_transfer_gate": "blocked",
             "stage_1_baseline_gate": (
                 "pending_structure_baseline"
@@ -483,7 +586,11 @@ def write_json(path: Path, value: object) -> None:
     )
 
 
-def validate_written_audit(paths: Mapping[str, Path]) -> dict[str, object]:
+def validate_written_audit(
+    paths: Mapping[str, Path],
+    *,
+    cross_provider_comparable: bool = False,
+) -> dict[str, object]:
     metadata = _read_csv_exact(paths["assay_metadata"], ASSAY_METADATA_FIELDS)
     samples = _read_csv_exact(paths["sample_review"], SAMPLE_REVIEW_FIELDS)
     view = _read_csv_exact(paths["view"], VIEW_FIELDS)
@@ -500,8 +607,11 @@ def validate_written_audit(paths: Mapping[str, Path]) -> dict[str, object]:
         EXPECTED_SEMANTICS_COUNTS
     ):
         raise ExpressionAuditError("Written semantics counts differ from 31/9/7")
-    if any(row["cross_assay_pooling_status"] != "blocked" for row in samples):
-        raise ExpressionAuditError("Cross-assay pooling must remain blocked")
+    expected_pooling = "pass" if cross_provider_comparable else "blocked"
+    if any(row["cross_assay_pooling_status"] != expected_pooling for row in samples):
+        raise ExpressionAuditError(
+            f"Cross-assay pooling must remain {expected_pooling}"
+        )
     if any(row["nb252_transfer_status"] != "blocked" for row in samples):
         raise ExpressionAuditError("Nb252 transfer must remain blocked")
     if any(row["evidence_status"] not in EVIDENCE_STATUSES for row in metadata):
@@ -528,7 +638,9 @@ def validate_written_audit(paths: Mapping[str, Path]) -> dict[str, object]:
         "semantics_counts": dict(
             Counter(row["observation_semantics"] for row in samples)
         ),
-        "cross_assay_pooling_blocked_count": 47,
+        "cross_assay_pooling_blocked_count": (
+            0 if cross_provider_comparable else 47
+        ),
         "nb252_transfer_blocked_count": 47,
     }
 

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-10T10:28:00+08:00",
+  "generated_at": "2026-08-10T12:02:36+08:00",
   "schema_version": 1,
   "scientific_scope": {
     "assay_equivalence_inferred": false,
@@ -269,10 +269,10 @@
       "size_bytes": 537670
     },
     "expression_audit_manifest": {
-      "mtime_ns": 1785763883673774900,
+      "mtime_ns": 1786334768350121700,
       "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\expression\\allowed_use_manifest.json",
-      "sha256": "0b011d18ac91f3b9fbdaa6464176dcec9545fa8bb3f5ca2ae1a8cb4387e269e4",
-      "size_bytes": 4823
+      "sha256": "19f7d664ee599169f0897729140e9113ad16abc9798690c77907da2e2113dba4",
+      "size_bytes": 5358
     },
     "expression_manifest": {
       "mtime_ns": 1785740936522894400,
@@ -293,10 +293,10 @@
       "size_bytes": 14172
     },
     "sample_comparability_review": {
-      "mtime_ns": 1785763883671774100,
+      "mtime_ns": 1786334768348121400,
       "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\expression\\sample_comparability_review.csv",
-      "sha256": "96141994f9f04237d4cb0e6a94ae2cca7e2db6df3c8b336e66d7748888f09762",
-      "size_bytes": 36560
+      "sha256": "314c7b406261daf2dd93e34e25d604009bf4bbaa9d5c5f31f479ced2fe03c7bf",
+      "size_bytes": 36607
     },
     "sequence_numbering_manifest": {
       "mtime_ns": 1785763881926849000,

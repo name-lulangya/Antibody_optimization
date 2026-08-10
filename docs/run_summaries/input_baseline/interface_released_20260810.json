@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "stage": "temporary_interface",
+  "status": "pass",
+  "generated_at": "2026-08-10T12:02:36+08:00",
+  "elapsed_seconds": 0.1347562000155449,
+  "script": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\input_baseline\\calculate_temporary_interface.py",
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\input_baseline\\calculate_temporary_interface.py",
+    "--structure-baseline-manifest",
+    "docs\\result_artifacts\\input_baseline\\structure_released_20260810\\structure_baseline_manifest.json",
+    "--confirmed-review",
+    "docs\\result_artifacts\\input_baseline\\structure_review_20260810\\baseline_review.json",
+    "--output-dir",
+    "docs\\result_artifacts\\input_baseline\\interface_released_20260810",
+    "--run-summary",
+    "docs\\run_summaries\\input_baseline\\interface_released_20260810.json",
+    "--generated-at",
+    "2026-08-10T12:02:36+08:00"
+  ],
+  "working_directory": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization",
+  "python": "3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "inputs": {
+    "structure_baseline_manifest": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_released_20260810\\structure_baseline_manifest.json",
+      "sha256": "e93d227178e75befd78518e7d91fc1ffccf22f3891cebfde7e93038cd6f307e8",
+      "size_bytes": 21634,
+      "mtime_ns": 1786334704897512600
+    },
+    "confirmed_review": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_review_20260810\\baseline_review.json",
+      "sha256": "ba4e2f253158b390d8f16a357a72d7503d80338d45110b64b4aae20f53282254",
+      "size_bytes": 4364,
+      "mtime_ns": 1786334583099795400
+    }
+  },
+  "outputs": {
+    "atom_contacts": {
+      "path": "docs\\result_artifacts\\input_baseline\\interface_released_20260810\\temporary_interface_atom_contacts.csv",
+      "sha256": "2aa96f6ad3dc16b951ba4f30d2515c1c302e336caea5ec408dd2c77bd8bfd273",
+      "size_bytes": 33150
+    },
+    "interface": {
+      "path": "docs\\result_artifacts\\input_baseline\\interface_released_20260810\\temporary_interface_residues.csv",
+      "sha256": "13fc38e3adb29b11c92f986bbbbbc6e1d7b0cde92245835f064dfe4fcfdf9ead",
+      "size_bytes": 4509
+    },
+    "orange_vs_4A_comparison": {
+      "path": "docs\\result_artifacts\\input_baseline\\interface_released_20260810\\orange_vs_4A.csv",
+      "sha256": "f7535a82b52da075a755e18a1f544813079984b1a79622438d43a7b2c8970297",
+      "size_bytes": 15128
+    }
+  },
+  "manifest": {
+    "path": "docs\\result_artifacts\\input_baseline\\interface_released_20260810\\interface_manifest.json",
+    "sha256": "f19232070f7f23b7a035cede02084da9634d0cf14fee78e898a0837190230045",
+    "size_bytes": 6312
+  },
+  "parameters": {
+    "name": "temporary_heavy_atom_interface_lt4A",
+    "distance": "literal atom-center Cartesian Euclidean distance strictly < 4.0 angstrom",
+    "atoms": "positive-occupancy polymer heavy atoms; H and D excluded",
+    "altloc_compatibility": "blank with any, or equal nonblank identifiers",
+    "candidate_search": "Gemmi NeighborSearch on an in-memory clone with cleared unit cell and space group",
+    "strict_verification": "independent literal Cartesian pair distance",
+    "periodic_or_symmetry_images": false,
+    "scientific_scope": "temporary geometric interface; not an energetic or functional claim",
+    "temporary_protection_set": "confirmed collaborator orange union strict temporary <4.0 A set; a conservative mutation-protection flag, not an energetic hotspot set"
+  },
+  "blockers": []
+}

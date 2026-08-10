@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "review_type": "nb252_candidate_design_constraints",
+  "status": "confirmed",
+  "parent_sequence_length": 128,
+  "parent_sequence_sha256": "df5b83ddde8a3486383c12afe45e22af6a358f507eab5503d5dbd4430710288d",
+  "immutable_reported_sequence_positions": [125, 126, 127, 128],
+  "immutable_terminal_sequence": "SSGS",
+  "constraint": "Candidate generation must not substitute or delete the terminal SSGS at reported-sequence positions 125-128.",
+  "numbering_note": "The terminal GS is outside the provisional ANARCII/IMGT numbered span; use reported-sequence indices for this constraint.",
+  "confirmed_by": "project_user_clarification",
+  "confirmed_at": "2026-08-10T15:03:19+08:00",
+  "evidence": "The project user clarified that retain means the terminal SSGS must not be mutated during candidate design."
+}

@@ -25,6 +25,7 @@ from antibody_optimization.expression_audit import (  # noqa: E402
     build_assay_metadata_rows,
     build_comparability_view,
     build_sample_review_rows,
+    load_cross_provider_confirmation,
     load_and_validate_inputs,
     sha256_file,
     validate_written_audit,
@@ -56,6 +57,11 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         help="Optional JSON with a top-level samples array of provisional numbering results",
     )
+    parser.add_argument(
+        "--comparability-confirmation",
+        type=Path,
+        help="Explicit collaborator confirmation that cross-provider reported yields are directly comparable",
+    )
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--run-summary", required=True, type=Path)
     parser.add_argument(
@@ -84,6 +90,8 @@ def main() -> int:
     ]
     if args.sequence_audit_summary is not None:
         lexical_sources.append(args.sequence_audit_summary.expanduser().absolute())
+    if args.comparability_confirmation is not None:
+        lexical_sources.append(args.comparability_confirmation.expanduser().absolute())
     for source in lexical_sources:
         if not source.is_file() or source.is_symlink():
             raise FileNotFoundError(
@@ -108,7 +116,14 @@ def main() -> int:
     )
     source_paths = validated.source_paths
     records_path, context_path, manifest_path = source_paths[:3]
-    sequence_summary_path = source_paths[3] if len(source_paths) == 4 else None
+    source_index = 3
+    sequence_summary_path = None
+    if args.sequence_audit_summary is not None:
+        sequence_summary_path = source_paths[source_index]
+        source_index += 1
+    confirmation_path = None
+    if args.comparability_confirmation is not None:
+        confirmation_path = source_paths[source_index]
     final_artifacts = dict(
         zip(OUTPUT_NAMES, validated.target_paths[:-1], strict=True)
     )
@@ -124,10 +139,19 @@ def main() -> int:
     inputs = load_and_validate_inputs(
         records_path, context_path, manifest_path, sequence_summary_path
     )
-    metadata_rows = build_assay_metadata_rows(
-        inputs.assay_contexts, generated_at=generated_at
+    comparability_confirmation = (
+        load_cross_provider_confirmation(confirmation_path)
+        if confirmation_path is not None
+        else None
     )
-    sample_rows = build_sample_review_rows(inputs)
+    metadata_rows = build_assay_metadata_rows(
+        inputs.assay_contexts,
+        generated_at=generated_at,
+        comparability_confirmation=comparability_confirmation,
+    )
+    sample_rows = build_sample_review_rows(
+        inputs, comparability_confirmation=comparability_confirmation
+    )
     view_rows = build_comparability_view(sample_rows, metadata_rows)
 
     final_artifacts["assay_metadata"].parent.mkdir(parents=True, exist_ok=True)
@@ -157,9 +181,13 @@ def main() -> int:
             view_rows=view_rows,
             generated_at=generated_at,
             output_hashes=csv_hashes,
+            comparability_confirmation=comparability_confirmation,
         )
         write_json(stage_paths["allowed_use_manifest"], allowed_use_manifest)
-        validation = validate_written_audit(stage_paths)
+        validation = validate_written_audit(
+            stage_paths,
+            cross_provider_comparable=comparability_confirmation is not None,
+        )
 
         recorded_argv = list(sys.argv[1:])
         if not args.generated_at:
@@ -201,6 +229,14 @@ def main() -> int:
                         "sha256": sha256_file(sequence_summary_path),
                     }
                     if sequence_summary_path is not None
+                    else {"status": "not_provided"}
+                ),
+                "comparability_confirmation": (
+                    {
+                        "path": str(confirmation_path),
+                        "sha256": sha256_file(confirmation_path),
+                    }
+                    if confirmation_path is not None
                     else {"status": "not_provided"}
                 ),
             },

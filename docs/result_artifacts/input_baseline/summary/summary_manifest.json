@@ -1,17 +1,17 @@
 {
   "figure_semantics": "Reported Nb252 sequence with provisional IMGT numbering; structural and interface tracks are populated only from verified supplied artifacts.",
   "gate_status": {
-    "candidate_design_release": "blocked",
+    "candidate_design_release": "pass",
     "local_baseline_build": "pass",
-    "pooled_expression_model_release": "blocked"
+    "pooled_expression_model_release": "pass"
   },
-  "generated_at": "2026-08-10T10:28:00+08:00",
+  "generated_at": "2026-08-10T12:02:36+08:00",
   "inputs": {
     "expression_audit_manifest": {
-      "mtime_ns": 1785763883673774900,
+      "mtime_ns": 1786334768350121700,
       "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\expression\\allowed_use_manifest.json",
-      "sha256": "0b011d18ac91f3b9fbdaa6464176dcec9545fa8bb3f5ca2ae1a8cb4387e269e4",
-      "size_bytes": 4823
+      "sha256": "19f7d664ee599169f0897729140e9113ad16abc9798690c77907da2e2113dba4",
+      "size_bytes": 5358
     },
     "expression_records": {
       "mtime_ns": 1785740936517894800,
@@ -26,9 +26,9 @@
       "size_bytes": 6007
     },
     "interface_manifest": {
-      "mtime_ns": 1786328687842385200,
-      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\interface_reviewed_20260810\\interface_manifest.json",
-      "sha256": "2cc2f881abc1234dc50bdb61687b3453930d9ce7d459996aef3a309ad27b9a0a",
+      "mtime_ns": 1786334710997213800,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\interface_released_20260810\\interface_manifest.json",
+      "sha256": "f19232070f7f23b7a035cede02084da9634d0cf14fee78e898a0837190230045",
       "size_bytes": 6312
     },
     "numbering_positions": {
@@ -44,16 +44,16 @@
       "size_bytes": 26086
     },
     "orange_vs_4a_comparison": {
-      "mtime_ns": 1786328687840881300,
-      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\interface_reviewed_20260810\\orange_vs_4A.csv",
+      "mtime_ns": 1786334710996213300,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\interface_released_20260810\\orange_vs_4A.csv",
       "sha256": "f7535a82b52da075a755e18a1f544813079984b1a79622438d43a7b2c8970297",
       "size_bytes": 15128
     },
     "sample_comparability": {
-      "mtime_ns": 1785763883671774100,
+      "mtime_ns": 1786334768348121400,
       "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\expression\\sample_comparability_review.csv",
-      "sha256": "96141994f9f04237d4cb0e6a94ae2cca7e2db6df3c8b336e66d7748888f09762",
-      "size_bytes": 36560
+      "sha256": "314c7b406261daf2dd93e34e25d604009bf4bbaa9d5c5f31f479ced2fe03c7bf",
+      "size_bytes": 36607
     },
     "sequence_manifest": {
       "mtime_ns": 1785763881926849000,
@@ -74,38 +74,38 @@
       "size_bytes": 14172
     },
     "structure_manifest": {
-      "mtime_ns": 1786328667501764700,
-      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_reviewed_20260810\\structure_baseline_manifest.json",
-      "sha256": "7fbcb6f5bec5751a71c3942c8b5d4ddea09e0a22d6dbe5c5da5b879a31a9e5c6",
-      "size_bytes": 20892
+      "mtime_ns": 1786334704897512600,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_released_20260810\\structure_baseline_manifest.json",
+      "sha256": "e93d227178e75befd78518e7d91fc1ffccf22f3891cebfde7e93038cd6f307e8",
+      "size_bytes": 21634
     },
     "structure_mapping": {
-      "mtime_ns": 1786328667498762600,
-      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_reviewed_20260810\\nb252_sequence_structure_mapping.csv",
-      "sha256": "7086d28dc9a05b8cd759960d47aa1f8b9d42e74c355c4dfa9d8e796c4f62493e",
-      "size_bytes": 136762
+      "mtime_ns": 1786334704895512500,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_released_20260810\\nb252_sequence_structure_mapping.csv",
+      "sha256": "74e3975d1e10383d1f8904aba67487605b2c240bca5cca11093df2d50f21dce9",
+      "size_bytes": 137274
     }
   },
   "outputs": {
     "figure_png": {
       "file": "input_baseline_qc.png",
-      "sha256": "1405f7289d8ea59af42a4e1eb0f52a0fe931f1eb1ffd352393f8dbac0eaf3e34",
-      "size_bytes": 594090
+      "sha256": "ab97c93601b9efe3d33926f0aeba1579f8bd1b942911d2daafb2e47ac34384cd",
+      "size_bytes": 572886
     },
     "figure_svg": {
       "file": "input_baseline_qc.svg",
-      "sha256": "4effc0e6b8b2e2d66f36bbd1f93cac0a6ed634c69202214743efc68f2a787e9b",
-      "size_bytes": 239845
+      "sha256": "f8a58de517a5aa4056dbaf5738e1c23692b1dacfc9b7ccca0c7cc5c0f30b7552",
+      "size_bytes": 235695
     },
     "freeze": {
       "file": "input_freeze_manifest.json",
-      "sha256": "c27b3863c61416767d15459006e9802dcbed6e9e362a1c5ed40ee30f0fbd4f0a",
+      "sha256": "c06f66f52f03c065d20d88a054e807e074e9dbab34b5a3118832bd357885ad0a",
       "size_bytes": 12329
     },
     "gate": {
       "file": "stage1_gate.json",
-      "sha256": "9e01ff342096a9719de08658f5ad51fe3b530e592d44d7fe85c5d81b65e0dae3",
-      "size_bytes": 2809
+      "sha256": "24e5bcc399234d44f5f703477792be77bcaf01ce4b1fa3e388dbe176490bf6aa",
+      "size_bytes": 2204
     },
     "plot_data": {
       "file": "nb252_baseline_plot_data.csv",
@@ -114,8 +114,8 @@
     },
     "status_counts": {
       "file": "baseline_status_counts.csv",
-      "sha256": "7a406ee5e69835b5e4918ffc8f0fd8e4ebbc3d3201f57f68790ce2a1671f9677",
-      "size_bytes": 188
+      "sha256": "a628f6e326e45e82df078c949f8eb21664b6a2bca5dd28515faf4ca89656f6c5",
+      "size_bytes": 139
     }
   },
   "schema_version": 1
