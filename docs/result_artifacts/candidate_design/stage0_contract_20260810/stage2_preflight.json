@@ -1,6 +1,6 @@
 {
   "blocking_next_gate": [
-    "Validate PyRosetta Pose import with explicit missing-density jumps/cutpoints, PDBInfo mapping, finite energies, and constrained WT pose stability."
+    "Validate PyRosetta Pose import with explicit missing-density jumps/cutpoints, PDBInfo mapping, retained disulfide connectivity, and finite raw scores."
   ],
   "candidate_manifest_release": "pass",
   "completed_checks": [
@@ -22,7 +22,7 @@
     "hard_immutable_positions": 6,
     "parent_positions": 128
   },
-  "generated_at": "2026-08-10T20:19:38+08:00",
+  "generated_at": "2026-08-10T21:49:00+08:00",
   "inputs": {
     "confirmed_baseline_review": {
       "mtime_ns": 1786334583099795400,

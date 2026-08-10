@@ -13,7 +13,7 @@
     "pyrosetta_affinity_scoring_release": "blocked_pending_remote_gap_safe_import",
     "stage0_local_contract": "pass"
   },
-  "generated_at": "2026-08-10T20:19:38+08:00",
+  "generated_at": "2026-08-10T21:49:00+08:00",
   "inputs": {
     "confirmed_baseline_review": {
       "mtime_ns": 1786334583099795400,
@@ -61,7 +61,7 @@
   "outputs": {
     "contract": {
       "file": "stage2_design_contract.json",
-      "sha256": "4a269db96512b4ccc10eb62ed094a78aaaa228aeda325315349395334bc88d7a",
+      "sha256": "5facc1faaf97fa3f8929cff5bc15ae50fdc47ba0067b717e0acbe4f9b196ee0f",
       "size_bytes": 4904
     },
     "figure_png": {
@@ -81,8 +81,8 @@
     },
     "preflight": {
       "file": "stage2_preflight.json",
-      "sha256": "bd10bc93aec9651bb52a443a68c54e920aad5a9a30a55131b59c6e8ad16cb27a",
-      "size_bytes": 3024
+      "sha256": "03f7dd1614f3349a915b4a9a1fffaa19e327813cd9b0018db8af31f35792a537",
+      "size_bytes": 3028
     }
   },
   "schema_version": 1,

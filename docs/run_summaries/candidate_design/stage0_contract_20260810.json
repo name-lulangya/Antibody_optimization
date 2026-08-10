@@ -13,7 +13,7 @@
     "--run-summary",
     "docs/run_summaries/candidate_design/stage0_contract_20260810.json",
     "--generated-at",
-    "2026-08-10T20:19:38+08:00",
+    "2026-08-10T21:49:00+08:00",
     "--overwrite"
   ],
   "counts": {
@@ -23,13 +23,13 @@
     "hard_immutable_positions": 6,
     "parent_positions": 128
   },
-  "elapsed_seconds": 1.209181,
+  "elapsed_seconds": 1.196139,
   "gates": {
     "candidate_manifest_release": "pass",
     "pyrosetta_affinity_scoring_release": "blocked_pending_remote_gap_safe_import",
     "stage0_local_contract": "pass"
   },
-  "generated_at": "2026-08-10T20:19:38+08:00",
+  "generated_at": "2026-08-10T21:49:00+08:00",
   "inputs": {
     "confirmed_baseline_review": {
       "mtime_ns": 1786334583099795400,

@@ -111,6 +111,11 @@
   - 主要输入/返回：位点清单行；写出600 dpi PNG与固定SVG hashsalt的SVG。
   - 算法假设：输入必须恰好覆盖reported-sequence positions 1–128；颜色只编码清单中的机器可读状态；SVG固定hashsalt并规范为LF、无行尾空白和单一终止换行。
   - 明确不支持：计算界面、推断残基状态、修改合同或选择候选。
+- `antibody_optimization.pyrosetta_import_gate`
+  - 用途：复用已发布的阶段0与结构清单，形成一次PyRosetta WT导入阶段检查；比较Pose与实验源残基身份，核验真实缺口的cutpoint/jump和跨缺口C–N非成键状态，并生成紧凑阶段门与SVG。
+  - 主要输入/返回：阶段0目录、released structure baseline目录，以及从PyRosetta Pose提取的最小残基、FoldTree、成键和raw score记录；返回断点表、问题列表和`pyrosetta_wt_import_gate`。
+  - 算法假设：上游身份与哈希已由阶段0冻结，本阶段不重复计算；实验模型共有396个有坐标polymer残基，真实断点为Nb252两个missing-density断点、一个C/R链边界和NK2R auth 229–239 missing-density断点。
+  - 明确不支持：导入PyRosetta、补全缺失残基、relax/最小化、突变、亲和力解释或生产候选评分。
 
 ## 第一阶段活动入口
 
@@ -127,3 +132,4 @@
 ## 第二阶段活动入口
 
 - `scripts/candidate_design/build_stage2_design_contract.py`：阶段0本地入口；重新读取并核验关键残基制品及其上游哈希、阶段1门和实验complex，输出`stage2_design_contract.json`、128行`mutable_position_inventory.csv`、`stage2_preflight.json`、PNG/SVG、manifest及独立run summary。默认拒绝覆盖；固定时间戳双跑的六个正式制品必须逐字节一致。`stage0_local_contract=pass`只释放后续候选清单工作，不能越过仍为blocked的远程PyRosetta gap-safe导入门。
+- `scripts/structure_preparation/validate_pyrosetta_wt_import.py`：阶段1唯一计算入口；由同目录`submit_pyrosetta_wt_import.slurm`从已验证仓库根提交，使用`-missing_density_to_jump true`直接导入实验mmCIF，不做relax。Python入口默认拒绝覆盖，输出一个断点表、一个raw score term表、一个权威gate JSON、一张SVG和一个轻量run summary。Slurm固定`batch`、1 GPU、12 CPU、1小时上限且不显式申请内存；GPU是集群资源约束，本计算不使用GPU加速。`pass`只把亲和力评分推进到`ready_for_scoring_protocol_calibration`，不等于预测协议已验证。

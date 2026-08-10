@@ -38,6 +38,13 @@ This project optimizes the experimentally identified NK2R nanobody Nb252 for mul
 - Never substitute mock, synthetic, fabricated, or placeholder sequences, structures, scores, assays, or metadata for required project inputs merely to make code, checks, smoke runs, integration runs, or result-producing workflows succeed. Deliberately synthetic fixtures are allowed only in isolated unit tests, must be explicitly named as test-only, and must never be selected automatically by runtime code.
 - Never report a computational prediction as an experimental observation. Clearly label predicted, modeled, inferred, and experimentally measured values in code outputs, tables, figures, history, handoff documents, and conversation.
 
+## Information Recording and Proportionate Validation
+
+- Record each fact once in the most appropriate authoritative artifact. Other manifests, summaries, histories, figures, and handoffs should reference that source and include only information needed for their own purpose; do not copy the same detailed fact into multiple files.
+- Keep records decision-relevant and reproducible, but omit redundant metadata, repeated narrative, and low-value diagnostics that do not affect interpretation, rerunning, or a release decision.
+- Perform defensive validation once at the relevant stage boundary and record the result. Reuse that passed validation within the same unchanged stage; repeat it only when an upstream input changes, a new stage has a materially different risk, or a previous check failed.
+- Compute content hashes when freezing an input or binding a result manifest, then reuse the recorded identity. Do not repeatedly recompute hashes in every substep or add broad defensive checks without a concrete failure mode and meaningful consequence.
+
 ## Code Style
 
 - Prefer small, conservative Python changes that follow nearby script style.
@@ -90,8 +97,8 @@ This project optimizes the experimentally identified NK2R nanobody Nb252 for mul
 ### Critical residue facts and preflight verification
 
 - Residue-level facts that can change candidate generation, mutation safety, scoring, or interpretation must be stored in one or more Git-tracked machine-readable artifacts; conversation context, handoff prose, history prose, figure labels, and agent memory are not authoritative sources. At minimum this applies to the authoritative parent sequence and hash, chain roles, source/standardized numbering map, experimental missing-coordinate set, coordinate-evaluable status, interface/contact set and exact definition, immutable positions, cautious/protected positions, and any modeled-completion provenance.
-- Before every candidate-generation, mutation-modeling, affinity/stability scoring, or ranking run, reopen the authoritative artifacts and verify their schema/status, file hashes or stable source identifiers, model and chain identities, parent-sequence hash, numbering scheme, coordinate-evaluable flags, and wild-type residue identities. The entry point must refuse to proceed when a required artifact is absent, stale, blocked, hash-mismatched, or inconsistent; do not reconstruct these facts from remembered residue lists or prose.
-- Every downstream candidate or result manifest must bind the exact hashes of the critical-fact, mapping, interface, design-constraint, and structure-preparation artifacts it used. When an upstream artifact changes, regenerate or explicitly revalidate dependent manifests before using them.
+- At the start of each materially new design or scoring stage, validate the authoritative critical-fact artifact and the specific identities needed by that stage, then record one preflight result for all substeps that consume the unchanged inputs. Do not reconstruct facts from remembered residue lists or prose, and do not repeat the same validation per candidate or per substep.
+- A downstream candidate or result manifest should reference the already validated upstream manifest or stable run identifier. Add new hashes only when freezing a new input or output boundary; when an upstream artifact changes, regenerate or explicitly revalidate affected dependents once.
 - Experimental missing-coordinate residues must remain explicitly `not_evaluable` for experimental contact/interface claims. A predicted or completed structure may provide a separate modeled assessment only when its source, completion method, ensemble/model identity, and uncertainty are recorded; it must not silently convert a missing experimental residue into an experimentally observed non-contact or contact.
 
 ### Chain identity, residue numbering, and sequence mapping
@@ -139,7 +146,7 @@ This project optimizes the experimentally identified NK2R nanobody Nb252 for mul
 ### Numerical result integrity
 
 - Every numerical result reported in conversation, history, handoff, run summaries, tables, captions, or plots, and every value used to create a figure, must be read from or recomputed from concrete project data/result files or authoritative project records such as machine-readable run summaries, manifests, assay exports, and tracked artifacts. Never use conversational memory, manually transcribed narrative values, or an earlier caption as the sole data source.
-- Before reporting or plotting derived results, reopen and verify source paths, schemas, sequence/structure identifiers, sample counts, units, assay conditions, replicate and aggregation semantics, model versions, seeds, thresholds, and filtering. Retain enough provenance to identify those sources.
+- Before the first report or plot from a result stage, verify the relevant source paths, schemas, identifiers, units, aggregation semantics, model versions and filtering, and record that verification in the stage manifest. Later views of the same unchanged result should reuse that record rather than repeat the full check.
 - If a required source is unavailable, state that the value is unverified and do not present or plot it as an observed result.
 
 ## Git Rules

@@ -132,7 +132,7 @@ def build_stage0_contract(
     observed SG--SG disulfide pairs.  Missing residues remain absent and
     explicitly non-evaluable.  The returned preflight passes the local stage-0
     contract while leaving PyRosetta affinity scoring blocked until a remote
-    gap-safe Pose import has been validated.
+    gap-safe raw Pose import has been validated.
     """
 
     if not (0 < disulfide_min_sg_distance < disulfide_max_sg_distance):
@@ -403,7 +403,7 @@ def build_stage0_contract(
         "completed_checks": checks,
         "blocking_next_gate": [
             "Validate PyRosetta Pose import with explicit missing-density jumps/cutpoints, "
-            "PDBInfo mapping, finite energies, and constrained WT pose stability."
+            "PDBInfo mapping, retained disulfide connectivity, and finite raw scores."
         ],
         "counts": counts,
         "inputs": inputs,
