@@ -116,6 +116,11 @@
   - 主要输入/返回：阶段0目录、released structure baseline目录，以及从PyRosetta Pose提取的最小残基、FoldTree、成键和raw score记录；返回断点表、问题列表和`pyrosetta_wt_import_gate`。
   - 算法假设：上游身份与哈希已由阶段0冻结，本阶段不重复计算；实验模型共有396个有坐标polymer残基，真实断点为Nb252两个missing-density断点、一个C/R链边界和NK2R auth 229–239 missing-density断点。
   - 明确不支持：导入PyRosetta、补全缺失残基、relax/最小化、突变、亲和力解释或生产候选评分。
+- `antibody_optimization.pyrosetta_scoring_calibration`
+  - 用途：验证已通过的WT导入门，汇总固定主链界面repack与界面repack加坐标约束局部最小化的重复指标，按预声明的构象保持、接触保留、界面排斥和重复MAD标准选择最简单的通过协议，并生成亲和力评分release gate及SVG。
+  - 主要输入/返回：阶段0合同、WT导入gate、每个协议的重复指标、raw界面`fa_rep`和显式`CalibrationThresholds`；返回协议摘要、代表重复、选择结果和`pyrosetta_scoring_protocol_calibration` gate。
+  - 算法假设：`ref2015`只作为相同实验复合物、相同局部准备下的配对相对界面排序信号；优先选择固定主链repack，只有其不通过而受约束局部最小化通过时才选择后者。RosettaMP不与主路线并行，只有局部协议校准失败时才重新评估。
+  - 明确不支持：导入或操作Pose、把完整复合物绝对total score解释为亲和力/稳定性、补全缺失区、全局relax、候选突变或实验效力预测。
 
 ## 第一阶段活动入口
 
@@ -133,3 +138,4 @@
 
 - `scripts/candidate_design/build_stage2_design_contract.py`：阶段0本地入口；重新读取并核验关键残基制品及其上游哈希、阶段1门和实验complex，输出`stage2_design_contract.json`、128行`mutable_position_inventory.csv`、`stage2_preflight.json`、PNG/SVG、manifest及独立run summary。默认拒绝覆盖；固定时间戳双跑的六个正式制品必须逐字节一致。`stage0_local_contract=pass`只释放后续候选清单工作，不能越过仍为blocked的远程PyRosetta gap-safe导入门。
 - `scripts/structure_preparation/validate_pyrosetta_wt_import.py`：阶段1唯一计算入口；由同目录`submit_pyrosetta_wt_import.slurm`从已验证仓库根提交，使用`-missing_density_to_jump true`直接导入实验mmCIF，不做relax。Python入口默认拒绝覆盖，输出一个断点表、一个raw score term表、一个权威gate JSON、一张SVG和一个轻量run summary。Slurm固定`batch`、1 GPU、12 CPU、1小时上限且不显式申请内存；GPU是集群资源约束，本计算不使用GPU加速。`pass`只把亲和力评分推进到`ready_for_scoring_protocol_calibration`，不等于预测协议已验证。
+- `scripts/structure_preparation/calibrate_pyrosetta_scoring.py`：阶段2评分校准入口；由`submit_pyrosetta_scoring_calibration.slurm`运行8个固定主链界面repack和8个界面repack加坐标约束局部最小化重复。实验缺口、PDBInfo和二硫键每个重复均保持；不补全、全局relax或生成突变。输出重复指标、raw与选中WT的逐残基能量、协议选择JSON、代表结构、gate、SVG和run summary；仅gate `pass`才释放配对相对界面候选评分。Slurm固定`batch`、1 GPU、12 CPU、4小时上限且不显式申请内存，任务预计1–3小时并逐重复打印进度。
