@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-10 22:02:04
+Last updated: 2026-08-10 22:09:08
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -16,8 +16,8 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 远程项目环境：`/data/software/env/luly25/ab_optim`；计划检出父目录 `/homes/Tianlab/luly25/`，登录别名尚未建立。
 - PyRosetta：`/data/software/env/luly25/multi_ligand`，Python 3.10.20，PyRosetta 2026.03，Rosetta commit `5e498f1409c68ade56c8ce5842bf79e1b02e8db4`。
 - nanoBERT：`/data/software/env/luly25/vhh-lm`，`NaturalAntibody/nanoBERT` revision `edc8182ad89a827f8737fa572c6b5fac6197e6b0`，使用已记录离线缓存。
-- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；PyRosetta WT导入门与Slurm执行路线提交`c4a7985`已推送至`origin/main`。
-- 阶段2的本地阶段0合同已运行；尚未运行 AF3、PyRosetta、nanoBERT/AntiFold、候选生成或表达模型训练。
+- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；远程结果提交`5efbc99`已拉取，本地与`origin/main`同步。
+- 阶段2的本地阶段0合同和远程PyRosetta WT安全导入门已运行；尚未运行 AF3、nanoBERT/AntiFold、候选生成、亲和力评分协议或表达模型训练。
 
 ## Frozen Inputs
 
@@ -51,7 +51,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - `candidate_design_release=pass`：authoritative 128-aa Nb252、结构身份、映射和界面安全均已确认；设计必须维持实验表位和结合构象。
 - `pooled_expression_model_release=pass`：允许保留删失/分组语义的联合建模；独立的`nb252_expression_transfer`仍为`blocked`，直到模型经适当验证。
 - `stage0_local_contract=pass`、`candidate_manifest_release=pass`：关键来源哈希、母本、映射、链身份、缺失坐标、界面、SSGS和实验二硫键均通过本地重检。
-- `pyrosetta_affinity_scoring_release=blocked_pending_remote_gap_safe_import`：远程WT导入入口已实现但尚未实跑；通过缺失密度jump/cutpoint、PDBInfo、二硫键和有限raw score检查后，只推进为`ready_for_scoring_protocol_calibration`。
+- `pyrosetta_wt_import_release=pass`、`pyrosetta_affinity_scoring_release=ready_for_scoring_protocol_calibration`：远程WT门已完成，396个polymer残基、4个断点、PDBInfo映射、Cys22–Cys95二硫键和有限raw score均通过；这只释放评分协议校准，不释放候选亲和力评分。
 - `finalize_input_baseline.py` 已用真实 structure mapping/interface 重建 canonical 128 位点图和 `stage1_gate.json`。程序 `status=pass` 不代表科学 release gate 自动通过。
 
 ## Stage-2 Phase 0 Result
@@ -62,7 +62,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Current Optimization Plan
 
-1. **远程WT结构门（入口与Slurm已实现，实跑预计<0.5小时）**：复用阶段0身份，仅做一次PyRosetta专项preflight；直接导入未补全实验complex，核验Nb252两个缺口、C/R链边界、NK2R auth 229–239缺口、PDBInfo、Cys22–Cys95二硫键和有限raw score。不做relax、重复哈希或候选评分。按用户要求统一通过`submit_pyrosetta_wt_import.slurm`提交。
+1. **远程WT结构门（已完成，实测14.123538秒）**：PyRosetta 2026.03直接导入未补全实验complex，396个polymer残基和4个预期断点均安全，映射与二硫键通过；未做relax、补全、突变或候选评分。权威结果位于`structure_preparation/pyrosetta_wt_import_20260810/pyrosetta_wt_import_gate.json`。
 2. **WT序列/可开发性基线（约0.5–1天）**：本地计算序列理化、化学风险和47条yield的保留删失语义基线；服务器部署/固定AntiFold及VHH适用的自然度/可开发性模型。nanoBERT仅在能提供独立验证价值时使用，不与同类语言模型重复堆叠。
 3. **可审计单点景观（约0.5–1天）**：24个实验界面位点的全替换理论上限为456个单点；先由结构/序列模型提出或排序，再应用Cys22/Cys95、SSGS、WT一致性、化学风险和表位/构象约束，预计保留约200–400个可评分候选。每个候选绑定阶段0合同和全部上游哈希，实际数量以生成制品为准。
 4. **亲和力/稳定性筛选（约2–4天）**：PyRosetta快速界面评分约4–16小时，再对入围者运行flex-ddG/折叠稳定性复核约1–3天；使用实验complex，缺失位点保持非可评估。所有长任务走既定Slurm规则。
@@ -78,7 +78,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Required Next Steps
 
-1. 将当前提交拉取到已验证的服务器仓库根，执行`sbatch scripts/structure_preparation/submit_pyrosetta_wt_import.slurm`，完成后同步回传gate、两个CSV、SVG和run summary。
+1. 校准PyRosetta亲和力评分协议：针对未优化实验坐标中较高的排斥/构象能项，先定义对WT与所有候选一致的最小结构准备和界面评分合同；在校准通过前不得把当前raw total score或各能量项解释为亲和力、稳定性或候选优劣。
 2. 建立本地WT理化/化学风险基线，并在服务器核验AntiFold与VHH自然度/可开发性模型的版本、许可证、输入范围和环境隔离。
 3. 生成绑定阶段0合同哈希的单点候选清单；此步先生成/过滤，不提前运行大规模结构评分。
 4. 实现保留LLJ删失/分组语义的表达基线与交叉验证，决定`nb252_expression_transfer`能否释放。
