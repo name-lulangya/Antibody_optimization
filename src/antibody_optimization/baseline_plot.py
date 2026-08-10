@@ -130,9 +130,9 @@ def render_baseline_figure(
         ax2.grid(axis="x", color="#E5E5E5", linewidth=0.6)
 
         figure_note = (
-            "Structure tracks remain gray until verified ChimeraX exports and explicit "
-            "chain-role review. Orange circles and red crosses denote confirmed session "
-            "annotation and temporary non-H/D atom-center <4 A contacts."
+            "Gray cells denote missing, unavailable, or not-evaluable coordinates. "
+            "Orange circles and red crosses denote confirmed session annotation and "
+            "temporary non-H/D atom-center <4 A contacts."
         )
         note_ax = fig.add_subplot(grid[2])
         note_ax.axis("off")

@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "review_type": "nb252_structure_orange_and_construct_baseline_review",
+  "status": "confirmed",
+  "source_binding": {
+    "cxs_export_manifest_sha256": "6b8bda777c909aedcc4a66151899cb2dde8d8f3184ac0436e3f2bfdf745cc629",
+    "cxs_residue_colors_sha256": "bde135cdf3f332c649ba288867e2448372976bc8d7a904eb1b91ed1312216928",
+    "chain_identity_sha256": "06b254da2aec326f94a8bdd57bf0e4da65ffa0666e7fef5450f38182b8991967",
+    "expression_records_sha256": "ef5c9165d1e5f4a1b7995b8733e621ed7e7147cdb73dbfba9a74ce131b3647c9",
+    "numbering_positions_sha256": "d0249e11fa9800b769a7d2db28d6da453dc8d964029414fd444146ee2772266d",
+    "reported_nb252_sequence_sha256": "df5b83ddde8a3486383c12afe45e22af6a358f507eab5503d5dbd4430710288d"
+  },
+  "chain_reviews": [
+    {
+      "source_model_name": "NK2R-252.pdb",
+      "auth_asym_id": "C",
+      "label_asym_id": "C",
+      "entity_id": "1",
+      "confirmed_role": "Nb252_VHH",
+      "confirmation_status": "confirmed",
+      "confirmed_by": "project_user",
+      "confirmed_at": "2026-08-10T10:19:21+08:00",
+      "confirmation_note": "User visually confirmed chain #1/C as Nb252 in ChimeraX 1.12."
+    },
+    {
+      "source_model_name": "NK2R-252.pdb",
+      "auth_asym_id": "R",
+      "label_asym_id": "R",
+      "entity_id": "2",
+      "confirmed_role": "NK2R",
+      "confirmation_status": "confirmed",
+      "confirmed_by": "project_user",
+      "confirmed_at": "2026-08-10T10:19:21+08:00",
+      "confirmation_note": "User visually confirmed chain #1/R as NK2R in ChimeraX 1.12."
+    },
+    {
+      "source_model_name": "NK2R-NKA",
+      "auth_asym_id": "L",
+      "label_asym_id": "C",
+      "entity_id": "1",
+      "confirmed_role": "NKA",
+      "confirmation_status": "confirmed",
+      "confirmed_by": "project_user",
+      "confirmed_at": "2026-08-10T10:19:21+08:00",
+      "confirmation_note": "User visually confirmed chain #2/L as NKA in ChimeraX 1.12."
+    },
+    {
+      "source_model_name": "NK2R-NKA",
+      "auth_asym_id": "R",
+      "label_asym_id": "E",
+      "entity_id": "2",
+      "confirmed_role": "NK2R",
+      "confirmation_status": "confirmed",
+      "confirmed_by": "project_user",
+      "confirmed_at": "2026-08-10T10:19:21+08:00",
+      "confirmation_note": "User visually confirmed chain #2/R as NK2R in ChimeraX 1.12."
+    },
+    {
+      "source_model_name": "fold_2r_252_nomg_model_0.cif",
+      "auth_asym_id": "A",
+      "label_asym_id": "A",
+      "entity_id": "1",
+      "confirmed_role": "Nb252_VHH",
+      "confirmation_status": "confirmed",
+      "confirmed_by": "project_user",
+      "confirmed_at": "2026-08-10T10:19:21+08:00",
+      "confirmation_note": "User visually confirmed chain #3/A as the AF3 Nb252 model in ChimeraX 1.12."
+    }
+  ],
+  "orange_annotation_review": {
+    "status": "confirmed",
+    "confirmed_rgb": [255, 165, 0],
+    "confirmed_rgba": [255, 165, 0, 255],
+    "confirmed_channels": ["atom", "ribbon"],
+    "confirmed_by": "project_user",
+    "confirmed_at": "2026-08-10T10:19:21+08:00",
+    "confirmation_note": "User confirmed that the green selection of the 24 exact-orange chain-C residues coincides with the collaborator-marked orange region.",
+    "evidence": "Visual review of the original Nb252-optimization.cxs in ChimeraX 1.12, together with the exported exact built-in orange RGBA and atom/ribbon channels."
+  },
+  "authoritative_construct_review": {
+    "status": "pending_collaborator_confirmation"
+  }
+}

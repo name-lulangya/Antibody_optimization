@@ -64,7 +64,7 @@
 - `antibody_optimization.polymer_mapping`
   - 用途：按证据优先级组合 source polymer→reported Nb252 与 observed coordinates→source polymer 的可逆映射，并记录每一步的方法、fallback 原因和来源。
   - 主要输入/返回：128-aa reported Nb252、可选 `SourcePolymerEvidence`、结构观测残基及 label-ID 来源；返回 `PolymerMappingResult` 和逐观测残基的 reported 序列索引。
-  - 算法假设：先使用源 polymer 序列，再使用源 label/auth scheme；只有对应源标识缺失时才允许固定 exact-first/BLOSUM62 序列 fallback。已存在但冲突的源证据必须阻断，Gemmi 启发式 label ID 只能用于一致性核验。
+  - 算法假设：先使用源 polymer 序列，再使用源 label/auth scheme；较长源 polymer 仅在包含唯一、完整、逐字一致的 reported 参考连续片段，且全部有坐标残基均落在该片段内时才允许保留片段外 flank。源 polymer 序列缺失时，仅当全部整数 auth 编号在 reported 参考中逐位 WT 完全一致、无插入码、唯一且严格递增，才允许将源 auth 编号直接作为参考序列索引，否则使用固定 exact-first/BLOSUM62 序列 fallback。已存在但冲突的源证据必须阻断，Gemmi 启发式 label ID 只能用于一致性核验。
   - 明确不支持：把 128-aa reported 参考自动称为已确认 authoritative construct、忽略 WT/编号冲突、随机打破重复最佳比对，或在源证据冲突时静默 fallback。
 - `antibody_optimization.structure_baseline_support`
   - 用途：集中验证 CXS 导出集合/哈希、ChimeraX–Gemmi atom-site 与 model/chain/residue/atom 计数合同、颜色表绑定，并给结构清单补充 source-polymer 证据及 raw/heuristic label-ID 来源。

@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "script_version": "1.0.0",
+  "contact_library_version": "1.0.0",
+  "generated_at": "2026-08-10T10:28:00+08:00",
+  "status": "pass",
+  "interface_status": "pass",
+  "orange_annotation_status": "pass",
+  "orange_vs_4A_comparison_status": "pass",
+  "blockers": [],
+  "outputs": {
+    "atom_contacts": {
+      "path": "docs\\result_artifacts\\input_baseline\\interface_reviewed_20260810\\temporary_interface_atom_contacts.csv",
+      "sha256": "2aa96f6ad3dc16b951ba4f30d2515c1c302e336caea5ec408dd2c77bd8bfd273",
+      "size_bytes": 33150
+    },
+    "interface": {
+      "path": "docs\\result_artifacts\\input_baseline\\interface_reviewed_20260810\\temporary_interface_residues.csv",
+      "sha256": "13fc38e3adb29b11c92f986bbbbbc6e1d7b0cde92245835f064dfe4fcfdf9ead",
+      "size_bytes": 4509
+    },
+    "orange_vs_4A_comparison": {
+      "path": "docs\\result_artifacts\\input_baseline\\interface_reviewed_20260810\\orange_vs_4A.csv",
+      "sha256": "f7535a82b52da075a755e18a1f544813079984b1a79622438d43a7b2c8970297",
+      "size_bytes": 15128
+    }
+  },
+  "definition": {
+    "name": "temporary_heavy_atom_interface_lt4A",
+    "distance": "literal atom-center Cartesian Euclidean distance strictly < 4.0 angstrom",
+    "atoms": "positive-occupancy polymer heavy atoms; H and D excluded",
+    "altloc_compatibility": "blank with any, or equal nonblank identifiers",
+    "candidate_search": "Gemmi NeighborSearch on an in-memory clone with cleared unit cell and space group",
+    "strict_verification": "independent literal Cartesian pair distance",
+    "periodic_or_symmetry_images": false,
+    "scientific_scope": "temporary geometric interface; not an energetic or functional claim",
+    "temporary_protection_set": "confirmed collaborator orange union strict temporary <4.0 A set; a conservative mutation-protection flag, not an energetic hotspot set"
+  },
+  "inputs": {
+    "structure_baseline_manifest": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_reviewed_20260810\\structure_baseline_manifest.json",
+      "sha256": "7fbcb6f5bec5751a71c3942c8b5d4ddea09e0a22d6dbe5c5da5b879a31a9e5c6",
+      "size_bytes": 20892,
+      "mtime_ns": 1786328667501764700
+    },
+    "confirmed_review": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_review_20260810\\baseline_review.json",
+      "sha256": "820273fe546a05390500bf19fa067f68219133c52266e2bf5f3dbb3f7a6d63f9",
+      "size_bytes": 3453,
+      "mtime_ns": 1786328385882869000
+    }
+  },
+  "source_structure": {
+    "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\data\\structures\\cxs_exports\\NK2R-252__native.cif",
+    "sha256": "5c54f7fcf56c96f60b2dc7e80a9e009a790874c5c871f16d58c832560fde4322"
+  },
+  "analysis_structure_preparation": {
+    "analysis_copy_only": true,
+    "source_export_modified": false,
+    "gemmi_methods": [
+      "Structure.setup_entities",
+      "Structure.assign_label_seq_id"
+    ],
+    "classification": "heuristic_entity_subchain_and_label_sequence_setup",
+    "atom_site_count_before": 3090,
+    "atom_site_count_after": 3090,
+    "atom_site_count_preserved": true,
+    "physical_atom_site_signature_preserved": true,
+    "identifier_signature_changed": false
+  },
+  "confirmed_baseline_review": {
+    "vhh": {
+      "model_name": "NK2R-252.pdb",
+      "auth_asym_id": "C",
+      "label_asym_id": "C"
+    },
+    "receptors": [
+      {
+        "model_name": "NK2R-252.pdb",
+        "auth_asym_id": "R",
+        "label_asym_id": "R"
+      }
+    ],
+    "review_file": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_review_20260810\\baseline_review.json",
+    "review_file_sha256": "820273fe546a05390500bf19fa067f68219133c52266e2bf5f3dbb3f7a6d63f9"
+  },
+  "orange_confirmation": {
+    "status": "confirmed",
+    "confirmed_rgb": [
+      255,
+      165,
+      0
+    ],
+    "confirmed_rgba": [
+      255,
+      165,
+      0,
+      255
+    ],
+    "confirmed_channels": [
+      "atom",
+      "ribbon"
+    ],
+    "confirmed_by": "project_user",
+    "confirmed_at": "2026-08-10T10:19:21+08:00",
+    "confirmation_note": "User confirmed that the green selection of the 24 exact-orange chain-C residues coincides with the collaborator-marked orange region.",
+    "evidence": "Visual review of the original Nb252-optimization.cxs in ChimeraX 1.12, together with the exported exact built-in orange RGBA and atom/ribbon channels.",
+    "semantics": "exact reviewed RGBA/channel match in exported session colors; confirmation and chain roles share baseline_review.json"
+  },
+  "neighbor_search": {
+    "candidate_search": "gemmi.NeighborSearch",
+    "search_structure": "in-memory clone",
+    "unit_cell": "cleared gemmi.UnitCell; noncrystallographic bounding grid",
+    "spacegroup_hm": "cleared",
+    "accepted_image_indices": [
+      0
+    ],
+    "candidate_pair_count": 246,
+    "accepted_strict_contact_pair_count": 246,
+    "verification": "literal Cartesian Euclidean distance strictly less than cutoff",
+    "periodic_or_symmetry_images": false
+  },
+  "counts": {
+    "strict_atom_pair_contacts": 246,
+    "temporary_interface_residues": 24,
+    "confirmed_orange_residues": 24,
+    "comparison_rows": 128,
+    "temporary_protected_union_residues": 24
+  },
+  "temporary_protection_set": {
+    "status": "pass",
+    "definition": "confirmed orange residues union strict temporary <4.0 A residues",
+    "sequence_indices_1based": [
+      33,
+      37,
+      45,
+      46,
+      47,
+      58,
+      98,
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116
+    ],
+    "numbering_position_labels": [
+      "38",
+      "42",
+      "50",
+      "51",
+      "52",
+      "66",
+      "107",
+      "109",
+      "110",
+      "111",
+      "111A",
+      "111B",
+      "111C",
+      "112D",
+      "112C",
+      "112B",
+      "112A",
+      "112",
+      "113",
+      "114",
+      "115",
+      "116",
+      "117",
+      "118"
+    ],
+    "scientific_scope": "conservative mutation-protection flag; not an energy hotspot claim"
+  }
+}

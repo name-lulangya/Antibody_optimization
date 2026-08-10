@@ -80,7 +80,7 @@ from antibody_optimization.file_transaction import replace_staged_files  # noqa:
 SCRIPT_VERSION = "1.0.0"
 EXPECTED_MODELS = (
     "NK2R-252.pdb",
-    "NK2R-NKA.pdb",
+    "NK2R-NKA",
     "fold_2r_252_nomg_model_0.cif",
 )
 REFERENCE_MODEL = "NK2R-252.pdb"

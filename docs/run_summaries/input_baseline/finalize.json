@@ -23,24 +23,28 @@
     "--sample-comparability",
     "docs\\result_artifacts\\input_baseline\\expression\\sample_comparability_review.csv",
     "--structure-manifest",
-    "docs\\result_artifacts\\input_baseline\\structure_precheck\\structure_baseline_manifest.json",
+    "docs\\result_artifacts\\input_baseline\\structure_reviewed_20260810\\structure_baseline_manifest.json",
+    "--structure-mapping",
+    "docs\\result_artifacts\\input_baseline\\structure_reviewed_20260810\\nb252_sequence_structure_mapping.csv",
     "--interface-manifest",
-    "docs\\result_artifacts\\input_baseline\\interface_precheck\\interface_manifest.json",
+    "docs\\result_artifacts\\input_baseline\\interface_reviewed_20260810\\interface_manifest.json",
+    "--orange-vs-4a-comparison",
+    "docs\\result_artifacts\\input_baseline\\interface_reviewed_20260810\\orange_vs_4A.csv",
     "--output-dir",
     "docs\\result_artifacts\\input_baseline\\summary",
     "--run-summary",
     "docs\\run_summaries\\input_baseline\\finalize.json",
     "--generated-at",
-    "2026-08-03T21:24:20+08:00",
+    "2026-08-10T10:28:00+08:00",
     "--overwrite"
   ],
-  "elapsed_seconds": 2.091451,
+  "elapsed_seconds": 2.554625,
   "gate_status": {
     "candidate_design_release": "blocked",
-    "local_baseline_build": "blocked",
+    "local_baseline_build": "pass",
     "pooled_expression_model_release": "blocked"
   },
-  "generated_at": "2026-08-03T21:24:20+08:00",
+  "generated_at": "2026-08-10T10:28:00+08:00",
   "inputs": {
     "expression_audit_manifest": {
       "mtime_ns": 1785763883673774900,
@@ -61,10 +65,10 @@
       "size_bytes": 6007
     },
     "interface_manifest": {
-      "mtime_ns": 1785764866978126100,
-      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\interface_precheck\\interface_manifest.json",
-      "sha256": "260e3556a605734f8854e8d60eb590831e0db80f503d338aa86f33ffa8413734",
-      "size_bytes": 1643
+      "mtime_ns": 1786328687842385200,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\interface_reviewed_20260810\\interface_manifest.json",
+      "sha256": "2cc2f881abc1234dc50bdb61687b3453930d9ce7d459996aef3a309ad27b9a0a",
+      "size_bytes": 6312
     },
     "numbering_positions": {
       "mtime_ns": 1785763881926342300,
@@ -77,6 +81,12 @@
       "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_review.csv",
       "sha256": "d513ad96e9fdb0e9dbdc423155c10414b27c1eed2b0e267bc6904e05053f985d",
       "size_bytes": 26086
+    },
+    "orange_vs_4a_comparison": {
+      "mtime_ns": 1786328687840881300,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\interface_reviewed_20260810\\orange_vs_4A.csv",
+      "sha256": "f7535a82b52da075a755e18a1f544813079984b1a79622438d43a7b2c8970297",
+      "size_bytes": 15128
     },
     "sample_comparability": {
       "mtime_ns": 1785763883671774100,
@@ -103,10 +113,16 @@
       "size_bytes": 14172
     },
     "structure_manifest": {
-      "mtime_ns": 1785764859201447300,
-      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_precheck\\structure_baseline_manifest.json",
-      "sha256": "666f5e73c90bca8fb836cde856bf9f11136146a946e4fc22d2cc20350b519c9f",
-      "size_bytes": 2849
+      "mtime_ns": 1786328667501764700,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_reviewed_20260810\\structure_baseline_manifest.json",
+      "sha256": "7fbcb6f5bec5751a71c3942c8b5d4ddea09e0a22d6dbe5c5da5b879a31a9e5c6",
+      "size_bytes": 20892
+    },
+    "structure_mapping": {
+      "mtime_ns": 1786328667498762600,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_reviewed_20260810\\nb252_sequence_structure_mapping.csv",
+      "sha256": "7086d28dc9a05b8cd759960d47aa1f8b9d42e74c355c4dfa9d8e796c4f62493e",
+      "size_bytes": 136762
     }
   },
   "outputs": {

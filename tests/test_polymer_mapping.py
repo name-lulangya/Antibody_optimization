@@ -179,6 +179,27 @@ class SourceAwarePolymerMappingTests(unittest.TestCase):
                     source_evidence=evidence,
                 )
 
+    def test_unique_authoritative_segment_allows_extra_source_polymer_flank(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "source.cif"
+            write_source_cif(path, "ACDEFG")
+            evidence = self.read_evidence(path)
+            result = compose_polymer_mapping(
+                authoritative_sequence="ACD",
+                observed_residues=observations(
+                    "ACD",
+                    labels=[1, 2, 3],
+                    label_source="source_mmcif_atom_site",
+                ),
+                source_evidence=evidence,
+            )
+
+        self.assertEqual(result.authoritative_index_1based_by_observed_index, (1, 2, 3))
+        self.assertEqual(
+            result.polymer_to_authoritative_method,
+            "unique_exact_authoritative_segment_in_source_polymer:start=1",
+        )
+
     def test_internal_missing_coordinates_follow_source_label_positions(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             path = Path(temporary) / "source.cif"
@@ -329,6 +350,20 @@ class SourceAwarePolymerMappingTests(unittest.TestCase):
         self.assertIsNone(result.polymer_index_1based_by_observed_index)
         self.assertEqual(result.mapping_status, "observed_sequence_only_fallback")
         self.assertEqual(result.fallback_reason, "all_source_polymer_categories_absent")
+
+    def test_exact_source_auth_numbers_resolve_repeated_sequence_without_polymer(self) -> None:
+        result = compose_polymer_mapping(
+            authoritative_sequence="AAAA",
+            observed_residues=observations("AA", auth_ids=["1", "4"]),
+            source_evidence=None,
+        )
+
+        self.assertEqual(result.authoritative_index_1based_by_observed_index, (1, 4))
+        self.assertEqual(
+            result.observed_to_authoritative_method,
+            "source_atom_site.auth_seq_id_direct_exact_wt",
+        )
+        self.assertEqual(result.mapping_status, "source_auth_numbering_direct_exact_wt")
 
     def test_missing_entity_description_is_preserved_as_empty(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

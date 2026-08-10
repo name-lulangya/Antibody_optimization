@@ -2,10 +2,10 @@
   "figure_semantics": "Reported Nb252 sequence with provisional IMGT numbering; structural and interface tracks are populated only from verified supplied artifacts.",
   "gate_status": {
     "candidate_design_release": "blocked",
-    "local_baseline_build": "blocked",
+    "local_baseline_build": "pass",
     "pooled_expression_model_release": "blocked"
   },
-  "generated_at": "2026-08-03T21:24:20+08:00",
+  "generated_at": "2026-08-10T10:28:00+08:00",
   "inputs": {
     "expression_audit_manifest": {
       "mtime_ns": 1785763883673774900,
@@ -26,10 +26,10 @@
       "size_bytes": 6007
     },
     "interface_manifest": {
-      "mtime_ns": 1785764866978126100,
-      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\interface_precheck\\interface_manifest.json",
-      "sha256": "260e3556a605734f8854e8d60eb590831e0db80f503d338aa86f33ffa8413734",
-      "size_bytes": 1643
+      "mtime_ns": 1786328687842385200,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\interface_reviewed_20260810\\interface_manifest.json",
+      "sha256": "2cc2f881abc1234dc50bdb61687b3453930d9ce7d459996aef3a309ad27b9a0a",
+      "size_bytes": 6312
     },
     "numbering_positions": {
       "mtime_ns": 1785763881926342300,
@@ -42,6 +42,12 @@
       "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_review.csv",
       "sha256": "d513ad96e9fdb0e9dbdc423155c10414b27c1eed2b0e267bc6904e05053f985d",
       "size_bytes": 26086
+    },
+    "orange_vs_4a_comparison": {
+      "mtime_ns": 1786328687840881300,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\interface_reviewed_20260810\\orange_vs_4A.csv",
+      "sha256": "f7535a82b52da075a755e18a1f544813079984b1a79622438d43a7b2c8970297",
+      "size_bytes": 15128
     },
     "sample_comparability": {
       "mtime_ns": 1785763883671774100,
@@ -68,37 +74,43 @@
       "size_bytes": 14172
     },
     "structure_manifest": {
-      "mtime_ns": 1785764859201447300,
-      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_precheck\\structure_baseline_manifest.json",
-      "sha256": "666f5e73c90bca8fb836cde856bf9f11136146a946e4fc22d2cc20350b519c9f",
-      "size_bytes": 2849
+      "mtime_ns": 1786328667501764700,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_reviewed_20260810\\structure_baseline_manifest.json",
+      "sha256": "7fbcb6f5bec5751a71c3942c8b5d4ddea09e0a22d6dbe5c5da5b879a31a9e5c6",
+      "size_bytes": 20892
+    },
+    "structure_mapping": {
+      "mtime_ns": 1786328667498762600,
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_reviewed_20260810\\nb252_sequence_structure_mapping.csv",
+      "sha256": "7086d28dc9a05b8cd759960d47aa1f8b9d42e74c355c4dfa9d8e796c4f62493e",
+      "size_bytes": 136762
     }
   },
   "outputs": {
     "figure_png": {
       "file": "input_baseline_qc.png",
-      "sha256": "427ea6b40d8f8c41776b5a83f720b885ad0526cc4c5ee419264a449031b3568b",
-      "size_bytes": 614831
+      "sha256": "1405f7289d8ea59af42a4e1eb0f52a0fe931f1eb1ffd352393f8dbac0eaf3e34",
+      "size_bytes": 594090
     },
     "figure_svg": {
       "file": "input_baseline_qc.svg",
-      "sha256": "a485f357384599b20115a1eb0df8ec0b64d41d71cd015632247e97c893c2b167",
-      "size_bytes": 184293
+      "sha256": "4effc0e6b8b2e2d66f36bbd1f93cac0a6ed634c69202214743efc68f2a787e9b",
+      "size_bytes": 239845
     },
     "freeze": {
       "file": "input_freeze_manifest.json",
-      "sha256": "bd32644f22f625646feeae822d82e947451b6eefbd3004171b0831934d7dacdb",
+      "sha256": "c27b3863c61416767d15459006e9802dcbed6e9e362a1c5ed40ee30f0fbd4f0a",
       "size_bytes": 12329
     },
     "gate": {
       "file": "stage1_gate.json",
-      "sha256": "667f2093eed086e3e5b981690e1c4502a3f5be52330ea58e80443d9373afa00a",
-      "size_bytes": 3362
+      "sha256": "9e01ff342096a9719de08658f5ad51fe3b530e592d44d7fe85c5d81b65e0dae3",
+      "size_bytes": 2809
     },
     "plot_data": {
       "file": "nb252_baseline_plot_data.csv",
-      "sha256": "112b38c63c7af8e7c4bf01bf857c7ee0dd4c6df0093b431cfd812076039d0fe1",
-      "size_bytes": 8301
+      "sha256": "9ecf2efb1fa5a0a3d83a2b6b5b2a293d57822a2a1391ab45dd09d4f18d5788f6",
+      "size_bytes": 8628
     },
     "status_counts": {
       "file": "baseline_status_counts.csv",

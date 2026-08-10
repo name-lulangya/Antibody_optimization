@@ -188,7 +188,7 @@ def build_plot_rows(
             )
         values = interface_by_index.setdefault(index, {})
         if orange_annotation_verified:
-            values["orange"] = _normal_bool(
+            values["orange"] = _normal_bool_or_not_evaluable(
                 _first(
                     row,
                     "confirmed_orange",
@@ -197,7 +197,7 @@ def build_plot_rows(
                 )
             )
         if interface_evidence_verified:
-            values["interface"] = _normal_bool(
+            values["interface"] = _normal_bool_or_not_evaluable(
                 _first(row, "temporary_interface_lt4A", "interface_lt_4A")
             )
 
@@ -314,3 +314,9 @@ def _normal_bool(value: str) -> str:
     if lowered in {"false", "0", "no"}:
         return "false"
     raise BaselineSummaryError(f"Invalid boolean value: {value!r}")
+
+
+def _normal_bool_or_not_evaluable(value: str) -> str:
+    if value.strip().lower() == "not_evaluable":
+        return "not_evaluable"
+    return _normal_bool(value)

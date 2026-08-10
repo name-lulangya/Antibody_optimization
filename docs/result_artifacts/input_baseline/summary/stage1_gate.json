@@ -1,27 +1,17 @@
 {
   "blocking_gates": [
-    "structure_export",
-    "structure_inventory",
-    "structure_identity",
-    "residue_mapping",
     "authoritative_nb252_sequence",
-    "interface_safety",
     "cross_assay_pooling",
     "nb252_expression_transfer"
   ],
   "candidate_design_release": "blocked",
   "candidate_design_release_blockers": [
-    "structure_export",
-    "structure_inventory",
-    "structure_identity",
-    "residue_mapping",
-    "interface_safety",
     "authoritative_nb252_sequence"
   ],
   "expression_review_record_count": 47,
   "gates": {
     "authoritative_nb252_sequence": {
-      "reason": "The reported Nb252 sequence remains provisional until construct confirmation Observed=blocked. Upstream blockers: verified ChimeraX export manifest is absent; run the GUI runscript first",
+      "reason": "The reported Nb252 sequence remains provisional until construct confirmation Observed=blocked. Upstream blockers: reported Nb252 construct sequence has not been authoritatively confirmed",
       "status": "blocked"
     },
     "cross_assay_pooling": {
@@ -37,44 +27,38 @@
       "status": "pass"
     },
     "interface_safety": {
-      "reason": "Both the temporary <4 A interface and orange annotation require confirmation Observed interface=blocked, orange=blocked. Upstream blockers: structure baseline gates are not pass: ['export_status', 'inventory_status', 'chain_role_status', 'residue_mapping_status']",
-      "status": "blocked"
+      "reason": "Both the temporary <4 A interface and orange annotation require confirmation Observed interface=pass, orange=pass.",
+      "status": "pass"
     },
     "nb252_expression_transfer": {
       "reason": "All 47 samples require an explicit pass before Nb252 expression transfer",
       "status": "blocked"
     },
     "residue_mapping": {
-      "reason": "Unique reversible sequence/IMGT/structure mapping is required Observed=blocked. Upstream blockers: verified ChimeraX export manifest is absent; run the GUI runscript first",
-      "status": "blocked"
+      "reason": "Unique reversible sequence/IMGT/structure mapping is required Observed=pass. Upstream blockers: reported Nb252 construct sequence has not been authoritatively confirmed",
+      "status": "pass"
     },
     "sequence_numbering_inventory": {
       "reason": "All 47 ANARCII outcomes are retained, including explicit failures",
       "status": "pass"
     },
     "structure_export": {
-      "reason": "Verified ChimeraX export is required Observed=blocked. Upstream blockers: verified ChimeraX export manifest is absent; run the GUI runscript first",
-      "status": "blocked"
+      "reason": "Verified ChimeraX export is required Observed=pass. Upstream blockers: reported Nb252 construct sequence has not been authoritatively confirmed",
+      "status": "pass"
     },
     "structure_identity": {
-      "reason": "VHH and NK2R chain roles require explicit review Observed=blocked. Upstream blockers: verified ChimeraX export manifest is absent; run the GUI runscript first",
-      "status": "blocked"
+      "reason": "VHH and NK2R chain roles require explicit review Observed=pass. Upstream blockers: reported Nb252 construct sequence has not been authoritatively confirmed",
+      "status": "pass"
     },
     "structure_inventory": {
-      "reason": "Gemmi read-back inventory is required Observed=blocked. Upstream blockers: verified ChimeraX export manifest is absent; run the GUI runscript first",
-      "status": "blocked"
+      "reason": "Gemmi read-back inventory is required Observed=pass. Upstream blockers: reported Nb252 construct sequence has not been authoritatively confirmed",
+      "status": "pass"
     }
   },
-  "generated_at": "2026-08-03T21:24:20+08:00",
+  "generated_at": "2026-08-10T10:28:00+08:00",
   "interpretation": "A blocked scientific release is an evidence state, not an implementation failure.",
-  "local_baseline_build": "blocked",
-  "local_baseline_build_blockers": [
-    "structure_export",
-    "structure_inventory",
-    "structure_identity",
-    "residue_mapping",
-    "interface_safety"
-  ],
+  "local_baseline_build": "pass",
+  "local_baseline_build_blockers": [],
   "numbering_record_count": 47,
   "pooled_expression_model_release": "blocked",
   "pooled_expression_model_release_blockers": [

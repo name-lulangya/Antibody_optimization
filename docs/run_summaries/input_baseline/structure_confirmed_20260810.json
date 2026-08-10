@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "stage": "structure_baseline",
+  "status": "blocked",
+  "generated_at": "2026-08-10T10:19:21+08:00",
+  "elapsed_seconds": 0.3272272003814578,
+  "script": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\input_baseline\\build_structure_baseline.py",
+  "python": "3.11.15 | packaged by Anaconda, Inc. | (main, Jun 11 2026, 15:12:53) [MSC v.1942 64 bit (AMD64)]",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\input_baseline\\build_structure_baseline.py",
+    "--cxs-export-dir",
+    "data\\structures\\cxs_exports",
+    "--expression-records",
+    "docs\\result_artifacts\\nb_expression\\nb_expression_records.csv",
+    "--numbering-positions",
+    "docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_positions.csv",
+    "--output-dir",
+    "docs\\result_artifacts\\input_baseline\\structure_confirmed_20260810",
+    "--run-summary",
+    "docs\\run_summaries\\input_baseline\\structure_confirmed_20260810.json",
+    "--confirmed-review",
+    "docs\\result_artifacts\\input_baseline\\structure_review_20260810\\baseline_review.json",
+    "--generated-at",
+    "2026-08-10T10:19:21+08:00"
+  ],
+  "working_directory": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization",
+  "inputs": {
+    "cxs_export_directory": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\data\\structures\\cxs_exports",
+    "expression_records": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\nb_expression_records.csv",
+      "sha256": "ef5c9165d1e5f4a1b7995b8733e621ed7e7147cdb73dbfba9a74ce131b3647c9",
+      "size_bytes": 23931
+    },
+    "numbering_positions": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_positions.csv",
+      "sha256": "d0249e11fa9800b769a7d2db28d6da453dc8d964029414fd444146ee2772266d",
+      "size_bytes": 1351886
+    },
+    "confirmed_review": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\structure_review_20260810\\baseline_review.json",
+      "sha256": "820273fe546a05390500bf19fa067f68219133c52266e2bf5f3dbb3f7a6d63f9",
+      "size_bytes": 3453
+    }
+  },
+  "outputs": {
+    "inventory": {
+      "path": "docs\\result_artifacts\\input_baseline\\structure_confirmed_20260810\\model_chain_inventory.csv",
+      "sha256": "39f48112a9d91b0c6c9778c9f1a4a72dbcc5aba00850d2b580c4bd1dcbcb6898",
+      "size_bytes": 6694
+    },
+    "residue_inventory": {
+      "path": "docs\\result_artifacts\\input_baseline\\structure_confirmed_20260810\\structure_residue_inventory.csv",
+      "sha256": "df600b389a73589b24d23d9c587708d802be68784e8fba729ed9a8849d9d954c",
+      "size_bytes": 208270
+    },
+    "review_template": {
+      "path": "docs\\result_artifacts\\input_baseline\\structure_confirmed_20260810\\baseline_review_template.json",
+      "sha256": "fd93016eac9af595b6b867874560054fcdc17ca11a051ab42f693223303d1ba2",
+      "size_bytes": 15817
+    }
+  },
+  "parameters": {
+    "mapping_policy": {
+      "route": "exact-first_then_fixed_global_if_required",
+      "exact_branch": "unique identity-consistent order-preserving mapping",
+      "global_branch": {
+        "mode": "global",
+        "substitution_matrix": "BLOSUM62",
+        "open_gap_score": -10.0,
+        "extend_gap_score": -0.5,
+        "terminal_gap_score": 0.0
+      },
+      "acceptance": "all optimal global alignments must imply the same complete observed-to-reference mapping and every mapped residue must match WT",
+      "no_automatic_fallback_beyond_global_gate": true
+    },
+    "component_versions": {
+      "structure_inventory": "1.0.0",
+      "residue_mapping": "1.0.0",
+      "polymer_mapping": "1.0.0"
+    }
+  },
+  "manifest": {
+    "path": "docs\\result_artifacts\\input_baseline\\structure_confirmed_20260810\\structure_baseline_manifest.json",
+    "sha256": "6a7df9a699a38d32115ac7a52cabe9dbcfdbe985bca5e5de8940a1fc2ac4e308",
+    "size_bytes": 13213
+  },
+  "blockers": [
+    "observed sequence to authoritative fallback failed: Optimal BLOSUM62 global alignments imply different observed-to-authoritative residue mappings"
+  ]
+}

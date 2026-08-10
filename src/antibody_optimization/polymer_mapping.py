@@ -26,7 +26,7 @@ from .source_mmcif_evidence import (
 from .structure_inventory import StructureResidue
 
 
-POLYMER_MAPPING_VERSION = "1.0.0"
+POLYMER_MAPPING_VERSION = "1.1.0"
 STANDARD_AMINO_ACIDS = frozenset("ACDEFGHIKLMNPQRSTVWY")
 LABEL_SEQ_ID_SOURCES = frozenset(
     {"source_mmcif_atom_site", "gemmi_heuristic", "absent"}
@@ -135,8 +135,11 @@ def compose_polymer_mapping(
     2. source ``label_seq_id`` or source auth/insertion scheme to polymer index;
     3. observed-sequence alignment to the source polymer only if both identifier
        routes are absent;
-    4. observed-sequence alignment directly to the authoritative sequence only
-       if the source polymer sequence itself is absent.
+    4. when the source polymer sequence is absent, exact integer source auth
+       numbering may map directly to the authoritative sequence, but only if
+       every observed WT residue agrees at that index;
+    5. otherwise, observed-sequence alignment directly to the authoritative
+       sequence.
 
     Lower-priority evidence never overrides a present conflicting source value.
     """
@@ -153,20 +156,31 @@ def compose_polymer_mapping(
             raise PolymerMappingError(
                 "Source scheme rows are present but no source polymer sequence can be established"
             )
-        direct = _exact_mapping(
-            authoritative_sequence,
-            observed_sequence,
-            context="observed sequence to authoritative fallback",
-        )
         reason = (
             "all_source_polymer_categories_absent"
             if source_evidence is None
             else "source_polymer_sequence_absent"
         )
-        return PolymerMappingResult(
-            authoritative_index_1based_by_observed_index=(
+        auth_direct = _mapping_from_direct_auth_indices_if_consistent(
+            observations, authoritative_sequence
+        )
+        if auth_direct is None:
+            direct = _exact_mapping(
+                authoritative_sequence,
+                observed_sequence,
+                context="observed sequence to authoritative fallback",
+            )
+            authoritative_indices = (
                 direct.authoritative_index_1based_by_observed_index
-            ),
+            )
+            direct_method = f"observed_sequence_to_authoritative_fallback:{direct.method}"
+            mapping_status = "observed_sequence_only_fallback"
+        else:
+            authoritative_indices = auth_direct
+            direct_method = "source_atom_site.auth_seq_id_direct_exact_wt"
+            mapping_status = "source_auth_numbering_direct_exact_wt"
+        return PolymerMappingResult(
+            authoritative_index_1based_by_observed_index=authoritative_indices,
             polymer_index_1based_by_observed_index=None,
             polymer_sequence_source=(
                 "absent" if source_evidence is None else source_evidence.polymer_sequence_source
@@ -179,10 +193,8 @@ def compose_polymer_mapping(
             label_seq_id_source=label_source,
             polymer_to_authoritative_method="not_applicable_no_source_polymer_sequence",
             observed_to_polymer_method="not_applicable_no_source_polymer_sequence",
-            observed_to_authoritative_method=(
-                f"observed_sequence_to_authoritative_fallback:{direct.method}"
-            ),
-            mapping_status="observed_sequence_only_fallback",
+            observed_to_authoritative_method=direct_method,
+            mapping_status=mapping_status,
             fallback_reason=reason,
             source_path="" if source_evidence is None else source_evidence.source_path,
             source_block_name=(
@@ -192,12 +204,6 @@ def compose_polymer_mapping(
 
     polymer_sequence = source_evidence.polymer_sequence
     _validate_standard_sequence(polymer_sequence, "source mmCIF polymer sequence")
-    polymer_to_authoritative = _exact_mapping(
-        authoritative_sequence,
-        polymer_sequence,
-        context="source polymer sequence to authoritative sequence",
-    )
-
     source_label_mapping: tuple[int, ...] | None = None
     if label_source == "source_mmcif_atom_site":
         source_label_mapping = _mapping_from_label_seq_ids(
@@ -244,13 +250,16 @@ def compose_polymer_mapping(
                 "Gemmi heuristic label_seq_id conflicts with the source-aware mapping"
             )
 
-    authoritative_indices = tuple(
-        polymer_to_authoritative.authoritative_index_1based_by_observed_index[index - 1]
-        for index in observed_to_polymer
+    authoritative_indices, polymer_to_authoritative_method = (
+        _authoritative_indices_for_observed_polymer_positions(
+            authoritative_sequence,
+            polymer_sequence,
+            observed_to_polymer,
+        )
     )
     final_method = (
         f"composed:{observed_method}+polymer_to_authoritative:"
-        f"{polymer_to_authoritative.method}"
+        f"{polymer_to_authoritative_method}"
     )
     return PolymerMappingResult(
         authoritative_index_1based_by_observed_index=authoritative_indices,
@@ -260,7 +269,7 @@ def compose_polymer_mapping(
         entity_id=source_evidence.entity_id,
         entity_description=source_evidence.entity_description,
         label_seq_id_source=label_source,
-        polymer_to_authoritative_method=polymer_to_authoritative.method,
+        polymer_to_authoritative_method=polymer_to_authoritative_method,
         observed_to_polymer_method=observed_method,
         observed_to_authoritative_method=final_method,
         mapping_status=mapping_status,
@@ -341,6 +350,81 @@ def _mapping_from_label_seq_ids(
         indices.append(value)
     return _validate_polymer_indices(
         tuple(indices), observations, polymer_sequence, evidence_label=evidence_label
+    )
+
+
+def _mapping_from_direct_auth_indices_if_consistent(
+    observations: Sequence[ObservedResidueEvidence],
+    authoritative_sequence: str,
+) -> tuple[int, ...] | None:
+    """Use source auth numbers as sequence indices only under exact WT agreement."""
+
+    indices: list[int] = []
+    for row in observations:
+        if row.insertion_code or not row.auth_seq_id.isdecimal():
+            return None
+        index = int(row.auth_seq_id)
+        if not 1 <= index <= len(authoritative_sequence):
+            return None
+        if authoritative_sequence[index - 1] != row.residue_aa:
+            return None
+        indices.append(index)
+    if len(set(indices)) != len(indices):
+        return None
+    if any(left >= right for left, right in zip(indices, indices[1:])):
+        return None
+    return tuple(indices)
+
+
+def _authoritative_indices_for_observed_polymer_positions(
+    authoritative_sequence: str,
+    polymer_sequence: str,
+    observed_to_polymer: tuple[int, ...],
+) -> tuple[tuple[int, ...], str]:
+    """Map observed polymer indices into one exact authoritative segment.
+
+    A longer source polymer is accepted only when it contains the complete
+    authoritative sequence exactly once and every coordinate-observed residue
+    lies inside that segment. This preserves source flanks without treating
+    them as part of the reviewed VHH.
+    """
+
+    if len(polymer_sequence) > len(authoritative_sequence):
+        starts = tuple(
+            index
+            for index in range(len(polymer_sequence) - len(authoritative_sequence) + 1)
+            if polymer_sequence.startswith(authoritative_sequence, index)
+        )
+        if len(starts) == 1:
+            start_0based = starts[0]
+            start_1based = start_0based + 1
+            end_1based = start_0based + len(authoritative_sequence)
+            if any(
+                index < start_1based or index > end_1based
+                for index in observed_to_polymer
+            ):
+                raise PolymerMappingError(
+                    "Observed residues extend outside the unique exact authoritative "
+                    "segment in the source polymer sequence"
+                )
+            return (
+                tuple(index - start_0based for index in observed_to_polymer),
+                f"unique_exact_authoritative_segment_in_source_polymer:start={start_1based}",
+            )
+
+    polymer_to_authoritative = _exact_mapping(
+        authoritative_sequence,
+        polymer_sequence,
+        context="source polymer sequence to authoritative sequence",
+    )
+    return (
+        tuple(
+            polymer_to_authoritative.authoritative_index_1based_by_observed_index[
+                index - 1
+            ]
+            for index in observed_to_polymer
+        ),
+        polymer_to_authoritative.method,
     )
 
 

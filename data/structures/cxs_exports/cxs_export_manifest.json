@@ -1,0 +1,391 @@
+{
+  "schema_version": 1,
+  "exporter_version": "1.0.0",
+  "status": "pass",
+  "generated_at": "2026-08-10T10:02:49+08:00",
+  "execution_contract": {
+    "entry_point": "ChimeraX GUI command: runscript",
+    "opened_or_saved_session": false,
+    "model_transforms_or_display_modified": false,
+    "existing_output_directory_allowed": false
+  },
+  "software": {
+    "name": "UCSF ChimeraX",
+    "version": "1.12"
+  },
+  "source_cxs": {
+    "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\Nb252-optimization.cxs",
+    "sha256": "1bc636c28f66ae60edc658d2e1c4aad0b07f4141ca5411c78662aa19da793c4d",
+    "size_bytes": 537670,
+    "mtime_ns": 1785479308801468100,
+    "session_file_path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\Nb252-optimization.cxs",
+    "unchanged_after_export": true
+  },
+  "strict_model_identity": {
+    "expected_names": [
+      "NK2R-252.pdb",
+      "NK2R-NKA",
+      "fold_2r_252_nomg_model_0.cif"
+    ],
+    "observed_names": [
+      "NK2R-252.pdb",
+      "NK2R-NKA",
+      "fold_2r_252_nomg_model_0.cif"
+    ],
+    "matched_exactly": true
+  },
+  "session_model_inventory": {
+    "model_count": 5,
+    "atomic_structure_count": 3,
+    "non_atomic_model_count": 2,
+    "models": [
+      {
+        "model_id": "1",
+        "model_name": "NK2R-252.pdb",
+        "atomspec": "#1",
+        "python_class": "AtomicStructure",
+        "is_atomic_structure": true,
+        "parent_model_id": "",
+        "parent_model_name": "root",
+        "child_model_count": 1,
+        "display": true
+      },
+      {
+        "model_id": "1.1",
+        "model_name": "missing structure",
+        "atomspec": "#1.1",
+        "python_class": "PseudobondGroup",
+        "is_atomic_structure": false,
+        "parent_model_id": "1",
+        "parent_model_name": "NK2R-252.pdb",
+        "child_model_count": 0,
+        "display": true
+      },
+      {
+        "model_id": "2",
+        "model_name": "NK2R-NKA",
+        "atomspec": "#2",
+        "python_class": "AtomicStructure",
+        "is_atomic_structure": true,
+        "parent_model_id": "",
+        "parent_model_name": "root",
+        "child_model_count": 1,
+        "display": true
+      },
+      {
+        "model_id": "2.1",
+        "model_name": "missing structure",
+        "atomspec": "#2.1",
+        "python_class": "PseudobondGroup",
+        "is_atomic_structure": false,
+        "parent_model_id": "2",
+        "parent_model_name": "NK2R-NKA",
+        "child_model_count": 0,
+        "display": true
+      },
+      {
+        "model_id": "3",
+        "model_name": "fold_2r_252_nomg_model_0.cif",
+        "atomspec": "#3",
+        "python_class": "AtomicStructure",
+        "is_atomic_structure": true,
+        "parent_model_id": "",
+        "parent_model_name": "root",
+        "child_model_count": 0,
+        "display": true
+      }
+    ],
+    "semantics": "All models returned by session.models.list(), including surfaces, groups, and other non-AtomicStructure children when present."
+  },
+  "reference_frame": {
+    "model_name": "NK2R-252.pdb",
+    "model_id": "1",
+    "meaning": "experimental NK2R--Nb252 model frame"
+  },
+  "models": [
+    {
+      "model_name": "NK2R-252.pdb",
+      "model_id": "1",
+      "atomspec": "#1",
+      "atom_count": 3090,
+      "atom_site_classification_counts": {
+        "atom_site_count": 3090,
+        "blank_altloc_site_count": 3090,
+        "nonblank_altloc_site_count": 0,
+        "atom_objects_with_nonblank_altlocs": 0,
+        "occupancy_negative_site_count": 0,
+        "occupancy_zero_site_count": 0,
+        "occupancy_partial_site_count": 0,
+        "occupancy_unit_site_count": 3090,
+        "occupancy_above_unit_site_count": 0,
+        "occupancy_nonfinite_site_count": 0
+      },
+      "residue_count": 396,
+      "coordinate_set_count": 1,
+      "chain_count": 2,
+      "parent_model": {
+        "model_id": "",
+        "model_name": "root",
+        "atomspec": "#"
+      },
+      "position_3x4": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ]
+      ],
+      "scene_position_3x4": [
+        [
+          1.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          1.0,
+          0.0
+        ]
+      ]
+    },
+    {
+      "model_name": "NK2R-NKA",
+      "model_id": "2",
+      "atomspec": "#2",
+      "atom_count": 2424,
+      "atom_site_classification_counts": {
+        "atom_site_count": 2424,
+        "blank_altloc_site_count": 2424,
+        "nonblank_altloc_site_count": 0,
+        "atom_objects_with_nonblank_altlocs": 0,
+        "occupancy_negative_site_count": 0,
+        "occupancy_zero_site_count": 0,
+        "occupancy_partial_site_count": 0,
+        "occupancy_unit_site_count": 2424,
+        "occupancy_above_unit_site_count": 0,
+        "occupancy_nonfinite_site_count": 0
+      },
+      "residue_count": 307,
+      "coordinate_set_count": 1,
+      "chain_count": 2,
+      "parent_model": {
+        "model_id": "",
+        "model_name": "root",
+        "atomspec": "#"
+      },
+      "position_3x4": [
+        [
+          0.9719243591629595,
+          -0.19386112916745066,
+          -0.13334505114023276,
+          35.486071200850674
+        ],
+        [
+          0.18756974323558426,
+          0.9805167258719893,
+          -0.05834845077472784,
+          -35.84475779862031
+        ],
+        [
+          0.14205854950761415,
+          0.031698783623269534,
+          0.9893505726629958,
+          -47.583330576126485
+        ]
+      ],
+      "scene_position_3x4": [
+        [
+          0.9719243591629595,
+          -0.19386112916745066,
+          -0.13334505114023276,
+          35.486071200850674
+        ],
+        [
+          0.18756974323558426,
+          0.9805167258719893,
+          -0.05834845077472784,
+          -35.84475779862031
+        ],
+        [
+          0.14205854950761415,
+          0.031698783623269534,
+          0.9893505726629958,
+          -47.583330576126485
+        ]
+      ]
+    },
+    {
+      "model_name": "fold_2r_252_nomg_model_0.cif",
+      "model_id": "3",
+      "atomspec": "#3",
+      "atom_count": 988,
+      "atom_site_classification_counts": {
+        "atom_site_count": 988,
+        "blank_altloc_site_count": 988,
+        "nonblank_altloc_site_count": 0,
+        "atom_objects_with_nonblank_altlocs": 0,
+        "occupancy_negative_site_count": 0,
+        "occupancy_zero_site_count": 0,
+        "occupancy_partial_site_count": 0,
+        "occupancy_unit_site_count": 988,
+        "occupancy_above_unit_site_count": 0,
+        "occupancy_nonfinite_site_count": 0
+      },
+      "residue_count": 126,
+      "coordinate_set_count": 1,
+      "chain_count": 1,
+      "parent_model": {
+        "model_id": "",
+        "model_name": "root",
+        "atomspec": "#"
+      },
+      "position_3x4": [
+        [
+          -0.16701505450132587,
+          0.687069416746434,
+          -0.7071361878320431,
+          125.32808585666037
+        ],
+        [
+          -0.9307556976548362,
+          0.1267395395215592,
+          0.34297364389253393,
+          126.44560011628428
+        ],
+        [
+          0.32526881629350624,
+          0.7154527976698242,
+          0.6183263632204623,
+          138.22401082404124
+        ]
+      ],
+      "scene_position_3x4": [
+        [
+          -0.16701505450132587,
+          0.687069416746434,
+          -0.7071361878320431,
+          125.32808585666037
+        ],
+        [
+          -0.9307556976548362,
+          0.1267395395215592,
+          0.34297364389253393,
+          126.44560011628428
+        ],
+        [
+          0.32526881629350624,
+          0.7154527976698242,
+          0.6183263632204623,
+          138.22401082404124
+        ]
+      ]
+    }
+  ],
+  "atom_site_count_semantics": {
+    "atom_object": "one ChimeraX Atom object",
+    "atom_site": "one serialized coordinate state; nonblank Atom.alt_locs are enumerated and occupancy is read with get_alt_loc_occupancy",
+    "no_altloc": "when alt_locs is empty and active alt_loc is blank, one blank site is counted using Atom.occupancy",
+    "occupancy_tolerance": 1e-06,
+    "occupancy_classes": [
+      "negative",
+      "zero",
+      "partial",
+      "unit",
+      "above_unit",
+      "nonfinite"
+    ]
+  },
+  "exports": [
+    {
+      "path": "NK2R-252__native.cif",
+      "sha256": "5c54f7fcf56c96f60b2dc7e80a9e009a790874c5c871f16d58c832560fde4322",
+      "size_bytes": 243630,
+      "format": "mmCIF",
+      "source_model_name": "NK2R-252.pdb",
+      "source_model_id": "1",
+      "coordinate_frame_kind": "native_model_frame",
+      "coordinate_frame_model_name": "NK2R-252.pdb",
+      "coordinate_frame_model_id": "1"
+    },
+    {
+      "path": "NK2R-NKA__native.cif",
+      "sha256": "0896f097ace8b9a4e6e692af9ed83a96fb42cb5c529aee8e317dd02c1102f7ff",
+      "size_bytes": 212193,
+      "format": "mmCIF",
+      "source_model_name": "NK2R-NKA",
+      "source_model_id": "2",
+      "coordinate_frame_kind": "native_model_frame",
+      "coordinate_frame_model_name": "NK2R-NKA",
+      "coordinate_frame_model_id": "2"
+    },
+    {
+      "path": "NK2R-NKA__in_NK2R-252_frame.cif",
+      "sha256": "3711cbe0cc96a182890d350f39f6d22644f3096e5c767eab2ade2d91a73a479b",
+      "size_bytes": 212193,
+      "format": "mmCIF",
+      "source_model_name": "NK2R-NKA",
+      "source_model_id": "2",
+      "coordinate_frame_kind": "experimental_reference_model_frame",
+      "coordinate_frame_model_name": "NK2R-252.pdb",
+      "coordinate_frame_model_id": "1"
+    },
+    {
+      "path": "fold_2r_252_nomg_model_0__native.cif",
+      "sha256": "1aa69f736ad6c2f0ac3a367569b4237dbc9097eab5bcd7d9d3fe550a4d4a2ace",
+      "size_bytes": 95232,
+      "format": "mmCIF",
+      "source_model_name": "fold_2r_252_nomg_model_0.cif",
+      "source_model_id": "3",
+      "coordinate_frame_kind": "native_model_frame",
+      "coordinate_frame_model_name": "fold_2r_252_nomg_model_0.cif",
+      "coordinate_frame_model_id": "3"
+    },
+    {
+      "path": "fold_2r_252_nomg_model_0__in_NK2R-252_frame.cif",
+      "sha256": "de58501d5eee8edbd46ee0bb7f1af3846e0baff569347f7fae34396940f9ce75",
+      "size_bytes": 97208,
+      "format": "mmCIF",
+      "source_model_name": "fold_2r_252_nomg_model_0.cif",
+      "source_model_id": "3",
+      "coordinate_frame_kind": "experimental_reference_model_frame",
+      "coordinate_frame_model_name": "NK2R-252.pdb",
+      "coordinate_frame_model_id": "1"
+    }
+  ],
+  "color_inventory": {
+    "path": "cxs_residue_colors.csv",
+    "sha256": "bde135cdf3f332c649ba288867e2448372976bc8d7a904eb1b91ed1312216928",
+    "size_bytes": 137354,
+    "encoding": "utf-8-sig",
+    "builtin_orange_rgb": [
+      255,
+      165,
+      0
+    ],
+    "semantics": "Exact RGB/RGBA channel matches are candidate color evidence only; they do not prove the collaborator's orange selection.",
+    "notes": [],
+    "unmapped_or_overall_surface_colors": [],
+    "custom_colors": []
+  }
+}

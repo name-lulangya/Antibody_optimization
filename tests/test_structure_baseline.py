@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib.util
 import hashlib
 import json
+import runpy
 import subprocess
 import sys
 import tempfile
@@ -430,9 +431,79 @@ class EntryPointTests(unittest.TestCase):
     def test_exporter_imports_without_chimerax_and_has_best_guess_false(self) -> None:
         path = PROJECT_ROOT / "scripts" / "input_baseline" / "export_cxs_session_chimerax.py"
         module = self.load_script_module("test_cxs_exporter", path.name)
-        self.assertEqual(module.EXPECTED_MODEL_NAMES[0], "NK2R-252.pdb")
+        structure_module = self.load_script_module(
+            "test_structure_model_identity", "build_structure_baseline.py"
+        )
+        self.assertEqual(
+            module.EXPECTED_MODEL_NAMES,
+            (
+                "NK2R-252.pdb",
+                "NK2R-NKA",
+                "fold_2r_252_nomg_model_0.cif",
+            ),
+        )
+        self.assertEqual(module.EXPECTED_MODEL_NAMES, structure_module.EXPECTED_MODELS)
         self.assertEqual(module._rgba((255, 165, 0, 255)), (255, 165, 0, 255))
         self.assertIn("bestGuess false", path.read_text(encoding="utf-8"))
+
+    def test_exporter_runscript_sandbox_invokes_main(self) -> None:
+        path = PROJECT_ROOT / "scripts" / "input_baseline" / "export_cxs_session_chimerax.py"
+        session_sentinel = object()
+        invocation: dict[str, object] = {}
+
+        class MainInvoked(Exception):
+            pass
+
+        def trace_main_call(frame, event, arg):
+            if (
+                event == "call"
+                and frame.f_code.co_name == "main"
+                and Path(frame.f_code.co_filename) == path
+            ):
+                invocation["session"] = frame.f_locals["chimerax_session"]
+                invocation["argv"] = frame.f_locals["argv"]
+                raise MainInvoked
+            return trace_main_call
+
+        original_argv = sys.argv
+        original_trace = sys.gettrace()
+        try:
+            sys.argv = [str(path)]
+            sys.settrace(trace_main_call)
+            with self.assertRaises(MainInvoked):
+                runpy.run_path(
+                    str(path),
+                    init_globals={"session": session_sentinel},
+                    run_name="chimerax_runscript_sandbox",
+                )
+        finally:
+            sys.settrace(original_trace)
+            sys.argv = original_argv
+
+        self.assertIs(invocation["session"], session_sentinel)
+        self.assertEqual(invocation["argv"], [])
+
+    def test_exporter_normal_import_does_not_invoke_main(self) -> None:
+        path = PROJECT_ROOT / "scripts" / "input_baseline" / "export_cxs_session_chimerax.py"
+        invocations: list[object] = []
+
+        def trace_main_call(frame, event, arg):
+            if (
+                event == "call"
+                and frame.f_code.co_name == "main"
+                and Path(frame.f_code.co_filename) == path
+            ):
+                invocations.append(frame.f_locals.get("chimerax_session"))
+            return trace_main_call
+
+        original_trace = sys.gettrace()
+        try:
+            sys.settrace(trace_main_call)
+            self.load_script_module("test_cxs_exporter_normal_import", path.name)
+        finally:
+            sys.settrace(original_trace)
+
+        self.assertEqual(invocations, [])
 
     def test_interface_contract_has_atom_pairs_and_complete_128_row_comparison(self) -> None:
         module = self.load_script_module(

@@ -127,6 +127,42 @@ class BaselineSummaryTests(unittest.TestCase):
                 ],
             )
 
+    def test_interface_not_evaluable_is_preserved_for_missing_coordinates(self) -> None:
+        review = [{
+            "sample_uid": NB252_UID,
+            "numbering_status": "pass",
+            "query_start_0based_inclusive": "0",
+            "query_end_0based_inclusive": "125",
+            "provisional_numbered_span_sequence": NB252_SEQUENCE[:126],
+            "unnumbered_n_sequence": "",
+            "unnumbered_c_sequence": "GS",
+        }]
+        positions = [
+            {
+                "sample_uid": NB252_UID,
+                "sequence_index_1based": str(index),
+                "residue": residue,
+            }
+            for index, residue in enumerate(NB252_SEQUENCE[:126], start=1)
+        ]
+        rows = build_plot_rows(
+            expression_records=[{"sample_uid": NB252_UID, "sequence_raw": NB252_SEQUENCE}],
+            numbering_review=review,
+            numbering_positions=positions,
+            interface_rows=[{
+                "sample_uid": NB252_UID,
+                "sequence_index_1based": "9",
+                "residue_aa": NB252_SEQUENCE[8],
+                "confirmed_orange": "not_evaluable",
+                "temporary_interface_lt4A": "not_evaluable",
+            }],
+            orange_annotation_verified=True,
+            interface_evidence_verified=True,
+        )
+
+        self.assertEqual(rows[8]["collaborator_orange_annotation"], "not_evaluable")
+        self.assertEqual(rows[8]["temporary_interface_lt4A"], "not_evaluable")
+
     def test_candidate_release_cannot_bypass_local_structure_gates(self) -> None:
         numbering = [
             {"sample_uid": f"sample_{index}", "numbering_status": "pass"}

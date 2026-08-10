@@ -1,0 +1,580 @@
+{
+  "schema_version": 1,
+  "review_type": "nb252_structure_orange_and_construct_baseline_review",
+  "status": "pending_user_review",
+  "source_binding": {
+    "cxs_export_manifest_sha256": "6b8bda777c909aedcc4a66151899cb2dde8d8f3184ac0436e3f2bfdf745cc629",
+    "cxs_residue_colors_sha256": "bde135cdf3f332c649ba288867e2448372976bc8d7a904eb1b91ed1312216928",
+    "chain_identity_sha256": "06b254da2aec326f94a8bdd57bf0e4da65ffa0666e7fef5450f38182b8991967",
+    "expression_records_sha256": "ef5c9165d1e5f4a1b7995b8733e621ed7e7147cdb73dbfba9a74ce131b3647c9",
+    "numbering_positions_sha256": "d0249e11fa9800b769a7d2db28d6da453dc8d964029414fd444146ee2772266d",
+    "reported_nb252_sequence_sha256": "df5b83ddde8a3486383c12afe45e22af6a358f507eab5503d5dbd4430710288d"
+  },
+  "instructions": {
+    "single_review_contract": "Confirm every chain role and the collaborator orange annotation in this one file, then save it as baseline_review.json.",
+    "confirmed_role_examples": [
+      "Nb252_VHH",
+      "NK2R",
+      "NKA",
+      "other"
+    ],
+    "orange_channels": [
+      "ribbon",
+      "atom",
+      "surface_vertex_or_uniform_patch"
+    ],
+    "orange_caution": "Exact saved-session color is candidate evidence only; cite the collaborator annotation or an explicit visual review."
+  },
+  "chain_reviews": [
+    {
+      "source_model_name": "NK2R-252.pdb",
+      "auth_asym_id": "C",
+      "label_asym_id": "C",
+      "entity_id": "1",
+      "confirmed_role": "",
+      "confirmation_status": "pending_user_review",
+      "confirmed_by": "",
+      "confirmed_at": "",
+      "confirmation_note": "",
+      "provisional_role_suggestion": "unassigned",
+      "suggestion_evidence": "{\"exact_analysis_entity_match_to_reported\":false,\"exact_observed_match_to_reported\":false,\"exact_source_polymer_match_to_reported\":false,\"source_entity_description\":\"\",\"source_polymer_sequence_provenance\":\"absent\"}"
+    },
+    {
+      "source_model_name": "NK2R-252.pdb",
+      "auth_asym_id": "R",
+      "label_asym_id": "R",
+      "entity_id": "2",
+      "confirmed_role": "",
+      "confirmation_status": "pending_user_review",
+      "confirmed_by": "",
+      "confirmed_at": "",
+      "confirmation_note": "",
+      "provisional_role_suggestion": "unassigned",
+      "suggestion_evidence": "{\"exact_analysis_entity_match_to_reported\":false,\"exact_observed_match_to_reported\":false,\"exact_source_polymer_match_to_reported\":false,\"source_entity_description\":\"\",\"source_polymer_sequence_provenance\":\"absent\"}"
+    },
+    {
+      "source_model_name": "NK2R-NKA",
+      "auth_asym_id": "L",
+      "label_asym_id": "C",
+      "entity_id": "1",
+      "confirmed_role": "",
+      "confirmation_status": "pending_user_review",
+      "confirmed_by": "",
+      "confirmed_at": "",
+      "confirmation_note": "",
+      "provisional_role_suggestion": "unassigned",
+      "suggestion_evidence": "{\"exact_analysis_entity_match_to_reported\":false,\"exact_observed_match_to_reported\":false,\"exact_source_polymer_match_to_reported\":false,\"source_entity_description\":\"Protachykinin-1\",\"source_polymer_sequence_provenance\":\"source_mmcif_entity_poly_seq\"}"
+    },
+    {
+      "source_model_name": "NK2R-NKA",
+      "auth_asym_id": "R",
+      "label_asym_id": "E",
+      "entity_id": "2",
+      "confirmed_role": "",
+      "confirmation_status": "pending_user_review",
+      "confirmed_by": "",
+      "confirmed_at": "",
+      "confirmation_note": "",
+      "provisional_role_suggestion": "unassigned",
+      "suggestion_evidence": "{\"exact_analysis_entity_match_to_reported\":false,\"exact_observed_match_to_reported\":false,\"exact_source_polymer_match_to_reported\":false,\"source_entity_description\":\"Substance-K receptor\",\"source_polymer_sequence_provenance\":\"source_mmcif_entity_poly_seq\"}"
+    },
+    {
+      "source_model_name": "fold_2r_252_nomg_model_0.cif",
+      "auth_asym_id": "A",
+      "label_asym_id": "A",
+      "entity_id": "1",
+      "confirmed_role": "",
+      "confirmation_status": "pending_user_review",
+      "confirmed_by": "",
+      "confirmed_at": "",
+      "confirmation_note": "",
+      "provisional_role_suggestion": "unassigned",
+      "suggestion_evidence": "{\"exact_analysis_entity_match_to_reported\":false,\"exact_observed_match_to_reported\":false,\"exact_source_polymer_match_to_reported\":false,\"source_entity_description\":\"\",\"source_polymer_sequence_provenance\":\"source_mmcif_entity_poly_seq\"}"
+    }
+  ],
+  "orange_annotation_review": {
+    "status": "pending_user_review",
+    "confirmed_rgb": [],
+    "confirmed_rgba": [],
+    "confirmed_channels": [],
+    "confirmed_by": "",
+    "confirmed_at": "",
+    "confirmation_note": "",
+    "evidence": "",
+    "candidate_exact_builtin_orange_residue_count": 24,
+    "candidates": [
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "100",
+        "insertion_code": "",
+        "residue_name": "ILE",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "101",
+        "insertion_code": "",
+        "residue_name": "ASP",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "102",
+        "insertion_code": "",
+        "residue_name": "TYR",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "103",
+        "insertion_code": "",
+        "residue_name": "ILE",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "104",
+        "insertion_code": "",
+        "residue_name": "ILE",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "105",
+        "insertion_code": "",
+        "residue_name": "GLU",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "106",
+        "insertion_code": "",
+        "residue_name": "TRP",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "107",
+        "insertion_code": "",
+        "residue_name": "ASN",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "108",
+        "insertion_code": "",
+        "residue_name": "VAL",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "109",
+        "insertion_code": "",
+        "residue_name": "TYR",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "110",
+        "insertion_code": "",
+        "residue_name": "TYR",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "111",
+        "insertion_code": "",
+        "residue_name": "TYR",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "112",
+        "insertion_code": "",
+        "residue_name": "ILE",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "113",
+        "insertion_code": "",
+        "residue_name": "PHE",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "114",
+        "insertion_code": "",
+        "residue_name": "SER",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "115",
+        "insertion_code": "",
+        "residue_name": "TYR",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "116",
+        "insertion_code": "",
+        "residue_name": "TRP",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "33",
+        "insertion_code": "",
+        "residue_name": "ASP",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "37",
+        "insertion_code": "",
+        "residue_name": "TYR",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "45",
+        "insertion_code": "",
+        "residue_name": "ARG",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "46",
+        "insertion_code": "",
+        "residue_name": "GLU",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "47",
+        "insertion_code": "",
+        "residue_name": "PHE",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "58",
+        "insertion_code": "",
+        "residue_name": "ASN",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      },
+      {
+        "model_name": "NK2R-252.pdb",
+        "chimerax_chain_id": "C",
+        "mmcif_chain_id": "C",
+        "auth_seq_id": "98",
+        "insertion_code": "",
+        "residue_name": "ASP",
+        "exact_rgba": [
+          255,
+          165,
+          0,
+          255
+        ],
+        "candidate_channels": [
+          "ribbon",
+          "atom"
+        ],
+        "status": "candidate_unconfirmed"
+      }
+    ]
+  },
+  "authoritative_construct_review": {
+    "status": "pending_collaborator_confirmation",
+    "reported_sequence_sha256": "df5b83ddde8a3486383c12afe45e22af6a358f507eab5503d5dbd4430710288d",
+    "reported_sequence_length_aa": 128,
+    "authoritative_sequence": "",
+    "authoritative_sequence_sha256": "",
+    "reported_start_1based_inclusive": "",
+    "reported_end_1based_inclusive": "",
+    "construct_scope": "",
+    "terminal_gs_interpretation": "",
+    "confirmed_by": "",
+    "confirmed_at": "",
+    "confirmation_note": "",
+    "evidence": "",
+    "instructions": "Only set status=confirmed from explicit construct evidence. The exact authoritative sequence must be a contiguous literal span of the reported sequence, with 1-based inclusive boundaries and an explicit disposition for the reported terminal GS."
+  }
+}

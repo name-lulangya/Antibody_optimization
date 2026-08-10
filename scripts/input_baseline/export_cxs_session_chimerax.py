@@ -29,7 +29,7 @@ from typing import Iterable
 EXPORTER_VERSION = "1.0.0"
 EXPECTED_MODEL_NAMES = (
     "NK2R-252.pdb",
-    "NK2R-NKA.pdb",
+    "NK2R-NKA",
     "fold_2r_252_nomg_model_0.cif",
 )
 REFERENCE_MODEL_NAME = "NK2R-252.pdb"
@@ -628,11 +628,28 @@ def _write_json(path: Path, value: object) -> None:
     )
 
 
-if __name__ == "__main__":
-    try:
-        active_session = session  # type: ignore[name-defined]  # provided by ChimeraX
-    except NameError as exc:
+def _dispatch_entrypoint(
+    namespace: dict[str, object], module_name: str
+) -> int | None:
+    """Run in a ChimeraX ``runscript`` sandbox without firing on import.
+
+    ChimeraX executes Python scripts in a uniquely named module and injects the
+    active ``session`` global, so ``__name__ == \"__main__\"`` is not true there.
+    A regular import has neither condition and therefore remains side-effect free.
+    """
+
+    is_chimerax_runscript = (
+        module_name != "__main__"
+        and namespace.get("__spec__") is None
+        and namespace.get("session") is not None
+    )
+    if is_chimerax_runscript:
+        return main(namespace["session"], sys.argv[1:])
+    if module_name == "__main__":
         raise SystemExit(
             "Run this script inside ChimeraX 1.12 with the `runscript` command"
-        ) from exc
-    raise SystemExit(main(active_session, sys.argv[1:]))
+        )
+    return None
+
+
+_dispatch_entrypoint(globals(), __name__)

@@ -1,0 +1,332 @@
+{
+  "schema_version": 1,
+  "script_version": "1.0.0",
+  "generated_at": "2026-08-10T10:04:45+08:00",
+  "status": "blocked",
+  "export_status": "pass",
+  "inventory_status": "pass",
+  "chain_role_status": "blocked",
+  "residue_mapping_status": "blocked",
+  "authoritative_sequence_status": "blocked",
+  "blockers": [
+    "chain roles and orange annotation are pending one consolidated review; copy baseline_review_template.json to baseline_review.json, fill every required field, and pass --confirmed-review"
+  ],
+  "outputs": {
+    "inventory": {
+      "path": "docs\\result_artifacts\\input_baseline\\structure_review_20260810\\model_chain_inventory.csv",
+      "sha256": "965985095a1ece67829357004511e4cbb11cfbbea6d2eedc147be1b380a85f06",
+      "size_bytes": 6215
+    },
+    "residue_inventory": {
+      "path": "docs\\result_artifacts\\input_baseline\\structure_review_20260810\\structure_residue_inventory.csv",
+      "sha256": "df600b389a73589b24d23d9c587708d802be68784e8fba729ed9a8849d9d954c",
+      "size_bytes": 208270
+    },
+    "review_template": {
+      "path": "docs\\result_artifacts\\input_baseline\\structure_review_20260810\\baseline_review_template.json",
+      "sha256": "fd93016eac9af595b6b867874560054fcdc17ca11a051ab42f693223303d1ba2",
+      "size_bytes": 15817
+    }
+  },
+  "mapping_policy": {
+    "route": "exact-first_then_fixed_global_if_required",
+    "exact_branch": "unique identity-consistent order-preserving mapping",
+    "global_branch": {
+      "mode": "global",
+      "substitution_matrix": "BLOSUM62",
+      "open_gap_score": -10.0,
+      "extend_gap_score": -0.5,
+      "terminal_gap_score": 0.0
+    },
+    "acceptance": "all optimal global alignments must imply the same complete observed-to-reference mapping and every mapped residue must match WT",
+    "no_automatic_fallback_beyond_global_gate": true
+  },
+  "component_versions": {
+    "structure_inventory": "1.0.0",
+    "residue_mapping": "1.0.0",
+    "polymer_mapping": "1.0.0"
+  },
+  "execution": {
+    "script": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\input_baseline\\build_structure_baseline.py",
+    "command_argv": [
+      "D:\\miniconda\\envs\\ab_optim\\python.exe",
+      "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\input_baseline\\build_structure_baseline.py",
+      "--cxs-export-dir",
+      "data\\structures\\cxs_exports",
+      "--expression-records",
+      "docs\\result_artifacts\\nb_expression\\nb_expression_records.csv",
+      "--numbering-positions",
+      "docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_positions.csv",
+      "--output-dir",
+      "docs\\result_artifacts\\input_baseline\\structure_review_20260810",
+      "--run-summary",
+      "docs\\run_summaries\\input_baseline\\structure_review_20260810.json",
+      "--generated-at",
+      "2026-08-10T10:04:45+08:00"
+    ],
+    "working_directory": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization"
+  },
+  "inputs": {
+    "cxs_export_directory": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\data\\structures\\cxs_exports",
+    "expression_records": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\nb_expression\\nb_expression_records.csv",
+      "sha256": "ef5c9165d1e5f4a1b7995b8733e621ed7e7147cdb73dbfba9a74ce131b3647c9",
+      "size_bytes": 23931
+    },
+    "numbering_positions": {
+      "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\sequence\\sequence_numbering_positions.csv",
+      "sha256": "d0249e11fa9800b769a7d2db28d6da453dc8d964029414fd444146ee2772266d",
+      "size_bytes": 1351886
+    }
+  },
+  "cxs_export_manifest": {
+    "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\data\\structures\\cxs_exports\\cxs_export_manifest.json",
+    "sha256": "6b8bda777c909aedcc4a66151899cb2dde8d8f3184ac0436e3f2bfdf745cc629",
+    "size_bytes": 11128
+  },
+  "analysis_structure_preparation": {
+    "warning": "Gemmi entity/subchain/label-sequence setup is heuristic and was applied only to in-memory clones; exported coordinates were not overwritten",
+    "models": {
+      "NK2R-252.pdb": {
+        "analysis_copy_only": true,
+        "source_export_modified": false,
+        "gemmi_methods": [
+          "Structure.setup_entities",
+          "Structure.assign_label_seq_id"
+        ],
+        "classification": "heuristic_entity_subchain_and_label_sequence_setup",
+        "atom_site_count_before": 3090,
+        "atom_site_count_after": 3090,
+        "atom_site_count_preserved": true,
+        "physical_atom_site_signature_preserved": true,
+        "identifier_signature_changed": false
+      },
+      "NK2R-NKA": {
+        "analysis_copy_only": true,
+        "source_export_modified": false,
+        "gemmi_methods": [
+          "Structure.setup_entities",
+          "Structure.assign_label_seq_id"
+        ],
+        "classification": "heuristic_entity_subchain_and_label_sequence_setup",
+        "atom_site_count_before": 2424,
+        "atom_site_count_after": 2424,
+        "atom_site_count_preserved": true,
+        "physical_atom_site_signature_preserved": true,
+        "identifier_signature_changed": false
+      },
+      "fold_2r_252_nomg_model_0.cif": {
+        "analysis_copy_only": true,
+        "source_export_modified": false,
+        "gemmi_methods": [
+          "Structure.setup_entities",
+          "Structure.assign_label_seq_id"
+        ],
+        "classification": "heuristic_entity_subchain_and_label_sequence_setup",
+        "atom_site_count_before": 988,
+        "atom_site_count_after": 988,
+        "atom_site_count_preserved": true,
+        "physical_atom_site_signature_preserved": true,
+        "identifier_signature_changed": false
+      }
+    }
+  },
+  "chimerax_gemmi_atom_site_count_validation": {
+    "NK2R-252.pdb": {
+      "status": "pass",
+      "chimerax_export": {
+        "atom_site_count": 3090,
+        "blank_altloc_site_count": 3090,
+        "nonblank_altloc_site_count": 0,
+        "atom_objects_with_nonblank_altlocs": 0,
+        "occupancy_negative_site_count": 0,
+        "occupancy_zero_site_count": 0,
+        "occupancy_partial_site_count": 0,
+        "occupancy_unit_site_count": 3090,
+        "occupancy_above_unit_site_count": 0,
+        "occupancy_nonfinite_site_count": 0
+      },
+      "gemmi_readback": {
+        "atom_site_count": 3090,
+        "blank_altloc_site_count": 3090,
+        "nonblank_altloc_site_count": 0,
+        "atom_objects_with_nonblank_altlocs": 0,
+        "occupancy_negative_site_count": 0,
+        "occupancy_zero_site_count": 0,
+        "occupancy_partial_site_count": 0,
+        "occupancy_unit_site_count": 3090,
+        "occupancy_above_unit_site_count": 0,
+        "occupancy_nonfinite_site_count": 0
+      }
+    },
+    "NK2R-NKA": {
+      "status": "pass",
+      "chimerax_export": {
+        "atom_site_count": 2424,
+        "blank_altloc_site_count": 2424,
+        "nonblank_altloc_site_count": 0,
+        "atom_objects_with_nonblank_altlocs": 0,
+        "occupancy_negative_site_count": 0,
+        "occupancy_zero_site_count": 0,
+        "occupancy_partial_site_count": 0,
+        "occupancy_unit_site_count": 2424,
+        "occupancy_above_unit_site_count": 0,
+        "occupancy_nonfinite_site_count": 0
+      },
+      "gemmi_readback": {
+        "atom_site_count": 2424,
+        "blank_altloc_site_count": 2424,
+        "nonblank_altloc_site_count": 0,
+        "atom_objects_with_nonblank_altlocs": 0,
+        "occupancy_negative_site_count": 0,
+        "occupancy_zero_site_count": 0,
+        "occupancy_partial_site_count": 0,
+        "occupancy_unit_site_count": 2424,
+        "occupancy_above_unit_site_count": 0,
+        "occupancy_nonfinite_site_count": 0
+      }
+    },
+    "fold_2r_252_nomg_model_0.cif": {
+      "status": "pass",
+      "chimerax_export": {
+        "atom_site_count": 988,
+        "blank_altloc_site_count": 988,
+        "nonblank_altloc_site_count": 0,
+        "atom_objects_with_nonblank_altlocs": 0,
+        "occupancy_negative_site_count": 0,
+        "occupancy_zero_site_count": 0,
+        "occupancy_partial_site_count": 0,
+        "occupancy_unit_site_count": 988,
+        "occupancy_above_unit_site_count": 0,
+        "occupancy_nonfinite_site_count": 0
+      },
+      "gemmi_readback": {
+        "atom_site_count": 988,
+        "blank_altloc_site_count": 988,
+        "nonblank_altloc_site_count": 0,
+        "atom_objects_with_nonblank_altlocs": 0,
+        "occupancy_negative_site_count": 0,
+        "occupancy_zero_site_count": 0,
+        "occupancy_partial_site_count": 0,
+        "occupancy_unit_site_count": 988,
+        "occupancy_above_unit_site_count": 0,
+        "occupancy_nonfinite_site_count": 0
+      }
+    }
+  },
+  "chimerax_gemmi_structure_count_validation": {
+    "NK2R-252.pdb": {
+      "status": "pass",
+      "chimerax_export": {
+        "model_count": 1,
+        "chain_count": 2,
+        "residue_count": 396,
+        "atom_object_count": 3090,
+        "atom_site_count": 3090
+      },
+      "gemmi_readback": {
+        "model_count": 1,
+        "chain_count": 2,
+        "residue_count": 396,
+        "atom_object_count": 3090,
+        "atom_site_count": 3090
+      }
+    },
+    "NK2R-NKA": {
+      "status": "pass",
+      "chimerax_export": {
+        "model_count": 1,
+        "chain_count": 2,
+        "residue_count": 307,
+        "atom_object_count": 2424,
+        "atom_site_count": 2424
+      },
+      "gemmi_readback": {
+        "model_count": 1,
+        "chain_count": 2,
+        "residue_count": 307,
+        "atom_object_count": 2424,
+        "atom_site_count": 2424
+      }
+    },
+    "fold_2r_252_nomg_model_0.cif": {
+      "status": "pass",
+      "chimerax_export": {
+        "model_count": 1,
+        "chain_count": 1,
+        "residue_count": 126,
+        "atom_object_count": 988,
+        "atom_site_count": 988
+      },
+      "gemmi_readback": {
+        "model_count": 1,
+        "chain_count": 1,
+        "residue_count": 126,
+        "atom_object_count": 988,
+        "atom_site_count": 988
+      }
+    }
+  },
+  "native_reference_frame_coordinate_validation": {
+    "NK2R-NKA": {
+      "status": "pass",
+      "algorithm": "all_atom_site_kabsch_no_outlier_rejection",
+      "atom_site_count": 2424,
+      "rmsd_angstrom": 0.0004967492063318672,
+      "maximum_residual_angstrom": 0.000842592160259303,
+      "maximum_residual_tolerance_angstrom": 0.001,
+      "rotation_3x3": [
+        [
+          0.9719243526778465,
+          -0.1938612409666731,
+          -0.13334493587163318
+        ],
+        [
+          0.18756983800653892,
+          0.9805166987317191,
+          -0.05834860219792925
+        ],
+        [
+          0.14205846874420797,
+          0.0316989394004452,
+          0.9893505792685109
+        ]
+      ],
+      "translation_3": [
+        35.486069637184215,
+        -35.844739658705265,
+        -47.583351190616185
+      ]
+    },
+    "fold_2r_252_nomg_model_0.cif": {
+      "status": "pass",
+      "algorithm": "all_atom_site_kabsch_no_outlier_rejection",
+      "atom_site_count": 988,
+      "rmsd_angstrom": 0.000489081754258387,
+      "maximum_residual_angstrom": 0.0008051658751848149,
+      "maximum_residual_tolerance_angstrom": 0.001,
+      "rotation_3x3": [
+        [
+          -0.16701493011431393,
+          0.687069961516888,
+          -0.7071356878987887
+        ],
+        [
+          -0.9307554983286148,
+          0.12673984643013367,
+          0.3429740714076191
+        ],
+        [
+          0.32526945053288275,
+          0.7154522201433495,
+          0.6183266978240454
+        ]
+      ],
+      "translation_3": [
+        125.32806175815684,
+        126.44558693520759,
+        138.22401500864243
+      ]
+    }
+  }
+}

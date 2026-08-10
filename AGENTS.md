@@ -8,7 +8,7 @@ This project optimizes the experimentally identified NK2R nanobody Nb252 for mul
 
 - `Nb252-optimization.cxs` is the current structure session supplied by the collaborator. It contains three models:
   - `NK2R-252.pdb`: the experimentally resolved binding conformation of NK2R in complex with Nb252.
-  - `NK2R-NKA.pdb`: the NK2R complex with its ligand NKA.
+  - `NK2R-NKA`: the exact model name observed in the supplied CXS (without a `.pdb` suffix); it represents the NK2R complex with its ligand NKA.
   - `fold_2r_252_nomg_model_0.cif`: the AlphaFold 3 (AF3) prediction of the Nb252 VHH structure.
 - These three names currently identify models inside the ChimeraX session; they are not standalone PDB/mmCIF files in the repository unless they are explicitly exported and verified.
 - Parts of the nanobody are not built in the experimental `NK2R-252.pdb` structure. Missing coordinates must not be interpreted as deleted residues or proof that the corresponding sequence is absent.
@@ -107,7 +107,7 @@ This project optimizes the experimentally identified NK2R nanobody Nb252 for mul
 - Use `NK2R-252.pdb` as the primary evidence for the experimentally observed NK2R–Nb252 binding pose and interface, subject to its unresolved regions and experimental-model limitations.
 - In the `NK2R-252` model inside `Nb252-optimization.cxs`, the collaborator colored putative interface VHH residues orange and described them as being within 4 Å of the partner, but the distance definition and exact residue list have not been documented. Treat this as an unverified collaborator annotation: identify and remap the residues, reproduce the selection with an explicit atom/distance rule, and use extra caution before mutating this region.
 - Use `fold_2r_252_nomg_model_0.cif` to examine the predicted VHH fold and unbuilt regions, while preserving AF3 confidence information when available. AF3 coordinates do not experimentally establish the CDR3 conformation or receptor contacts.
-- Use `NK2R-NKA.pdb` to analyze the NKA-bound context, overlap, steric relationships, or possible mechanism only after NK2R chains and residue mappings are verified. Structural proximity or overlap alone does not prove competition, agonism, antagonism, or functional effect.
+- Use `NK2R-NKA` to analyze the NKA-bound context, overlap, steric relationships, or possible mechanism only after NK2R chains and residue mappings are verified. Structural proximity or overlap alone does not prove competition, agonism, antagonism, or functional effect.
 - Define interface contacts, buried surface area, hydrogen bonds, salt bridges, clashes, and energetic terms with explicit software, versions, parameters, protonation assumptions, and distance/angle cutoffs.
 - Candidate mutation generation must preserve a traceable path from structural or sequence rationale to the exact candidate sequence. Record parental sequence, mutation set, numbering scheme, source structure/model, design method/version, constraints, and filtering decisions.
 - Avoid treating a single structure, single predicted pose, or single scoring function as ground truth. When feasible, assess sensitivity to unresolved coordinates, alternative CDR3 conformations, model preparation, and scoring method.

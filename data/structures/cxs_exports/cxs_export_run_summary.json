@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "generated_at": "2026-08-10T10:02:49+08:00",
+  "elapsed_seconds": 0.47966339997947216,
+  "software": {
+    "name": "UCSF ChimeraX",
+    "version": "1.12"
+  },
+  "script": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\input_baseline\\export_cxs_session_chimerax.py",
+  "entry_point": "ChimeraX command: runscript",
+  "argv": [
+    "--source-cxs",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\Nb252-optimization.cxs",
+    "--expected-source-sha256",
+    "1BC636C28F66AE60EDC658D2E1C4AAD0B07F4141CA5411C78662AA19DA793C4D",
+    "--output-dir",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\data\\structures\\cxs_exports",
+    "--generated-at",
+    "2026-08-10T10:02:49+08:00"
+  ],
+  "source_cxs": {
+    "path": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\Nb252-optimization.cxs",
+    "sha256": "1bc636c28f66ae60edc658d2e1c4aad0b07f4141ca5411c78662aa19da793c4d",
+    "size_bytes": 537670,
+    "mtime_ns": 1785479308801468100
+  },
+  "manifest": {
+    "path": "cxs_export_manifest.json",
+    "sha256": "6b8bda777c909aedcc4a66151899cb2dde8d8f3184ac0436e3f2bfdf745cc629",
+    "size_bytes": 11128
+  },
+  "output_counts": {
+    "session_models": 5,
+    "atomic_models": 3,
+    "non_atomic_models": 2,
+    "mmcif_exports": 5,
+    "residue_color_rows": 829,
+    "files_excluding_run_summary": 7
+  }
+}
