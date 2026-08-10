@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-10 15:08:02
+Last updated: 2026-08-10 15:41:44
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -16,7 +16,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 远程项目环境：`/data/software/env/luly25/ab_optim`；计划检出父目录 `/homes/Tianlab/luly25/`，登录别名尚未建立。
 - PyRosetta：`/data/software/env/luly25/multi_ligand`，Python 3.10.20，PyRosetta 2026.03，Rosetta commit `5e498f1409c68ade56c8ce5842bf79e1b02e8db4`。
 - nanoBERT：`/data/software/env/luly25/vhh-lm`，`NaturalAntibody/nanoBERT` revision `edc8182ad89a827f8737fa572c6b5fac6197e6b0`，使用已记录离线缓存。
-- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；合作者确认、审核逻辑、released制品、阶段门、`SSGS`硬约束、测试和文档已由提交`871a2db8c3f4a4fa3d1bdc7b2df961179c389d43`推送至`origin/main`。
+- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；上一同步点为`929408048dc2428061bab53e2b50cdb8a4f54d60`。关键残基机器可读制品、强制preflight规则和对应文档已准备提交至`origin/main`。
 - 本阶段未运行 AF3、PyRosetta、nanoBERT、候选生成或表达模型训练。
 
 ## Frozen Inputs
@@ -36,6 +36,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 82 个共同 framework Cα、Kabsch、无 outlier rejection：RMSD 0.631994 Å。拟合后 FR aggregate RMSD 0.631994 Å；CDR3 RMSD 6.490853 Å、最大位移 10.733119 Å。实验结构仍是结合构象证据，AF3 始终是预测。
 - `interface_released_20260810/`：严格 polymer heavy-atom center `<4.0 Å`，排除 H/D、非正 occupancy、水/配体/糖/离子、晶体/NCS images，并遵守 altloc 兼容性。结果为246个原子接触对、24个VHH界面残基。
 - 严格 `<4.0 Å` 残基集合与确认橙色 24 位点完全相同；保护并集为 reported sequence index `33,37,45,46,47,58,98,100-116`。该集合仅用于保守保护，不是能量热点或突变效应结论。
+- 关键残基集合已集中绑定到机器可读文件`docs/result_artifacts/input_baseline/reviews/nb252_critical_residue_sets.json`：实验缺失坐标为reported indices `9-15,24-29`，在实验界面语义中必须保持`not_evaluable`；24个复现界面位点为谨慎突变而非禁区；positions `125-128`的`SSGS`不可突变。所有候选生成和评分入口必须重新读取并核对该文件及其上游哈希，不得从聊天、handoff或记忆重建残基集合。
 
 ## Expression Audit
 

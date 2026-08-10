@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "artifact_type": "nb252_critical_residue_sets",
+  "status": "pass",
+  "generated_at": "2026-08-10T15:41:44+08:00",
+  "authoritative_parent": {
+    "sample_uid": "LTT__Nb252",
+    "length": 128,
+    "sequence_sha256": "df5b83ddde8a3486383c12afe45e22af6a358f507eab5503d5dbd4430710288d"
+  },
+  "experimental_vhh": {
+    "source_model_name": "NK2R-252.pdb",
+    "auth_asym_id": "C",
+    "label_asym_id": "C"
+  },
+  "experimental_missing_coordinates": {
+    "reported_sequence_indices_1based": [9, 10, 11, 12, 13, 14, 15, 24, 25, 26, 27, 28, 29],
+    "imgt_position_labels": ["9", "11", "12", "13", "14", "15", "16", "25", "26", "27", "28", "29", "30"],
+    "regions_by_reported_index": {
+      "9": "FR1",
+      "10": "FR1",
+      "11": "FR1",
+      "12": "FR1",
+      "13": "FR1",
+      "14": "FR1",
+      "15": "FR1",
+      "24": "FR1",
+      "25": "FR1",
+      "26": "CDR1",
+      "27": "CDR1",
+      "28": "CDR1",
+      "29": "CDR1"
+    },
+    "experimental_interface_semantics": "not_evaluable",
+    "interpretation": "Missing experimental coordinates are neither experimental contacts nor experimental non-contacts."
+  },
+  "reproduced_experimental_interface": {
+    "reported_sequence_indices_1based": [33, 37, 45, 46, 47, 58, 98, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116],
+    "imgt_position_labels": ["38", "42", "50", "51", "52", "66", "107", "109", "110", "111", "111A", "111B", "111C", "112D", "112C", "112B", "112A", "112", "113", "114", "115", "116", "117", "118"],
+    "mutation_semantics": "cautious_not_forbidden",
+    "definition": "positive-occupancy polymer heavy-atom center distance strictly <4.0 angstrom; H/D, water, ligand, glycan, ion, crystal and NCS copies excluded; altloc compatibility enforced",
+    "evidence_scope": "experimentally coordinate-evaluable residues in the NK2R-252 model"
+  },
+  "immutable_terminal_set": {
+    "reported_sequence_indices_1based": [125, 126, 127, 128],
+    "sequence": "SSGS",
+    "mutation_semantics": "no_substitution_or_deletion"
+  },
+  "source_bindings": {
+    "sequence_structure_mapping": {
+      "path": "docs/result_artifacts/input_baseline/structure_released_20260810/nb252_sequence_structure_mapping.csv",
+      "sha256": "74e3975d1e10383d1f8904aba67487605b2c240bca5cca11093df2d50f21dce9"
+    },
+    "interface_manifest": {
+      "path": "docs/result_artifacts/input_baseline/interface_released_20260810/interface_manifest.json",
+      "sha256": "f19232070f7f23b7a035cede02084da9634d0cf14fee78e898a0837190230045"
+    },
+    "design_constraints": {
+      "path": "docs/result_artifacts/input_baseline/reviews/nb252_design_constraints.json",
+      "sha256": "674d19ffe764ce69b9a57e7ea4102a72b08394aed1a0d08d0587e62cd0fa6d3b"
+    },
+    "confirmed_baseline_review": {
+      "path": "docs/result_artifacts/input_baseline/structure_review_20260810/baseline_review.json",
+      "sha256": "ba4e2f253158b390d8f16a357a72d7503d80338d45110b64b4aae20f53282254"
+    }
+  }
+}
