@@ -1,0 +1,31 @@
+{
+  "command_argv": [
+    "/data/software/env/luly25/multi_ligand/bin/python",
+    "/homes/Tianlab/luly25/Antibody_optimization/scripts/structure_preparation/validate_pyrosetta_wt_import.py",
+    "--stage0-dir",
+    "docs/result_artifacts/candidate_design/stage0_contract_20260810",
+    "--structure-baseline-dir",
+    "docs/result_artifacts/input_baseline/structure_released_20260810",
+    "--experimental-structure",
+    "data/structures/cxs_exports/NK2R-252__native.cif",
+    "--output-dir",
+    "docs/result_artifacts/structure_preparation/pyrosetta_wt_import_20260810",
+    "--run-summary",
+    "docs/run_summaries/structure_preparation/pyrosetta_wt_import_20260810.json"
+  ],
+  "elapsed_seconds": 14.123538,
+  "generated_at": "2026-08-10T14:08:11+00:00",
+  "input_stage_ids": {
+    "stage0_contract_generated_at": "2026-08-10T21:49:00+08:00",
+    "structure_baseline_generated_at": "2026-08-10T12:02:36+08:00"
+  },
+  "outputs": {
+    "breaks": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/structure_preparation/pyrosetta_wt_import_20260810/pose_breaks_and_mapping.csv",
+    "figure": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/structure_preparation/pyrosetta_wt_import_20260810/pyrosetta_wt_import_qc.svg",
+    "gate": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/structure_preparation/pyrosetta_wt_import_20260810/pyrosetta_wt_import_gate.json",
+    "scores": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/structure_preparation/pyrosetta_wt_import_20260810/wt_raw_score_terms.csv"
+  },
+  "pyrosetta_version": "┌───────────────────────────────────────────────────────────────────────────────┐\n│                                  PyRosetta-4                                  │\n│               Created in JHU by Sergey Lyskov and PyRosetta Team              │\n│               (C) Copyright Rosetta Commons Member Institutions               │\n│                                                                               │\n│ NOTE: USE OF PyRosetta FOR COMMERCIAL PURPOSES REQUIRES PURCHASE OF A LICENSE │\n│          See LICENSE.PyRosetta.md or email license@uw.edu for details         │\n└───────────────────────────────────────────────────────────────────────────────┘\nPyRosetta-4 2026 [Rosetta PyRosetta4.Release.python310.ubuntu 2026.03+releasequarterly.5e498f1409c68ade56c8ce5842bf79e1b02e8db4 2026-01-13T13:24:11] retrieved from: http://www.pyrosetta.org",
+  "schema_version": 1,
+  "status": "pass"
+}

@@ -1,0 +1,35 @@
+{
+  "blockers": [],
+  "gate_name": "pyrosetta_wt_import_gate",
+  "generated_at": "2026-08-10T14:08:11+00:00",
+  "outputs": {
+    "breaks_and_mapping": "pose_breaks_and_mapping.csv",
+    "qc_figure": "pyrosetta_wt_import_qc.svg",
+    "raw_score_terms": "wt_raw_score_terms.csv"
+  },
+  "pyrosetta_affinity_scoring_release": "ready_for_scoring_protocol_calibration",
+  "pyrosetta_wt_import_release": "pass",
+  "schema_version": 1,
+  "software": {
+    "pyrosetta_version": "┌───────────────────────────────────────────────────────────────────────────────┐\n│                                  PyRosetta-4                                  │\n│               Created in JHU by Sergey Lyskov and PyRosetta Team              │\n│               (C) Copyright Rosetta Commons Member Institutions               │\n│                                                                               │\n│ NOTE: USE OF PyRosetta FOR COMMERCIAL PURPOSES REQUIRES PURCHASE OF A LICENSE │\n│          See LICENSE.PyRosetta.md or email license@uw.edu for details         │\n└───────────────────────────────────────────────────────────────────────────────┘\nPyRosetta-4 2026 [Rosetta PyRosetta4.Release.python310.ubuntu 2026.03+releasequarterly.5e498f1409c68ade56c8ce5842bf79e1b02e8db4 2026-01-13T13:24:11] retrieved from: http://www.pyrosetta.org",
+    "score_function": "ref2015",
+    "score_semantics": "raw_import_diagnostic_not_affinity_prediction"
+  },
+  "source_stage_ids": {
+    "stage0_contract_generated_at": "2026-08-10T21:49:00+08:00",
+    "structure_baseline_generated_at": "2026-08-10T12:02:36+08:00"
+  },
+  "status": "pass",
+  "summary": {
+    "all_expected_breaks_safe": true,
+    "all_recorded_scores_finite": true,
+    "chain_residue_counts": {
+      "C": 115,
+      "R": 281
+    },
+    "cys22_cys95_disulfide_bonded": true,
+    "expected_break_count": 4,
+    "mapping_status": "pass",
+    "pose_residue_count": 396
+  }
+}

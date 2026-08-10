@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="360" viewBox="0 0 1000 360">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="50" y="48" font-family="Arial, sans-serif" font-size="26" font-weight="bold">PyRosetta WT import gate</text>
+<rect x="820" y="22" width="130" height="38" rx="8" fill="#2a9d8f"/>
+<text x="885" y="49" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#ffffff">PASS</text>
+<text x="50" y="92" font-family="Arial, sans-serif" font-size="17" fill="#333333">Experimental NK2R-Nb252 complex; raw import diagnostic, no relax</text>
+<line x1="100" y1="165" x2="900" y2="165" stroke="#666666" stroke-width="12" stroke-linecap="round"/>
+<line x1="116.16" y1="125" x2="116.16" y2="205" stroke="#f4a261" stroke-width="5"/><line x1="132.32" y1="125" x2="132.32" y2="205" stroke="#f4a261" stroke-width="5"/><line x1="332.32" y1="125" x2="332.32" y2="205" stroke="#457b9d" stroke-width="5"/><line x1="734.34" y1="125" x2="734.34" y2="205" stroke="#f4a261" stroke-width="5"/>
+<text x="100" y="230" font-family="Arial, sans-serif" font-size="15">Pose 1</text>
+<text x="900" y="230" text-anchor="end" font-family="Arial, sans-serif" font-size="15">Pose 396</text>
+<rect x="100" y="270" width="18" height="18" fill="#f4a261"/><text x="128" y="285" font-family="Arial, sans-serif" font-size="15">missing-density break</text>
+<rect x="340" y="270" width="18" height="18" fill="#457b9d"/><text x="368" y="285" font-family="Arial, sans-serif" font-size="15">chain boundary</text>
+<text x="650" y="285" font-family="Arial, sans-serif" font-size="15">Residues: 396 | Breaks: 4 | Blockers: 0</text>
+<text x="50" y="330" font-family="Arial, sans-serif" font-size="14" fill="#555555">Source: pose_breaks_and_mapping.csv and pyrosetta_wt_import_gate.json</text>
+</svg>

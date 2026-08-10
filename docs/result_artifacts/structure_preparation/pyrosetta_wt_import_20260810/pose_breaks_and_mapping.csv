@@ -1,0 +1,5 @@
+﻿break_type,left_pose_index,left_chain_id,left_auth_seq_id,left_residue_name,right_pose_index,right_chain_id,right_auth_seq_id,right_residue_name,missing_auth_start,missing_auth_end,fold_tree_cutpoint,jump_cutpoint,c_n_atoms_bonded,status
+missing_density,8,C,8,GLY,9,C,16,GLY,9,15,True,True,False,pass
+missing_density,16,C,23,ALA,17,C,30,PHE,24,29,True,True,False,pass
+chain_boundary,115,C,128,SER,116,R,30,SER,,,True,True,False,pass
+missing_density,314,R,228,ALA,315,R,240,ARG,229,239,True,True,False,pass
