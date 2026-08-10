@@ -1,0 +1,89 @@
+{
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\build_stage2_design_contract.py",
+    "--critical-residue-facts",
+    "docs/result_artifacts/input_baseline/reviews/nb252_critical_residue_sets.json",
+    "--stage1-gate",
+    "docs/result_artifacts/input_baseline/summary/stage1_gate.json",
+    "--experimental-structure",
+    "data/structures/cxs_exports/NK2R-252__native.cif",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/stage0_contract_20260810",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/stage0_contract_20260810.json",
+    "--generated-at",
+    "2026-08-10T20:19:38+08:00",
+    "--overwrite"
+  ],
+  "counts": {
+    "experimental_interface_positions": 24,
+    "experimental_missing_positions": 13,
+    "first_round_affinity_allowed_positions": 24,
+    "hard_immutable_positions": 6,
+    "parent_positions": 128
+  },
+  "elapsed_seconds": 1.205213,
+  "gates": {
+    "candidate_manifest_release": "pass",
+    "pyrosetta_affinity_scoring_release": "blocked_pending_remote_gap_safe_import",
+    "stage0_local_contract": "pass"
+  },
+  "generated_at": "2026-08-10T20:19:38+08:00",
+  "inputs": {
+    "confirmed_baseline_review": {
+      "mtime_ns": 1786334583099795400,
+      "path": "docs/result_artifacts/input_baseline/structure_review_20260810/baseline_review.json",
+      "sha256": "ba4e2f253158b390d8f16a357a72d7503d80338d45110b64b4aae20f53282254",
+      "size_bytes": 4364
+    },
+    "critical_residue_facts": {
+      "mtime_ns": 1786347747984705700,
+      "path": "docs/result_artifacts/input_baseline/reviews/nb252_critical_residue_sets.json",
+      "sha256": "6a6a4759abf24dac293910bc689739b1e83643fffb791073c795bab760d8ffd9",
+      "size_bytes": 2999
+    },
+    "design_constraints": {
+      "mtime_ns": 1786345411294372500,
+      "path": "docs/result_artifacts/input_baseline/reviews/nb252_design_constraints.json",
+      "sha256": "674d19ffe764ce69b9a57e7ea4102a72b08394aed1a0d08d0587e62cd0fa6d3b",
+      "size_bytes": 834
+    },
+    "experimental_structure": {
+      "mtime_ns": 1786327369383212700,
+      "path": "data/structures/cxs_exports/NK2R-252__native.cif",
+      "sha256": "5c54f7fcf56c96f60b2dc7e80a9e009a790874c5c871f16d58c832560fde4322",
+      "size_bytes": 243630
+    },
+    "interface_manifest": {
+      "mtime_ns": 1786334710997213800,
+      "path": "docs/result_artifacts/input_baseline/interface_released_20260810/interface_manifest.json",
+      "sha256": "f19232070f7f23b7a035cede02084da9634d0cf14fee78e898a0837190230045",
+      "size_bytes": 6312
+    },
+    "sequence_structure_mapping": {
+      "mtime_ns": 1786334704895512500,
+      "path": "docs/result_artifacts/input_baseline/structure_released_20260810/nb252_sequence_structure_mapping.csv",
+      "sha256": "74e3975d1e10383d1f8904aba67487605b2c240bca5cca11093df2d50f21dce9",
+      "size_bytes": 137274
+    },
+    "stage1_gate": {
+      "mtime_ns": 1786334770878650700,
+      "path": "docs/result_artifacts/input_baseline/summary/stage1_gate.json",
+      "sha256": "24e5bcc399234d44f5f703477792be77bcaf01ce4b1fa3e388dbe176490bf6aa",
+      "size_bytes": 2204
+    }
+  },
+  "outputs": {
+    "contract": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stage0_contract_20260810\\stage2_design_contract.json",
+    "figure_png": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stage0_contract_20260810\\stage2_design_contract_qc.png",
+    "figure_svg": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stage0_contract_20260810\\stage2_design_contract_qc.svg",
+    "inventory": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stage0_contract_20260810\\mutable_position_inventory.csv",
+    "manifest": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stage0_contract_20260810\\stage2_stage0_manifest.json",
+    "preflight": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stage0_contract_20260810\\stage2_preflight.json"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass",
+  "working_directory": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization"
+}

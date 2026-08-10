@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-10 15:57:15
+Last updated: 2026-08-10 20:22:06
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -17,7 +17,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - PyRosetta：`/data/software/env/luly25/multi_ligand`，Python 3.10.20，PyRosetta 2026.03，Rosetta commit `5e498f1409c68ade56c8ce5842bf79e1b02e8db4`。
 - nanoBERT：`/data/software/env/luly25/vhh-lm`，`NaturalAntibody/nanoBERT` revision `edc8182ad89a827f8737fa572c6b5fac6197e6b0`，使用已记录离线缓存。
 - Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；关键残基机器可读制品、强制preflight规则和对应文档已由提交`8b768aaec6de837f205523d4d55db4cdb2571189`推送至`origin/main`。
-- 本阶段未运行 AF3、PyRosetta、nanoBERT、候选生成或表达模型训练。
+- 阶段2的本地阶段0合同已运行；尚未运行 AF3、PyRosetta、nanoBERT/AntiFold、候选生成或表达模型训练。
 
 ## Frozen Inputs
 
@@ -50,17 +50,35 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - `local_baseline_build=pass`：结构导出、清单、链身份、可逆映射和临时界面安全均已完成。
 - `candidate_design_release=pass`：authoritative 128-aa Nb252、结构身份、映射和界面安全均已确认；设计必须维持实验表位和结合构象。
 - `pooled_expression_model_release=pass`：允许保留删失/分组语义的联合建模；独立的`nb252_expression_transfer`仍为`blocked`，直到模型经适当验证。
+- `stage0_local_contract=pass`、`candidate_manifest_release=pass`：关键来源哈希、母本、映射、链身份、缺失坐标、界面、SSGS和实验二硫键均通过本地重检。
+- `pyrosetta_affinity_scoring_release=blocked_pending_remote_gap_safe_import`：在服务器验证缺失密度的jump/cutpoint导入、PDBInfo映射、有限能量及约束WT pose稳定前，不运行亲和力评分。
 - `finalize_input_baseline.py` 已用真实 structure mapping/interface 重建 canonical 128 位点图和 `stage1_gate.json`。程序 `status=pass` 不代表科学 release gate 自动通过。
+
+## Stage-2 Phase 0 Result
+
+- 正式制品位于`docs/result_artifacts/candidate_design/stage0_contract_20260810/`，run summary位于`docs/run_summaries/candidate_design/stage0_contract_20260810.json`。
+- 128个位点中：实验缺失坐标13位、实验界面24位、硬冻结6位、首轮亲和力放行24位。硬冻结为reported positions 125–128的`SSGS`和实验SG–SG几何支持的Cys 22/Cys 95；界面位点是“谨慎但可突变”。
+- 首轮亲和力以未批量补全的实验complex为主；缺失位点不进入首轮亲和力扫描。只有终选涉及缺失CDR1、或原实验结构与完整VHH预测轨道冲突时，才触发定点补全敏感性分析。
+
+## Current Optimization Plan
+
+1. **远程WT结构门（约0.5–1天）**：在既有PyRosetta 2026.03环境验证实验complex的gap-safe Pose导入、PDBInfo可逆映射、cutpoint/jump、有限能量及约束松弛稳定性；不为首轮扫描批量补全13个缺失位点。
+2. **WT序列/可开发性基线（约0.5–1天）**：本地计算序列理化、化学风险和47条yield的保留删失语义基线；服务器部署/固定AntiFold及VHH适用的自然度/可开发性模型。nanoBERT仅在能提供独立验证价值时使用，不与同类语言模型重复堆叠。
+3. **可审计单点景观（约0.5–1天）**：24个实验界面位点的全替换理论上限为456个单点；先由结构/序列模型提出或排序，再应用Cys22/Cys95、SSGS、WT一致性、化学风险和表位/构象约束，预计保留约200–400个可评分候选。每个候选绑定阶段0合同和全部上游哈希，实际数量以生成制品为准。
+4. **亲和力/稳定性筛选（约2–4天）**：PyRosetta快速界面评分约4–16小时，再对入围者运行flex-ddG/折叠稳定性复核约1–3天；使用实验complex，缺失位点保持非可评估。所有长任务走既定Slurm规则。
+5. **表达与多目标排序（约1–2天）**：用47条可比yield做小样本、交叉验证且保留LLJ分组/删失语义的表达模型；验证前不释放新Nb252突变迁移。综合亲和力、稳定性、表达、自然度、化学风险和不确定性做Pareto排序，不用单一总分掩盖严重退化。
+6. **组合与终选结构复核（约2–4天）**：只从互补的优质单点构建少量双突变；PyRosetta复核后，对最终约10–30个候选运行AF3构象/表位保持检查。若涉及缺失区再做定点补全敏感性分析。计算全流程预计约1–2周，不含排队和实验验证。
 
 ## Verification
 
-- 全套：`97 passed, 1 skipped, 4 subtests passed`；唯一 skip 为 Windows 真实 symlink 权限测试。
+- 阶段0专项：`3 passed`；覆盖真实128位合同、过期哈希拒绝、CSV BOM/LF、拒绝覆盖、固定时间戳双跑六制品逐字节一致。
+- 阶段0图已人工检查，轨道、坐标轴和图例无遮挡。全套验收为`100 passed, 1 skipped, 4 subtests passed`；唯一skip仍是Windows真实symlink权限测试。
 - `pip check`、`python -m compileall -q src scripts tests`、`git diff --check` 均通过。
 - 修复覆盖：ChimeraX sandbox 入口、实际模型名、无 polymer sequence 时严格 source-auth exact-WT 映射、较长 polymer 中唯一 authoritative segment、`not_evaluable` summary 状态。
 
 ## Required Next Steps
 
-1. 实现第二阶段设计合同和候选空间清单：固定完整128-aa母本，硬冻结reported positions 125–128的`SSGS`，维持实验表位/构象，并把24个界面位点设为“谨慎突变”而非绝对禁区。
-2. 建立WT的本地developability与序列基线，再在服务器分别建立nanoBERT和PyRosetta基线；冻结每个工具的输入、参数、版本和输出语义。
-3. 先生成可审计的单点候选景观并执行硬约束/化学风险过滤，再做亲和力、稳定性、表达倾向和不确定性的多目标排序；AF3只用于少量入围候选的构象复核。
-4. 为47条可比yield实现能保留LLJ删失/分组语义的小样本建模与交叉验证；只有验证后才释放`nb252_expression_transfer`。最终实验面板大小与组合突变规模可在看到单点景观后由用户决定，不阻断上述计算基线。
+1. 在远程PyRosetta环境实现并验证gap-safe WT Pose导入门；只有该门通过后才释放亲和力评分。
+2. 建立本地WT理化/化学风险基线，并在服务器核验AntiFold与VHH自然度/可开发性模型的版本、许可证、输入范围和环境隔离。
+3. 生成绑定阶段0合同哈希的单点候选清单；此步先生成/过滤，不提前运行大规模结构评分。
+4. 实现保留LLJ删失/分组语义的表达基线与交叉验证，决定`nb252_expression_transfer`能否释放。

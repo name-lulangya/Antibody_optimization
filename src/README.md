@@ -101,6 +101,16 @@
   - 主要输入/返回：128 行 Nb252 位点表、47 序列审核计数及固定时间戳；写出带可复现 metadata 的 600 dpi PNG 和 SVG。
   - 算法假设：图中序列/IMGT、实验/AF3 覆盖、橙色注释和临时界面均直接来自紧凑数据；SVG hashsalt 固定，保存后确定性规范为 LF-only、无行尾空格/Tab 且只有一个终止换行。
   - 明确不支持：从原始结构/序列提取事实、评估 gate、修改紧凑数据或解释结果。
+- `antibody_optimization.design_contract`
+  - 用途：把阶段1的关键残基制品及其哈希绑定、128-aa母本、实验链身份、缺失坐标、严格界面、末端`SSGS`、实验坐标支持的二硫键和阶段门重新核验为候选设计前合同。
+  - 主要输入/返回：`nb252_critical_residue_sets.json`、其四个绑定来源、`stage1_gate.json`和实验complex mmCIF；返回设计合同、严格128行位点清单和分层preflight。
+  - 算法假设：只接受仓库内普通文件及精确SHA-256；实验chain C的CYS SG距离在显式1.8–2.3 Å区间内才记为坐标支持的二硫键；实验缺失位点保持`not_evaluable`，首轮亲和力不依赖批量补全；PyRosetta评分在远程gap-safe Pose导入验证前保持blocked。
+  - 明确不支持：生成突变、补全缺失结构、把界面位点当热点、运行PyRosetta，或从叙述/记忆重建关键残基集合。
+- `antibody_optimization.design_contract_plot`
+  - 用途：只从精确128行位点清单绘制实验缺失、实验界面、硬冻结和首轮亲和力放行轨道。
+  - 主要输入/返回：位点清单行；写出600 dpi PNG与固定SVG hashsalt的SVG。
+  - 算法假设：输入必须恰好覆盖reported-sequence positions 1–128；颜色只编码清单中的机器可读状态。
+  - 明确不支持：计算界面、推断残基状态、修改合同或选择候选。
 
 ## 第一阶段活动入口
 
@@ -113,3 +123,7 @@
 - `calculate_temporary_interface.py`：只消费 passed 结构 baseline 及与其哈希绑定的同一 `baseline_review.json`，通过 CXS manifest 追溯颜色表并重算严格 `<4.0 Å` 界面；输出 `temporary_interface_atom_contacts.csv`、`temporary_interface_residues.csv`、`orange_vs_4A.csv`、`interface_manifest.json` 及 run summary。`orange_vs_4A.csv.temporary_protected_union` 与 manifest 中的 reported 序列索引/IMGT 标签表示“confirmed orange ∪ strict `<4.0 Å`”；`not_evaluable` 不会被改写为 false，该并集只是保守突变保护标志，不是能量热点。目标目录/run summary 必须不存在。
 - `finalize_input_baseline.py`：冻结全部上游输入，联接可选结构/界面证据并评估分层门；输出 `input_freeze_manifest.json`、`nb252_baseline_plot_data.csv`、`baseline_status_counts.csv`、`stage1_gate.json`、`input_baseline_qc.png/.svg`、`summary_manifest.json` 及 run summary。
 - `plot_input_baseline.py`：从上述两个精确紧凑 CSV 重绘 PNG/SVG 并写 run summary；需固定 `--generated-at`，不允许绕过 `finalize_input_baseline.py` 直接覆盖与 `summary_manifest.json` 绑定的正式基线图。
+
+## 第二阶段活动入口
+
+- `scripts/candidate_design/build_stage2_design_contract.py`：阶段0本地入口；重新读取并核验关键残基制品及其上游哈希、阶段1门和实验complex，输出`stage2_design_contract.json`、128行`mutable_position_inventory.csv`、`stage2_preflight.json`、PNG/SVG、manifest及独立run summary。默认拒绝覆盖；固定时间戳双跑的六个正式制品必须逐字节一致。`stage0_local_contract=pass`只释放后续候选清单工作，不能越过仍为blocked的远程PyRosetta gap-safe导入门。

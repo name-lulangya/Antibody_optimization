@@ -242,6 +242,7 @@ This project optimizes the experimentally identified NK2R nanobody Nb252 for mul
 - Maintain a `Last updated: YYYY-MM-DD HH:mm:ss` field near the top of `docs/codex-handoff.md` so staleness is visible.
 - Use `docs/codex-handoff.md` only for current project status, active experiments, recent implementation state, decision-relevant cautions, and immediate next steps. Do not put current experiment status in `AGENTS.md`.
 - Update `docs/codex-handoff.md` whenever a substantive implementation, workflow, experiment status, run-summary result, caution, or next step changes the current state a new agent needs to know. Every update must remove or rewrite superseded facts in the same task.
+- Keep a concise `Current Optimization Plan` in `docs/codex-handoff.md`. Whenever the design route, tool choice, stage gate, expected runtime, or completion state changes, update that section in the same task and remove the superseded route.
 - After an experiment completes, remove its execution command and pending status from `Suggested Next Steps`; replace them with the observed result and actual unresolved follow-up, if any.
 - When an implementation or scientific route changes, remove the superseded route from `Current Project Status` and `Suggested Next Steps`. Preserve historical details only in weekly history or run summaries.
 - Before finishing any substantive implementation or result-sync task, audit the handoff for contradictions, especially an experiment being marked both completed and pending.
