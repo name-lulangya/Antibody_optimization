@@ -85,8 +85,20 @@ def render_design_contract_figure(
     fig.savefig(png_path, dpi=600, bbox_inches="tight", metadata={"Software": "matplotlib"})
     with plt.rc_context({"svg.hashsalt": "nb252-stage2-design-contract-v1"}):
         fig.savefig(svg_path, bbox_inches="tight", metadata={"Date": None})
+    _canonicalize_svg(svg_path)
     plt.close(fig)
 
 
 def _truth(value: object) -> bool:
     return value is True or str(value).lower() == "true"
+
+
+def _canonicalize_svg(path: Path) -> None:
+    """Normalize Matplotlib SVG text for stable Git-tracked artifacts."""
+
+    lines = path.read_text(encoding="utf-8").splitlines()
+    path.write_text(
+        "\n".join(line.rstrip() for line in lines) + "\n",
+        encoding="utf-8",
+        newline="\n",
+    )

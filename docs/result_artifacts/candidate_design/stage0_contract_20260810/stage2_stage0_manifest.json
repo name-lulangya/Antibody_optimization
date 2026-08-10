@@ -71,8 +71,8 @@
     },
     "figure_svg": {
       "file": "stage2_design_contract_qc.svg",
-      "sha256": "dc0077d0e6205f7553aee11c569101a40ebab5375af02682fc0926682381a9c1",
-      "size_bytes": 92327
+      "sha256": "c4974048af373814a67d66c51fdbd19024deb553d09abae00d70ff3d66d703da",
+      "size_bytes": 88680
     },
     "inventory": {
       "file": "mutable_position_inventory.csv",

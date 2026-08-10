@@ -109,7 +109,7 @@
 - `antibody_optimization.design_contract_plot`
   - 用途：只从精确128行位点清单绘制实验缺失、实验界面、硬冻结和首轮亲和力放行轨道。
   - 主要输入/返回：位点清单行；写出600 dpi PNG与固定SVG hashsalt的SVG。
-  - 算法假设：输入必须恰好覆盖reported-sequence positions 1–128；颜色只编码清单中的机器可读状态。
+  - 算法假设：输入必须恰好覆盖reported-sequence positions 1–128；颜色只编码清单中的机器可读状态；SVG固定hashsalt并规范为LF、无行尾空白和单一终止换行。
   - 明确不支持：计算界面、推断残基状态、修改合同或选择候选。
 
 ## 第一阶段活动入口

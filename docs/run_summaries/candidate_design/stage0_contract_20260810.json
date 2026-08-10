@@ -23,7 +23,7 @@
     "hard_immutable_positions": 6,
     "parent_positions": 128
   },
-  "elapsed_seconds": 1.205213,
+  "elapsed_seconds": 1.209181,
   "gates": {
     "candidate_manifest_release": "pass",
     "pyrosetta_affinity_scoring_release": "blocked_pending_remote_gap_safe_import",

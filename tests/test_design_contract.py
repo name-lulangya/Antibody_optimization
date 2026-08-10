@@ -100,6 +100,12 @@ class DesignContractTests(unittest.TestCase):
             data = (output / "mutable_position_inventory.csv").read_bytes()
             self.assertTrue(data.startswith(b"\xef\xbb\xbf"))
             self.assertNotIn(b"\r\n", data)
+            svg_data = (output / "stage2_design_contract_qc.svg").read_bytes()
+            self.assertNotIn(b"\r\n", svg_data)
+            self.assertTrue(svg_data.endswith(b"\n"))
+            self.assertFalse(
+                any(line.endswith((b" ", b"\t")) for line in svg_data.splitlines())
+            )
             with (output / "mutable_position_inventory.csv").open(
                 encoding="utf-8-sig", newline=""
             ) as handle:
