@@ -32,9 +32,11 @@ from antibody_optimization.pyrosetta_scoring_calibration import (  # noqa: E402
     PROTOCOL_ORDER,
     REPLICATE_FIELDS,
     CalibrationThresholds,
+    audit_source_incomplete_sidechains,
     build_calibration_gate,
     choose_representative_replicate,
     load_calibration_inputs,
+    energy_edge_map,
     render_calibration_svg,
     select_protocol,
     summarize_protocol_rows,
@@ -104,6 +106,12 @@ def main() -> int:
         stage0_dir=stage0_dir,
         structure_baseline_dir=structure_dir,
     )
+    source_incomplete_sidechains = audit_source_incomplete_sidechains(
+        structure_baseline_dir=structure_dir,
+        vhh_interface_auth_positions=calibration_inputs[
+            "vhh_interface_auth_positions"
+        ],
+    )
     if (
         calibration_inputs["stage0_run_id"]
         != structure_inputs["stage0_run_id"]
@@ -166,6 +174,13 @@ def main() -> int:
         chain_b="R",
         cutoff=args.interface_neighborhood_angstrom,
     )
+    source_incomplete_sidechains = [
+        {
+            **row,
+            "local_interface_neighborhood": int(row["pose_index"]) in local_indices,
+        }
+        for row in source_incomplete_sidechains
+    ]
     raw_ca = _ca_coordinates(raw_pose, local_indices)
     raw_cross = _cross_interface_energy(raw_pose, scorefxn, "C", "R")
     raw_total = float(scorefxn(raw_pose))
@@ -179,6 +194,22 @@ def main() -> int:
         "vhh_contact_count": len(raw_contacts["chain_a_auth_positions"]),
         "receptor_epitope_count": len(raw_contacts["chain_b_auth_positions"]),
         "local_repack_residue_count": len(local_indices),
+        "source_incomplete_sidechain_residue_count": len(
+            source_incomplete_sidechains
+        ),
+        "source_missing_heavy_atom_count": sum(
+            int(row["missing_heavy_atom_count"])
+            for row in source_incomplete_sidechains
+        ),
+        "source_incomplete_sidechain_local_residue_count": sum(
+            bool(row["local_interface_neighborhood"])
+            for row in source_incomplete_sidechains
+        ),
+        "source_incomplete_vhh_interface_positions": [
+            int(row["auth_seq_id"])
+            for row in source_incomplete_sidechains
+            if row["vhh_experimental_interface"]
+        ],
     }
 
     replicate_rows: list[dict[str, object]] = []
@@ -300,6 +331,7 @@ def main() -> int:
             "absolute_total_score_as_affinity",
             "membrane_protein_absolute_stability",
         ],
+        "source_incomplete_sidechains": source_incomplete_sidechains,
     }
 
     raw_per_residue = _per_residue_rows(
@@ -686,8 +718,7 @@ def _cross_interface_energy(pose, scorefxn, chain_a: str, chain_b: str) -> dict[
             if edge is None:
                 continue
             result["total"] += float(edge.dot(weights))
-            energy_map = pyrosetta.rosetta.core.scoring.EMapVector()
-            edge.fill_energy_map(energy_map)
+            energy_map = energy_edge_map(edge)
             result["fa_atr"] += float(energy_map[fa_atr_type] * weights[fa_atr_type])
             result["fa_rep"] += float(energy_map[fa_rep_type] * weights[fa_rep_type])
     return result

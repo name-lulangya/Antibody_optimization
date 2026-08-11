@@ -12,8 +12,10 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from antibody_optimization.pyrosetta_scoring_calibration import (  # noqa: E402
     CalibrationThresholds,
+    audit_source_incomplete_sidechains,
     build_calibration_gate,
     choose_representative_replicate,
+    energy_edge_map,
     load_calibration_inputs,
     render_calibration_svg,
     select_protocol,
@@ -25,6 +27,10 @@ STAGE0 = PROJECT_ROOT / "docs/result_artifacts/candidate_design/stage0_contract_
 IMPORT_GATE = (
     PROJECT_ROOT
     / "docs/result_artifacts/structure_preparation/pyrosetta_wt_import_20260810"
+)
+STRUCTURE_BASELINE = (
+    PROJECT_ROOT
+    / "docs/result_artifacts/input_baseline/structure_released_20260810"
 )
 SCRIPT = PROJECT_ROOT / "scripts/structure_preparation/calibrate_pyrosetta_scoring.py"
 SLURM = (
@@ -74,6 +80,36 @@ class PyRosettaScoringCalibrationTests(unittest.TestCase):
         self.assertEqual(inputs["vhh_interface_auth_positions"][0], 33)
         self.assertEqual(inputs["vhh_interface_auth_positions"][-1], 116)
         self.assertEqual(inputs["import_gate"]["status"], "pass")
+        incomplete = audit_source_incomplete_sidechains(
+            structure_baseline_dir=STRUCTURE_BASELINE,
+            vhh_interface_auth_positions=inputs["vhh_interface_auth_positions"],
+        )
+        self.assertEqual(len(incomplete), 20)
+        self.assertEqual(
+            sum(int(row["missing_heavy_atom_count"]) for row in incomplete),
+            90,
+        )
+        self.assertEqual(
+            [
+                (row["chain_id"], row["auth_seq_id"], row["residue_name"])
+                for row in incomplete
+                if row["vhh_experimental_interface"]
+            ],
+            [("C", 102, "TYR")],
+        )
+
+    def test_energy_edge_map_uses_pyrosetta_2026_zero_argument_api(self) -> None:
+        class FakeEnergyEdge:
+            def __init__(self) -> None:
+                self.call_count = 0
+
+            def fill_energy_map(self):
+                self.call_count += 1
+                return "emap"
+
+        edge = FakeEnergyEdge()
+        self.assertEqual(energy_edge_map(edge), "emap")
+        self.assertEqual(edge.call_count, 1)
 
     def test_simplest_passing_protocol_is_selected(self) -> None:
         rows = []

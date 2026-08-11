@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-10 22:41:34
+Last updated: 2026-08-11 09:17:37
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -17,7 +17,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - PyRosetta：`/data/software/env/luly25/multi_ligand`，Python 3.10.20，PyRosetta 2026.03，Rosetta commit `5e498f1409c68ade56c8ce5842bf79e1b02e8db4`。
 - nanoBERT：`/data/software/env/luly25/vhh-lm`，`NaturalAntibody/nanoBERT` revision `edc8182ad89a827f8737fa572c6b5fac6197e6b0`，使用已记录离线缓存。
 - Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；评分协议校准实现提交`1b11126`已推送至`origin/main`。
-- 阶段2的本地阶段0合同和远程PyRosetta WT安全导入门已运行；评分协议校准入口与Slurm已实现但尚未实跑。尚未运行AF3、nanoBERT/AntiFold、候选生成、正式亲和力评分或表达模型训练。
+- 阶段2的本地阶段0合同和远程PyRosetta WT安全导入门已运行；评分协议校准首次远程运行在读取`EnergyEdge`时因PyRosetta 2026.03 API签名不匹配停止，未产生校准结果，入口现已修复并等待重跑。尚未运行AF3、nanoBERT/AntiFold、候选生成、正式亲和力评分或表达模型训练。
 
 ## Frozen Inputs
 
@@ -52,6 +52,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - `pooled_expression_model_release=pass`：允许保留删失/分组语义的联合建模；独立的`nb252_expression_transfer`仍为`blocked`，直到模型经适当验证。
 - `stage0_local_contract=pass`、`candidate_manifest_release=pass`：关键来源哈希、母本、映射、链身份、缺失坐标、界面、SSGS和实验二硫键均通过本地重检。
 - `pyrosetta_wt_import_release=pass`、`pyrosetta_affinity_scoring_release=ready_for_scoring_protocol_calibration`：远程WT门已完成，396个polymer残基、4个断点、PDBInfo映射、Cys22–Cys95二硫键和有限raw score均通过；这只释放评分协议校准，不释放候选亲和力评分。
+- source结构有20个侧链不完整的标准残基（Nb252 3、NK2R 17），按标准重原子计数共缺90个；Nb252 auth 102 TYR属于已确认界面。PyRosetta补建这些原子产生的warning不单独阻断，但校准输出必须记录该事实，且界面邻域使用统一repack，避免WT/候选准备不对称。
 - `finalize_input_baseline.py` 已用真实 structure mapping/interface 重建 canonical 128 位点图和 `stage1_gate.json`。程序 `status=pass` 不代表科学 release gate 自动通过。
 
 ## Stage-2 Phase 0 Result
@@ -72,13 +73,13 @@ Timezone: Asia/Shanghai (UTC+08:00)
 ## Verification
 
 - 阶段0专项：`3 passed`；覆盖真实128位合同、过期哈希拒绝、CSV BOM/LF、拒绝覆盖、固定时间戳双跑六制品逐字节一致。
-- 阶段0图已人工检查，轨道、坐标轴和图例无遮挡。当前全套验收为`110 passed, 1 skipped, 4 subtests passed`；唯一skip仍是Windows真实symlink权限测试。
+- 阶段0图已人工检查，轨道、坐标轴和图例无遮挡。当前全套验收为`111 passed, 1 skipped, 4 subtests passed`；唯一skip仍是Windows真实symlink权限测试。
 - `pip check`、`python -m compileall -q src scripts tests`、`git diff --check` 均通过。
 - 修复覆盖：ChimeraX sandbox 入口、实际模型名、无 polymer sequence 时严格 source-auth exact-WT 映射、较长 polymer 中唯一 authoritative segment、`not_evaluable` summary 状态。
 
 ## Required Next Steps
 
-1. 在服务器已验证仓库根提交`sbatch scripts/structure_preparation/submit_pyrosetta_scoring_calibration.slurm`，完成后同步gate、两个CSV、协议选择JSON、代表WT PDB、SVG和run summary；结果`pass`前不得启动候选亲和力评分。
+1. 服务器拉取包含PyRosetta 2026.03 `EnergyEdge.fill_energy_map()`修复的提交后，确认失败运行未留下任何正式输出文件，再重新提交`sbatch scripts/structure_preparation/submit_pyrosetta_scoring_calibration.slurm`；空输出目录可保留，结果`pass`前不得启动候选亲和力评分。
 2. 建立本地WT理化/化学风险基线，并在服务器核验AntiFold与VHH自然度/可开发性模型的版本、许可证、输入范围和环境隔离。
 3. 生成绑定阶段0合同哈希的单点候选清单；此步先生成/过滤，不提前运行大规模结构评分。
 4. 实现保留LLJ删失/分组语义的表达基线与交叉验证，决定`nb252_expression_transfer`能否释放。

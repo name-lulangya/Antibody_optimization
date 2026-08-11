@@ -24,6 +24,29 @@ class ScoringCalibrationError(ValueError):
 
 PROTOCOL_ORDER = ("interface_repack", "interface_repack_constrained_min")
 
+STANDARD_HEAVY_ATOM_COUNTS = {
+    "ALA": 5,
+    "ARG": 11,
+    "ASN": 8,
+    "ASP": 8,
+    "CYS": 6,
+    "GLN": 9,
+    "GLU": 9,
+    "GLY": 4,
+    "HIS": 10,
+    "ILE": 8,
+    "LEU": 8,
+    "LYS": 9,
+    "MET": 8,
+    "PHE": 11,
+    "PRO": 7,
+    "SER": 6,
+    "THR": 7,
+    "TRP": 14,
+    "TYR": 12,
+    "VAL": 7,
+}
+
 REPLICATE_FIELDS = [
     "protocol",
     "replicate",
@@ -130,6 +153,69 @@ def load_calibration_inputs(
         "stage0_run_id": str(contract.get("generated_at", "")),
         "import_gate_run_id": str(import_gate.get("generated_at", "")),
     }
+
+
+def audit_source_incomplete_sidechains(
+    *,
+    structure_baseline_dir: Path,
+    vhh_interface_auth_positions: Sequence[int],
+) -> list[dict[str, object]]:
+    """Identify incomplete standard-residue heavy-atom sets from the source inventory.
+
+    The released inventory records observed heavy-atom counts before PyRosetta
+    fills absent atoms.  This audit intentionally reports counts, not guessed
+    missing atom names.
+    """
+
+    rows = _load_csv(structure_baseline_dir / "structure_residue_inventory.csv")
+    selected = [
+        row
+        for row in rows
+        if row.get("source_model_name") == "NK2R-252.pdb"
+        and row.get("entity_type") == "Polymer"
+        and row.get("coordinate_status") == "observed"
+        and row.get("auth_asym_id") in {"C", "R"}
+    ]
+    interface_positions = set(int(value) for value in vhh_interface_auth_positions)
+    incomplete: list[dict[str, object]] = []
+    for pose_index, row in enumerate(selected, start=1):
+        residue_name = row["residue_name"].strip().upper()
+        if residue_name not in STANDARD_HEAVY_ATOM_COUNTS:
+            raise ScoringCalibrationError(
+                f"Unsupported standard heavy-atom audit residue: {residue_name}"
+            )
+        observed = int(row["heavy_atom_count"])
+        expected = STANDARD_HEAVY_ATOM_COUNTS[residue_name]
+        if observed > expected:
+            raise ScoringCalibrationError(
+                f"Observed heavy-atom count exceeds standard count at pose {pose_index}"
+            )
+        if observed == expected:
+            continue
+        chain_id = row["auth_asym_id"]
+        auth_seq_id = int(row["auth_seq_id"])
+        incomplete.append(
+            {
+                "pose_index": pose_index,
+                "chain_id": chain_id,
+                "auth_seq_id": auth_seq_id,
+                "residue_name": residue_name,
+                "observed_heavy_atom_count": observed,
+                "expected_heavy_atom_count": expected,
+                "missing_heavy_atom_count": expected - observed,
+                "vhh_experimental_interface": (
+                    chain_id == "C" and auth_seq_id in interface_positions
+                ),
+                "interpretation": "source_sidechain_incomplete_pyrosetta_rebuilds_atoms",
+            }
+        )
+    return incomplete
+
+
+def energy_edge_map(edge):
+    """Return an EnergyEdge map using the PyRosetta 2026.03 zero-argument API."""
+
+    return edge.fill_energy_map()
 
 
 def summarize_protocol_rows(

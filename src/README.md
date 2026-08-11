@@ -117,10 +117,10 @@
   - 算法假设：上游身份与哈希已由阶段0冻结，本阶段不重复计算；实验模型共有396个有坐标polymer残基，真实断点为Nb252两个missing-density断点、一个C/R链边界和NK2R auth 229–239 missing-density断点。
   - 明确不支持：导入PyRosetta、补全缺失残基、relax/最小化、突变、亲和力解释或生产候选评分。
 - `antibody_optimization.pyrosetta_scoring_calibration`
-  - 用途：验证已通过的WT导入门，汇总固定主链界面repack与界面repack加坐标约束局部最小化的重复指标，按预声明的构象保持、接触保留、界面排斥和重复MAD标准选择最简单的通过协议，并生成亲和力评分release gate及SVG。
+  - 用途：验证已通过的WT导入门，审计PyRosetta补原子前的source标准重原子完整性，汇总固定主链界面repack与界面repack加坐标约束局部最小化的重复指标，按预声明的构象保持、接触保留、界面排斥和重复MAD标准选择最简单的通过协议，并生成亲和力评分release gate及SVG。
   - 主要输入/返回：阶段0合同、WT导入gate、每个协议的重复指标、raw界面`fa_rep`和显式`CalibrationThresholds`；返回协议摘要、代表重复、选择结果和`pyrosetta_scoring_protocol_calibration` gate。
   - 算法假设：`ref2015`只作为相同实验复合物、相同局部准备下的配对相对界面排序信号；优先选择固定主链repack，只有其不通过而受约束局部最小化通过时才选择后者。RosettaMP不与主路线并行，只有局部协议校准失败时才重新评估。
-  - 明确不支持：导入或操作Pose、把完整复合物绝对total score解释为亲和力/稳定性、补全缺失区、全局relax、候选突变或实验效力预测。
+  - 明确不支持：导入或操作Pose、从重原子计数猜测具体缺失原子名、把完整复合物绝对total score解释为亲和力/稳定性、补全缺失区、全局relax、候选突变或实验效力预测。
 
 ## 第一阶段活动入口
 
