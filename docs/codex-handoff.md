@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-11 10:09:53
+Last updated: 2026-08-11 10:15:33
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -16,7 +16,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 远程项目环境：`/data/software/env/luly25/ab_optim`；计划检出父目录 `/homes/Tianlab/luly25/`，登录别名尚未建立。
 - PyRosetta：`/data/software/env/luly25/multi_ligand`，Python 3.10.20，PyRosetta 2026.03，Rosetta commit `5e498f1409c68ade56c8ce5842bf79e1b02e8db4`。
 - nanoBERT：`/data/software/env/luly25/vhh-lm`，`NaturalAntibody/nanoBERT` revision `edc8182ad89a827f8737fa572c6b5fac6197e6b0`，使用已记录离线缓存。
-- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；评分校准科学复核提交`8d3312c`已推送至`origin/main`。
+- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；评分校准v2实现提交`e3de4e6`已推送至`origin/main`。
 - 阶段2的本地阶段0、远程WT安全导入和v1评分校准计算均已运行；v1机器gate形式上为`pass`但科学release仍暂缓。v2选择门、精确接触变化制品和全新Slurm输出路线已实现，等待远程运行。尚未运行AF3、nanoBERT/AntiFold、候选生成、正式亲和力评分或表达模型训练。
 
 ## Frozen Inputs
