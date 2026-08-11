@@ -1,0 +1,44 @@
+{
+  "candidate_filtering_applied": false,
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\build_affinity_full_scan_plan.py",
+    "--candidate-dir",
+    "docs/result_artifacts/candidate_design/affinity_single_mutants_20260811",
+    "--pilot-v2-review",
+    "docs/result_artifacts/candidate_design/affinity_pyrosetta_pilot_v2_20260811/affinity_pilot_v2_scientific_review.json",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/affinity_pyrosetta_full_scan_plan_20260811",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/affinity_pyrosetta_full_scan_plan_20260811.json",
+    "--generated-at",
+    "2026-08-11T16:50:17+08:00"
+  ],
+  "counts": {
+    "candidate_count": 456,
+    "candidates_per_shard": 38,
+    "mutant_evaluation_count": 1368,
+    "shard_count": 12
+  },
+  "elapsed_seconds": 0.029907,
+  "generated_at": "2026-08-11T16:50:17+08:00",
+  "outputs": {
+    "manifest": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_pyrosetta_full_scan_plan_20260811\\full_scan_shard_manifest.csv",
+    "plan": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_pyrosetta_full_scan_plan_20260811\\full_scan_plan.json",
+    "shard_00": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_pyrosetta_full_scan_plan_20260811\\shard_00_candidate_ids.txt",
+    "shard_01": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_pyrosetta_full_scan_plan_20260811\\shard_01_candidate_ids.txt",
+    "shard_02": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_pyrosetta_full_scan_plan_20260811\\shard_02_candidate_ids.txt",
+    "shard_03": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_pyrosetta_full_scan_plan_20260811\\shard_03_candidate_ids.txt",
+    "shard_04": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_pyrosetta_full_scan_plan_20260811\\shard_04_candidate_ids.txt",
+    "shard_05": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_pyrosetta_full_scan_plan_20260811\\shard_05_candidate_ids.txt",
+    "shard_06": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_pyrosetta_full_scan_plan_20260811\\shard_06_candidate_ids.txt",
+    "shard_07": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_pyrosetta_full_scan_plan_20260811\\shard_07_candidate_ids.txt",
+    "shard_08": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_pyrosetta_full_scan_plan_20260811\\shard_08_candidate_ids.txt",
+    "shard_09": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_pyrosetta_full_scan_plan_20260811\\shard_09_candidate_ids.txt",
+    "shard_10": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_pyrosetta_full_scan_plan_20260811\\shard_10_candidate_ids.txt",
+    "shard_11": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_pyrosetta_full_scan_plan_20260811\\shard_11_candidate_ids.txt"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}

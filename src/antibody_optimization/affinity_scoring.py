@@ -285,15 +285,24 @@ def summarize_paired_rows(
     return summaries
 
 
-def build_pilot_gate(
+def build_scoring_run_gate(
     *,
     wt_controls: Sequence[Mapping[str, object]],
     paired_rows: Sequence[Mapping[str, object]],
     summaries: Sequence[Mapping[str, object]],
     expected_candidate_count: int,
     expected_replicates: int,
+    run_kind: str,
+    shard_id: str | None = None,
 ) -> dict[str, object]:
-    """Release full scoring only when the pilot route itself is evaluable."""
+    """Validate one unfiltered pilot or full-scan shard execution."""
+
+    if run_kind not in {"pilot", "full_scan_shard"}:
+        raise AffinityScoringError(f"Unsupported run kind: {run_kind}")
+    if run_kind == "full_scan_shard" and not shard_id:
+        raise AffinityScoringError("Full-scan shard runs require a shard ID")
+    if run_kind == "pilot" and shard_id is not None:
+        raise AffinityScoringError("Pilot runs must not declare a shard ID")
 
     expected_rows = expected_candidate_count * expected_replicates
     blockers = []
@@ -322,9 +331,21 @@ def build_pilot_gate(
         blockers.append("paired_wt_control_failure")
     return {
         "schema_version": 2,
-        "gate_name": "nb252_affinity_pyrosetta_pilot_v2",
+        "gate_name": (
+            "nb252_affinity_pyrosetta_pilot_v2"
+            if run_kind == "pilot"
+            else "nb252_affinity_pyrosetta_full_scan_shard"
+        ),
+        "run_kind": run_kind,
+        "shard_id": shard_id,
         "status": "pass" if not blockers else "blocked",
-        "full_affinity_scan_release": "pass" if not blockers else "blocked",
+        "full_affinity_scan_release": (
+            "pass"
+            if not blockers and run_kind == "pilot"
+            else "pending_complete_merge"
+            if not blockers
+            else "blocked"
+        ),
         "blockers": blockers,
         "candidate_count": len(summaries),
         "wt_control_count": len(wt_controls),
@@ -337,6 +358,26 @@ def build_pilot_gate(
         "candidate_energy_direction_is_not_a_workflow_gate": True,
         "score_semantics": "mutant_minus_paired_WT_Rosetta_ranking_signal",
     }
+
+
+def build_pilot_gate(
+    *,
+    wt_controls: Sequence[Mapping[str, object]],
+    paired_rows: Sequence[Mapping[str, object]],
+    summaries: Sequence[Mapping[str, object]],
+    expected_candidate_count: int,
+    expected_replicates: int,
+) -> dict[str, object]:
+    """Backward-compatible pilot wrapper around the generic run gate."""
+
+    return build_scoring_run_gate(
+        wt_controls=wt_controls,
+        paired_rows=paired_rows,
+        summaries=summaries,
+        expected_candidate_count=expected_candidate_count,
+        expected_replicates=expected_replicates,
+        run_kind="pilot",
+    )
 
 
 def build_wt_control_row(

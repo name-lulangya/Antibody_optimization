@@ -14,6 +14,7 @@ from antibody_optimization.affinity_scoring import (
     AffinityScoringError,
     build_paired_row,
     build_pilot_gate,
+    build_scoring_run_gate,
     build_wt_control_row,
     summarize_paired_rows,
 )
@@ -91,6 +92,7 @@ def test_paired_summary_keeps_unfavorable_candidate_evaluable() -> None:
         expected_replicates=3,
     )
     assert gate["status"] == "pass"
+    assert gate["run_kind"] == "pilot"
     assert gate["candidate_filtering_applied"] is False
     assert gate["full_scan_contract"] == "score_all_declared_candidates_then_filter_once"
 
@@ -162,6 +164,34 @@ def test_mutant_runtime_failure_blocks_pilot() -> None:
     assert summaries[0]["interpretation"] == "runtime_failure"
     assert summaries[0]["selection_status"] == "not_applied_scan_stage"
     assert gate["status"] == "blocked"
+
+
+def test_full_scan_shard_pass_waits_for_complete_merge() -> None:
+    rows = [
+        build_paired_row(
+            _candidate(),
+            replicate=i,
+            seed=100 + i,
+            wt_metrics=_metrics(),
+            mutant_metrics=_metrics(),
+        )
+        for i in range(1, 4)
+    ]
+    summaries = summarize_paired_rows(rows, expected_replicates=3)
+    gate = build_scoring_run_gate(
+        wt_controls=[
+            build_wt_control_row(replicate=i, seed=100 + i, metrics=_metrics())
+            for i in range(1, 4)
+        ],
+        paired_rows=rows,
+        summaries=summaries,
+        expected_candidate_count=1,
+        expected_replicates=3,
+        run_kind="full_scan_shard",
+        shard_id="shard_00",
+    )
+    assert gate["status"] == "pass"
+    assert gate["full_affinity_scan_release"] == "pending_complete_merge"
 
 
 def test_summary_rejects_missing_replicate() -> None:

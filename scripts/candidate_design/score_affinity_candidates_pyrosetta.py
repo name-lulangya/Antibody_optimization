@@ -22,7 +22,7 @@ from antibody_optimization.affinity_scoring import (  # noqa: E402
     SUMMARY_FIELDS,
     WT_CONTROL_FIELDS,
     build_paired_row,
-    build_pilot_gate,
+    build_scoring_run_gate,
     build_wt_control_row,
     summarize_paired_rows,
 )
@@ -36,7 +36,7 @@ from antibody_optimization.pyrosetta_import_gate import (  # noqa: E402
 from antibody_optimization import pyrosetta_runtime as runtime  # noqa: E402
 
 
-OUTPUT_NAMES = {
+PILOT_OUTPUT_NAMES = {
     "wt_controls": "wt_replicate_metrics.csv",
     "paired": "candidate_replicate_metrics.csv",
     "summary": "candidate_summary.csv",
@@ -44,11 +44,24 @@ OUTPUT_NAMES = {
     "figure": "affinity_scoring_pilot_qc.svg",
 }
 
+SHARD_OUTPUT_NAMES = {
+    "wt_controls": "wt_replicate_metrics.csv",
+    "paired": "candidate_replicate_metrics.csv",
+    "summary": "candidate_summary.csv",
+    "gate": "affinity_scoring_shard_gate.json",
+}
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--candidate-dir", type=Path, required=True)
     parser.add_argument("--candidate-id-file", type=Path, required=True)
+    parser.add_argument(
+        "--run-kind", choices=("pilot", "full_scan_shard"), default="pilot"
+    )
+    parser.add_argument("--shard-id")
+    parser.add_argument("--scan-plan-dir", type=Path)
+    parser.add_argument("--pilot-v2-review", type=Path)
     parser.add_argument("--stage0-dir", type=Path, required=True)
     parser.add_argument("--structure-baseline-dir", type=Path, required=True)
     parser.add_argument("--calibration-dir", type=Path, required=True)
@@ -74,15 +87,62 @@ def main() -> int:
     structure_dir = _project_directory(args.structure_baseline_dir)
     calibration_dir = _project_directory(args.calibration_dir)
     candidate_id_file = args.candidate_id_file.expanduser().resolve(strict=True)
-    if candidate_id_file.parent != candidate_dir:
-        raise ValueError("Candidate ID file must belong to the declared candidate directory")
+    scan_source_paths: list[Path] = []
+    if args.run_kind == "pilot":
+        if args.shard_id or args.scan_plan_dir or args.pilot_v2_review:
+            raise ValueError("Pilot mode does not accept full-scan shard arguments")
+        if candidate_id_file.parent != candidate_dir:
+            raise ValueError(
+                "Pilot candidate ID file must belong to the candidate directory"
+            )
+    else:
+        if not args.shard_id or args.scan_plan_dir is None or args.pilot_v2_review is None:
+            raise ValueError(
+                "Full-scan shard mode requires shard ID, scan plan, and V2 review"
+            )
+        plan_dir = _project_directory(args.scan_plan_dir)
+        expected_id_file = plan_dir / f"{args.shard_id}_candidate_ids.txt"
+        if candidate_id_file != expected_id_file.resolve(strict=True):
+            raise ValueError("Candidate ID file does not match the declared shard")
+        plan = _load_json(plan_dir / "full_scan_plan.json")
+        review_path = args.pilot_v2_review.expanduser().resolve(strict=True)
+        review_path.relative_to(PROJECT_ROOT.resolve(strict=True))
+        review = _load_json(review_path)
+        release = review.get("scientific_release")
+        if (
+            plan.get("status") != "pass"
+            or plan.get("maximum_array_concurrency") != 4
+            or plan.get("full_scan_contract")
+            != "score_all_declared_candidates_then_filter_once"
+            or not isinstance(release, dict)
+            or release.get("status")
+            != "released_for_full_456_scan_implementation"
+        ):
+            raise ValueError("Full-scan plan or pilot V2 release is not valid")
+        declared = {
+            str(row["shard_id"]): int(row["candidate_count"])
+            for row in plan.get("shards", [])
+        }
+        if declared.get(args.shard_id) != 38:
+            raise ValueError("Shard is not declared with 38 candidates")
+        scan_source_paths = [
+            plan_dir / "full_scan_plan.json",
+            plan_dir / "full_scan_shard_manifest.csv",
+            review_path,
+        ]
 
     candidate_gate = _load_json(candidate_dir / "affinity_candidate_gate.json")
     calibration_gate = _load_json(
         calibration_dir / "pyrosetta_scoring_calibration_gate.json"
     )
     selection = _load_json(calibration_dir / "selected_scoring_protocol.json")
-    if candidate_gate.get("pyrosetta_pilot_release") != "ready_for_remote_pilot":
+    if candidate_gate.get("candidate_manifest_release") != "pass":
+        raise ValueError("Candidate manifest is not released")
+    if (
+        args.run_kind == "pilot"
+        and candidate_gate.get("pyrosetta_pilot_release")
+        != "ready_for_remote_pilot"
+    ):
         raise ValueError("Candidate manifest does not release the remote pilot")
     if calibration_gate.get("pyrosetta_affinity_scoring_release") != "pass":
         raise ValueError("PyRosetta calibration does not release candidate scoring")
@@ -110,6 +170,8 @@ def main() -> int:
     if missing:
         raise ValueError(f"Unknown candidate IDs: {missing}")
     candidates = [by_id[candidate_id] for candidate_id in requested_ids]
+    if args.run_kind == "full_scan_shard" and len(candidates) != 38:
+        raise ValueError("Each full-scan shard must contain exactly 38 candidates")
 
     structure_inputs = load_released_stage_inputs(
         stage0_dir=stage0_dir,
@@ -140,18 +202,22 @@ def main() -> int:
         calibration_dir / "selected_scoring_protocol.json",
         calibration_dir / "selected_contact_changes.csv",
         starting_pdb,
+        *scan_source_paths,
     ]
     output_dir = args.output_dir.expanduser().absolute()
     run_summary = args.run_summary.expanduser().absolute()
+    output_names = (
+        PILOT_OUTPUT_NAMES if args.run_kind == "pilot" else SHARD_OUTPUT_NAMES
+    )
     validated = validate_file_paths(
         project_root=PROJECT_ROOT,
         source_paths=source_paths,
         target_paths=[
-            *[output_dir / name for name in OUTPUT_NAMES.values()],
+            *[output_dir / name for name in output_names.values()],
             run_summary,
         ],
     )
-    final_paths = dict(zip(OUTPUT_NAMES, validated.target_paths[:-1], strict=True))
+    final_paths = dict(zip(output_names, validated.target_paths[:-1], strict=True))
     run_summary = validated.target_paths[-1]
     existing = [path for path in [*final_paths.values(), run_summary] if path.exists()]
     if existing:
@@ -175,7 +241,8 @@ def main() -> int:
     for replicate in range(1, args.replicates + 1):
         seed = args.base_seed + replicate
         print(
-            f"Affinity pilot V2: replicate {replicate}/{args.replicates} seed={seed}",
+            f"Affinity {args.run_kind}: replicate {replicate}/{args.replicates} "
+            f"seed={seed}",
             flush=True,
         )
         wt_pose = runtime.prepare_interface_pose(
@@ -259,12 +326,14 @@ def main() -> int:
             )
 
     summaries = summarize_paired_rows(paired_rows, expected_replicates=args.replicates)
-    gate = build_pilot_gate(
+    gate = build_scoring_run_gate(
         wt_controls=wt_control_rows,
         paired_rows=paired_rows,
         summaries=summaries,
         expected_candidate_count=len(candidates),
         expected_replicates=args.replicates,
+        run_kind=args.run_kind,
+        shard_id=args.shard_id,
     )
     gate.update(
         {
@@ -277,13 +346,14 @@ def main() -> int:
 
     with tempfile.TemporaryDirectory(prefix=".affinity-scoring-", dir=PROJECT_ROOT) as temp:
         staging = Path(temp)
-        staged = {key: staging / name for key, name in OUTPUT_NAMES.items()}
+        staged = {key: staging / name for key, name in output_names.items()}
         staged_summary = staging / "run_summary.json"
         _write_csv(staged["wt_controls"], wt_control_rows, WT_CONTROL_FIELDS)
         _write_csv(staged["paired"], paired_rows, PAIRED_FIELDS)
         _write_csv(staged["summary"], summaries, SUMMARY_FIELDS)
         _write_json(staged["gate"], gate)
-        _render_svg(summaries, staged["figure"])
+        if "figure" in staged:
+            _render_svg(summaries, staged["figure"])
         _write_json(
             staged_summary,
             {
@@ -300,12 +370,14 @@ def main() -> int:
                 "replicate_count": args.replicates,
                 "candidate_filtering_applied": False,
                 "full_scan_contract": "score_all_declared_candidates_then_filter_once",
+                "run_kind": args.run_kind,
+                "shard_id": args.shard_id,
                 "outputs": {key: str(path) for key, path in final_paths.items()},
             },
         )
         replace_staged_files(
             {
-                **{staged[key]: final_paths[key] for key in OUTPUT_NAMES},
+                **{staged[key]: final_paths[key] for key in output_names},
                 staged_summary: run_summary,
             },
             project_root=PROJECT_ROOT,
