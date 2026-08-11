@@ -28,12 +28,14 @@ from antibody_optimization.pyrosetta_import_gate import (  # noqa: E402
     load_released_stage_inputs,
 )
 from antibody_optimization.pyrosetta_scoring_calibration import (  # noqa: E402
+    CONTACT_CHANGE_FIELDS,
     PER_RESIDUE_FIELDS,
     PROTOCOL_ORDER,
     REPLICATE_FIELDS,
     CalibrationThresholds,
     audit_source_incomplete_sidechains,
     build_calibration_gate,
+    build_contact_change_rows,
     choose_representative_replicate,
     load_calibration_inputs,
     energy_edge_map,
@@ -47,6 +49,7 @@ OUTPUT_NAMES = {
     "replicates": "protocol_replicate_metrics.csv",
     "per_residue": "wt_per_residue_energy.csv",
     "selection": "selected_scoring_protocol.json",
+    "contact_changes": "selected_contact_changes.csv",
     "gate": "pyrosetta_scoring_calibration_gate.json",
     "figure": "pyrosetta_scoring_calibration_qc.svg",
     "representative": "selected_wt_prepared.pdb",
@@ -168,6 +171,10 @@ def main() -> int:
         "chain_a_auth_positions": expected_vhh,
         "chain_b_auth_positions": raw_contacts["chain_b_auth_positions"],
     }
+    reference_contact_distances = {
+        "C": _auth_minimum_partner_distances(raw_pose, "C", "R"),
+        "R": _auth_minimum_partner_distances(raw_pose, "R", "C"),
+    }
     local_indices = _interface_neighborhood(
         raw_pose,
         chain_a="C",
@@ -263,6 +270,7 @@ def main() -> int:
     )
     representative_pose = None
     representative_seed = None
+    representative_row = None
     if selected_protocol is not None and representative_replicate is not None:
         representative_row = next(
             row
@@ -281,6 +289,46 @@ def main() -> int:
         )
         _assert_pose_safety(representative_pose, structure_inputs)
 
+    contact_change_rows: list[dict[str, object]] = []
+    if representative_pose is not None and representative_row is not None:
+        prepared_contacts = _contact_sets(
+            representative_pose,
+            chain_a="C",
+            chain_b="R",
+            cutoff=args.contact_cutoff_angstrom,
+        )
+        residue_names = _auth_residue_names(representative_pose)
+        prepared_contact_distances = {
+            "C": _auth_minimum_partner_distances(representative_pose, "C", "R"),
+            "R": _auth_minimum_partner_distances(representative_pose, "R", "C"),
+        }
+        contact_change_rows.extend(
+            build_contact_change_rows(
+                molecule_side="Nb252_VHH",
+                chain_id="C",
+                reference_positions=reference_contacts["chain_a_auth_positions"],
+                prepared_positions=prepared_contacts["chain_a_auth_positions"],
+                residue_names=residue_names["C"],
+                reference_minimum_distances=reference_contact_distances["C"],
+                prepared_minimum_distances=prepared_contact_distances["C"],
+            )
+        )
+        contact_change_rows.extend(
+            build_contact_change_rows(
+                molecule_side="NK2R",
+                chain_id="R",
+                reference_positions=reference_contacts["chain_b_auth_positions"],
+                prepared_positions=prepared_contacts["chain_b_auth_positions"],
+                residue_names=residue_names["R"],
+                reference_minimum_distances=reference_contact_distances["R"],
+                prepared_minimum_distances=prepared_contact_distances["R"],
+            )
+        )
+        _assert_representative_contact_metrics(
+            representative_row=representative_row,
+            contact_change_rows=contact_change_rows,
+        )
+
     gate = build_calibration_gate(
         generated_at=generated_at,
         pyrosetta_version=version,
@@ -290,18 +338,19 @@ def main() -> int:
         protocol_summaries=summaries,
         selected_protocol=selected_protocol,
         representative_replicate=representative_replicate,
+        contact_change_rows=contact_change_rows,
         stage0_run_id=str(calibration_inputs["stage0_run_id"]),
         import_gate_run_id=str(calibration_inputs["import_gate_run_id"]),
     )
     selection = {
-        "schema_version": 1,
+        "schema_version": 2,
         "status": gate["status"],
         "selected_protocol": selected_protocol,
         "representative_replicate": representative_replicate,
         "representative_seed": representative_seed,
         "score_function": SCORE_FUNCTION,
         "protocol_order": list(PROTOCOL_ORDER),
-        "selection_rule": "first_passing_protocol_prefer_interface_repack",
+        "selection_rule": "first_protocol_passing_all_structure_reproducibility_and_negative_binding_direction_gates",
         "local_interface_definition": {
             "chains": "C_R",
             "heavy_atom_neighborhood_angstrom": args.interface_neighborhood_angstrom,
@@ -366,12 +415,17 @@ def main() -> int:
             PER_RESIDUE_FIELDS,
         )
         _write_json(staged["selection"], selection)
+        _write_csv(
+            staged["contact_changes"],
+            contact_change_rows,
+            CONTACT_CHANGE_FIELDS,
+        )
         _write_json(staged["gate"], gate)
         render_calibration_svg(gate=gate, path=staged["figure"])
         if representative_pose is not None:
             representative_pose.dump_pdb(str(staged["representative"]))
         summary = {
-            "schema_version": 1,
+            "schema_version": 2,
             "status": gate["status"],
             "generated_at": generated_at,
             "elapsed_seconds": round(time.perf_counter() - started, 6),
@@ -700,6 +754,45 @@ def _minimum_interchain_distance(pose, chain_a: str, chain_b: str) -> float:
     return minimum
 
 
+def _auth_minimum_partner_distances(
+    pose, chain_id: str, partner_chain_id: str
+) -> dict[int, float]:
+    pdb_info = pose.pdb_info()
+    indices = [
+        index
+        for index in range(1, pose.total_residue() + 1)
+        if str(pdb_info.chain(index)).strip() == chain_id
+    ]
+    partner_indices = [
+        index
+        for index in range(1, pose.total_residue() + 1)
+        if str(pdb_info.chain(index)).strip() == partner_chain_id
+    ]
+    result: dict[int, float] = {}
+    for index in indices:
+        residue = pose.residue(index)
+        minimum = math.inf
+        for partner_index in partner_indices:
+            partner = pose.residue(partner_index)
+            for atom in range(1, residue.nheavyatoms() + 1):
+                for partner_atom in range(1, partner.nheavyatoms() + 1):
+                    distance = (
+                        residue.xyz(atom) - partner.xyz(partner_atom)
+                    ).norm()
+                    minimum = min(minimum, distance)
+        if not math.isfinite(minimum):
+            raise RuntimeError(
+                f"No finite partner distance for {chain_id} pose residue {index}"
+            )
+        auth_seq_id = int(pdb_info.number(index))
+        if auth_seq_id in result:
+            raise RuntimeError(
+                f"Duplicate auth position in contact distances: {chain_id} {auth_seq_id}"
+            )
+        result[auth_seq_id] = minimum
+    return result
+
+
 def _cross_interface_energy(pose, scorefxn, chain_a: str, chain_b: str) -> dict[str, float]:
     import pyrosetta
 
@@ -785,6 +878,44 @@ def _ca_rmsd(
 
 def _set_retention(reference: set[int], observed: set[int]) -> float:
     return len(reference & observed) / len(reference) if reference else math.nan
+
+
+def _auth_residue_names(pose) -> dict[str, dict[int, str]]:
+    pdb_info = pose.pdb_info()
+    result: dict[str, dict[int, str]] = {"C": {}, "R": {}}
+    for index in range(1, pose.total_residue() + 1):
+        chain_id = str(pdb_info.chain(index)).strip()
+        if chain_id not in result:
+            continue
+        auth_seq_id = int(pdb_info.number(index))
+        residue_name = str(pose.residue(index).name3()).strip().upper()
+        existing = result[chain_id].get(auth_seq_id)
+        if existing is not None and existing != residue_name:
+            raise RuntimeError(
+                f"Conflicting residue identity at {chain_id} auth {auth_seq_id}"
+            )
+        result[chain_id][auth_seq_id] = residue_name
+    return result
+
+
+def _assert_representative_contact_metrics(
+    *,
+    representative_row: dict[str, object],
+    contact_change_rows: list[dict[str, object]],
+) -> None:
+    for side, field in (
+        ("Nb252_VHH", "vhh_contact_retention"),
+        ("NK2R", "receptor_epitope_retention"),
+    ):
+        rows = [row for row in contact_change_rows if row["molecule_side"] == side]
+        reference_count = sum(bool(row["reference_contact"]) for row in rows)
+        retained_count = sum(row["contact_status"] == "retained" for row in rows)
+        observed = retained_count / reference_count if reference_count else math.nan
+        expected = float(representative_row[field])
+        if not math.isclose(observed, expected, rel_tol=0.0, abs_tol=1e-12):
+            raise RuntimeError(
+                f"Representative {side} contact retention {observed} != {expected}"
+            )
 
 
 def _per_residue_rows(

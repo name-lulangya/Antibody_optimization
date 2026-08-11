@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-11 09:56:25
+Last updated: 2026-08-11 10:09:53
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -17,7 +17,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - PyRosetta：`/data/software/env/luly25/multi_ligand`，Python 3.10.20，PyRosetta 2026.03，Rosetta commit `5e498f1409c68ade56c8ce5842bf79e1b02e8db4`。
 - nanoBERT：`/data/software/env/luly25/vhh-lm`，`NaturalAntibody/nanoBERT` revision `edc8182ad89a827f8737fa572c6b5fac6197e6b0`，使用已记录离线缓存。
 - Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；评分校准科学复核提交`8d3312c`已推送至`origin/main`。
-- 阶段2的本地阶段0、远程WT安全导入和评分校准计算均已运行；校准机器gate形式上为`pass`，但科学复核发现自动选择标准过宽，当前结果不得释放候选评分。尚未运行AF3、nanoBERT/AntiFold、候选生成、正式亲和力评分或表达模型训练。
+- 阶段2的本地阶段0、远程WT安全导入和v1评分校准计算均已运行；v1机器gate形式上为`pass`但科学release仍暂缓。v2选择门、精确接触变化制品和全新Slurm输出路线已实现，等待远程运行。尚未运行AF3、nanoBERT/AntiFold、候选生成、正式亲和力评分或表达模型训练。
 
 ## Frozen Inputs
 
@@ -65,7 +65,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 ## Current Optimization Plan
 
 1. **远程WT结构门（已完成，实测14.123538秒）**：PyRosetta 2026.03直接导入未补全实验complex，396个polymer残基和4个预期断点均安全，映射与二硫键通过；未做relax、补全、突变或候选评分。权威结果位于`structure_preparation/pyrosetta_wt_import_20260810/pyrosetta_wt_import_gate.json`。
-2. **WT评分协议校准（计算完成，实测404.321078秒；选择待修订）**：两条协议各8个重复均满足原内部阈值，但repack-only保持显著正`dG_separated`和正跨界面能，不能作为实验结合复合物的候选母本；需补充界面必须非碰撞主导且结合方向一致的选择条件，重新生成受约束局部最小化代表WT和gate。不补全、全局relax或生成突变。
+2. **WT评分协议校准（v2入口已完成，待远程运行）**：除原重复稳定、接触/表位和构象门外，v2要求每个重复的`dG_separated < 0`且跨界面能`< 0`；真实v1表集成测试确定阻断repack-only并唯一选择受约束局部最小化。将生成全新代表WT、逐位置接触变化CSV和schema v2 gate，不补全、全局relax或生成突变。
 3. **WT序列/可开发性基线（约0.5–1天）**：本地计算序列理化、化学风险和47条yield的保留删失语义基线；服务器部署/固定AntiFold及VHH适用的自然度/可开发性模型。nanoBERT仅在能提供独立验证价值时使用，不与同类语言模型重复堆叠。
 4. **可审计单点景观（约0.5–1天）**：24个实验界面位点的全替换理论上限为456个单点；先由结构/序列模型提出或排序，再应用Cys22/Cys95、SSGS、WT一致性、化学风险和表位/构象约束，预计保留约200–400个可评分候选。每个候选绑定阶段0合同和全部上游哈希，实际数量以生成制品为准。
 5. **亲和力/稳定性筛选（约2–4天）**：PyRosetta快速界面评分约4–16小时，再对入围者运行flex-ddG/折叠稳定性复核约1–3天；使用实验complex，缺失位点保持非可评估。所有长任务走既定Slurm规则。
@@ -74,13 +74,13 @@ Timezone: Asia/Shanghai (UTC+08:00)
 ## Verification
 
 - 阶段0专项：`3 passed`；覆盖真实128位合同、过期哈希拒绝、CSV BOM/LF、拒绝覆盖、固定时间戳双跑六制品逐字节一致。
-- 阶段0图已人工检查，轨道、坐标轴和图例无遮挡。当前全套验收为`111 passed, 1 skipped, 4 subtests passed`；唯一skip仍是Windows真实symlink权限测试。
+- 阶段0图已人工检查，轨道、坐标轴和图例无遮挡。当前全套验收为`113 passed, 1 skipped, 4 subtests passed`；唯一skip仍是Windows真实symlink权限测试。
 - `pip check`、`python -m compileall -q src scripts tests`、`git diff --check` 均通过。
 - 修复覆盖：ChimeraX sandbox 入口、实际模型名、无 polymer sequence 时严格 source-auth exact-WT 映射、较长 polymer 中唯一 authoritative segment、`not_evaluable` summary 状态。
 
 ## Required Next Steps
 
-1. 修订评分校准选择gate：除重复稳定、接触和构象保持外，要求准备后的实验结合复合物不再由正跨界面能/高残余`fa_rep`主导；用全新输出目录重跑并生成受约束局部最小化代表WT。科学review通过前不得启动候选亲和力评分。
+1. 服务器拉取v2实现后，从已验证仓库根提交`sbatch scripts/structure_preparation/submit_pyrosetta_scoring_calibration.slurm`；活动路线写入`pyrosetta_scoring_calibration_v2_20260811/`，不得覆盖v1。同步并审核schema v2 gate、受约束局部最小化代表WT及精确接触变化后，才决定是否释放候选评分。
 2. 建立本地WT理化/化学风险基线，并在服务器核验AntiFold与VHH自然度/可开发性模型的版本、许可证、输入范围和环境隔离。
 3. 生成绑定阶段0合同哈希的单点候选清单；此步先生成/过滤，不提前运行大规模结构评分。
 4. 实现保留LLJ删失/分组语义的表达基线与交叉验证，决定`nb252_expression_transfer`能否释放。

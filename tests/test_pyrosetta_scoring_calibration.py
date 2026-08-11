@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import csv
+import json
 import subprocess
 import sys
 import tempfile
@@ -14,6 +16,7 @@ from antibody_optimization.pyrosetta_scoring_calibration import (  # noqa: E402
     CalibrationThresholds,
     audit_source_incomplete_sidechains,
     build_calibration_gate,
+    build_contact_change_rows,
     choose_representative_replicate,
     energy_edge_map,
     load_calibration_inputs,
@@ -31,6 +34,10 @@ IMPORT_GATE = (
 STRUCTURE_BASELINE = (
     PROJECT_ROOT
     / "docs/result_artifacts/input_baseline/structure_released_20260810"
+)
+V1_CALIBRATION = (
+    PROJECT_ROOT
+    / "docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_20260810"
 )
 SCRIPT = PROJECT_ROOT / "scripts/structure_preparation/calibrate_pyrosetta_scoring.py"
 SLURM = (
@@ -146,6 +153,58 @@ class PyRosettaScoringCalibrationTests(unittest.TestCase):
         self.assertEqual(selected, "interface_repack_constrained_min")
         self.assertEqual(blockers, [])
 
+    def test_real_v1_metrics_block_repack_and_select_constrained_min(self) -> None:
+        with (V1_CALIBRATION / "protocol_replicate_metrics.csv").open(
+            "r", encoding="utf-8-sig", newline=""
+        ) as handle:
+            rows = list(csv.DictReader(handle))
+        gate = json.loads(
+            (V1_CALIBRATION / "pyrosetta_scoring_calibration_gate.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        summaries = summarize_protocol_rows(
+            rows,
+            raw_interface_fa_rep=float(
+                gate["raw_import_metrics"]["interface_fa_rep"]
+            ),
+            thresholds=CalibrationThresholds(),
+        )
+        by_protocol = {row["protocol"]: row for row in summaries}
+        self.assertEqual(by_protocol["interface_repack"]["status"], "blocked")
+        self.assertIn(
+            "one_or_more_dg_separated_not_negative",
+            by_protocol["interface_repack"]["blockers"],
+        )
+        self.assertIn(
+            "one_or_more_cross_interface_energy_not_negative",
+            by_protocol["interface_repack"]["blockers"],
+        )
+        self.assertEqual(
+            by_protocol["interface_repack_constrained_min"]["status"], "pass"
+        )
+        self.assertEqual(
+            select_protocol(summaries)[0],
+            "interface_repack_constrained_min",
+        )
+
+    def test_contact_change_rows_preserve_exact_position_status(self) -> None:
+        rows = build_contact_change_rows(
+            molecule_side="Nb252_VHH",
+            chain_id="C",
+            reference_positions={33, 37},
+            prepared_positions={37, 45},
+            residue_names={33: "TYR", 37: "SER", 45: "ARG"},
+            reference_minimum_distances={33: 3.5, 37: 3.2, 45: 5.0},
+            prepared_minimum_distances={33: 4.2, 37: 3.3, 45: 3.8},
+        )
+        self.assertEqual(
+            [(row["auth_seq_id"], row["contact_status"]) for row in rows],
+            [(33, "lost"), (37, "retained"), (45, "gained")],
+        )
+        self.assertEqual(rows[0]["reference_minimum_distance_angstrom"], 3.5)
+        self.assertEqual(rows[0]["prepared_minimum_distance_angstrom"], 4.2)
+
     def test_both_failed_protocols_keep_affinity_release_blocked(self) -> None:
         rows = []
         for protocol in ("interface_repack", "interface_repack_constrained_min"):
@@ -170,6 +229,7 @@ class PyRosettaScoringCalibrationTests(unittest.TestCase):
             protocol_summaries=summaries,
             selected_protocol=None,
             representative_replicate=None,
+            contact_change_rows=[],
             stage0_run_id="stage0",
             import_gate_run_id="import",
         )
@@ -197,6 +257,7 @@ class PyRosettaScoringCalibrationTests(unittest.TestCase):
         self.assertNotIn("#SBATCH --mem", text)
         self.assertIn("/data/software/env/luly25/multi_ligand", text)
         self.assertIn("calibrate_pyrosetta_scoring.py", text)
+        self.assertIn("pyrosetta_scoring_calibration_v2_20260811", text)
 
 
 if __name__ == "__main__":

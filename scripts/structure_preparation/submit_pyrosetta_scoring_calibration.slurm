@@ -20,6 +20,6 @@ python scripts/structure_preparation/calibrate_pyrosetta_scoring.py \
   --structure-baseline-dir docs/result_artifacts/input_baseline/structure_released_20260810 \
   --import-gate-dir docs/result_artifacts/structure_preparation/pyrosetta_wt_import_20260810 \
   --experimental-structure data/structures/cxs_exports/NK2R-252__native.cif \
-  --output-dir docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_20260810 \
-  --run-summary docs/run_summaries/structure_preparation/pyrosetta_scoring_calibration_20260810.json \
+  --output-dir docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_v2_20260811 \
+  --run-summary docs/run_summaries/structure_preparation/pyrosetta_scoring_calibration_v2_20260811.json \
   --replicates 8

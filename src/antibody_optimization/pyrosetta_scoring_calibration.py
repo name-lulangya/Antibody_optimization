@@ -85,6 +85,18 @@ PER_RESIDUE_FIELDS = [
     "residue_total_score",
 ]
 
+CONTACT_CHANGE_FIELDS = [
+    "molecule_side",
+    "chain_id",
+    "auth_seq_id",
+    "residue_name",
+    "reference_contact",
+    "prepared_contact",
+    "contact_status",
+    "reference_minimum_distance_angstrom",
+    "prepared_minimum_distance_angstrom",
+]
+
 
 @dataclass(frozen=True)
 class CalibrationThresholds:
@@ -95,6 +107,8 @@ class CalibrationThresholds:
     maximum_interface_ca_rmsd_angstrom: float = 0.50
     maximum_dg_mad_reu: float = 3.0
     maximum_interface_fa_rep_increase_reu: float = 0.0
+    require_all_replicates_negative_dg_separated: bool = True
+    require_all_replicates_negative_cross_interface_energy: bool = True
 
     def validate(self) -> None:
         for label, value in (
@@ -110,6 +124,12 @@ class CalibrationThresholds:
             raise ScoringCalibrationError("maximum CA RMSD must be nonnegative")
         if self.maximum_dg_mad_reu < 0:
             raise ScoringCalibrationError("maximum dG MAD must be nonnegative")
+        if not self.require_all_replicates_negative_dg_separated:
+            raise ScoringCalibrationError("negative dG direction gate cannot be disabled")
+        if not self.require_all_replicates_negative_cross_interface_energy:
+            raise ScoringCalibrationError(
+                "negative cross-interface direction gate cannot be disabled"
+            )
 
 
 def load_calibration_inputs(
@@ -240,6 +260,7 @@ def summarize_protocol_rows(
         finite = all(_row_metrics_are_finite(row) for row in selected)
         safe = all(str(row.get("status")) == "pass" for row in selected)
         dgs = [float(row["dG_separated"]) for row in selected]
+        cross_interface = [float(row["cross_interface_energy"]) for row in selected]
         vhh_retention = [float(row["vhh_contact_retention"]) for row in selected]
         receptor_retention = [
             float(row["receptor_epitope_retention"]) for row in selected
@@ -266,6 +287,10 @@ def summarize_protocol_rows(
                 blockers.append("interface_ca_rmsd_above_limit")
             if dg_mad > thresholds.maximum_dg_mad_reu:
                 blockers.append("dg_separated_mad_above_limit")
+            if max(dgs) >= 0.0:
+                blockers.append("one_or_more_dg_separated_not_negative")
+            if max(cross_interface) >= 0.0:
+                blockers.append("one_or_more_cross_interface_energy_not_negative")
             if (
                 statistics.median(interface_rep)
                 > raw_interface_fa_rep
@@ -280,6 +305,13 @@ def summarize_protocol_rows(
                 "blockers": blockers,
                 "dG_separated_median": dg_median,
                 "dG_separated_mad": dg_mad,
+                "maximum_dG_separated": max(dgs) if finite else math.nan,
+                "cross_interface_energy_median": (
+                    statistics.median(cross_interface) if finite else math.nan
+                ),
+                "maximum_cross_interface_energy": (
+                    max(cross_interface) if finite else math.nan
+                ),
                 "interface_fa_rep_median": (
                     statistics.median(interface_rep) if finite else math.nan
                 ),
@@ -298,7 +330,7 @@ def summarize_protocol_rows(
 def select_protocol(
     summaries: Sequence[Mapping[str, object]],
 ) -> tuple[str | None, list[str]]:
-    """Choose the first passing protocol, preferring the simpler repack route."""
+    """Choose the first protocol satisfying every scientific release condition."""
 
     by_name = {str(row.get("protocol")): row for row in summaries}
     if set(by_name) != set(PROTOCOL_ORDER):
@@ -339,6 +371,58 @@ def choose_representative_replicate(
     return int(chosen["replicate"])
 
 
+def build_contact_change_rows(
+    *,
+    molecule_side: str,
+    chain_id: str,
+    reference_positions: set[int],
+    prepared_positions: set[int],
+    residue_names: Mapping[int, str],
+    reference_minimum_distances: Mapping[int, float],
+    prepared_minimum_distances: Mapping[int, float],
+) -> list[dict[str, object]]:
+    """Build exact retained/lost/gained contact rows for one molecular side."""
+
+    if molecule_side not in {"Nb252_VHH", "NK2R"}:
+        raise ScoringCalibrationError(f"Unexpected contact side: {molecule_side}")
+    positions = sorted(reference_positions | prepared_positions)
+    rows: list[dict[str, object]] = []
+    for position in positions:
+        if position not in residue_names:
+            raise ScoringCalibrationError(
+                f"Missing residue identity for {chain_id} auth {position}"
+            )
+        if position not in reference_minimum_distances:
+            raise ScoringCalibrationError(
+                f"Missing reference distance for {chain_id} auth {position}"
+            )
+        if position not in prepared_minimum_distances:
+            raise ScoringCalibrationError(
+                f"Missing prepared distance for {chain_id} auth {position}"
+            )
+        reference = position in reference_positions
+        prepared = position in prepared_positions
+        status = "retained" if reference and prepared else ("lost" if reference else "gained")
+        rows.append(
+            {
+                "molecule_side": molecule_side,
+                "chain_id": chain_id,
+                "auth_seq_id": position,
+                "residue_name": residue_names[position],
+                "reference_contact": reference,
+                "prepared_contact": prepared,
+                "contact_status": status,
+                "reference_minimum_distance_angstrom": float(
+                    reference_minimum_distances[position]
+                ),
+                "prepared_minimum_distance_angstrom": float(
+                    prepared_minimum_distances[position]
+                ),
+            }
+        )
+    return rows
+
+
 def build_calibration_gate(
     *,
     generated_at: str,
@@ -349,6 +433,7 @@ def build_calibration_gate(
     protocol_summaries: Sequence[Mapping[str, object]],
     selected_protocol: str | None,
     representative_replicate: int | None,
+    contact_change_rows: Sequence[Mapping[str, object]],
     stage0_run_id: str,
     import_gate_run_id: str,
 ) -> dict[str, object]:
@@ -370,9 +455,22 @@ def build_calibration_gate(
     if (selected_protocol is None) != (representative_replicate is None):
         raise ScoringCalibrationError("Representative replicate selection is inconsistent")
 
+    if selected_protocol is not None and not contact_change_rows:
+        raise ScoringCalibrationError("Selected protocol requires exact contact changes")
+    contact_summary = {
+        side: {
+            status_name: sum(
+                row.get("molecule_side") == side
+                and row.get("contact_status") == status_name
+                for row in contact_change_rows
+            )
+            for status_name in ("retained", "lost", "gained")
+        }
+        for side in ("Nb252_VHH", "NK2R")
+    }
     status = "pass" if selected_protocol is not None else "blocked"
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "gate_name": "pyrosetta_scoring_protocol_calibration",
         "status": status,
         "generated_at": generated_at,
@@ -399,10 +497,12 @@ def build_calibration_gate(
         "thresholds": asdict(thresholds),
         "raw_import_metrics": dict(raw_metrics),
         "protocol_summaries": [dict(row) for row in protocol_summaries],
+        "selected_contact_change_summary": contact_summary,
         "outputs": {
             "replicate_metrics": "protocol_replicate_metrics.csv",
             "per_residue_diagnostics": "wt_per_residue_energy.csv",
             "protocol_selection": "selected_scoring_protocol.json",
+            "selected_contact_changes": "selected_contact_changes.csv",
             "representative_structure": "selected_wt_prepared.pdb",
             "qc_figure": "pyrosetta_scoring_calibration_qc.svg",
         },
