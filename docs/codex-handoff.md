@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-11 09:28:45
+Last updated: 2026-08-11 09:50:28
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -16,8 +16,8 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 远程项目环境：`/data/software/env/luly25/ab_optim`；计划检出父目录 `/homes/Tianlab/luly25/`，登录别名尚未建立。
 - PyRosetta：`/data/software/env/luly25/multi_ligand`，Python 3.10.20，PyRosetta 2026.03，Rosetta commit `5e498f1409c68ade56c8ce5842bf79e1b02e8db4`。
 - nanoBERT：`/data/software/env/luly25/vhh-lm`，`NaturalAntibody/nanoBERT` revision `edc8182ad89a827f8737fa572c6b5fac6197e6b0`，使用已记录离线缓存。
-- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；PyRosetta 2026.03评分校准API修复提交`7765843`已推送至`origin/main`。
-- 阶段2的本地阶段0合同和远程PyRosetta WT安全导入门已运行；评分协议校准首次远程运行在读取`EnergyEdge`时因PyRosetta 2026.03 API签名不匹配停止，未产生校准结果，入口现已修复并等待重跑。尚未运行AF3、nanoBERT/AntiFold、候选生成、正式亲和力评分或表达模型训练。
+- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；远程评分校准结果提交`6d8bac1`已拉取，本地与`origin/main`同步。
+- 阶段2的本地阶段0、远程WT安全导入和评分校准计算均已运行；校准机器gate形式上为`pass`，但科学复核发现自动选择标准过宽，当前结果不得释放候选评分。尚未运行AF3、nanoBERT/AntiFold、候选生成、正式亲和力评分或表达模型训练。
 
 ## Frozen Inputs
 
@@ -53,6 +53,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - `stage0_local_contract=pass`、`candidate_manifest_release=pass`：关键来源哈希、母本、映射、链身份、缺失坐标、界面、SSGS和实验二硫键均通过本地重检。
 - `pyrosetta_wt_import_release=pass`、`pyrosetta_affinity_scoring_release=ready_for_scoring_protocol_calibration`：远程WT门已完成，396个polymer残基、4个断点、PDBInfo映射、Cys22–Cys95二硫键和有限raw score均通过；这只释放评分协议校准，不释放候选亲和力评分。
 - source结构有20个侧链不完整的标准残基（Nb252 3、NK2R 17），按标准重原子计数共缺90个；Nb252 auth 102 TYR属于已确认界面。PyRosetta补建这些原子产生的warning不单独阻断，但校准输出必须记录该事实，且界面邻域使用统一repack，避免WT/候选准备不对称。
+- 评分校准结果的机器字段为`pyrosetta_affinity_scoring_release=pass`并自动选择`interface_repack`，但当前科学review状态为`held_pending_protocol_selection_revision`：repack-only的中位`dG_separated=+58.425061 REU`、跨界面能`+12.675360 REU`及界面`fa_rep=112.064095 REU`仍显示不利/碰撞主导界面；受约束局部最小化相应为`-58.147156`、`-82.876253`和`22.466594 REU`，两协议定性冲突。不得读取机器`pass`直接启动候选评分。
 - `finalize_input_baseline.py` 已用真实 structure mapping/interface 重建 canonical 128 位点图和 `stage1_gate.json`。程序 `status=pass` 不代表科学 release gate 自动通过。
 
 ## Stage-2 Phase 0 Result
@@ -64,7 +65,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 ## Current Optimization Plan
 
 1. **远程WT结构门（已完成，实测14.123538秒）**：PyRosetta 2026.03直接导入未补全实验complex，396个polymer残基和4个预期断点均安全，映射与二硫键通过；未做relax、补全、突变或候选评分。权威结果位于`structure_preparation/pyrosetta_wt_import_20260810/pyrosetta_wt_import_gate.json`。
-2. **WT评分协议校准（入口与Slurm已实现，预计1–3小时）**：比较8个固定主链界面repack与8个界面repack加坐标约束局部最小化重复；按接触/表位保持、界面Cα RMSD、界面`fa_rep`和`dG_separated` MAD选择最简单的通过协议。不补全、全局relax或生成突变；`ref2015`只作为配对相对界面信号。
+2. **WT评分协议校准（计算完成，实测404.321078秒；选择待修订）**：两条协议各8个重复均满足原内部阈值，但repack-only保持显著正`dG_separated`和正跨界面能，不能作为实验结合复合物的候选母本；需补充界面必须非碰撞主导且结合方向一致的选择条件，重新生成受约束局部最小化代表WT和gate。不补全、全局relax或生成突变。
 3. **WT序列/可开发性基线（约0.5–1天）**：本地计算序列理化、化学风险和47条yield的保留删失语义基线；服务器部署/固定AntiFold及VHH适用的自然度/可开发性模型。nanoBERT仅在能提供独立验证价值时使用，不与同类语言模型重复堆叠。
 4. **可审计单点景观（约0.5–1天）**：24个实验界面位点的全替换理论上限为456个单点；先由结构/序列模型提出或排序，再应用Cys22/Cys95、SSGS、WT一致性、化学风险和表位/构象约束，预计保留约200–400个可评分候选。每个候选绑定阶段0合同和全部上游哈希，实际数量以生成制品为准。
 5. **亲和力/稳定性筛选（约2–4天）**：PyRosetta快速界面评分约4–16小时，再对入围者运行flex-ddG/折叠稳定性复核约1–3天；使用实验complex，缺失位点保持非可评估。所有长任务走既定Slurm规则。
@@ -79,7 +80,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Required Next Steps
 
-1. 服务器拉取包含PyRosetta 2026.03 `EnergyEdge.fill_energy_map()`修复的提交后，确认失败运行未留下任何正式输出文件，再重新提交`sbatch scripts/structure_preparation/submit_pyrosetta_scoring_calibration.slurm`；空输出目录可保留，结果`pass`前不得启动候选亲和力评分。
+1. 修订评分校准选择gate：除重复稳定、接触和构象保持外，要求准备后的实验结合复合物不再由正跨界面能/高残余`fa_rep`主导；用全新输出目录重跑并生成受约束局部最小化代表WT。科学review通过前不得启动候选亲和力评分。
 2. 建立本地WT理化/化学风险基线，并在服务器核验AntiFold与VHH自然度/可开发性模型的版本、许可证、输入范围和环境隔离。
 3. 生成绑定阶段0合同哈希的单点候选清单；此步先生成/过滤，不提前运行大规模结构评分。
 4. 实现保留LLJ删失/分组语义的表达基线与交叉验证，决定`nb252_expression_transfer`能否释放。
