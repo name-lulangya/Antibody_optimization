@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-11 10:37:12
+Last updated: 2026-08-11 12:00:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -68,22 +68,22 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 1. **远程WT结构门（已完成，实测14.123538秒）**：PyRosetta 2026.03直接导入未补全实验complex，396个polymer残基和4个预期断点均安全，映射与二硫键通过；未做relax、补全、突变或候选评分。权威结果位于`structure_preparation/pyrosetta_wt_import_20260810/pyrosetta_wt_import_gate.json`。
 2. **WT评分协议校准（已完成，实测465.154733秒）**：schema v2 gate通过并唯一选择受约束局部最小化；代表WT、逐位置接触变化、重复表、逐残基能量和QC图均已同步。该步骤只释放成对相对候选评分，不生成突变或给出实验亲和力结论。
-3. **WT序列/可开发性基线（约0.5–1天）**：本地计算序列理化、化学风险和47条yield的保留删失语义基线；服务器部署/固定AntiFold及VHH适用的自然度/可开发性模型。nanoBERT仅在能提供独立验证价值时使用，不与同类语言模型重复堆叠。
-4. **可审计单点景观（约0.5–1天）**：24个实验界面位点的全替换理论上限为456个单点；先由结构/序列模型提出或排序，再应用Cys22/Cys95、SSGS、WT一致性、化学风险和表位/构象约束，预计保留约200–400个可评分候选。每个候选绑定阶段0合同和全部上游哈希，实际数量以生成制品为准。
-5. **亲和力/稳定性筛选（约2–4天）**：PyRosetta快速界面评分约4–16小时，再对入围者运行flex-ddG/折叠稳定性复核约1–3天；使用实验complex，缺失位点保持非可评估。所有长任务走既定Slurm规则。
-6. **表达、组合与终选复核（约3–6天）**：保留47条yield的分组/删失语义做表达模型与Pareto排序，只从互补优质单点构建少量双突变；对最终约10–30个候选运行AF3构象/表位保持检查，涉及缺失区时才做定点补全敏感性分析。计算全流程仍预计约1–2周，不含排队和实验验证。
+3. **总体多目标架构（保留，但调整执行顺序）**：最终仍采用亲和力与稳定性/表达两条主轨从同一authoritative WT独立发现、风险作为横向监测层、汇合后少量组合、实验后再串行迭代。当前先完整完成证据最确定的亲和力轨道；稳定性/表达候选、47条yield小模型、nanoBERT PLL相关性和风险修复候选均暂停，待亲和力单点结果形成后另行讨论，不让未验证模型阻断亲和力进度。
+4. **亲和力单点空间（本地已完成，实测约2秒）**：`affinity_single_mutants_20260811/`已从阶段0合同、实验24位界面、可逆编号和v2评分gate生成每个位点19种非WT替换，共456个单点；每条均保留完整128-aa序列、reported/IMGT/source-auth编号、实验接触和prepared WT敏感标记。12个pilot候选覆盖FR/CDR、保守/跨类替换及E46/D101/I103，未按prepared接触或主观化学偏好预删候选。
+5. **成对PyRosetta亲和力筛选（远程入口已实现，尚未运行）**：共享runtime严格复用`interface_repack_constrained_min`、ref2015、固定8 Å局部pose集合、0.25 Å主链坐标约束和结构安全门。每个replicate/seed从同一selected prepared WT只计算一次共享WT，随后全部突变体以同一seed分别计算并引用该WT；12候选×3重复pilot因此是3次WT和36次突变体计算。WT控制单独记录3行，候选表只记录WT控制ID、突变体指标和`mutant-WT`差值。pilot通过后再实现456候选分片3重复初筛，入围者补足8重复；Rosetta REU只作相对排序。
+6. **亲和力复核与面板（约1–3天，不含实验）**：按重复稳定性、原NK2R表位/实验VHH接触保持、界面Cα RMSD、排斥和局部几何筛选，不以单一能量值决定。E46/D101/I103不得因单一prepared构象接触丢失而直接淘汰。对小规模入围者再运行更严格的flex-ddG或等价多构象复核，并用AF3检查最终候选是否维持总体VHH构象；输出WT、机制多样的亲和力单点实验面板。此阶段不组合突变。
 
 ## Verification
 
 - 阶段0专项：`3 passed`；覆盖真实128位合同、过期哈希拒绝、CSV BOM/LF、拒绝覆盖、固定时间戳双跑六制品逐字节一致。
-- 阶段0图已人工检查，轨道、坐标轴和图例无遮挡。当前全套验收为`113 passed, 1 skipped, 4 subtests passed`；唯一skip仍是Windows真实symlink权限测试。
+- 阶段0图及亲和力候选空间图均已人工检查，坐标轴、图例和说明无遮挡。当前全套验收为`126 passed, 1 skipped, 4 subtests passed`；唯一skip仍是Windows真实symlink权限测试。
 - `pip check`、`python -m compileall -q src scripts tests`、`git diff --check` 均通过。
 - v2结果一致性复核：schema 2 gate为pass、16行重复数据和67行接触状态与gate一致、代表PDB含396个polymer残基；评分校准专项测试`8 passed`。
 - 修复覆盖：ChimeraX sandbox 入口、实际模型名、无 polymer sequence 时严格 source-auth exact-WT 映射、较长 polymer 中唯一 authoritative segment、`not_evaluable` summary 状态。
 
 ## Required Next Steps
 
-1. 建立本地WT理化、化学风险和47条yield的保留删失语义基线；同时在服务器核验AntiFold及单一VHH自然度/可开发性模型的版本、许可证、输入范围和环境隔离。
-2. 生成绑定阶段0合同与v2评分gate的可审计单点候选清单；仍以原实验24位界面定义候选，不用prepared WT接触变化重定义实验界面。
-3. 为候选实现与v2完全一致的成对受约束局部评分入口和Slurm任务；先做少量真实候选验证，再运行完整清单。
-4. 实现保留LLJ删失/分组语义的表达基线与交叉验证，决定`nb252_expression_transfer`能否释放。
+1. 将当前实现同步到远程后，在仓库根运行`sbatch scripts/candidate_design/submit_affinity_scoring_pilot.slurm`；预计实际计算约5–15分钟、申请上限2小时，排队时间另计。
+2. pilot完成后拉回`affinity_pyrosetta_pilot_20260811/`和run summary，先核验12候选×3重复、WT方向、映射/断点/二硫键、接触/表位保持和界面Cα RMSD；候选能量变差只代表不优，不视为流程失败。
+3. 只有pilot gate为pass，才实现456候选的显式分片清单与Slurm array；每任务控制在5小时内，不提前实现复杂checkpoint。
+4. 表达/稳定性建模、nanoBERT/AntiFold/AbMPNN和风险修复候选继续暂停，亲和力初筛结果完成后重新讨论。

@@ -1,0 +1,40 @@
+{
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\build_affinity_single_mutants.py",
+    "--stage0-dir",
+    "docs/result_artifacts/candidate_design/stage0_contract_20260810",
+    "--calibration-dir",
+    "docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_v2_20260811",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/affinity_single_mutants_20260811",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/affinity_single_mutants_20260811.json",
+    "--generated-at",
+    "2026-08-11T12:00:00+08:00"
+  ],
+  "counts": {
+    "candidate_count": 456,
+    "interface_position_count": 24,
+    "pilot_candidate_count": 12
+  },
+  "elapsed_seconds": 1.531774,
+  "gates": {
+    "candidate_manifest_release": "pass",
+    "pyrosetta_pilot_release": "ready_for_remote_pilot"
+  },
+  "generated_at": "2026-08-11T12:00:00+08:00",
+  "outputs": {
+    "candidates": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_single_mutants_20260811\\affinity_single_mutants.csv",
+    "fasta": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_single_mutants_20260811\\affinity_single_mutants.fasta",
+    "figure_png": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_single_mutants_20260811\\affinity_candidate_space_qc.png",
+    "figure_svg": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_single_mutants_20260811\\affinity_candidate_space_qc.svg",
+    "gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_single_mutants_20260811\\affinity_candidate_gate.json",
+    "manifest": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_single_mutants_20260811\\affinity_candidate_manifest.json",
+    "pilot_ids": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_single_mutants_20260811\\pilot_candidate_ids.txt",
+    "positions": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_single_mutants_20260811\\affinity_position_summary.csv"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}

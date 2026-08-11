@@ -7,7 +7,6 @@ import argparse
 import csv
 import json
 import math
-import platform
 import sys
 import tempfile
 import time
@@ -23,10 +22,9 @@ from antibody_optimization.file_transaction import (  # noqa: E402
     validate_file_paths,
 )
 from antibody_optimization.pyrosetta_import_gate import (  # noqa: E402
-    compare_pose_to_source,
-    evaluate_breaks,
     load_released_stage_inputs,
 )
+from antibody_optimization import pyrosetta_runtime as runtime  # noqa: E402
 from antibody_optimization.pyrosetta_scoring_calibration import (  # noqa: E402
     CONTACT_CHANGE_FIELDS,
     PER_RESIDUE_FIELDS,
@@ -38,7 +36,6 @@ from antibody_optimization.pyrosetta_scoring_calibration import (  # noqa: E402
     build_contact_change_rows,
     choose_representative_replicate,
     load_calibration_inputs,
-    energy_edge_map,
     render_calibration_svg,
     select_protocol,
     summarize_protocol_rows,
@@ -54,13 +51,7 @@ OUTPUT_NAMES = {
     "figure": "pyrosetta_scoring_calibration_qc.svg",
     "representative": "selected_wt_prepared.pdb",
 }
-INIT_OPTIONS = (
-    "-missing_density_to_jump true "
-    "-detect_disulf true "
-    "-ignore_unrecognized_res false "
-    "-constant_seed -jran 8102026"
-)
-SCORE_FUNCTION = "ref2015"
+SCORE_FUNCTION = runtime.SCORE_FUNCTION
 
 
 def parse_args() -> argparse.Namespace:
@@ -143,20 +134,16 @@ def main() -> int:
     for target in [*final_paths.values(), run_summary]:
         target.parent.mkdir(parents=True, exist_ok=True)
 
-    pyrosetta = _import_and_initialize_pyrosetta()
+    pyrosetta = runtime.initialize_pyrosetta(
+        expected_version=args.expected_pyrosetta_version
+    )
     version = pyrosetta.version()
-    if args.expected_pyrosetta_version not in version:
-        raise RuntimeError(
-            f"PyRosetta version does not contain {args.expected_pyrosetta_version!r}"
-        )
-    if platform.python_version_tuple()[:2] != ("3", "10"):
-        raise RuntimeError("The pinned PyRosetta environment must use Python 3.10")
 
     raw_pose = pyrosetta.pose_from_file(str(structure_path))
-    _assert_pose_safety(raw_pose, structure_inputs)
+    runtime.assert_pose_safety(raw_pose, structure_inputs)
     scorefxn = pyrosetta.create_score_function(SCORE_FUNCTION)
     scorefxn(raw_pose)
-    raw_contacts = _contact_sets(
+    raw_contacts = runtime.contact_sets(
         raw_pose,
         chain_a="C",
         chain_b="R",
@@ -172,10 +159,10 @@ def main() -> int:
         "chain_b_auth_positions": raw_contacts["chain_b_auth_positions"],
     }
     reference_contact_distances = {
-        "C": _auth_minimum_partner_distances(raw_pose, "C", "R"),
-        "R": _auth_minimum_partner_distances(raw_pose, "R", "C"),
+        "C": runtime.auth_minimum_partner_distances(raw_pose, "C", "R"),
+        "R": runtime.auth_minimum_partner_distances(raw_pose, "R", "C"),
     }
-    local_indices = _interface_neighborhood(
+    local_indices = runtime.interface_neighborhood(
         raw_pose,
         chain_a="C",
         chain_b="R",
@@ -188,10 +175,10 @@ def main() -> int:
         }
         for row in source_incomplete_sidechains
     ]
-    raw_ca = _ca_coordinates(raw_pose, local_indices)
-    raw_cross = _cross_interface_energy(raw_pose, scorefxn, "C", "R")
+    raw_ca = runtime.ca_coordinates(raw_pose, local_indices)
+    raw_cross = runtime.cross_interface_energy(raw_pose, scorefxn, "C", "R")
     raw_total = float(scorefxn(raw_pose))
-    raw_separated = _score_separated_without_repack(raw_pose, scorefxn, "C")
+    raw_separated = runtime.score_separated_without_repack(raw_pose, scorefxn, "C")
     raw_metrics = {
         "total_score": raw_total,
         "dG_separated_fixed_sidechains": raw_total - raw_separated,
@@ -228,7 +215,7 @@ def main() -> int:
                 f"{replicate}/{args.replicates} seed={seed}",
                 flush=True,
             )
-            prepared = _prepare_pose(
+            prepared = runtime.prepare_interface_pose(
                 raw_pose,
                 scorefxn,
                 local_indices=local_indices,
@@ -237,13 +224,13 @@ def main() -> int:
                 coordinate_constraint_sd=args.coordinate_constraint_sd_angstrom,
             )
             replicate_rows.append(
-                _measure_pose(
+                runtime.measure_interface_pose(
                     prepared,
                     scorefxn,
                     structure_inputs=structure_inputs,
                     local_indices=local_indices,
-                    raw_ca=raw_ca,
-                    raw_contacts=reference_contacts,
+                    reference_ca=raw_ca,
+                    reference_contacts=reference_contacts,
                     protocol=protocol,
                     replicate=replicate,
                     seed=seed,
@@ -279,7 +266,7 @@ def main() -> int:
             and int(row["replicate"]) == representative_replicate
         )
         representative_seed = int(representative_row["seed"])
-        representative_pose = _prepare_pose(
+        representative_pose = runtime.prepare_interface_pose(
             raw_pose,
             scorefxn,
             local_indices=local_indices,
@@ -287,20 +274,20 @@ def main() -> int:
             seed=representative_seed,
             coordinate_constraint_sd=args.coordinate_constraint_sd_angstrom,
         )
-        _assert_pose_safety(representative_pose, structure_inputs)
+        runtime.assert_pose_safety(representative_pose, structure_inputs)
 
     contact_change_rows: list[dict[str, object]] = []
     if representative_pose is not None and representative_row is not None:
-        prepared_contacts = _contact_sets(
+        prepared_contacts = runtime.contact_sets(
             representative_pose,
             chain_a="C",
             chain_b="R",
             cutoff=args.contact_cutoff_angstrom,
         )
-        residue_names = _auth_residue_names(representative_pose)
+        residue_names = runtime.auth_residue_names(representative_pose)
         prepared_contact_distances = {
-            "C": _auth_minimum_partner_distances(representative_pose, "C", "R"),
-            "R": _auth_minimum_partner_distances(representative_pose, "R", "C"),
+            "C": runtime.auth_minimum_partner_distances(representative_pose, "C", "R"),
+            "R": runtime.auth_minimum_partner_distances(representative_pose, "R", "C"),
         }
         contact_change_rows.extend(
             build_contact_change_rows(
@@ -383,7 +370,7 @@ def main() -> int:
         "source_incomplete_sidechains": source_incomplete_sidechains,
     }
 
-    raw_per_residue = _per_residue_rows(
+    raw_per_residue = runtime.per_residue_rows(
         raw_pose,
         scorefxn,
         structure_state="raw_import",
@@ -392,7 +379,7 @@ def main() -> int:
         local_indices=local_indices,
     )
     representative_rows = (
-        _per_residue_rows(
+        runtime.per_residue_rows(
             representative_pose,
             scorefxn,
             structure_state="selected_prepared_WT",
@@ -466,438 +453,6 @@ def _validate_args(args: argparse.Namespace) -> None:
         raise ValueError("Coordinate-constraint SD must be positive")
 
 
-def _import_and_initialize_pyrosetta():
-    try:
-        import pyrosetta
-    except ImportError as exc:
-        raise RuntimeError(
-            "PyRosetta is required; use /data/software/env/luly25/multi_ligand"
-        ) from exc
-    pyrosetta.init(INIT_OPTIONS)
-    return pyrosetta
-
-
-def _prepare_pose(
-    raw_pose,
-    scorefxn,
-    *,
-    local_indices: set[int],
-    protocol: str,
-    seed: int,
-    coordinate_constraint_sd: float,
-):
-    import pyrosetta
-
-    pose = raw_pose.clone()
-    pyrosetta.rosetta.numeric.random.rg().set_seed(seed)
-    _repack_indices(pose, scorefxn, local_indices)
-    if protocol == "interface_repack":
-        return pose
-    if protocol != "interface_repack_constrained_min":
-        raise ValueError(f"Unknown calibration protocol: {protocol}")
-
-    from pyrosetta.rosetta.core.id import AtomID
-    from pyrosetta.rosetta.core.kinematics import MoveMap
-    from pyrosetta.rosetta.core.scoring import ScoreType
-    from pyrosetta.rosetta.core.scoring.constraints import CoordinateConstraint
-    from pyrosetta.rosetta.core.scoring.func import HarmonicFunc
-    from pyrosetta.rosetta.protocols.minimization_packing import MinMover
-
-    anchor_index = next(index for index in range(1, pose.total_residue() + 1) if index not in local_indices)
-    anchor_atom = AtomID(pose.residue(anchor_index).atom_index("CA"), anchor_index)
-    harmonic = HarmonicFunc(0.0, coordinate_constraint_sd)
-    for index in sorted(local_indices):
-        residue = pose.residue(index)
-        for atom_name in ("N", "CA", "C", "O"):
-            atom_id = AtomID(residue.atom_index(atom_name), index)
-            pose.add_constraint(
-                CoordinateConstraint(atom_id, anchor_atom, pose.xyz(atom_id), harmonic)
-            )
-    move_map = MoveMap()
-    move_map.set_bb(False)
-    move_map.set_chi(False)
-    move_map.set_jump(False)
-    for index in local_indices:
-        move_map.set_bb(index, True)
-        move_map.set_chi(index, True)
-    constrained_scorefxn = scorefxn.clone()
-    constrained_scorefxn.set_weight(ScoreType.coordinate_constraint, 1.0)
-    minimizer = MinMover(
-        move_map,
-        constrained_scorefxn,
-        "lbfgs_armijo_nonmonotone",
-        0.01,
-        True,
-    )
-    minimizer.max_iter(200)
-    minimizer.apply(pose)
-    pose.remove_constraints()
-    scorefxn(pose)
-    return pose
-
-
-def _repack_indices(pose, scorefxn, indices: set[int]) -> None:
-    import pyrosetta
-
-    task = pyrosetta.standard_packer_task(pose)
-    task.restrict_to_repacking()
-    task.or_include_current(True)
-    for index in range(1, pose.total_residue() + 1):
-        if index not in indices:
-            task.nonconst_residue_task(index).prevent_repacking()
-    mover = pyrosetta.rosetta.protocols.minimization_packing.PackRotamersMover(
-        scorefxn, task
-    )
-    mover.apply(pose)
-
-
-def _measure_pose(
-    pose,
-    scorefxn,
-    *,
-    structure_inputs,
-    local_indices: set[int],
-    raw_ca: dict[int, tuple[float, float, float]],
-    raw_contacts,
-    protocol: str,
-    replicate: int,
-    seed: int,
-    contact_cutoff: float,
-) -> dict[str, object]:
-    mapping_pass, breaks_pass, disulfide_pass = _pose_safety(pose, structure_inputs)
-    total = float(scorefxn(pose))
-    contacts = _contact_sets(pose, "C", "R", contact_cutoff)
-    cross = _cross_interface_energy(pose, scorefxn, "C", "R")
-    separated = _score_separated_with_repack(
-        pose,
-        scorefxn,
-        moving_chain="C",
-        repack_indices=local_indices,
-        seed=seed + 1000000,
-    )
-    vhh_retention = _set_retention(
-        raw_contacts["chain_a_auth_positions"], contacts["chain_a_auth_positions"]
-    )
-    receptor_retention = _set_retention(
-        raw_contacts["chain_b_auth_positions"], contacts["chain_b_auth_positions"]
-    )
-    rmsd = _ca_rmsd(raw_ca, _ca_coordinates(pose, local_indices))
-    values = [
-        total,
-        total - separated,
-        cross["total"],
-        cross["fa_atr"],
-        cross["fa_rep"],
-        vhh_retention,
-        receptor_retention,
-        rmsd,
-        contacts["minimum_distance"],
-    ]
-    finite = all(math.isfinite(value) for value in values)
-    status = (
-        "pass"
-        if mapping_pass and breaks_pass and disulfide_pass and finite
-        else "blocked"
-    )
-    return {
-        "protocol": protocol,
-        "replicate": replicate,
-        "seed": seed,
-        "total_score": total,
-        "dG_separated": total - separated,
-        "cross_interface_energy": cross["total"],
-        "interface_fa_atr": cross["fa_atr"],
-        "interface_fa_rep": cross["fa_rep"],
-        "vhh_contact_count": len(contacts["chain_a_auth_positions"]),
-        "receptor_epitope_count": len(contacts["chain_b_auth_positions"]),
-        "vhh_contact_retention": vhh_retention,
-        "receptor_epitope_retention": receptor_retention,
-        "interface_ca_rmsd": rmsd,
-        "minimum_interchain_distance": contacts["minimum_distance"],
-        "mapping_pass": mapping_pass,
-        "breaks_pass": breaks_pass,
-        "disulfide_pass": disulfide_pass,
-        "finite_metrics": finite,
-        "status": status,
-    }
-
-
-def _pose_safety(pose, structure_inputs) -> tuple[bool, bool, bool]:
-    from antibody_optimization.pyrosetta_import_gate import ResidueRecord
-
-    pdb_info = pose.pdb_info()
-    pose_records = [
-        ResidueRecord(
-            index=index,
-            chain_id=str(pdb_info.chain(index)).strip(),
-            auth_seq_id=int(pdb_info.number(index)),
-            insertion_code=_normalize_icode(pdb_info.icode(index)),
-            residue_name=str(pose.residue(index).name3()).strip().upper(),
-        )
-        for index in range(1, pose.total_residue() + 1)
-    ]
-    mapping_pass = not compare_pose_to_source(
-        source_residues=structure_inputs["source_residues"],
-        pose_residues=pose_records,
-    )
-    fold_tree = pose.fold_tree()
-    fold_tree_cutpoints = {int(value) for value in fold_tree.cutpoints()}
-    jump_cutpoints = {
-        int(fold_tree.cutpoint_by_jump(number))
-        for number in range(1, int(fold_tree.num_jump()) + 1)
-    }
-    bonded = _bonded_break_pairs(pose, structure_inputs["expected_breaks"])
-    _, break_problems = evaluate_breaks(
-        expected_breaks=structure_inputs["expected_breaks"],
-        fold_tree_cutpoints=fold_tree_cutpoints,
-        jump_cutpoints=jump_cutpoints,
-        bonded_c_n_pairs=bonded,
-    )
-    disulfide_pass = _disulfide_is_bonded(pose, "C", {22, 95})
-    return mapping_pass, not break_problems, disulfide_pass
-
-
-def _assert_pose_safety(pose, structure_inputs) -> None:
-    flags = _pose_safety(pose, structure_inputs)
-    if flags != (True, True, True):
-        raise RuntimeError(f"Pose failed mapping/break/disulfide safety: {flags}")
-
-
-def _bonded_break_pairs(pose, expected_breaks) -> set[tuple[int, int]]:
-    from pyrosetta.rosetta.core.id import AtomID
-
-    bonded: set[tuple[int, int]] = set()
-    conformation = pose.conformation()
-    for item in expected_breaks:
-        left = pose.residue(item.left.index)
-        right = pose.residue(item.right.index)
-        c_atom = AtomID(left.atom_index("C"), item.left.index)
-        n_atom = AtomID(right.atom_index("N"), item.right.index)
-        if conformation.atoms_are_bonded(c_atom, n_atom):
-            bonded.add((item.left.index, item.right.index))
-    return bonded
-
-
-def _disulfide_is_bonded(pose, chain_id: str, auth_positions: set[int]) -> bool:
-    pdb_info = pose.pdb_info()
-    indices = [
-        index
-        for index in range(1, pose.total_residue() + 1)
-        if str(pdb_info.chain(index)).strip() == chain_id
-        and int(pdb_info.number(index)) in auth_positions
-    ]
-    return len(indices) == 2 and bool(pose.residue(indices[0]).is_bonded(indices[1]))
-
-
-def _interface_neighborhood(pose, chain_a: str, chain_b: str, cutoff: float) -> set[int]:
-    pairs = _contact_pose_indices(pose, chain_a, chain_b, cutoff)
-    return {index for pair in pairs for index in pair}
-
-
-def _contact_sets(pose, chain_a: str, chain_b: str, cutoff: float) -> dict[str, object]:
-    pairs = _contact_pose_indices(pose, chain_a, chain_b, cutoff)
-    pdb_info = pose.pdb_info()
-    minimum = _minimum_interchain_distance(pose, chain_a, chain_b)
-    return {
-        "chain_a_auth_positions": {int(pdb_info.number(left)) for left, _ in pairs},
-        "chain_b_auth_positions": {int(pdb_info.number(right)) for _, right in pairs},
-        "minimum_distance": minimum,
-    }
-
-
-def _contact_pose_indices(pose, chain_a: str, chain_b: str, cutoff: float) -> set[tuple[int, int]]:
-    pdb_info = pose.pdb_info()
-    left_indices = [
-        index
-        for index in range(1, pose.total_residue() + 1)
-        if str(pdb_info.chain(index)).strip() == chain_a
-    ]
-    right_indices = [
-        index
-        for index in range(1, pose.total_residue() + 1)
-        if str(pdb_info.chain(index)).strip() == chain_b
-    ]
-    cutoff_squared = cutoff * cutoff
-    pairs: set[tuple[int, int]] = set()
-    for left in left_indices:
-        left_residue = pose.residue(left)
-        for right in right_indices:
-            right_residue = pose.residue(right)
-            if _residues_within(left_residue, right_residue, cutoff_squared):
-                pairs.add((left, right))
-    return pairs
-
-
-def _residues_within(left, right, cutoff_squared: float) -> bool:
-    for left_atom in range(1, left.nheavyatoms() + 1):
-        left_xyz = left.xyz(left_atom)
-        for right_atom in range(1, right.nheavyatoms() + 1):
-            delta = left_xyz - right.xyz(right_atom)
-            if delta.length_squared() < cutoff_squared:
-                return True
-    return False
-
-
-def _minimum_interchain_distance(pose, chain_a: str, chain_b: str) -> float:
-    pdb_info = pose.pdb_info()
-    left_indices = [i for i in range(1, pose.total_residue() + 1) if str(pdb_info.chain(i)).strip() == chain_a]
-    right_indices = [i for i in range(1, pose.total_residue() + 1) if str(pdb_info.chain(i)).strip() == chain_b]
-    minimum = math.inf
-    for left in left_indices:
-        left_residue = pose.residue(left)
-        for right in right_indices:
-            right_residue = pose.residue(right)
-            for left_atom in range(1, left_residue.nheavyatoms() + 1):
-                for right_atom in range(1, right_residue.nheavyatoms() + 1):
-                    distance = (left_residue.xyz(left_atom) - right_residue.xyz(right_atom)).norm()
-                    minimum = min(minimum, distance)
-    return minimum
-
-
-def _auth_minimum_partner_distances(
-    pose, chain_id: str, partner_chain_id: str
-) -> dict[int, float]:
-    pdb_info = pose.pdb_info()
-    indices = [
-        index
-        for index in range(1, pose.total_residue() + 1)
-        if str(pdb_info.chain(index)).strip() == chain_id
-    ]
-    partner_indices = [
-        index
-        for index in range(1, pose.total_residue() + 1)
-        if str(pdb_info.chain(index)).strip() == partner_chain_id
-    ]
-    result: dict[int, float] = {}
-    for index in indices:
-        residue = pose.residue(index)
-        minimum = math.inf
-        for partner_index in partner_indices:
-            partner = pose.residue(partner_index)
-            for atom in range(1, residue.nheavyatoms() + 1):
-                for partner_atom in range(1, partner.nheavyatoms() + 1):
-                    distance = (
-                        residue.xyz(atom) - partner.xyz(partner_atom)
-                    ).norm()
-                    minimum = min(minimum, distance)
-        if not math.isfinite(minimum):
-            raise RuntimeError(
-                f"No finite partner distance for {chain_id} pose residue {index}"
-            )
-        auth_seq_id = int(pdb_info.number(index))
-        if auth_seq_id in result:
-            raise RuntimeError(
-                f"Duplicate auth position in contact distances: {chain_id} {auth_seq_id}"
-            )
-        result[auth_seq_id] = minimum
-    return result
-
-
-def _cross_interface_energy(pose, scorefxn, chain_a: str, chain_b: str) -> dict[str, float]:
-    import pyrosetta
-
-    scorefxn(pose)
-    pdb_info = pose.pdb_info()
-    left_indices = [i for i in range(1, pose.total_residue() + 1) if str(pdb_info.chain(i)).strip() == chain_a]
-    right_indices = [i for i in range(1, pose.total_residue() + 1) if str(pdb_info.chain(i)).strip() == chain_b]
-    graph = pose.energies().energy_graph()
-    weights = scorefxn.weights()
-    fa_atr_type = pyrosetta.rosetta.core.scoring.ScoreType.fa_atr
-    fa_rep_type = pyrosetta.rosetta.core.scoring.ScoreType.fa_rep
-    result = {"total": 0.0, "fa_atr": 0.0, "fa_rep": 0.0}
-    for left in left_indices:
-        for right in right_indices:
-            edge = graph.find_energy_edge(left, right)
-            if edge is None:
-                continue
-            result["total"] += float(edge.dot(weights))
-            energy_map = energy_edge_map(edge)
-            result["fa_atr"] += float(energy_map[fa_atr_type] * weights[fa_atr_type])
-            result["fa_rep"] += float(energy_map[fa_rep_type] * weights[fa_rep_type])
-    return result
-
-
-def _score_separated_without_repack(pose, scorefxn, moving_chain: str) -> float:
-    separated = pose.clone()
-    _translate_chain(separated, moving_chain, 1000.0)
-    return float(scorefxn(separated))
-
-
-def _score_separated_with_repack(
-    pose,
-    scorefxn,
-    *,
-    moving_chain: str,
-    repack_indices: set[int],
-    seed: int,
-) -> float:
-    import pyrosetta
-
-    separated = pose.clone()
-    _translate_chain(separated, moving_chain, 1000.0)
-    pyrosetta.rosetta.numeric.random.rg().set_seed(seed)
-    _repack_indices(separated, scorefxn, repack_indices)
-    return float(scorefxn(separated))
-
-
-def _translate_chain(pose, chain_id: str, distance: float) -> None:
-    from pyrosetta.rosetta.core.id import AtomID
-    from pyrosetta.rosetta.numeric import xyzVector_double_t
-
-    pdb_info = pose.pdb_info()
-    shift = xyzVector_double_t(distance, 0.0, 0.0)
-    for index in range(1, pose.total_residue() + 1):
-        if str(pdb_info.chain(index)).strip() != chain_id:
-            continue
-        residue = pose.residue(index)
-        for atom in range(1, residue.natoms() + 1):
-            atom_id = AtomID(atom, index)
-            pose.set_xyz(atom_id, pose.xyz(atom_id) + shift)
-
-
-def _ca_coordinates(pose, indices: set[int]) -> dict[int, tuple[float, float, float]]:
-    result = {}
-    for index in indices:
-        xyz = pose.residue(index).xyz("CA")
-        result[index] = (float(xyz.x), float(xyz.y), float(xyz.z))
-    return result
-
-
-def _ca_rmsd(
-    reference: dict[int, tuple[float, float, float]],
-    observed: dict[int, tuple[float, float, float]],
-) -> float:
-    if reference.keys() != observed.keys() or not reference:
-        return math.nan
-    squared = 0.0
-    for index, ref in reference.items():
-        obs = observed[index]
-        squared += sum((a - b) ** 2 for a, b in zip(ref, obs, strict=True))
-    return math.sqrt(squared / len(reference))
-
-
-def _set_retention(reference: set[int], observed: set[int]) -> float:
-    return len(reference & observed) / len(reference) if reference else math.nan
-
-
-def _auth_residue_names(pose) -> dict[str, dict[int, str]]:
-    pdb_info = pose.pdb_info()
-    result: dict[str, dict[int, str]] = {"C": {}, "R": {}}
-    for index in range(1, pose.total_residue() + 1):
-        chain_id = str(pdb_info.chain(index)).strip()
-        if chain_id not in result:
-            continue
-        auth_seq_id = int(pdb_info.number(index))
-        residue_name = str(pose.residue(index).name3()).strip().upper()
-        existing = result[chain_id].get(auth_seq_id)
-        if existing is not None and existing != residue_name:
-            raise RuntimeError(
-                f"Conflicting residue identity at {chain_id} auth {auth_seq_id}"
-            )
-        result[chain_id][auth_seq_id] = residue_name
-    return result
-
-
 def _assert_representative_contact_metrics(
     *,
     representative_row: dict[str, object],
@@ -918,60 +473,6 @@ def _assert_representative_contact_metrics(
             )
 
 
-def _per_residue_rows(
-    pose,
-    scorefxn,
-    *,
-    structure_state: str,
-    protocol: str,
-    replicate: int,
-    local_indices: set[int],
-) -> list[dict[str, object]]:
-    import pyrosetta
-
-    scorefxn(pose)
-    weights = scorefxn.weights()
-    score_types = {
-        "fa_atr": pyrosetta.rosetta.core.scoring.ScoreType.fa_atr,
-        "fa_rep": pyrosetta.rosetta.core.scoring.ScoreType.fa_rep,
-        "fa_sol": pyrosetta.rosetta.core.scoring.ScoreType.fa_sol,
-        "fa_dun": pyrosetta.rosetta.core.scoring.ScoreType.fa_dun,
-    }
-    pdb_info = pose.pdb_info()
-    rows = []
-    for index in range(1, pose.total_residue() + 1):
-        energies = pose.energies().residue_total_energies(index)
-        chain = str(pdb_info.chain(index)).strip()
-        region = (
-            "local_interface_neighborhood"
-            if index in local_indices
-            else ("Nb252_other" if chain == "C" else "NK2R_other")
-        )
-        weighted = {
-            name: float(energies[score_type] * weights[score_type])
-            for name, score_type in score_types.items()
-        }
-        total = sum(
-            float(energies[score_type] * weights[score_type])
-            for score_type in scorefxn.get_nonzero_weighted_scoretypes()
-        )
-        rows.append(
-            {
-                "structure_state": structure_state,
-                "protocol": protocol,
-                "replicate": replicate,
-                "pose_index": index,
-                "chain_id": chain,
-                "auth_seq_id": int(pdb_info.number(index)),
-                "residue_name": str(pose.residue(index).name3()).strip().upper(),
-                "region": region,
-                **weighted,
-                "residue_total_score": total,
-            }
-        )
-    return rows
-
-
 def _project_directory(path: Path) -> Path:
     resolved = path.expanduser().resolve(strict=True)
     if not resolved.is_dir() or resolved.is_symlink():
@@ -981,11 +482,6 @@ def _project_directory(path: Path) -> Path:
     except ValueError as exc:
         raise ValueError(f"Directory must be inside the project: {resolved}") from exc
     return resolved
-
-
-def _normalize_icode(value: object) -> str:
-    text = str(value or "").strip()
-    return "" if text in {"?", "."} else text
 
 
 def _write_csv(path: Path, rows: list[dict[str, object]], fields: list[str]) -> None:

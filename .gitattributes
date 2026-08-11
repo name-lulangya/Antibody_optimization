@@ -7,5 +7,7 @@
 *.fasta text eol=lf
 *.json text eol=lf
 *.svg text eol=lf
+*.slurm text eol=lf
+*.txt text eol=lf
 *.cxs binary
 *.docx binary

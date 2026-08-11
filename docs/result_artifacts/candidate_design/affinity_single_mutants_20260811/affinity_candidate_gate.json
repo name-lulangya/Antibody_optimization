@@ -1,0 +1,24 @@
+{
+  "candidate_count": 456,
+  "candidate_count_per_position": 19,
+  "candidate_manifest_release": "pass",
+  "experimental_interface_definition_preserved": true,
+  "explicit_exclusions": [
+    "noninterface_mutations",
+    "missing_coordinate_positions",
+    "multiple_mutations",
+    "language_model_prefiltering",
+    "stability_expression_ranking",
+    "risk_repair_candidates"
+  ],
+  "gate_name": "nb252_affinity_single_mutant_space",
+  "generated_at": "2026-08-11T12:00:00+08:00",
+  "interface_position_count": 24,
+  "parent_length": 128,
+  "pilot_candidate_count": 12,
+  "prepared_contacts_used_to_redefine_interface": false,
+  "pyrosetta_pilot_release": "ready_for_remote_pilot",
+  "schema_version": 1,
+  "selected_scoring_protocol": "interface_repack_constrained_min",
+  "status": "pass"
+}
