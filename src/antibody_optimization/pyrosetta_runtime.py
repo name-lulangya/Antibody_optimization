@@ -201,6 +201,7 @@ def measure_interface_pose(
     seed: int,
     contact_cutoff: float,
     allowed_mutations: Mapping[tuple[str, int, str], str] | None = None,
+    include_contact_sets: bool = False,
 ) -> dict[str, object]:
     """Measure one prepared WT or mutant using calibrated semantics."""
 
@@ -241,7 +242,7 @@ def measure_interface_pose(
     ]
     finite = all(math.isfinite(value) for value in values)
     status = "pass" if mapping_pass and breaks_pass and disulfide_pass and finite else "blocked"
-    return {
+    result = {
         "protocol": protocol,
         "replicate": replicate,
         "seed": seed,
@@ -262,6 +263,18 @@ def measure_interface_pose(
         "finite_metrics": finite,
         "status": status,
     }
+    if include_contact_sets:
+        result.update(
+            {
+                "vhh_contact_auth_positions": sorted(
+                    contacts["chain_a_auth_positions"]
+                ),
+                "receptor_contact_auth_positions": sorted(
+                    contacts["chain_b_auth_positions"]
+                ),
+            }
+        )
+    return result
 
 
 def pose_safety(

@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-11 15:15:12
+Last updated: 2026-08-11 15:40:32
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -16,7 +16,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 远程项目环境：`/data/software/env/luly25/ab_optim`；计划检出父目录 `/homes/Tianlab/luly25/`，登录别名尚未建立。
 - PyRosetta：`/data/software/env/luly25/multi_ligand`，Python 3.10.20，PyRosetta 2026.03，Rosetta commit `5e498f1409c68ade56c8ce5842bf79e1b02e8db4`。
 - nanoBERT：`/data/software/env/luly25/vhh-lm`，`NaturalAntibody/nanoBERT` revision `edc8182ad89a827f8737fa572c6b5fac6197e6b0`，使用已记录离线缓存。
-- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；亲和力pilot远程结果提交`e28207d`已同步至本地，当前科学复核更改尚未提交。
+- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；pilot v1结果及科学复核均已同步，pilot V2实现随当前`main`提交同步。
 - 阶段2的本地阶段0、远程WT安全导入、WT评分校准v1/v2和12候选PyRosetta pilot均已运行。尚未运行456候选全量评分、AF3候选复核、nanoBERT/AntiFold或表达模型训练。
 
 ## Frozen Inputs
@@ -58,6 +58,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 科学review状态为`released_for_paired_relative_candidate_scoring`：候选必须从该prepared WT按同一受约束局部协议比较，并保留映射、断点、二硫键、接触/表位和构象门。Rosetta分数仍只是相对排序信号，不是实测亲和力或膜蛋白绝对稳定性；无需RosettaMP、缺失区补全或全局relax。
 - 12候选×3重复pilot的计算执行完整：3个共享WT、36个突变体评估、12个候选汇总，耗时1157.355071秒；所有突变体映射、断点、二硫键和有限数值均通过，WT的`dG_separated`及跨界面能也全部为负。生成machine gate为pass，但科学release由`affinity_pilot_scientific_review.json`覆盖为`held_pending_candidate_structure_gate_revision`。
 - hold原因：再次运行局部准备后的配对WT本身只保持33/37个实验NK2R表位残基，即0.8918918918918919，低于候选硬编码的0.90绝对阈值；9个候选仅与WT相同却被标为blocked。因此生成的“3 pass/9 blocked”和`full_affinity_scan_release=pass`不可用于启动456扫描。候选结构门必须先改为显式相对配对WT，同时继续核对原实验表位集合，再以新目录重跑pilot。
+- pilot V2代码已实现但尚未远程运行：扫描阶段不按能量、接触保持率或RMSD筛选；逐重复保存WT和突变体精确接触集合，同时计算相对原实验集合及相对同seed配对WT的保持率。V2 gate只验证候选运行安全和WT对照有效性，并显式声明`score_all_declared_candidates_then_filter_once`。v1制品保持历史状态、不覆盖。
 - `finalize_input_baseline.py` 已用真实 structure mapping/interface 重建 canonical 128 位点图和 `stage1_gate.json`。程序 `status=pass` 不代表科学 release gate 自动通过。
 
 ## Stage-2 Phase 0 Result
@@ -72,8 +73,9 @@ Timezone: Asia/Shanghai (UTC+08:00)
 2. **WT评分协议校准（已完成，实测465.154733秒）**：schema v2 gate通过并唯一选择受约束局部最小化；代表WT、逐位置接触变化、重复表、逐残基能量和QC图均已同步。该步骤只释放成对相对候选评分，不生成突变或给出实验亲和力结论。
 3. **总体多目标架构（保留，但调整执行顺序）**：最终仍采用亲和力与稳定性/表达两条主轨从同一authoritative WT独立发现、风险作为横向监测层、汇合后少量组合、实验后再串行迭代。当前先完整完成证据最确定的亲和力轨道；稳定性/表达候选、47条yield小模型、nanoBERT PLL相关性和风险修复候选均暂停，待亲和力单点结果形成后另行讨论，不让未验证模型阻断亲和力进度。
 4. **亲和力单点空间（本地已完成，实测约2秒）**：`affinity_single_mutants_20260811/`已从阶段0合同、实验24位界面、可逆编号和v2评分gate生成每个位点19种非WT替换，共456个单点；每条均保留完整128-aa序列、reported/IMGT/source-auth编号、实验接触和prepared WT敏感标记。12个pilot候选覆盖FR/CDR、保守/跨类替换及E46/D101/I103，未按prepared接触或主观化学偏好预删候选。
-5. **成对PyRosetta亲和力pilot（计算完成，科学release暂缓）**：实测19.289251分钟；循环、共享WT、突变和运行安全路线均通过，但绝对0.90表位保持阈值低于配对WT自身表现，造成9个伪blocked状态。当前能量信号只作探索性诊断，尚未释放456候选分片；必须先修订为配对WT相对结构门并重跑pilot。
-6. **亲和力复核与面板（约1–3天，不含实验）**：按重复稳定性、原NK2R表位/实验VHH接触保持、界面Cα RMSD、排斥和局部几何筛选，不以单一能量值决定。E46/D101/I103不得因单一prepared构象接触丢失而直接淘汰。对小规模入围者再运行更严格的flex-ddG或等价多构象复核，并用AF3检查最终候选是否维持总体VHH构象；输出WT、机制多样的亲和力单点实验面板。此阶段不组合突变。
+5. **成对PyRosetta亲和力pilot V2（实现完成、待远程运行）**：沿用12候选×3重复和共享WT，但计算阶段不筛选候选；同时输出配对WT相对接触保持、原实验集合保持、能量差、RMSD和运行安全。预计约20分钟，写入全新V2目录。
+6. **456单点全量扫描（V2通过后实现）**：所有456候选先按同一协议完成3重复评分，不在分片、任务或扫描中按分数/结构指标提前淘汰。结果合并且完整性核验后，再一次性采用统一规则筛选，避免不同批次或局部门改变候选空间。
+7. **亲和力复核与面板（约1–3天，不含实验）**：统一筛选综合重复稳定性、相对配对WT及原实验表位/接触保持、界面Cα RMSD、排斥和局部几何，不以单一能量值决定。E46/D101/I103不得因单一prepared构象接触丢失而直接淘汰。对小规模入围者再运行更严格的flex-ddG或等价多构象复核，并用AF3检查最终候选是否维持总体VHH构象；输出WT、机制多样的亲和力单点实验面板。此阶段不组合突变。
 
 ## Verification
 
@@ -86,7 +88,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Required Next Steps
 
-1. 修订候选结构门：运行安全继续独立阻断；接触/表位和构象保持必须显式相对同seed配对WT，同时保留对原实验接触集合的可解释记录，不能让WT自身低于的绝对阈值淘汰同水平候选。
-2. 在全新`affinity_pyrosetta_pilot_v2_20260811/`目录重跑同一12候选×3重复pilot，不覆盖v1结果；复核WT、候选接触集合、相对门和能量差值后再决定科学release。
-3. 只有v2科学review明确pass，才实现456候选的显式分片清单与Slurm array；每任务控制在5小时内，不提前实现复杂checkpoint。
-4. 表达/稳定性建模、nanoBERT/AntiFold/AbMPNN和风险修复候选继续暂停，亲和力初筛结果完成后重新讨论。
+1. 在远程pull当前pilot V2实现；通过`sbatch scripts/candidate_design/submit_affinity_scoring_pilot.slurm`写入全新`affinity_pyrosetta_pilot_v2_20260811/`目录，不覆盖v1。
+2. 同步V2结果，核验3个WT、36个突变体评估、12个未筛选摘要、精确接触集合、两套接触保持率及machine gate；此时只判断计算路线是否可用于全量扫描，不进行候选优劣筛选。
+3. V2运行门通过后实现456候选显式分片与Slurm array；全部候选完成并合并后，再实现一次统一筛选入口。每任务控制在5小时内，不增加复杂checkpoint。
+4. 表达/稳定性建模、nanoBERT/AntiFold/AbMPNN和风险修复候选继续暂停，亲和力全量筛选结果完成后重新讨论。

@@ -127,10 +127,10 @@
   - 算法假设：实验严格`<4 Å`集合定义首轮空间；prepared-WT接触变化只作QC，不重定义界面；19种替换全部保留，不运行语言模型或主观预筛。
   - 明确不支持：多突变、非界面设计、亲和力排序、表达/稳定性判断或把界面位点解释为能量热点。
 - `antibody_optimization.pyrosetta_runtime`与`affinity_scoring`
-  - 用途：集中实现校准v2与候选评分共用的PyRosetta局部repack、坐标约束最小化、结构安全及界面测量语义；对同一重复的突变体与WT构建配对差值和候选摘要。
-  - 主要输入/返回：selected prepared WT、固定局部pose indices、候选source-auth突变、released结构身份和原实验接触集合；返回逐重复`mutant-WT` Rosetta信号、结构保持状态、候选汇总和pilot release gate。
-  - 算法假设：固定`ref2015`、8 Å局部邻域、0.25 Å主链坐标约束与共同随机种子；候选能量方向不决定运行是否有效，映射/断点/二硫键/有限数值和结构保持才是流程门。
-  - 明确不支持：绝对亲和力、膜蛋白绝对稳定性、缺失区补全、全局relax、表达/稳定性筛选或自动组合突变。
+  - 用途：集中实现校准v2与候选评分共用的PyRosetta局部repack、坐标约束最小化、结构安全及界面测量语义；对同一重复的突变体与WT构建配对差值、精确接触集合和未筛选候选摘要。
+  - 主要输入/返回：selected prepared WT、固定局部pose indices、候选source-auth突变、released结构身份和原实验接触集合；返回逐重复`mutant-WT` Rosetta信号、相对原实验及同seed配对WT的接触保持率、候选汇总和pilot V2运行门。
+  - 算法假设：固定`ref2015`、8 Å局部邻域、0.25 Å主链坐标约束与共同随机种子；扫描阶段必须先计算全部显式候选，能量、接触和RMSD仅记录为非阻断QC，统一候选筛选在完整扫描结束后另行执行。只有映射、断点、二硫键、有限数值及WT对照有效性决定运行门。
+  - 明确不支持：在扫描阶段筛选候选、绝对亲和力、膜蛋白绝对稳定性、缺失区补全、全局relax、表达/稳定性筛选或自动组合突变。
 
 ## 第一阶段活动入口
 
@@ -150,4 +150,4 @@
 - `scripts/structure_preparation/validate_pyrosetta_wt_import.py`：阶段1唯一计算入口；由同目录`submit_pyrosetta_wt_import.slurm`从已验证仓库根提交，使用`-missing_density_to_jump true`直接导入实验mmCIF，不做relax。Python入口默认拒绝覆盖，输出一个断点表、一个raw score term表、一个权威gate JSON、一张SVG和一个轻量run summary。Slurm固定`batch`、1 GPU、12 CPU、1小时上限且不显式申请内存；GPU是集群资源约束，本计算不使用GPU加速。`pass`只把亲和力评分推进到`ready_for_scoring_protocol_calibration`，不等于预测协议已验证。
 - `scripts/structure_preparation/calibrate_pyrosetta_scoring.py`：阶段2评分校准入口；由`submit_pyrosetta_scoring_calibration.slurm`运行8个固定主链界面repack和8个界面repack加坐标约束局部最小化重复。实验缺口、PDBInfo和二硫键每个重复均保持；不补全、全局relax或生成突变。v2除重复指标、raw/选中WT逐残基能量、选择JSON、代表结构、gate、SVG和run summary外，还输出选中WT的精确接触变化CSV；所有重复的`dG_separated`和跨界面能均须为负。Slurm唯一活动路线写入全新`pyrosetta_scoring_calibration_v2_20260811`，固定`batch`、1 GPU、12 CPU、4小时上限且不显式申请内存，按v1实测预计约7–15分钟并逐重复打印进度。
 - `scripts/candidate_design/build_affinity_single_mutants.py`：本地生成456个实验界面单突变、FASTA、24行位置摘要、12个pilot ID、gate、manifest、600 dpi PNG/SVG和run summary；默认拒绝覆盖。
-- `scripts/candidate_design/score_affinity_candidates_pyrosetta.py`：读取显式candidate ID文件；每个replicate/seed只计算一次共享WT，再以相同seed和v2协议分别评分全部突变体。WT结果只写入一行`wt_replicate_metrics.csv`，候选逐重复表通过`wt_control_id`引用对应WT并保存差值，避免把共享WT重复记录成多次计算；另输出候选摘要、pilot gate、SVG和run summary。`submit_affinity_scoring_pilot.slurm`固定`batch`、1 GPU、12 CPU、2小时上限和3重复。候选能量、接触保持或RMSD不合格只淘汰该候选；只有映射/断点/二硫键/有限数值等运行安全失败或WT对照失效才阻断全量初筛。
+- `scripts/candidate_design/score_affinity_candidates_pyrosetta.py`：读取显式candidate ID文件；每个replicate/seed只计算一次共享WT，再以相同seed和v2协议分别评分全部突变体。WT结果只写入一行`wt_replicate_metrics.csv`，候选逐重复表通过`wt_control_id`引用对应WT并保存差值、精确接触集合及相对配对WT的接触保持率；另输出未筛选候选摘要、pilot V2运行门、SVG和run summary。`submit_affinity_scoring_pilot.slurm`固定`batch`、1 GPU、12 CPU、2小时上限和3重复，并写入全新V2目录。扫描阶段不使用能量、接触保持或RMSD淘汰候选；只有映射/断点/二硫键/有限数值等运行安全失败或WT对照失效才阻断路线，完整扫描结束后再统一筛选。

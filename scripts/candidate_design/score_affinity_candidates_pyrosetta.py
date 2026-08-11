@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Score a declared Nb252 candidate subset against paired WT controls."""
+"""Score every declared Nb252 candidate without applying candidate filters."""
 
 from __future__ import annotations
 
@@ -174,7 +174,10 @@ def main() -> int:
     paired_rows = []
     for replicate in range(1, args.replicates + 1):
         seed = args.base_seed + replicate
-        print(f"Affinity pilot: replicate {replicate}/{args.replicates} seed={seed}", flush=True)
+        print(
+            f"Affinity pilot V2: replicate {replicate}/{args.replicates} seed={seed}",
+            flush=True,
+        )
         wt_pose = runtime.prepare_interface_pose(
             starting_pose,
             scorefxn,
@@ -194,6 +197,7 @@ def main() -> int:
             replicate=replicate,
             seed=seed,
             contact_cutoff=contact_cutoff,
+            include_contact_sets=True,
         )
         wt_control_rows.append(
             build_wt_control_row(replicate=replicate, seed=seed, metrics=wt_metrics)
@@ -242,6 +246,7 @@ def main() -> int:
                 seed=seed,
                 contact_cutoff=contact_cutoff,
                 allowed_mutations={(chain_id, auth_seq_id, insertion_code): mutant_residue},
+                include_contact_sets=True,
             )
             paired_rows.append(
                 build_paired_row(
@@ -282,7 +287,7 @@ def main() -> int:
         _write_json(
             staged_summary,
             {
-                "schema_version": 1,
+                "schema_version": 2,
                 "status": gate["status"],
                 "generated_at": generated_at,
                 "elapsed_seconds": round(time.perf_counter() - started, 6),
@@ -293,6 +298,8 @@ def main() -> int:
                 "wt_control_count": len(wt_control_rows),
                 "mutant_evaluation_count": len(paired_rows),
                 "replicate_count": args.replicates,
+                "candidate_filtering_applied": False,
+                "full_scan_contract": "score_all_declared_candidates_then_filter_once",
                 "outputs": {key: str(path) for key, path in final_paths.items()},
             },
         )
@@ -315,9 +322,10 @@ def _render_svg(rows: list[dict[str, object]], path: Path) -> None:
     items = [
         f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
         '<rect width="100%" height="100%" fill="white"/>',
-        '<text x="24" y="34" font-family="Arial" font-size="20">Paired PyRosetta affinity pilot</text>',
-        '<text x="24" y="56" font-family="Arial" font-size="12">ΔdG_separated = mutant − paired WT (REU; negative is favorable)</text>',
-        f'<line x1="{center}" y1="72" x2="{center}" y2="{height - 24}" stroke="#555" stroke-width="1"/>',
+        '<text x="24" y="34" font-family="Arial" font-size="20">Paired PyRosetta affinity pilot V2</text>',
+        '<text x="24" y="54" font-family="Arial" font-size="12">delta dG_separated = mutant - paired WT (REU; negative is favorable)</text>',
+        '<text x="24" y="68" font-family="Arial" font-size="12">Unfiltered scan-stage results; no candidate selection is applied.</text>',
+        f'<line x1="{center}" y1="76" x2="{center}" y2="{height - 24}" stroke="#555" stroke-width="1"/>',
     ]
     for index, row in enumerate(rows):
         y = 88 + index * 24

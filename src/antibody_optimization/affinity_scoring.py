@@ -32,6 +32,11 @@ METRIC_FIELDS = (
     "minimum_interchain_distance",
 )
 
+CONTACT_SET_FIELDS = (
+    "vhh_contact_auth_positions",
+    "receptor_contact_auth_positions",
+)
+
 PAIRED_FIELDS = [
     "candidate_id",
     "mutation_reported_label",
@@ -46,6 +51,11 @@ PAIRED_FIELDS = [
     "seed",
     "wt_control_id",
     *[f"mutant_{field}" for field in METRIC_FIELDS],
+    *[f"mutant_{field}" for field in CONTACT_SET_FIELDS],
+    "paired_wt_vhh_contact_count",
+    "paired_wt_receptor_epitope_count",
+    "candidate_vs_paired_wt_vhh_contact_retention",
+    "candidate_vs_paired_wt_receptor_epitope_retention",
     "delta_dG_separated",
     "delta_cross_interface_energy",
     "delta_interface_fa_rep",
@@ -54,7 +64,6 @@ PAIRED_FIELDS = [
     "mutant_disulfide_pass",
     "mutant_finite_metrics",
     "mutant_runtime_valid",
-    "mutant_structure_gate",
     "status",
 ]
 
@@ -63,6 +72,7 @@ WT_CONTROL_FIELDS = [
     "replicate",
     "seed",
     *METRIC_FIELDS,
+    *CONTACT_SET_FIELDS,
     "mapping_pass",
     "breaks_pass",
     "disulfide_pass",
@@ -81,15 +91,18 @@ SUMMARY_FIELDS = [
     "region",
     "prepared_contact_sensitive",
     "replicate_count",
-    "passing_replicate_count",
+    "runtime_valid_replicate_count",
     "delta_dG_separated_median",
     "delta_dG_separated_mad",
     "delta_cross_interface_energy_median",
     "delta_interface_fa_rep_median",
     "minimum_vhh_contact_retention",
     "minimum_receptor_epitope_retention",
+    "minimum_candidate_vs_paired_wt_vhh_contact_retention",
+    "minimum_candidate_vs_paired_wt_receptor_epitope_retention",
     "maximum_interface_ca_rmsd",
     "status",
+    "selection_status",
     "interpretation",
 ]
 
@@ -101,11 +114,8 @@ def build_paired_row(
     seed: int,
     wt_metrics: Mapping[str, object],
     mutant_metrics: Mapping[str, object],
-    minimum_vhh_contact_retention: float = 0.80,
-    minimum_receptor_epitope_retention: float = 0.90,
-    maximum_interface_ca_rmsd: float = 0.50,
 ) -> dict[str, object]:
-    """Create one paired mutant-minus-WT scoring record."""
+    """Create one unfiltered paired mutant-minus-WT scoring record."""
 
     if replicate < 1 or seed <= 0:
         raise AffinityScoringError("Replicate and seed must be positive")
@@ -115,17 +125,24 @@ def build_paired_row(
             raise AffinityScoringError(f"{label} metrics missing fields: {missing}")
         if not all(math.isfinite(float(metrics[field])) for field in METRIC_FIELDS):
             raise AffinityScoringError(f"{label} metrics contain non-finite values")
+        missing_contacts = [field for field in CONTACT_SET_FIELDS if field not in metrics]
+        if missing_contacts:
+            raise AffinityScoringError(
+                f"{label} metrics missing contact sets: {missing_contacts}"
+            )
+    wt_vhh_contacts = _contact_set(wt_metrics["vhh_contact_auth_positions"])
+    wt_receptor_contacts = _contact_set(
+        wt_metrics["receptor_contact_auth_positions"]
+    )
+    mutant_vhh_contacts = _contact_set(
+        mutant_metrics["vhh_contact_auth_positions"]
+    )
+    mutant_receptor_contacts = _contact_set(
+        mutant_metrics["receptor_contact_auth_positions"]
+    )
     runtime_valid = all(
         bool(mutant_metrics.get(field))
         for field in ("mapping_pass", "breaks_pass", "disulfide_pass", "finite_metrics")
-    )
-    structure_gate = runtime_valid and (
-        float(mutant_metrics["vhh_contact_retention"])
-        >= minimum_vhh_contact_retention
-        and float(mutant_metrics["receptor_epitope_retention"])
-        >= minimum_receptor_epitope_retention
-        and float(mutant_metrics["interface_ca_rmsd"])
-        <= maximum_interface_ca_rmsd
     )
     row = {
         key: candidate[key]
@@ -151,6 +168,20 @@ def build_paired_row(
     row.update({f"mutant_{field}": mutant_metrics[field] for field in METRIC_FIELDS})
     row.update(
         {
+            f"mutant_{field}": _serialize_contact_set(mutant_metrics[field])
+            for field in CONTACT_SET_FIELDS
+        }
+    )
+    row.update(
+        {
+            "paired_wt_vhh_contact_count": len(wt_vhh_contacts),
+            "paired_wt_receptor_epitope_count": len(wt_receptor_contacts),
+            "candidate_vs_paired_wt_vhh_contact_retention": _set_retention(
+                wt_vhh_contacts, mutant_vhh_contacts
+            ),
+            "candidate_vs_paired_wt_receptor_epitope_retention": _set_retention(
+                wt_receptor_contacts, mutant_receptor_contacts
+            ),
             "delta_dG_separated": float(mutant_metrics["dG_separated"])
             - float(wt_metrics["dG_separated"]),
             "delta_cross_interface_energy": float(
@@ -164,7 +195,6 @@ def build_paired_row(
             "mutant_disulfide_pass": bool(mutant_metrics.get("disulfide_pass")),
             "mutant_finite_metrics": bool(mutant_metrics.get("finite_metrics")),
             "mutant_runtime_valid": runtime_valid,
-            "mutant_structure_gate": structure_gate,
             "status": "pass" if runtime_valid else "blocked",
         }
     )
@@ -174,7 +204,7 @@ def build_paired_row(
 def summarize_paired_rows(
     rows: Sequence[Mapping[str, object]], *, expected_replicates: int
 ) -> list[dict[str, object]]:
-    """Summarize each candidate without treating unfavorable energy as run failure."""
+    """Summarize every scored candidate without applying scientific selection."""
 
     if expected_replicates < 3:
         raise AffinityScoringError("At least three paired replicates are required")
@@ -196,7 +226,6 @@ def summarize_paired_rows(
         delta_rep = [float(row["delta_interface_fa_rep"]) for row in selected]
         median_dg = statistics.median(delta_dg)
         runtime_valid = all(bool(row["mutant_runtime_valid"]) for row in selected)
-        all_structure_pass = all(bool(row["mutant_structure_gate"]) for row in selected)
         summaries.append(
             {
                 **{
@@ -214,8 +243,8 @@ def summarize_paired_rows(
                     )
                 },
                 "replicate_count": len(selected),
-                "passing_replicate_count": sum(
-                    bool(row["mutant_structure_gate"]) for row in selected
+                "runtime_valid_replicate_count": sum(
+                    bool(row["mutant_runtime_valid"]) for row in selected
                 ),
                 "delta_dG_separated_median": median_dg,
                 "delta_dG_separated_mad": statistics.median(
@@ -229,18 +258,27 @@ def summarize_paired_rows(
                 "minimum_receptor_epitope_retention": min(
                     float(row["mutant_receptor_epitope_retention"]) for row in selected
                 ),
+                "minimum_candidate_vs_paired_wt_vhh_contact_retention": min(
+                    float(row["candidate_vs_paired_wt_vhh_contact_retention"])
+                    for row in selected
+                ),
+                "minimum_candidate_vs_paired_wt_receptor_epitope_retention": min(
+                    float(
+                        row[
+                            "candidate_vs_paired_wt_receptor_epitope_retention"
+                        ]
+                    )
+                    for row in selected
+                ),
                 "maximum_interface_ca_rmsd": max(
                     float(row["mutant_interface_ca_rmsd"]) for row in selected
                 ),
-                "status": "pass" if all_structure_pass else "blocked",
+                "status": "pass" if runtime_valid else "blocked",
+                "selection_status": "not_applied_scan_stage",
                 "interpretation": (
-                    "favorable_relative_signal"
-                    if all_structure_pass and median_dg < 0
-                    else "unfavorable_or_neutral_relative_signal"
-                    if all_structure_pass
+                    "unfiltered_relative_scoring_result"
+                    if runtime_valid
                     else "runtime_failure"
-                    if not runtime_valid
-                    else "structurally_not_evaluable"
                 ),
             }
         )
@@ -283,8 +321,8 @@ def build_pilot_gate(
     if wt_control_failures:
         blockers.append("paired_wt_control_failure")
     return {
-        "schema_version": 1,
-        "gate_name": "nb252_affinity_pyrosetta_pilot",
+        "schema_version": 2,
+        "gate_name": "nb252_affinity_pyrosetta_pilot_v2",
         "status": "pass" if not blockers else "blocked",
         "full_affinity_scan_release": "pass" if not blockers else "blocked",
         "blockers": blockers,
@@ -293,7 +331,9 @@ def build_pilot_gate(
         "replicate_count_per_candidate": expected_replicates,
         "paired_row_count": len(paired_rows),
         "candidate_status_counts": dict(Counter(str(row["status"]) for row in summaries)),
-        "structurally_rejected_candidates_do_not_block_workflow": True,
+        "candidate_filtering_applied": False,
+        "full_scan_contract": "score_all_declared_candidates_then_filter_once",
+        "structure_metrics_are_nonblocking_qc": True,
         "candidate_energy_direction_is_not_a_workflow_gate": True,
         "score_semantics": "mutant_minus_paired_WT_Rosetta_ranking_signal",
     }
@@ -309,11 +349,18 @@ def build_wt_control_row(
         raise AffinityScoringError(f"WT metrics missing fields: {missing}")
     if not all(math.isfinite(float(metrics[field])) for field in METRIC_FIELDS):
         raise AffinityScoringError("WT metrics contain non-finite values")
+    missing_contacts = [field for field in CONTACT_SET_FIELDS if field not in metrics]
+    if missing_contacts:
+        raise AffinityScoringError(f"WT metrics missing contact sets: {missing_contacts}")
     return {
         "wt_control_id": f"Nb252_WT_rep{replicate:02d}_seed{seed}",
         "replicate": replicate,
         "seed": seed,
         **{field: metrics[field] for field in METRIC_FIELDS},
+        **{
+            field: _serialize_contact_set(metrics[field])
+            for field in CONTACT_SET_FIELDS
+        },
         **{
             field: bool(metrics.get(field))
             for field in (
@@ -325,3 +372,21 @@ def build_wt_control_row(
         },
         "status": str(metrics.get("status", "blocked")),
     }
+
+
+def _contact_set(value: object) -> set[int]:
+    if isinstance(value, str):
+        return {int(item) for item in value.split(";") if item}
+    if not isinstance(value, (set, frozenset, list, tuple)):
+        raise AffinityScoringError(f"Invalid contact-set value: {value!r}")
+    return {int(item) for item in value}
+
+
+def _serialize_contact_set(value: object) -> str:
+    return ";".join(str(item) for item in sorted(_contact_set(value)))
+
+
+def _set_retention(reference: set[int], observed: set[int]) -> float:
+    if not reference:
+        raise AffinityScoringError("Paired WT contact set must not be empty")
+    return len(reference & observed) / len(reference)

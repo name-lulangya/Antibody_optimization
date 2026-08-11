@@ -1,11 +1,11 @@
 #!/bin/bash
-#SBATCH --job-name=nb252_aff_pilot
+#SBATCH --job-name=nb252_aff_pilot_v2
 #SBATCH --partition=batch
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=12
 #SBATCH --time=02:00:00
-#SBATCH --output=nb252-affinity-pilot-%j.log
-#SBATCH --error=nb252-affinity-pilot-%j.log
+#SBATCH --output=nb252-affinity-pilot-v2-%j.log
+#SBATCH --error=nb252-affinity-pilot-v2-%j.log
 
 set -euo pipefail
 
@@ -20,7 +20,7 @@ python scripts/candidate_design/score_affinity_candidates_pyrosetta.py \
   --stage0-dir docs/result_artifacts/candidate_design/stage0_contract_20260810 \
   --structure-baseline-dir docs/result_artifacts/input_baseline/structure_released_20260810 \
   --calibration-dir docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_v2_20260811 \
-  --output-dir docs/result_artifacts/candidate_design/affinity_pyrosetta_pilot_20260811 \
-  --run-summary docs/run_summaries/candidate_design/affinity_pyrosetta_pilot_20260811.json \
+  --output-dir docs/result_artifacts/candidate_design/affinity_pyrosetta_pilot_v2_20260811 \
+  --run-summary docs/run_summaries/candidate_design/affinity_pyrosetta_pilot_v2_20260811.json \
   --replicates 3 \
   --base-seed 8112100

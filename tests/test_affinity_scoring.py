@@ -34,7 +34,13 @@ def _candidate() -> dict[str, object]:
     }
 
 
-def _metrics(*, delta: float = 0.0, retention: float = 1.0) -> dict[str, object]:
+def _metrics(
+    *,
+    delta: float = 0.0,
+    retention: float = 1.0,
+    vhh_contacts: set[int] | None = None,
+    receptor_contacts: set[int] | None = None,
+) -> dict[str, object]:
     values = {
         "total_score": -100.0 + delta,
         "dG_separated": -50.0 + delta,
@@ -47,6 +53,8 @@ def _metrics(*, delta: float = 0.0, retention: float = 1.0) -> dict[str, object]
         "receptor_epitope_retention": retention,
         "interface_ca_rmsd": 0.1,
         "minimum_interchain_distance": 2.0,
+        "vhh_contact_auth_positions": vhh_contacts or {1, 2, 3},
+        "receptor_contact_auth_positions": receptor_contacts or {10, 11, 12},
         "mapping_pass": True,
         "breaks_pass": True,
         "disulfide_pass": True,
@@ -69,7 +77,8 @@ def test_paired_summary_keeps_unfavorable_candidate_evaluable() -> None:
     ]
     summaries = summarize_paired_rows(rows, expected_replicates=3)
     assert summaries[0]["status"] == "pass"
-    assert summaries[0]["interpretation"] == "unfavorable_or_neutral_relative_signal"
+    assert summaries[0]["selection_status"] == "not_applied_scan_stage"
+    assert summaries[0]["interpretation"] == "unfiltered_relative_scoring_result"
     assert summaries[0]["delta_dG_separated_median"] == pytest.approx(2.0)
     gate = build_pilot_gate(
         wt_controls=[
@@ -82,21 +91,36 @@ def test_paired_summary_keeps_unfavorable_candidate_evaluable() -> None:
         expected_replicates=3,
     )
     assert gate["status"] == "pass"
+    assert gate["candidate_filtering_applied"] is False
+    assert gate["full_scan_contract"] == "score_all_declared_candidates_then_filter_once"
 
 
-def test_structure_failure_rejects_candidate_without_blocking_pilot() -> None:
+def test_structure_metrics_are_recorded_without_filtering_candidate() -> None:
     rows = [
         build_paired_row(
             _candidate(),
             replicate=replicate,
             seed=100 + replicate,
             wt_metrics=_metrics(),
-            mutant_metrics=_metrics(delta=-1.0, retention=0.5),
+            mutant_metrics=_metrics(
+                delta=-1.0,
+                retention=0.5,
+                vhh_contacts={2, 3, 4},
+                receptor_contacts={11, 12, 13},
+            ),
         )
         for replicate in range(1, 4)
     ]
     summaries = summarize_paired_rows(rows, expected_replicates=3)
-    assert summaries[0]["status"] == "blocked"
+    assert summaries[0]["status"] == "pass"
+    assert summaries[0]["selection_status"] == "not_applied_scan_stage"
+    assert summaries[0][
+        "minimum_candidate_vs_paired_wt_vhh_contact_retention"
+    ] == pytest.approx(2 / 3)
+    assert summaries[0][
+        "minimum_candidate_vs_paired_wt_receptor_epitope_retention"
+    ] == pytest.approx(2 / 3)
+    assert rows[0]["mutant_vhh_contact_auth_positions"] == "2;3;4"
     gate = build_pilot_gate(
         wt_controls=[
             build_wt_control_row(replicate=i, seed=100 + i, metrics=_metrics())
@@ -108,6 +132,7 @@ def test_structure_failure_rejects_candidate_without_blocking_pilot() -> None:
         expected_replicates=3,
     )
     assert gate["status"] == "pass"
+    assert gate["structure_metrics_are_nonblocking_qc"] is True
 
 
 def test_mutant_runtime_failure_blocks_pilot() -> None:
@@ -135,6 +160,7 @@ def test_mutant_runtime_failure_blocks_pilot() -> None:
         expected_replicates=3,
     )
     assert summaries[0]["interpretation"] == "runtime_failure"
+    assert summaries[0]["selection_status"] == "not_applied_scan_stage"
     assert gate["status"] == "blocked"
 
 
@@ -166,6 +192,7 @@ def test_shared_wt_control_is_recorded_once_per_replicate() -> None:
         row["wt_control_id"] for row in controls
     ]
     assert not any(key.startswith("wt_dG") for key in rows[0])
+    assert controls[0]["vhh_contact_auth_positions"] == "1;2;3"
 
 
 def test_runtime_pure_geometry_helpers() -> None:
@@ -187,6 +214,7 @@ def test_remote_entry_and_slurm_contract() -> None:
     assert "#SBATCH --cpus-per-task=12" in slurm
     assert "--replicates 3" in slurm
     assert "/data/software/env/luly25/multi_ligand" in slurm
+    assert "affinity_pyrosetta_pilot_v2_20260811" in slurm
 
 
 def test_calibration_uses_shared_runtime() -> None:
@@ -196,3 +224,8 @@ def test_calibration_uses_shared_runtime() -> None:
     assert "runtime.prepare_interface_pose(" in source
     assert "runtime.measure_interface_pose(" in source
     assert "runtime.cross_interface_energy(" in source
+    assert "include_contact_sets=True" not in source
+    candidate_source = (
+        PROJECT_ROOT / "scripts/candidate_design/score_affinity_candidates_pyrosetta.py"
+    ).read_text(encoding="utf-8")
+    assert candidate_source.count("include_contact_sets=True") == 2
