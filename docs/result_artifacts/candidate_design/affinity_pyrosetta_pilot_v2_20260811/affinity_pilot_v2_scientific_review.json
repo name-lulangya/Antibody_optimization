@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-08-11T16:24:23+08:00",
+  "source_result_commit": "181cbc51561950f6d06b15433fb47a38764c0d05",
+  "source_files": {
+    "machine_gate": "affinity_scoring_pilot_gate.json",
+    "wt_controls": "wt_replicate_metrics.csv",
+    "candidate_replicates": "candidate_replicate_metrics.csv",
+    "candidate_summary": "candidate_summary.csv"
+  },
+  "computational_execution": {
+    "status": "pass",
+    "elapsed_seconds": 1146.969247,
+    "wt_control_count": 3,
+    "mutant_evaluation_count": 36,
+    "candidate_count": 12,
+    "replicates_per_candidate": 3,
+    "mutant_runtime_failure_count": 0,
+    "candidate_filtering_applied": false
+  },
+  "integrity_review": {
+    "status": "pass",
+    "all_contact_counts_match_serialized_contact_sets": true,
+    "all_paired_wt_contact_retentions_recomputed_exactly": true,
+    "all_candidate_summaries_marked_not_applied_scan_stage": true,
+    "v1_v2_common_numeric_metrics_identical": true
+  },
+  "paired_wt_relative_contact_observation": {
+    "minimum_vhh_contact_retention": 0.9583333333333334,
+    "maximum_vhh_contact_retention": 1.0,
+    "minimum_receptor_epitope_retention": 1.0,
+    "maximum_receptor_epitope_retention": 1.0
+  },
+  "experimental_reference_contact_observation": {
+    "minimum_vhh_contact_retention": 0.875,
+    "maximum_vhh_contact_retention": 0.9583333333333334,
+    "minimum_receptor_epitope_retention": 0.8918918918918919,
+    "maximum_receptor_epitope_retention": 0.918918918918919,
+    "interpretation": "Experimental-reference retention remains a nonblocking provenance and QC measure during the scan; paired-WT retention prevents a prepared-WT baseline shift from being mislabeled as a mutation effect."
+  },
+  "scientific_release": {
+    "status": "released_for_full_456_scan_implementation",
+    "full_affinity_scan_release": "pass",
+    "reason": "The V2 pilot completed every declared candidate without scientific filtering, all runtime controls passed, and contact preservation relative to the same-seed paired WT was computed reproducibly without the V1 absolute-threshold baseline error.",
+    "full_scan_contract": "score_all_declared_candidates_then_filter_once",
+    "candidate_selection_performed": false
+  },
+  "score_scope": {
+    "status": "unfiltered_pilot_diagnostic",
+    "interpretation": "Mutant-minus-paired-WT Rosetta signals are model-specific ranking features, not measured affinity. Pilot candidates are not selected or rejected by this review."
+  }
+}
