@@ -1,0 +1,39 @@
+{
+  "command_argv": [
+    "/data/software/env/luly25/multi_ligand/bin/python",
+    "/homes/Tianlab/luly25/Antibody_optimization/scripts/structure_preparation/calibrate_pyrosetta_scoring.py",
+    "--stage0-dir",
+    "docs/result_artifacts/candidate_design/stage0_contract_20260810",
+    "--structure-baseline-dir",
+    "docs/result_artifacts/input_baseline/structure_released_20260810",
+    "--import-gate-dir",
+    "docs/result_artifacts/structure_preparation/pyrosetta_wt_import_20260810",
+    "--experimental-structure",
+    "data/structures/cxs_exports/NK2R-252__native.cif",
+    "--output-dir",
+    "docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_20260810",
+    "--run-summary",
+    "docs/run_summaries/structure_preparation/pyrosetta_scoring_calibration_20260810.json",
+    "--replicates",
+    "8"
+  ],
+  "elapsed_seconds": 404.321078,
+  "generated_at": "2026-08-11T09:34:34+08:00",
+  "outputs": {
+    "figure": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_20260810/pyrosetta_scoring_calibration_qc.svg",
+    "gate": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_20260810/pyrosetta_scoring_calibration_gate.json",
+    "per_residue": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_20260810/wt_per_residue_energy.csv",
+    "replicates": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_20260810/protocol_replicate_metrics.csv",
+    "representative": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_20260810/selected_wt_prepared.pdb",
+    "selection": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_20260810/selected_scoring_protocol.json"
+  },
+  "pyrosetta_version": "┌───────────────────────────────────────────────────────────────────────────────┐\n│                                  PyRosetta-4                                  │\n│               Created in JHU by Sergey Lyskov and PyRosetta Team              │\n│               (C) Copyright Rosetta Commons Member Institutions               │\n│                                                                               │\n│ NOTE: USE OF PyRosetta FOR COMMERCIAL PURPOSES REQUIRES PURCHASE OF A LICENSE │\n│          See LICENSE.PyRosetta.md or email license@uw.edu for details         │\n└───────────────────────────────────────────────────────────────────────────────┘\nPyRosetta-4 2026 [Rosetta PyRosetta4.Release.python310.ubuntu 2026.03+releasequarterly.5e498f1409c68ade56c8ce5842bf79e1b02e8db4 2026-01-13T13:24:11] retrieved from: http://www.pyrosetta.org",
+  "replicate_count_per_protocol": 8,
+  "schema_version": 1,
+  "selected_protocol": "interface_repack",
+  "source_stage_ids": {
+    "pyrosetta_import_gate_generated_at": "2026-08-10T14:08:11+00:00",
+    "stage0_contract_generated_at": "2026-08-10T21:49:00+08:00"
+  },
+  "status": "pass"
+}

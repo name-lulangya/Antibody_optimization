@@ -1,0 +1,76 @@
+{
+  "blockers": [],
+  "gate_name": "pyrosetta_scoring_protocol_calibration",
+  "generated_at": "2026-08-11T09:34:34+08:00",
+  "membrane_protocol_decision": "not_required_for_primary_local_interface_protocol",
+  "outputs": {
+    "per_residue_diagnostics": "wt_per_residue_energy.csv",
+    "protocol_selection": "selected_scoring_protocol.json",
+    "qc_figure": "pyrosetta_scoring_calibration_qc.svg",
+    "replicate_metrics": "protocol_replicate_metrics.csv",
+    "representative_structure": "selected_wt_prepared.pdb"
+  },
+  "protocol_summaries": [
+    {
+      "blockers": [],
+      "dG_separated_mad": 0.6086992593056948,
+      "dG_separated_median": 58.42506113349623,
+      "interface_fa_rep_median": 112.06409478842124,
+      "maximum_interface_ca_rmsd": 0.0,
+      "minimum_receptor_epitope_retention": 0.918918918918919,
+      "minimum_vhh_contact_retention": 0.9583333333333334,
+      "protocol": "interface_repack",
+      "replicate_count": 8,
+      "status": "pass"
+    },
+    {
+      "blockers": [],
+      "dG_separated_mad": 2.357017322241518,
+      "dG_separated_median": -58.14715619556847,
+      "interface_fa_rep_median": 22.466594093190103,
+      "maximum_interface_ca_rmsd": 0.07180428670014488,
+      "minimum_receptor_epitope_retention": 0.918918918918919,
+      "minimum_vhh_contact_retention": 0.875,
+      "protocol": "interface_repack_constrained_min",
+      "replicate_count": 8,
+      "status": "pass"
+    }
+  ],
+  "pyrosetta_affinity_scoring_release": "pass",
+  "raw_import_metrics": {
+    "cross_interface_energy": 70.00295567694212,
+    "dG_separated_fixed_sidechains": 66.9126731684953,
+    "interface_fa_atr": -136.46699185250654,
+    "interface_fa_rep": 183.48368635623535,
+    "local_repack_residue_count": 146,
+    "receptor_epitope_count": 37,
+    "source_incomplete_sidechain_local_residue_count": 8,
+    "source_incomplete_sidechain_residue_count": 20,
+    "source_incomplete_vhh_interface_positions": [
+      102
+    ],
+    "source_missing_heavy_atom_count": 90,
+    "total_score": 1292.7485711160023,
+    "vhh_contact_count": 24
+  },
+  "representative_replicate": 4,
+  "schema_version": 1,
+  "score_semantics": "paired_relative_interface_ranking_signal_not_measured_affinity",
+  "selected_protocol": "interface_repack",
+  "software": {
+    "pyrosetta_version": "┌───────────────────────────────────────────────────────────────────────────────┐\n│                                  PyRosetta-4                                  │\n│               Created in JHU by Sergey Lyskov and PyRosetta Team              │\n│               (C) Copyright Rosetta Commons Member Institutions               │\n│                                                                               │\n│ NOTE: USE OF PyRosetta FOR COMMERCIAL PURPOSES REQUIRES PURCHASE OF A LICENSE │\n│          See LICENSE.PyRosetta.md or email license@uw.edu for details         │\n└───────────────────────────────────────────────────────────────────────────────┘\nPyRosetta-4 2026 [Rosetta PyRosetta4.Release.python310.ubuntu 2026.03+releasequarterly.5e498f1409c68ade56c8ce5842bf79e1b02e8db4 2026-01-13T13:24:11] retrieved from: http://www.pyrosetta.org",
+    "score_function": "ref2015"
+  },
+  "source_stage_ids": {
+    "pyrosetta_import_gate_generated_at": "2026-08-10T14:08:11+00:00",
+    "stage0_contract_generated_at": "2026-08-10T21:49:00+08:00"
+  },
+  "status": "pass",
+  "thresholds": {
+    "maximum_dg_mad_reu": 3.0,
+    "maximum_interface_ca_rmsd_angstrom": 0.5,
+    "maximum_interface_fa_rep_increase_reu": 0.0,
+    "minimum_receptor_epitope_retention": 0.9,
+    "minimum_vhh_contact_retention": 0.8
+  }
+}
