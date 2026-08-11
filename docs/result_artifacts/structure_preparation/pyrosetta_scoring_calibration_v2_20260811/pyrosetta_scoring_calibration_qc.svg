@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="390" viewBox="0 0 1000 390">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="50" y="48" font-family="Arial, sans-serif" font-size="26" font-weight="bold">PyRosetta WT scoring calibration</text>
+<rect x="820" y="22" width="130" height="38" rx="8" fill="#2a9d8f"/>
+<text x="885" y="49" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#ffffff">PASS</text>
+<text x="50" y="91" font-family="Arial, sans-serif" font-size="16" fill="#333333">Local interface preparation; ref2015; no missing-region completion or global relax</text>
+<rect x="70" y="122" width="860" height="58" rx="8" fill="#f7f7f7" stroke="#d1495b" stroke-width="3"/><text x="95" y="150" font-family="Arial, sans-serif" font-size="17">interface_repack</text><text x="470" y="150" font-family="Arial, sans-serif" font-size="16">dG median 58.425 REU; MAD 0.609</text><text x="890" y="150" text-anchor="end" font-family="Arial, sans-serif" font-size="17" fill="#d1495b">BLOCKED</text><rect x="70" y="204" width="860" height="58" rx="8" fill="#f7f7f7" stroke="#2a9d8f" stroke-width="3"/><text x="95" y="232" font-family="Arial, sans-serif" font-size="17">interface_repack_constrained_min</text><text x="470" y="232" font-family="Arial, sans-serif" font-size="16">dG median -58.147 REU; MAD 2.357</text><text x="890" y="232" text-anchor="end" font-family="Arial, sans-serif" font-size="17" fill="#2a9d8f">PASS</text>
+<text x="70" y="338" font-family="Arial, sans-serif" font-size="17" font-weight="bold">Selected: interface_repack_constrained_min</text>
+<text x="70" y="370" font-family="Arial, sans-serif" font-size="14" fill="#555555">Ranking signal only; not measured affinity or absolute membrane-protein stability</text>
+</svg>
