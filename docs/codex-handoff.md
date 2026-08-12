@@ -60,6 +60,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - pilot V2已远程完成：1146.969247秒，3个共享WT、36个突变体评估、12个候选摘要全部通过运行安全，所有摘要均为`not_applied_scan_stage`，没有执行候选筛选。接触集合、计数和相对同seed配对WT保持率已逐行重算一致；NK2R表位配对WT保持率全部为1.0，VHH配对WT保持率范围0.958333–1.0。V1/V2共同数值字段逐字一致，证明V2修正的是门和记录语义而非评分轨迹。
 - `affinity_pilot_v2_scientific_review.json`将路线发布为`released_for_full_456_scan_implementation`。全量合同固定为先计算全部456候选并核验合并完整性，再统一筛选；pilot能量只作未筛选诊断，不产生实验候选推荐。
 - 456×3全量扫描已完成并通过merge gate：12片累计计算42645.718076秒，456个候选、1368个唯一重复键、3个去重WT均完整，0个runtime failure，全部摘要为`not_applied_scan_stage`。接触集合/保持率和`mutant-WT`能量差已逐行复算一致；`affinity_full_scan_scientific_review.json`发布`ready_for_post_scan_filter_implementation`，尚未选择或淘汰任何候选。
+- 统一post-scan分层已在本地完成：456条全部通过硬有效性门并互斥分为Tier 1/2/3/4/5=`18/30/39/82/287`；Tier 1/2合计48条形成严格复核池。分层使用三重复双能量方向、配对WT接触保持和`Δfa_rep`，风险标签与层内Pareto保持独立；`candidate_selection_performed=false`，尚未形成最终实验面板。
 - `finalize_input_baseline.py` 已用真实 structure mapping/interface 重建 canonical 128 位点图和 `stage1_gate.json`。程序 `status=pass` 不代表科学 release gate 自动通过。
 
 ## Stage-2 Phase 0 Result
@@ -76,12 +77,13 @@ Timezone: Asia/Shanghai (UTC+08:00)
 4. **亲和力单点空间（本地已完成，实测约2秒）**：`affinity_single_mutants_20260811/`已从阶段0合同、实验24位界面、可逆编号和v2评分gate生成每个位点19种非WT替换，共456个单点；每条均保留完整128-aa序列、reported/IMGT/source-auth编号、实验接触和prepared WT敏感标记。12个pilot候选覆盖FR/CDR、保守/跨类替换及E46/D101/I103，未按prepared接触或主观化学偏好预删候选。
 5. **成对PyRosetta亲和力pilot V2（已完成，实测19.116154分钟）**：12候选×3重复和共享WT运行全部有效，配对WT相对接触指标复算一致，扫描阶段未筛选候选；路线已释放456全量扫描实现。
 6. **456单点全量扫描（已完成）**：12片累计11.846小时计算量，完整得到456候选×3重复且没有扫描中筛选。未筛选景观中113个候选`ΔdG<0`、143个跨界面能变化<0、87个两者均<0，但这些只是描述性计数；82个候选两指标方向不一致，说明后续不能使用单一能量列筛选。
-7. **统一筛选与亲和力复核（下一阶段，约1–3天，不含实验）**：只读取完整merge结果，预声明统一规则，综合能量方向/重复MAD、配对WT及原实验接触保持、界面Cα RMSD、排斥和局部几何。之后仅对小规模入围者运行更严格的flex-ddG或等价多构象复核，并用AF3检查最终候选总体VHH构象；此阶段不组合突变。
+7. **统一筛选（已完成，本地实测约1.5秒）**：完整456候选按统一规则分为`18/30/39/82/287`，48条Tier 1/2进入严格复核池；未删除候选、未形成最终实验推荐。
+8. **亲和力严格复核（下一阶段，约1–3天，不含实验）**：为48条复核池设计多构象复核和机制多样性缩减，重点处理接触变化、排斥、C102不完整侧链和prepared敏感位点；此阶段仍不组合突变。
 
 ## Verification
 
 - 阶段0专项：`3 passed`；覆盖真实128位合同、过期哈希拒绝、CSV BOM/LF、拒绝覆盖、固定时间戳双跑六制品逐字节一致。
-- 阶段0图及亲和力候选空间图均已人工检查，坐标轴、图例和说明无遮挡。当前全套验收为`132 passed, 1 skipped, 4 subtests passed`；唯一skip仍是Windows真实symlink权限测试。
+- 阶段0图、亲和力候选空间图及post-scan四面板图均已人工检查，坐标轴、图例和说明无遮挡。当前全套验收为`141 passed, 1 skipped, 4 subtests passed`；唯一skip仍是Windows真实symlink权限测试。
 - `pip check`、`python -m compileall -q src scripts tests`、`git diff --check` 均通过。
 - v2结果一致性复核：schema 2 gate为pass、16行重复数据和67行接触状态与gate一致、代表PDB含396个polymer残基；评分校准专项测试`8 passed`。
 - pilot V2一致性复核：3行WT、36行候选重复、12行候选汇总与machine gate一致；0个runtime failure，36/36重复和12/12摘要为pass，全部摘要未筛选。接触集合计数及配对WT保持率复算一致；V1/V2共同数值字段逐字一致。
@@ -91,7 +93,6 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Required Next Steps
 
-1. 实现一次统一的post-scan筛选合同和入口；在代码中明确硬运行/结构约束与软排序指标，并只读取完整456候选merge制品。
-2. 对筛后小规模候选设计更严格的亲和力复核方案，重点处理能量方向不一致、高MAD、接触变化、C102 source侧链不完整及prepared敏感位点。
-3. 复核后形成机制多样的亲和力单点实验面板；仍不组合突变，不把REU转换为实验亲和力。
-4. 表达/稳定性建模、nanoBERT/AntiFold/AbMPNN和风险修复候选继续暂停，亲和力单点面板形成后重新讨论。
+1. 为48条Tier 1/2严格复核池设计多构象亲和力复核合同；先确定需要复核的局部几何、重复数和候选多样性原则，再启动远程计算。
+2. 复核后形成机制多样的亲和力单点实验面板；仍不组合突变，不把REU转换为实验亲和力。
+3. 表达/稳定性建模、nanoBERT/AntiFold/AbMPNN和风险修复候选继续暂停，亲和力单点面板形成后重新讨论。

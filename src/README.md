@@ -136,6 +136,11 @@
   - 主要输入/返回：456候选表、12分片manifest及每片WT/重复/摘要/gate；返回去重的3行WT、1368行突变体重复、456行摘要、绘图表、完整性统计和24×20双能量热图。
   - 算法假设：每片恰含两个完整界面位置、3个固定seed；12片WT按身份/接触状态精确比较且数值允许`1e-6`跨节点误差；只有12片全部pass、候选/重复键完整且全部`not_applied_scan_stage`才释放统一筛选。
   - 明确不支持：运行PyRosetta、在分片或合并时筛选候选、自动设定筛选阈值、解释绝对亲和力或生成组合突变。
+- `antibody_optimization.affinity_post_scan`与`affinity_post_scan_plot`
+  - 用途：只对完整456候选合并结果执行一次统一证据分层，生成显式风险标签、层内Pareto前沿、48条严格复核池及四面板结果图。
+  - 主要输入/返回：候选manifest、456行摘要、1368行重复、merge/scientific/calibration gates和关键残基集；返回完整候选Tier表、Tier/位置/区域统计、复核池和release gate。
+  - 算法假设：Tier 1要求两项配对WT能量在3/3重复均为负、两侧配对WT接触保持均为1.0且`Δfa_rep`中位数不增加；Tier 2保留3/3双能量且NK2R表位保持为1.0但需局部复核者；Tier 3为其余双负中位数，Tier 4为两项中位数方向冲突，Tier 5为当前模型无双负中位数支持。层内Pareto不使用加权综合分。
+  - 明确不支持：重新运行PyRosetta、删除候选、把Tier解释为实测亲和力、形成最终实验面板或生成组合突变。
 
 ## 第一阶段活动入口
 
@@ -159,3 +164,4 @@
 - `scripts/candidate_design/build_affinity_full_scan_plan.py`：本地读取456候选和pilot V2科学release，生成12×38分片manifest、12个ID文件、plan及run summary；每片恰好覆盖两个完整界面位置，固定最大array并发为4。
 - `scripts/candidate_design/score_affinity_candidates_pyrosetta.py --run-kind full_scan_shard`：复用同一评分实现运行一个38候选分片，只输出WT、114行突变体重复、38行未筛选摘要、shard gate和ignored run summary；要求plan、shard ID和V2 review一致。
 - `scripts/candidate_design/merge_affinity_full_scan.py`：只在12片全部完成后合并；严格验证456候选、1368个`candidate×replicate×seed`键、分片归属、候选身份、三组WT一致性和无筛选状态，再写Git跟踪CSV/gate/600 dpi PNG/SVG及run summary。`submit_affinity_full_scan.sh`提交`0-11%4` array并以`afterok`提交合并任务；array使用PyRosetta工具环境，合并使用项目`ab_optim`环境。
+- `scripts/candidate_design/filter_affinity_full_scan.py`：本地一次性读取完整merge结果、候选manifest、关键残基集和评分release，执行统一Tier/风险/Pareto解释；默认拒绝覆盖，输出456行完整Tier表、48行严格复核池、Tier摘要、gate、600 dpi PNG/SVG和run summary，不重新评分或生成最终实验推荐。

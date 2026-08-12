@@ -1,0 +1,28 @@
+{
+  "all_candidates_assigned_exactly_one_tier": true,
+  "candidate_count": 456,
+  "candidate_selection_performed": false,
+  "combination_mutations_generated": false,
+  "gate_name": "nb252_affinity_post_scan_tiering",
+  "generated_at": "2026-08-12T14:00:00+08:00",
+  "interpretation": "Evidence tiers organize paired-WT PyRosetta signals and structural QC; they are not measured affinity or a final experimental panel.",
+  "release": "ready_for_strict_review_protocol_design",
+  "schema_version": 1,
+  "source_full_scan_complete": true,
+  "status": "pass",
+  "strict_review_pool_count": 48,
+  "thresholds": {
+    "high_dg_mad_annotation_reu": 3.0,
+    "maximum_interface_ca_rmsd_angstrom": 0.5,
+    "tier_1_requires_all_replicates_negative_for_both_energy_metrics": true,
+    "tier_1_requires_nonpositive_median_delta_fa_rep": true,
+    "tier_1_requires_paired_wt_contact_retention": 1.0
+  },
+  "tier_counts": {
+    "tier_1": 18,
+    "tier_2": 30,
+    "tier_3": 39,
+    "tier_4": 82,
+    "tier_5": 287
+  }
+}

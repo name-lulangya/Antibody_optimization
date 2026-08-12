@@ -1,0 +1,45 @@
+{
+  "candidate_selection_performed": false,
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\filter_affinity_full_scan.py",
+    "--full-scan-dir",
+    "docs/result_artifacts/candidate_design/affinity_pyrosetta_full_scan_20260811",
+    "--candidate-dir",
+    "docs/result_artifacts/candidate_design/affinity_single_mutants_20260811",
+    "--critical-residue-sets",
+    "docs/result_artifacts/input_baseline/reviews/nb252_critical_residue_sets.json",
+    "--calibration-gate",
+    "docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_v2_20260811/pyrosetta_scoring_calibration_gate.json",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/affinity_post_scan_filter_20260812",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/affinity_post_scan_filter_20260812.json",
+    "--generated-at",
+    "2026-08-12T14:00:00+08:00"
+  ],
+  "counts": {
+    "candidate_count": 456,
+    "strict_review_pool_count": 48,
+    "tier_counts": {
+      "tier_1": 18,
+      "tier_2": 30,
+      "tier_3": 39,
+      "tier_4": 82,
+      "tier_5": 287
+    }
+  },
+  "elapsed_seconds": 1.501016,
+  "generated_at": "2026-08-12T14:00:00+08:00",
+  "outputs": {
+    "candidates": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_post_scan_filter_20260812\\affinity_candidate_tiers.csv",
+    "figure_png": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_post_scan_filter_20260812\\affinity_post_scan_tiers.png",
+    "figure_svg": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_post_scan_filter_20260812\\affinity_post_scan_tiers.svg",
+    "gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_post_scan_filter_20260812\\affinity_post_scan_gate.json",
+    "review_pool": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_post_scan_filter_20260812\\affinity_review_pool.csv",
+    "tier_summary": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_post_scan_filter_20260812\\affinity_tier_summary.csv"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}

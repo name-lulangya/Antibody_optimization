@@ -1,0 +1,6 @@
+﻿tier,candidate_count,strict_review_pool
+tier_1,18,True
+tier_2,30,True
+tier_3,39,False
+tier_4,82,False
+tier_5,287,False
