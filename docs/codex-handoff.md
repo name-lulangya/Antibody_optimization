@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-12 10:58:00
+Last updated: 2026-08-12 18:30:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -91,11 +91,11 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 全量扫描plan为pass：456候选、1368预期突变体评估、12片×38、每片两个完整位置、最大并发4且`candidate_filtering_applied=false`。实现测试覆盖真实分片、完整合并、缺片/提前筛选阻断、最终PNG/SVG和Slurm依赖合同。
 - 全量结果复核：456摘要、1368重复、3个WT与manifest/merge gate一致，所有candidate×replicate×seed唯一，接触和能量差复算通过。最终PNG已人工检查；右侧重复Y轴标签已从绘图代码和已有plot data修正，不改评分数据。
 - 修复覆盖：ChimeraX sandbox 入口、实际模型名、无 polymer sequence 时严格 source-auth exact-WT 映射、较长 polymer 中唯一 authoritative segment、`not_evaluable` summary 状态。
-- Flex ddG pilot本地专项`7 passed`，当前全套验收为`148 passed, 1 skipped, 4 subtests passed`；真实PyRosetta backrub API和8任务运行尚未在服务器验证，不能报告pilot耗时或科学结果。
+- Flex ddG pilot首次远程数组在C++层段错误，未产生正式结果；活动路线现使用不跨FoldTree cutpoint/链边界的显式3–12残基segment，并把4个代表邻域各一次真实move移入提交前检查。本地专项`9 passed`，当前全套验收为`150 passed, 1 skipped, 4 subtests passed`；修复后真实PyRosetta move和8任务尚待服务器验证，不能报告pilot耗时或科学结果。
 
 ## Required Next Steps
 
-1. 远程pull后运行`bash scripts/candidate_design/submit_flex_ddg_pilot.sh`；包装器先在PyRosetta环境执行一次真实`--check_only`，随后提交8任务并发数组及`afterok`汇总任务。
+1. 远程pull后运行`bash scripts/candidate_design/submit_flex_ddg_pilot.sh`；包装器先在PyRosetta环境对4个代表邻域各执行一个真实backrub move，确认显式segment不跨实验缺失区的FoldTree cutpoint后，才提交8任务并发数组及`afterok`汇总任务。
 2. pull回结果后核验8/8任务、阶段耗时、峰值内存、输出规模和计时图；只据实测median/P90投影讨论正式复核纳入Tier 1/2还是Tier 1/2/3，不用两重复分数排名。
 3. 范围确定后再实现正式20样本Flex ddG复核，随后形成机制多样的亲和力单点实验面板；仍不组合突变，不把REU转换为实验亲和力。
 4. 表达/稳定性建模、nanoBERT/AntiFold/AbMPNN和风险修复候选继续暂停，亲和力单点面板形成后重新讨论。

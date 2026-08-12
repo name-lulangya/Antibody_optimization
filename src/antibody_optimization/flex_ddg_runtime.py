@@ -27,18 +27,13 @@ def validate_backrub_api() -> dict[str, bool]:
 
     backrub = pyrosetta.rosetta.protocols.backrub.BackrubMover()
     required = {
-        "BackrubMover.set_pivot_residues": hasattr(backrub, "set_pivot_residues"),
-        "BackrubMover.set_min_atoms": hasattr(backrub, "set_min_atoms"),
-        "BackrubMover.set_max_atoms": hasattr(backrub, "set_max_atoms"),
         "BackrubMover.set_require_mm_bend": hasattr(
             backrub, "set_require_mm_bend"
         ),
         "BackrubMover.set_preserve_detailed_balance": hasattr(
             backrub, "set_preserve_detailed_balance"
         ),
-        "BackrubMover.add_mainchain_segments": hasattr(
-            backrub, "add_mainchain_segments"
-        ),
+        "BackrubMover.add_segment": hasattr(backrub, "add_segment"),
         "BackrubMover.apply": hasattr(backrub, "apply"),
         "MonteCarlo.boltzmann": hasattr(
             pyrosetta.rosetta.protocols.moves.MonteCarlo, "boltzmann"
@@ -74,7 +69,7 @@ def run_paired_sample(
     insertion_code = str(candidate.get("experimental_insertion_code", ""))
     wt_residue = str(candidate["wt_residue"])
     mutant_residue = str(candidate["mutant_residue"])
-    mutation_index = _pose_index(
+    mutation_index = locate_mutation_pose_index(
         starting_pose,
         chain_id=chain_id,
         auth_seq_id=auth_seq_id,
@@ -86,6 +81,10 @@ def run_paired_sample(
 
     started = time.perf_counter()
     phase = time.perf_counter()
+    print(
+        f"[{candidate['task_id']}] constrained WT minimization start",
+        flush=True,
+    )
     minimized = constrained_minimize(
         starting_pose,
         scorefxn,
@@ -96,6 +95,11 @@ def run_paired_sample(
     shared.assert_pose_safety(minimized, structure_inputs)
 
     phase = time.perf_counter()
+    print(
+        f"[{candidate['task_id']}] backrub start: "
+        f"pivots={len(backrub_indices)}, trials={backrub_trials}",
+        flush=True,
+    )
     backbone = sample_backrub(
         minimized,
         scorefxn,
@@ -234,20 +238,28 @@ def sample_backrub(
 
     pyrosetta.rosetta.numeric.random.rg().set_seed(seed)
     sampled = pose.clone()
-    pivot_vector = pyrosetta.rosetta.utility.vector1_unsigned_long()
-    for index in sorted(pivot_indices):
-        pivot_vector.append(index)
     mover = pyrosetta.rosetta.protocols.backrub.BackrubMover()
-    mover.set_pivot_residues(pivot_vector)
     mover.set_preserve_detailed_balance(True)
-    # Rosetta counts main-chain atoms; 3..34 atoms approximates the published
-    # short 3..12-residue segment range used by the Flex ddG protocol.
-    mover.set_min_atoms(3)
-    mover.set_max_atoms(34)
     mover.set_require_mm_bend(False)
-    segment_count = mover.add_mainchain_segments(sampled)
+    segment_pairs = safe_backrub_segment_pairs(
+        sampled,
+        pivot_indices,
+        minimum_residues=3,
+        maximum_residues=12,
+    )
+    from pyrosetta.rosetta.core.id import AtomID
+
+    segment_count = 0
+    for start_index, end_index in segment_pairs:
+        start_atom = AtomID(
+            sampled.residue(start_index).atom_index("CA"), start_index
+        )
+        end_atom = AtomID(sampled.residue(end_index).atom_index("CA"), end_index)
+        if mover.add_segment(start_atom, end_atom) > 0:
+            segment_count += 1
     if segment_count <= 0:
         raise RuntimeError("No valid backrub segments were generated")
+    print(f"  explicit covalent backrub segments: {segment_count}", flush=True)
     monte_carlo = pyrosetta.rosetta.protocols.moves.MonteCarlo(
         sampled, scorefxn, temperature
     )
@@ -259,6 +271,50 @@ def sample_backrub(
             print(f"  backrub {trial}/{trials}", flush=True)
     scorefxn(sampled)
     return sampled
+
+
+def safe_backrub_segment_pairs(
+    pose,
+    pivot_indices: set[int],
+    *,
+    minimum_residues: int,
+    maximum_residues: int,
+) -> list[tuple[int, int]]:
+    """Build explicit CA-pivot segments that never cross a chain end or cutpoint."""
+
+    if minimum_residues < 3 or maximum_residues < minimum_residues:
+        raise ValueError("Backrub residue-span bounds are invalid")
+    pdb_info = pose.pdb_info()
+    cutpoints = {int(value) for value in pose.fold_tree().cutpoints()}
+    runs: list[list[int]] = []
+    for index in sorted(pivot_indices):
+        if not runs:
+            runs.append([index])
+            continue
+        previous = runs[-1][-1]
+        same_chain = str(pdb_info.chain(previous)).strip() == str(
+            pdb_info.chain(index)
+        ).strip()
+        if index == previous + 1 and same_chain and previous not in cutpoints:
+            runs[-1].append(index)
+        else:
+            runs.append([index])
+
+    pairs: list[tuple[int, int]] = []
+    for run in runs:
+        for start_offset, start_index in enumerate(run):
+            for residue_count in range(minimum_residues, maximum_residues + 1):
+                end_offset = start_offset + residue_count - 1
+                if end_offset >= len(run):
+                    break
+                pairs.append((start_index, run[end_offset]))
+    if any(
+        any(cutpoint in range(start, end) for cutpoint in cutpoints)
+        or str(pdb_info.chain(start)).strip() != str(pdb_info.chain(end)).strip()
+        for start, end in pairs
+    ):
+        raise RuntimeError("Unsafe backrub segment crossed a chain boundary or cutpoint")
+    return pairs
 
 
 def optimize_branch(
@@ -338,9 +394,11 @@ def constrained_minimize(pose, scorefxn, *, movable_indices: set[int], max_iter:
     return minimized
 
 
-def _pose_index(
+def locate_mutation_pose_index(
     pose, *, chain_id: str, auth_seq_id: int, insertion_code: str
 ) -> int:
+    """Locate one source-auth mutation target and reject ambiguous mappings."""
+
     pdb_info = pose.pdb_info()
     matches = [
         index

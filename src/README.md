@@ -149,7 +149,7 @@
 - `antibody_optimization.flex_ddg_runtime`
   - 用途：复用`pyrosetta_runtime`的突变、repack、界面测量与结构安全逻辑，为一个任务执行WT约束最小化、局部backrub以及同一backbone上的独立WT/突变分支。
   - 主要输入/返回：released prepared WT、候选source-auth突变、固定seed、8 Å邻域、35,000 trials和项目界面定义；返回backbone/WT/突变Pose、两分支指标及分阶段耗时。
-  - 算法假设：采用项目`ref2015`和Flex ddG的成对backbone顺序；backrub只在WT序列上采样并保留轨迹最终接受构象，随后克隆为WT与突变分支；这是适配本项目评分基线的计时pilot，不是旧talaris/GAM权重的逐字复现。
+  - 算法假设：采用项目`ref2015`和Flex ddG的成对backbone顺序；backrub只在WT序列上采样并保留轨迹最终接受构象，随后克隆为WT与突变分支。backrub segment由3–12个残基的同链连续pose索引显式构建，禁止跨越FoldTree cutpoint或链边界；这是适配本项目评分基线及实验缺失区的计时pilot，不是旧talaris/GAM权重的逐字复现。
   - 明确不支持：本地无PyRosetta运行、跨候选共享backbone、在轨迹中筛选最低能构象、候选排序、组合突变或表达/稳定性判断。
 - `antibody_optimization.flex_ddg_plot`
   - 用途：从已验证的8任务阶段耗时和两种范围投影绘制600 dpi PNG/SVG，不绘制候选能量排名。
@@ -181,5 +181,5 @@
 - `scripts/candidate_design/merge_affinity_full_scan.py`：只在12片全部完成后合并；严格验证456候选、1368个`candidate×replicate×seed`键、分片归属、候选身份、三组WT一致性和无筛选状态，再写Git跟踪CSV/gate/600 dpi PNG/SVG及run summary。`submit_affinity_full_scan.sh`提交`0-11%4` array并以`afterok`提交合并任务；array使用PyRosetta工具环境，合并使用项目`ab_optim`环境。
 - `scripts/candidate_design/filter_affinity_full_scan.py`：本地一次性读取完整merge结果、候选manifest、关键残基集和评分release，执行统一Tier/风险/Pareto解释；默认拒绝覆盖，输出456行完整Tier表、48行严格复核池、Tier摘要、gate、600 dpi PNG/SVG和run summary，不重新评分或生成最终实验推荐。
 - `scripts/candidate_design/build_flex_ddg_pilot_plan.py`：本地固定生成4代表候选×2样本的8任务生产参数计时pilot；支持只读`--check_only`，正式输出manifest、plan及轻量run summary，默认拒绝覆盖。
-- `scripts/candidate_design/run_flex_ddg_task_pyrosetta.py`：在PyRosetta工具环境运行一个WT-backrub-成对WT/突变分支任务；`--check_only`会真实初始化固定PyRosetta并检查backrub API，但不写结果。正式任务事务性输出backbone、两分支PDB、能量/接触表和任务计时JSON。
+- `scripts/candidate_design/run_flex_ddg_task_pyrosetta.py`：在PyRosetta工具环境运行一个WT-backrub-成对WT/突变分支任务；`--check_only`会真实初始化固定PyRosetta，并在prepared WT上对4个代表候选各运行一个显式安全segment的backrub move，但不写结果。正式任务事务性输出backbone、两分支PDB、能量/接触表和任务计时JSON。
 - `scripts/candidate_design/summarize_flex_ddg_pilot.py`：仅在8任务全部存在后验证身份与指标，输出阶段耗时、48/87候选各20样本的并发8投影、可行性gate、600 dpi PNG/SVG和run summary；不按能量筛选候选。`submit_flex_ddg_pilot.sh`先执行一次真实precheck，再提交`0-7%8`数组及`afterok`汇总任务。

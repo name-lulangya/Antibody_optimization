@@ -12,6 +12,7 @@ from antibody_optimization.flex_ddg import (
     summarize_pilot_results,
 )
 from antibody_optimization.flex_ddg_plot import render_flex_ddg_pilot_figure
+from antibody_optimization.flex_ddg_runtime import safe_backrub_segment_pairs
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -111,12 +112,37 @@ def test_entry_points_and_slurm_contracts() -> None:
     assert "afterok:${ARRAY_JOB_ID}" in submit
     assert "/data/software/env/luly25/multi_ligand" in array
     assert "/data/software/env/luly25/ab_optim" in summary
-    assert "set_pivot_residues" in runtime
-    assert "set_min_atoms(3)" in runtime
-    assert "set_max_atoms(34)" in runtime
     assert "recover_low" not in runtime
+    assert "add_mainchain_segments" not in runtime
+    assert "add_segment" in runtime
     assert "run_flex_ddg_task_pyrosetta.py" in array
     assert 'local_definition["local_pose_indices"]' in task_script
+    assert "real_pose_one_move_smoke" in task_script
+
+
+def test_backrub_segments_never_cross_cutpoints_or_chain_boundaries() -> None:
+    pose = _FakePose(chains={index: "C" for index in range(1, 11)}, cutpoints={5})
+    pairs = safe_backrub_segment_pairs(
+        pose,
+        set(range(1, 11)),
+        minimum_residues=3,
+        maximum_residues=5,
+    )
+    assert pairs
+    assert (1, 5) in pairs
+    assert (6, 10) in pairs
+    assert all(not (start <= 5 < end) for start, end in pairs)
+
+
+def test_backrub_segments_require_consecutive_pose_indices() -> None:
+    pose = _FakePose(chains={index: "C" for index in range(1, 9)}, cutpoints=set())
+    pairs = safe_backrub_segment_pairs(
+        pose,
+        {1, 2, 3, 5, 6, 7, 8},
+        minimum_residues=3,
+        maximum_residues=4,
+    )
+    assert pairs == [(1, 3), (5, 7), (5, 8), (6, 8)]
 
 
 def _task_result(manifest_row: dict[str, object], elapsed: float) -> dict[str, object]:
@@ -156,3 +182,31 @@ def _task_result(manifest_row: dict[str, object], elapsed: float) -> dict[str, o
 def _csv(path: Path) -> list[dict[str, str]]:
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         return list(csv.DictReader(handle))
+
+
+class _FakePdbInfo:
+    def __init__(self, chains: dict[int, str]) -> None:
+        self.chains = chains
+
+    def chain(self, index: int) -> str:
+        return self.chains[index]
+
+
+class _FakeFoldTree:
+    def __init__(self, cutpoints: set[int]) -> None:
+        self._cutpoints = cutpoints
+
+    def cutpoints(self) -> list[int]:
+        return sorted(self._cutpoints)
+
+
+class _FakePose:
+    def __init__(self, *, chains: dict[int, str], cutpoints: set[int]) -> None:
+        self._pdb_info = _FakePdbInfo(chains)
+        self._fold_tree = _FakeFoldTree(cutpoints)
+
+    def pdb_info(self) -> _FakePdbInfo:
+        return self._pdb_info
+
+    def fold_tree(self) -> _FakeFoldTree:
+        return self._fold_tree

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import faulthandler
 import json
 import platform
 import sys
@@ -65,6 +66,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> int:
+    faulthandler.enable()
     args = parse_args()
     if args.task_index < 0:
         raise ValueError("Task index must be nonnegative")
@@ -101,9 +103,6 @@ def main() -> int:
         expected_version=args.expected_pyrosetta_version
     )
     api = flex_runtime.validate_backrub_api()
-    if args.check_only:
-        print(json.dumps({"status": "pass", "task_id": task["task_id"], "api": api}, sort_keys=True))
-        return 0
 
     selection = _load_json(calibration_dir / "selected_scoring_protocol.json")
     local_definition = selection["local_interface_definition"]
@@ -132,6 +131,52 @@ def main() -> int:
     starting_pose = pyrosetta.pose_from_file(str(starting_pdb))
     shared.assert_pose_safety(starting_pose, structure_inputs)
     scorefxn = pyrosetta.create_score_function(shared.SCORE_FUNCTION)
+    if args.check_only:
+        smoke_results = []
+        seen_candidates = set()
+        for candidate in manifest:
+            candidate_id = candidate["candidate_id"]
+            if candidate_id in seen_candidates:
+                continue
+            seen_candidates.add(candidate_id)
+            mutation_index = flex_runtime.locate_mutation_pose_index(
+                starting_pose,
+                chain_id=candidate["experimental_auth_asym_id"],
+                auth_seq_id=int(candidate["experimental_auth_seq_id"]),
+                insertion_code=candidate["experimental_insertion_code"],
+            )
+            neighborhood = flex_runtime.mutation_neighborhood(
+                starting_pose,
+                mutation_index,
+                args.backrub_neighborhood_angstrom,
+            )
+            sampled = flex_runtime.sample_backrub(
+                starting_pose,
+                scorefxn,
+                pivot_indices=neighborhood,
+                seed=int(candidate["seed"]),
+                trials=1,
+                temperature=args.backrub_temperature,
+            )
+            shared.assert_pose_safety(sampled, structure_inputs)
+            smoke_results.append(
+                {
+                    "candidate_id": candidate_id,
+                    "neighborhood_residue_count": len(neighborhood),
+                    "status": "pass",
+                }
+            )
+        print(
+            json.dumps(
+                {
+                    "status": "pass",
+                    "api": api,
+                    "real_pose_one_move_smoke": smoke_results,
+                },
+                sort_keys=True,
+            )
+        )
+        return 0
     reference_ca = shared.ca_coordinates(starting_pose, local_indices)
 
     started = time.perf_counter()
