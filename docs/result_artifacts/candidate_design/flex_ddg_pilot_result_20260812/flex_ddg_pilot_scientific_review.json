@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-08-12T14:32:57+08:00",
+  "source_result_commit": "0bfcc885b7832c979c6a1a4b094fb5e1f2715676",
+  "source_files": {
+    "gate": "flex_ddg_pilot_gate.json",
+    "task_metrics": "flex_ddg_pilot_task_metrics.csv",
+    "timing_summary": "flex_ddg_pilot_timing_summary.csv",
+    "scope_projections": "flex_ddg_scope_projections.csv"
+  },
+  "execution": {
+    "status": "pass",
+    "task_count": 8,
+    "candidate_count": 4,
+    "samples_per_candidate": 2,
+    "aggregate_task_elapsed_seconds": 6000.201128323912,
+    "aggregate_task_hours": 1.666722535645531,
+    "task_elapsed_seconds": {
+      "minimum": 678.2036797120236,
+      "median": 717.9807197590126,
+      "p90": 874.7537344722659,
+      "maximum": 875.3364788239123
+    },
+    "backrub_fraction_of_aggregate_task_time": 0.9472119572532958,
+    "peak_rss_mb": {
+      "minimum": 975.65234375,
+      "median": 988.5859375,
+      "maximum": 1000.6171875
+    },
+    "output_size_bytes_per_task": {
+      "minimum": 1700163,
+      "median": 1701466.5,
+      "maximum": 1701756
+    }
+  },
+  "integrity_review": {
+    "status": "pass",
+    "manifest_identity_matches_all_tasks": true,
+    "unique_complete_task_ids": true,
+    "all_task_statuses_pass": true,
+    "all_wt_and_mutant_mapping_break_disulfide_checks_pass": true,
+    "timing_projections_independently_recomputed": true,
+    "figure_manually_checked": true
+  },
+  "scope_projections_concurrency_8_overhead_factor_1_2": {
+    "tier_1_2_48_candidates_20_samples": {
+      "task_count": 960,
+      "median_wall_hours": 28.719228790360503,
+      "p90_wall_hours": 34.990149378890635,
+      "maximum_wall_hours": 35.01345915295649
+    },
+    "tier_1_2_3_87_candidates_20_samples": {
+      "task_count": 1740,
+      "median_wall_hours": 52.05360218252841,
+      "p90_wall_hours": 63.41964574923928,
+      "maximum_wall_hours": 63.46189471473364
+    },
+    "tier_3_increment_p90_wall_hours": 28.429496370348648
+  },
+  "scientific_limits": {
+    "candidate_selection_performed": false,
+    "tier_3_scope_decision_performed": false,
+    "two_samples_support_candidate_ranking": false,
+    "observed_energy_values_are_model_specific_reu_not_measured_affinity": true,
+    "reason": "Several representative candidates change energy direction between the two samples; the pilot was powered for runtime and protocol feasibility, not ranking."
+  },
+  "scope_recommendation": {
+    "status": "recommend_include_tier_3_pending_user_confirmation",
+    "recommended_scope": "tier_1_2_3",
+    "rationale": "Including the 39 Tier-3 candidates adds about 28.43 P90 wall-hours at concurrency 8 and preserves candidates with weaker but still double-negative median evidence for later ensemble review and mechanism-diverse panel construction.",
+    "user_confirmation_required": true
+  },
+  "release": "ready_for_user_tier_scope_decision"
+}

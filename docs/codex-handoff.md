@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-12 19:10:00
+Last updated: 2026-08-12 14:32:57
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -78,8 +78,8 @@ Timezone: Asia/Shanghai (UTC+08:00)
 5. **成对PyRosetta亲和力pilot V2（已完成，实测19.116154分钟）**：12候选×3重复和共享WT运行全部有效，配对WT相对接触指标复算一致，扫描阶段未筛选候选；路线已释放456全量扫描实现。
 6. **456单点全量扫描（已完成）**：12片累计11.846小时计算量，完整得到456候选×3重复且没有扫描中筛选。未筛选景观中113个候选`ΔdG<0`、143个跨界面能变化<0、87个两者均<0，但这些只是描述性计数；82个候选两指标方向不一致，说明后续不能使用单一能量列筛选。
 7. **统一筛选（已完成，本地实测约1.5秒）**：完整456候选按统一规则分为`18/30/39/82/287`，48条Tier 1/2进入严格复核池；未删除候选、未形成最终实验推荐。
-8. **Flex ddG生产参数计时pilot（已本地实现，待远程运行）**：先不决定是否把Tier 3纳入正式复核。固定4个代表候选（Tier 1常规、C102侧链不完整/大芳香替换、Tier 2排斥增加、Tier 3表位接触风险）×2次独立样本，共8个Slurm数组任务，并发8；每任务使用WT序列35,000次局部backrub，随后从同一最终接受backbone分别构建WT和突变分支。复用项目`ref2015`、prepared WT、突变/repack、界面能、接触、RMSD及结构安全实现。该pilot只验证生产参数可行性、阶段耗时、内存和输出规模；2次样本不用于候选排序，也不自动决定Tier 3范围。
-9. **亲和力严格复核（pilot后决策）**：根据8任务实测median/P90耗时比较Tier 1/2共48条和Tier 1/2/3共87条各20样本、并发8的墙钟投影，再决定正式范围；正式复核后才做机制多样性缩减和单点实验面板，此阶段仍不组合突变。
+8. **Flex ddG生产参数计时pilot（已完成）**：4代表候选×2独立样本共8任务全部pass，累计1.666723 job-hours；单任务中位717.980720秒、P90 874.753734秒，backrub占累计任务时间94.7212%，峰值内存975.65–1000.62 MiB。全部WT/突变映射、断点和二硫键检查通过。两重复只验证生产参数、耗时和协议可行性；代表候选存在样本间能量方向翻转，因此不得用pilot分数排名。
+9. **亲和力严格复核（待范围确认）**：20样本、并发8及1.2开销因子下，Tier 1/2的48候选投影median/P90为28.72/34.99小时；加入Tier 3后的87候选为52.05/63.42小时，P90增量约28.43小时。当前建议纳入Tier 3以保留较弱但仍有双负中位数证据的机制多样性；该建议待用户确认，`tier_3_scope_decision_performed`仍为false。正式复核后才缩减单点实验面板，此阶段仍不组合突变。
 
 ## Verification
 
@@ -91,11 +91,11 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 全量扫描plan为pass：456候选、1368预期突变体评估、12片×38、每片两个完整位置、最大并发4且`candidate_filtering_applied=false`。实现测试覆盖真实分片、完整合并、缺片/提前筛选阻断、最终PNG/SVG和Slurm依赖合同。
 - 全量结果复核：456摘要、1368重复、3个WT与manifest/merge gate一致，所有candidate×replicate×seed唯一，接触和能量差复算通过。最终PNG已人工检查；右侧重复Y轴标签已从绘图代码和已有plot data修正，不改评分数据。
 - 修复覆盖：ChimeraX sandbox 入口、实际模型名、无 polymer sequence 时严格 source-auth exact-WT 映射、较长 polymer 中唯一 authoritative segment、`not_evaluable` summary 状态。
-- Flex ddG pilot首次远程数组在C++层段错误，未产生正式结果；第一次修复后的提交前真实move成功将问题进一步定位为直接调用`add_segment()`前未设置mover input pose，Rosetta明确断言`input_pose != nullptr`，因此数组未提交。活动路线现先以`set_input_pose`绑定prepared WT，再添加不跨FoldTree cutpoint/链边界的显式3–12残基segment；4个代表邻域各一次真实move仍是唯一提交前检查。本地专项`9 passed`，全套`150 passed, 1 skipped, 4 subtests passed`；修复后真实move和8任务尚待服务器验证，不能报告pilot耗时或科学结果。
+- Flex ddG修复后真实precheck和8任务均成功；结果commit为`0bfcc88`，gate为pass。8/8任务身份与manifest一致、结构安全全pass，时间投影独立复算一致，PNG已人工检查无遮挡；科学review位于`flex_ddg_pilot_scientific_review.json`。
 
 ## Required Next Steps
 
-1. 远程pull后运行`bash scripts/candidate_design/submit_flex_ddg_pilot.sh`；包装器先在PyRosetta环境对4个代表邻域各执行一个真实backrub move，确认显式segment不跨实验缺失区的FoldTree cutpoint后，才提交8任务并发数组及`afterok`汇总任务。
-2. pull回结果后核验8/8任务、阶段耗时、峰值内存、输出规模和计时图；只据实测median/P90投影讨论正式复核纳入Tier 1/2还是Tier 1/2/3，不用两重复分数排名。
-3. 范围确定后再实现正式20样本Flex ddG复核，随后形成机制多样的亲和力单点实验面板；仍不组合突变，不把REU转换为实验亲和力。
+1. 用户确认正式Flex ddG范围：仅Tier 1/2共48候选，或按当前建议纳入Tier 3共87候选。
+2. 范围确认后实现正式20样本Flex ddG复核；数组任务需保留任务级恢复边界，并继续使用并发8、真实precheck和安全显式segment。
+3. 正式复核后形成机制多样的亲和力单点实验面板；仍不组合突变，不把REU转换为实验亲和力。
 4. 表达/稳定性建模、nanoBERT/AntiFold/AbMPNN和风险修复候选继续暂停，亲和力单点面板形成后重新讨论。
