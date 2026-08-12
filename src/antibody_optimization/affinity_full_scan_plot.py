@@ -54,7 +54,8 @@ def render_full_scan_figure(
         top=0.88,
         wspace=0.18,
     )
-    axes = [figure.add_subplot(grid[0, 0]), figure.add_subplot(grid[0, 2])]
+    axes = [figure.add_subplot(grid[0, 0])]
+    axes.append(figure.add_subplot(grid[0, 2], sharey=axes[0]))
     color_axes = [figure.add_subplot(grid[0, 1]), figure.add_subplot(grid[0, 3])]
     cmap = plt.get_cmap("RdBu_r").with_extremes(bad="#eeeeee")
     for axis, color_axis, matrix, title, label in (
@@ -63,14 +64,14 @@ def render_full_scan_figure(
             color_axes[0],
             delta_dg,
             "Paired separation score",
-            "Median delta dG_separated (REU)",
+            "Median delta dG\n(REU)",
         ),
         (
             axes[1],
             color_axes[1],
             delta_cross,
             "Cross-interface score",
-            "Median delta cross-interface energy (REU)",
+            "Median cross-interface\ndelta (REU)",
         ),
     ):
         finite = matrix[np.isfinite(matrix)]
@@ -83,7 +84,7 @@ def render_full_scan_figure(
             interpolation="nearest",
         )
         colorbar = figure.colorbar(image, cax=color_axis)
-        colorbar.set_label(label, fontsize=9)
+        colorbar.ax.set_title(label, fontsize=8, pad=7)
         axis.set_title(title, fontsize=12, pad=10)
         axis.set_xticks(range(len(AMINO_ACIDS)), AMINO_ACIDS, fontsize=8)
         axis.set_yticks(
@@ -94,6 +95,8 @@ def render_full_scan_figure(
         axis.set_xlabel("Mutant residue", fontsize=10)
         axis.set_ylabel("Reported position and WT residue", fontsize=10)
         axis.tick_params(length=0)
+    axes[1].set_ylabel("")
+    axes[1].tick_params(axis="y", labelleft=False)
     figure.suptitle(
         "Nb252 PyRosetta full single-mutant scan (unfiltered)",
         fontsize=15,
@@ -110,3 +113,13 @@ def render_full_scan_figure(
     figure.savefig(png_path, dpi=600, facecolor="white")
     figure.savefig(svg_path, facecolor="white")
     plt.close(figure)
+    _normalize_svg(svg_path)
+
+
+def _normalize_svg(path: Path) -> None:
+    lines = path.read_text(encoding="utf-8").splitlines()
+    path.write_text(
+        "\n".join(line.rstrip() for line in lines) + "\n",
+        encoding="utf-8",
+        newline="\n",
+    )

@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-08-12T09:14:40+08:00",
+  "source_result_commit": "6268ee8",
+  "source_files": {
+    "merge_gate": "full_scan_merge_gate.json",
+    "wt_controls": "wt_replicate_metrics.csv",
+    "candidate_replicates": "candidate_replicate_metrics.csv",
+    "candidate_summary": "candidate_summary.csv",
+    "plot_data": "full_scan_plot_data.csv"
+  },
+  "execution": {
+    "status": "pass",
+    "shard_count": 12,
+    "aggregate_shard_elapsed_seconds": 42645.718076,
+    "candidate_count": 456,
+    "mutant_evaluation_count": 1368,
+    "replicates_per_candidate": 3,
+    "wt_control_count": 3,
+    "runtime_failure_count": 0,
+    "candidate_filtering_applied": false
+  },
+  "integrity_review": {
+    "status": "pass",
+    "candidate_set_matches_manifest": true,
+    "all_candidate_replicate_seed_keys_unique_and_complete": true,
+    "all_contact_counts_and_paired_wt_retentions_recomputed": true,
+    "all_mutant_minus_wt_energy_differences_recomputed": true,
+    "all_summaries_marked_not_applied_scan_stage": true
+  },
+  "unfiltered_landscape": {
+    "delta_dG_separated_median_reu": {
+      "minimum": -5.446950680575242,
+      "median": 1.5768401190578913,
+      "maximum": 30.681403085598618
+    },
+    "delta_cross_interface_energy_median_reu": {
+      "minimum": -8.036636997436304,
+      "median": 0.8652213461384903,
+      "maximum": 18.506500224418275
+    },
+    "delta_dG_mad_reu": {
+      "median": 0.11158505586922729,
+      "maximum": 5.683221790510515,
+      "count_at_most_0_5": 355,
+      "count_at_most_1_0": 429
+    },
+    "direction_counts": {
+      "delta_dG_negative": 113,
+      "cross_interface_delta_negative": 143,
+      "both_negative": 87,
+      "directions_disagree": 82
+    },
+    "paired_wt_contact_retention_ranges": {
+      "vhh": [
+        0.9166666666666666,
+        1.0
+      ],
+      "receptor_epitope": [
+        0.8918918918918919,
+        1.0
+      ]
+    },
+    "maximum_interface_ca_rmsd_range_angstrom": [
+      0.037837217458470074,
+      0.07286769307423714
+    ]
+  },
+  "scientific_release": {
+    "status": "ready_for_post_scan_filter_implementation",
+    "full_scan_complete": true,
+    "candidate_selection_performed": false,
+    "next_contract": "Apply one explicit, uniform post-scan filter only to the complete 456-candidate merged result."
+  },
+  "interpretation": "Rosetta values are paired-WT model-specific ranking features, not measured affinity. Negative directions and low MAD are descriptive scan statistics only and do not constitute candidate selection."
+}
