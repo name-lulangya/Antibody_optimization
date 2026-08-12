@@ -33,6 +33,7 @@ def validate_backrub_api() -> dict[str, bool]:
         "BackrubMover.set_preserve_detailed_balance": hasattr(
             backrub, "set_preserve_detailed_balance"
         ),
+        "BackrubMover.set_input_pose": hasattr(backrub, "set_input_pose"),
         "BackrubMover.add_segment": hasattr(backrub, "add_segment"),
         "BackrubMover.apply": hasattr(backrub, "apply"),
         "MonteCarlo.boltzmann": hasattr(
@@ -239,6 +240,9 @@ def sample_backrub(
     pyrosetta.rosetta.numeric.random.rg().set_seed(seed)
     sampled = pose.clone()
     mover = pyrosetta.rosetta.protocols.backrub.BackrubMover()
+    # add_segment() validates AtomIDs against the mover input pose. In direct
+    # PyRosetta use there is no JobDistributor to set it automatically.
+    mover.set_input_pose(sampled)
     mover.set_preserve_detailed_balance(True)
     mover.set_require_mm_bend(False)
     segment_pairs = safe_backrub_segment_pairs(

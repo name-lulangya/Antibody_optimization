@@ -149,7 +149,7 @@
 - `antibody_optimization.flex_ddg_runtime`
   - 用途：复用`pyrosetta_runtime`的突变、repack、界面测量与结构安全逻辑，为一个任务执行WT约束最小化、局部backrub以及同一backbone上的独立WT/突变分支。
   - 主要输入/返回：released prepared WT、候选source-auth突变、固定seed、8 Å邻域、35,000 trials和项目界面定义；返回backbone/WT/突变Pose、两分支指标及分阶段耗时。
-  - 算法假设：采用项目`ref2015`和Flex ddG的成对backbone顺序；backrub只在WT序列上采样并保留轨迹最终接受构象，随后克隆为WT与突变分支。backrub segment由3–12个残基的同链连续pose索引显式构建，禁止跨越FoldTree cutpoint或链边界；这是适配本项目评分基线及实验缺失区的计时pilot，不是旧talaris/GAM权重的逐字复现。
+  - 算法假设：采用项目`ref2015`和Flex ddG的成对backbone顺序；backrub只在WT序列上采样并保留轨迹最终接受构象，随后克隆为WT与突变分支。直接使用PyRosetta时先以`set_input_pose`绑定当前Pose，再添加显式segment；segment由3–12个残基的同链连续pose索引构建，禁止跨越FoldTree cutpoint或链边界。这是适配本项目评分基线及实验缺失区的计时pilot，不是旧talaris/GAM权重的逐字复现。
   - 明确不支持：本地无PyRosetta运行、跨候选共享backbone、在轨迹中筛选最低能构象、候选排序、组合突变或表达/稳定性判断。
 - `antibody_optimization.flex_ddg_plot`
   - 用途：从已验证的8任务阶段耗时和两种范围投影绘制600 dpi PNG/SVG，不绘制候选能量排名。

@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-12 18:30:00
+Last updated: 2026-08-12 19:10:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -91,7 +91,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 全量扫描plan为pass：456候选、1368预期突变体评估、12片×38、每片两个完整位置、最大并发4且`candidate_filtering_applied=false`。实现测试覆盖真实分片、完整合并、缺片/提前筛选阻断、最终PNG/SVG和Slurm依赖合同。
 - 全量结果复核：456摘要、1368重复、3个WT与manifest/merge gate一致，所有candidate×replicate×seed唯一，接触和能量差复算通过。最终PNG已人工检查；右侧重复Y轴标签已从绘图代码和已有plot data修正，不改评分数据。
 - 修复覆盖：ChimeraX sandbox 入口、实际模型名、无 polymer sequence 时严格 source-auth exact-WT 映射、较长 polymer 中唯一 authoritative segment、`not_evaluable` summary 状态。
-- Flex ddG pilot首次远程数组在C++层段错误，未产生正式结果；活动路线现使用不跨FoldTree cutpoint/链边界的显式3–12残基segment，并把4个代表邻域各一次真实move移入提交前检查。本地专项`9 passed`，当前全套验收为`150 passed, 1 skipped, 4 subtests passed`；修复后真实PyRosetta move和8任务尚待服务器验证，不能报告pilot耗时或科学结果。
+- Flex ddG pilot首次远程数组在C++层段错误，未产生正式结果；第一次修复后的提交前真实move成功将问题进一步定位为直接调用`add_segment()`前未设置mover input pose，Rosetta明确断言`input_pose != nullptr`，因此数组未提交。活动路线现先以`set_input_pose`绑定prepared WT，再添加不跨FoldTree cutpoint/链边界的显式3–12残基segment；4个代表邻域各一次真实move仍是唯一提交前检查。本地专项`9 passed`，全套`150 passed, 1 skipped, 4 subtests passed`；修复后真实move和8任务尚待服务器验证，不能报告pilot耗时或科学结果。
 
 ## Required Next Steps
 

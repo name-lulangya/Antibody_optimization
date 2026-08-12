@@ -114,6 +114,7 @@ def test_entry_points_and_slurm_contracts() -> None:
     assert "/data/software/env/luly25/ab_optim" in summary
     assert "recover_low" not in runtime
     assert "add_mainchain_segments" not in runtime
+    assert "set_input_pose(sampled)" in runtime
     assert "add_segment" in runtime
     assert "run_flex_ddg_task_pyrosetta.py" in array
     assert 'local_definition["local_pose_indices"]' in task_script
