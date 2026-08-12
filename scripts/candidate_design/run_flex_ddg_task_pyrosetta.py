@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run one production-parameter paired-backbone Flex ddG timing task."""
+"""Run one paired-backbone Flex ddG pilot or production task."""
 
 from __future__ import annotations
 
@@ -47,6 +47,7 @@ OUTPUT_NAMES = {
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--plan-dir", type=Path, required=True)
+    parser.add_argument("--run-kind", choices=("pilot", "production"), default="pilot")
     parser.add_argument("--task-index", type=int, required=True)
     parser.add_argument("--stage0-dir", type=Path, required=True)
     parser.add_argument("--structure-baseline-dir", type=Path, required=True)
@@ -77,27 +78,35 @@ def main() -> int:
     stage0_dir = _project_directory(args.stage0_dir)
     structure_dir = _project_directory(args.structure_baseline_dir)
     calibration_dir = _project_directory(args.calibration_dir)
-    plan = _load_json(plan_dir / "flex_ddg_pilot_plan.json")
-    manifest = _load_csv(plan_dir / "flex_ddg_pilot_manifest.csv")
+    prefix = f"flex_ddg_{args.run_kind}"
+    plan_path = plan_dir / f"{prefix}_plan.json"
+    manifest_path = plan_dir / f"{prefix}_manifest.csv"
+    plan = _load_json(plan_path)
+    manifest = _load_csv(manifest_path)
+    expected_purpose = {
+        "pilot": "production_parameter_runtime_and_protocol_feasibility_only",
+        "production": "tier_1_2_plus_selected_tier_3_ensemble_affinity_review",
+    }[args.run_kind]
+    expected_tier_3_decision = args.run_kind == "production"
     if (
         plan.get("status") != "pass"
-        or plan.get("purpose") != "production_parameter_runtime_and_protocol_feasibility_only"
+        or plan.get("purpose") != expected_purpose
         or plan.get("candidate_selection_performed") is not False
-        or plan.get("tier_3_scope_decision_performed") is not False
+        or plan.get("tier_3_scope_decision_performed") is not expected_tier_3_decision
         or args.task_index >= len(manifest)
     ):
-        raise ValueError("Flex ddG pilot plan or task index is invalid")
+        raise ValueError(f"Flex ddG {args.run_kind} plan or task index is invalid")
     task = manifest[args.task_index]
     if int(task["task_index"]) != args.task_index:
         raise ValueError("Manifest task order does not match the task index")
     if args.backrub_trials != int(plan["backrub"]["trials"]):
-        raise ValueError("Pilot must use the production backrub trial count")
+        raise ValueError("Run must use the planned backrub trial count")
     if args.backrub_temperature != float(plan["backrub"]["temperature_kT"]):
-        raise ValueError("Pilot must use the planned backrub temperature")
+        raise ValueError("Run must use the planned backrub temperature")
     if args.backrub_neighborhood_angstrom != float(
         plan["backrub"]["mutation_neighborhood_angstrom"]
     ):
-        raise ValueError("Pilot must use the planned backrub neighborhood")
+        raise ValueError("Run must use the planned backrub neighborhood")
 
     pyrosetta = shared.initialize_pyrosetta(
         expected_version=args.expected_pyrosetta_version
@@ -134,9 +143,12 @@ def main() -> int:
     if args.check_only:
         smoke_results = []
         seen_candidates = set()
+        representative_ids = set(plan.get("precheck_candidate_ids", ()))
         for candidate in manifest:
             candidate_id = candidate["candidate_id"]
-            if candidate_id in seen_candidates:
+            if candidate_id in seen_candidates or (
+                representative_ids and candidate_id not in representative_ids
+            ):
                 continue
             seen_candidates.add(candidate_id)
             mutation_index = flex_runtime.locate_mutation_pose_index(
@@ -204,8 +216,8 @@ def main() -> int:
     validated = validate_file_paths(
         project_root=PROJECT_ROOT,
         source_paths=[
-            plan_dir / "flex_ddg_pilot_plan.json",
-            plan_dir / "flex_ddg_pilot_manifest.csv",
+            plan_path,
+            manifest_path,
             starting_pdb,
             calibration_dir / "selected_scoring_protocol.json",
             calibration_dir / "selected_contact_changes.csv",
@@ -240,6 +252,8 @@ def main() -> int:
             output_size_bytes=output_size,
             total_elapsed_seconds=time.perf_counter() - started,
             backrub_trials=args.backrub_trials,
+            run_kind=args.run_kind,
+            tier_3_scope_decision_performed=expected_tier_3_decision,
         )
         _write_json(staged["result"], task_result)
         replace_staged_files(
@@ -259,6 +273,7 @@ def _task_result(**kwargs) -> dict[str, object]:
     receptor_ref = set(wt["receptor_contact_auth_positions"])
     return {
         "schema_version": 1,
+        "run_kind": kwargs["run_kind"],
         "task_index": int(task["task_index"]),
         "task_id": task["task_id"],
         "candidate_id": task["candidate_id"],
@@ -308,7 +323,9 @@ def _task_result(**kwargs) -> dict[str, object]:
         "mutant_breaks_pass": mutant["breaks_pass"],
         "mutant_disulfide_pass": mutant["disulfide_pass"],
         "candidate_selection_performed": False,
-        "tier_3_scope_decision_performed": False,
+        "tier_3_scope_decision_performed": kwargs[
+            "tier_3_scope_decision_performed"
+        ],
     }
 
 

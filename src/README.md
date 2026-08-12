@@ -156,6 +156,11 @@
   - 主要输入/返回：任务指标与范围投影行；返回阶段堆叠耗时和20样本范围墙钟时间图。
   - 算法假设：输入必须恰为8任务和2个投影范围；图注显式声明pilot不支持候选排序；SVG使用固定hashsalt并规范化行尾。
   - 明确不支持：读取原始任务目录、重新计算投影、选择候选或决定Tier 3范围。
+- `antibody_optimization.flex_ddg_production`与`flex_ddg_production_plot`
+  - 用途：固定生成全部48个Tier 1/2候选加指定Tier 3 `D33N/Y115F`、共50候选×20样本的1000任务身份，识别可复用的完整任务输出，将待运行任务切成调度批次，并在全部完成后生成未筛选的候选ensemble摘要和QC图。
+  - 主要输入/返回：完整Tier表、生产manifest、逐任务六文件输出；返回完成/待运行/冲突状态、任务指标、50行候选median/MAD/方向支持/接触保持摘要和600 dpi PNG/SVG。
+  - 算法假设：并发数与科学任务身份解耦；只有六个输出齐全、任务身份一致、状态pass且WT/突变结构安全均通过才视为可续传的完成任务。部分或冲突输出阻断且不覆盖。
+  - 明确不支持：运行PyRosetta、自动删除损坏输出、按ensemble结果筛选候选、把REU解释为实测亲和力。
 
 ## 第一阶段活动入口
 
@@ -183,3 +188,8 @@
 - `scripts/candidate_design/build_flex_ddg_pilot_plan.py`：本地固定生成4代表候选×2样本的8任务生产参数计时pilot；支持只读`--check_only`，正式输出manifest、plan及轻量run summary，默认拒绝覆盖。
 - `scripts/candidate_design/run_flex_ddg_task_pyrosetta.py`：在PyRosetta工具环境运行一个WT-backrub-成对WT/突变分支任务；`--check_only`会真实初始化固定PyRosetta，并在prepared WT上对4个代表候选各运行一个显式安全segment的backrub move，但不写结果。正式任务事务性输出backbone、两分支PDB、能量/接触表和任务计时JSON。
 - `scripts/candidate_design/summarize_flex_ddg_pilot.py`：仅在8任务全部存在后验证身份与指标，输出阶段耗时、48/87候选各20样本的并发8投影、可行性gate、600 dpi PNG/SVG和run summary；不按能量筛选候选。`submit_flex_ddg_pilot.sh`先执行一次真实precheck，再提交`0-7%8`数组及`afterok`汇总任务。
+- `scripts/candidate_design/build_flex_ddg_production_plan.py`：本地固定生成Tier 1/2全部48条加Tier 3 `D33N/Y115F`两条、共50候选×20样本的生产manifest和plan；任务seed不随Slurm并发改变，默认拒绝覆盖。
+- `scripts/candidate_design/prepare_flex_ddg_production_resume.py`：每次提交前只读检查1000个任务目录，完整任务跳过、无输出任务进入pending index文件、部分/冲突/安全失败任务阻断。默认每900项切一个顺序依赖批次，以兼容数组大小限制。
+- `scripts/candidate_design/run_flex_ddg_task_pyrosetta.py --run-kind production`：复用pilot已验证的PyRosetta运行层执行一个正式样本；生产precheck只对固定4个代表候选各做一次真实backrub move。
+- `scripts/candidate_design/submit_flex_ddg_production.sh`：远程唯一生产提交包装；默认`--concurrency 12 --chunk-size 900`，每个Git revision只执行一次成功的真实precheck，随后按resume状态提交数组和最终`afterok`汇总，日志写入`logs/flex_ddg_production/`。中断或取消全部在途任务后可用新并发重跑；排队/运行期间可执行`set_flex_ddg_production_concurrency.sh --submission-dir <本次目录> --concurrency N`修改本次所有数组节流，不改变任务身份。
+- `scripts/candidate_design/summarize_flex_ddg_production.py`：仅在1000任务全部pass后输出任务表、50行未筛选ensemble摘要、gate、600 dpi PNG/SVG和run summary；`candidate_selection_performed=false`，后续另行设计统一ensemble筛选。

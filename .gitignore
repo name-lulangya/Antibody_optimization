@@ -5,6 +5,7 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 .matplotlib/
+logs/
 .coverage
 htmlcov/
 

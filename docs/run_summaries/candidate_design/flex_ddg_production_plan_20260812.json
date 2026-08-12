@@ -1,0 +1,27 @@
+{
+  "candidate_count": 50,
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\build_flex_ddg_production_plan.py",
+    "--tier-dir",
+    "docs/result_artifacts/candidate_design/affinity_post_scan_filter_20260812",
+    "--pilot-result-dir",
+    "docs/result_artifacts/candidate_design/flex_ddg_pilot_result_20260812",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/flex_ddg_production_plan_20260812",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/flex_ddg_production_plan_20260812.json",
+    "--generated-at",
+    "2026-08-12T15:00:05+08:00"
+  ],
+  "elapsed_seconds": 0.019288,
+  "generated_at": "2026-08-12T15:00:05+08:00",
+  "outputs": {
+    "manifest": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\flex_ddg_production_plan_20260812\\flex_ddg_production_manifest.csv",
+    "plan": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\flex_ddg_production_plan_20260812\\flex_ddg_production_plan.json"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass",
+  "task_count": 1000
+}

@@ -1,0 +1,55 @@
+{
+  "backrub": {
+    "branching": "same_sampled_backbone_to_independent_WT_and_mutant_branches",
+    "mutation_neighborhood_angstrom": 8.0,
+    "segment_length_residues": "3-12",
+    "sequence_during_sampling": "WT",
+    "temperature_kT": 1.2,
+    "trials": 35000
+  },
+  "candidate_count": 50,
+  "candidate_selection_performed": false,
+  "generated_at": "2026-08-12T15:00:05+08:00",
+  "interpretation": "All 48 Tier-1/2 and two position-diverse Tier-3 single mutants are evaluated before ensemble filtering; model-specific Rosetta scores are not measured affinity.",
+  "plan_name": "nb252_flex_ddg_production",
+  "precheck_candidate_ids": [
+    "Nb252_aff_seq045_R45T",
+    "Nb252_aff_seq102_Y102W",
+    "Nb252_aff_seq105_E105W",
+    "Nb252_aff_seq033_D33N",
+    "Nb252_aff_seq115_Y115F"
+  ],
+  "protocol_identity": "project_ref2015_paired_backbone_flex_ddg_production",
+  "purpose": "tier_1_2_plus_selected_tier_3_ensemble_affinity_review",
+  "resume": {
+    "completed_files_required": 6,
+    "identity_and_safety_validation_required": true,
+    "partial_or_conflicting_outputs": "block_without_overwrite",
+    "unit": "complete_task_output_set"
+  },
+  "runtime_projection": {
+    "overhead_factor": 1.2,
+    "p90_wall_hours_at_concurrency_8": 36.448072269677745,
+    "p90_wall_hours_at_default_concurrency_12": 24.29871484645183,
+    "source": "flex_ddg_pilot_scientific_review.json"
+  },
+  "samples_per_candidate": 20,
+  "scheduler": {
+    "concurrency_changes_scientific_task_identity": false,
+    "default_array_chunk_size": 900,
+    "default_array_concurrency": 12,
+    "logs_directory": "logs/flex_ddg_production"
+  },
+  "schema_version": 1,
+  "scope": "all_tier_1_and_2_plus_two_selected_tier_3",
+  "score_function": "ref2015",
+  "selected_tier_3_candidate_ids": [
+    "Nb252_aff_seq033_D33N",
+    "Nb252_aff_seq115_Y115F"
+  ],
+  "starting_structure_state": "selected_wt_prepared",
+  "status": "pass",
+  "task_count": 1000,
+  "tier_3_scope_decision_performed": true,
+  "tier_3_scope_decision_source": "user_revision_for_30_sequence_delivery_2026-08-12"
+}
