@@ -1,0 +1,14 @@
+{
+  "candidate_selection_performed": false,
+  "gate_name": "nb252_flex_ddg_timing_pilot",
+  "generated_at": "2026-08-12T12:22:05+08:00",
+  "interpretation": "Timing and protocol feasibility only; two samples per candidate are insufficient for affinity ranking.",
+  "schema_version": 1,
+  "scope_decision_release": "ready_for_tier_scope_decision",
+  "status": "pass",
+  "status_counts": {
+    "pass": 8
+  },
+  "task_count": 8,
+  "tier_3_scope_decision_performed": false
+}
