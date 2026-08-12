@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-12 09:14:40
+Last updated: 2026-08-12 10:58:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -78,7 +78,8 @@ Timezone: Asia/Shanghai (UTC+08:00)
 5. **成对PyRosetta亲和力pilot V2（已完成，实测19.116154分钟）**：12候选×3重复和共享WT运行全部有效，配对WT相对接触指标复算一致，扫描阶段未筛选候选；路线已释放456全量扫描实现。
 6. **456单点全量扫描（已完成）**：12片累计11.846小时计算量，完整得到456候选×3重复且没有扫描中筛选。未筛选景观中113个候选`ΔdG<0`、143个跨界面能变化<0、87个两者均<0，但这些只是描述性计数；82个候选两指标方向不一致，说明后续不能使用单一能量列筛选。
 7. **统一筛选（已完成，本地实测约1.5秒）**：完整456候选按统一规则分为`18/30/39/82/287`，48条Tier 1/2进入严格复核池；未删除候选、未形成最终实验推荐。
-8. **亲和力严格复核（下一阶段，约1–3天，不含实验）**：为48条复核池设计多构象复核和机制多样性缩减，重点处理接触变化、排斥、C102不完整侧链和prepared敏感位点；此阶段仍不组合突变。
+8. **Flex ddG生产参数计时pilot（已本地实现，待远程运行）**：先不决定是否把Tier 3纳入正式复核。固定4个代表候选（Tier 1常规、C102侧链不完整/大芳香替换、Tier 2排斥增加、Tier 3表位接触风险）×2次独立样本，共8个Slurm数组任务，并发8；每任务使用WT序列35,000次局部backrub，随后从同一最终接受backbone分别构建WT和突变分支。复用项目`ref2015`、prepared WT、突变/repack、界面能、接触、RMSD及结构安全实现。该pilot只验证生产参数可行性、阶段耗时、内存和输出规模；2次样本不用于候选排序，也不自动决定Tier 3范围。
+9. **亲和力严格复核（pilot后决策）**：根据8任务实测median/P90耗时比较Tier 1/2共48条和Tier 1/2/3共87条各20样本、并发8的墙钟投影，再决定正式范围；正式复核后才做机制多样性缩减和单点实验面板，此阶段仍不组合突变。
 
 ## Verification
 
@@ -90,9 +91,11 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 全量扫描plan为pass：456候选、1368预期突变体评估、12片×38、每片两个完整位置、最大并发4且`candidate_filtering_applied=false`。实现测试覆盖真实分片、完整合并、缺片/提前筛选阻断、最终PNG/SVG和Slurm依赖合同。
 - 全量结果复核：456摘要、1368重复、3个WT与manifest/merge gate一致，所有candidate×replicate×seed唯一，接触和能量差复算通过。最终PNG已人工检查；右侧重复Y轴标签已从绘图代码和已有plot data修正，不改评分数据。
 - 修复覆盖：ChimeraX sandbox 入口、实际模型名、无 polymer sequence 时严格 source-auth exact-WT 映射、较长 polymer 中唯一 authoritative segment、`not_evaluable` summary 状态。
+- Flex ddG pilot本地专项`7 passed`，当前全套验收为`148 passed, 1 skipped, 4 subtests passed`；真实PyRosetta backrub API和8任务运行尚未在服务器验证，不能报告pilot耗时或科学结果。
 
 ## Required Next Steps
 
-1. 为48条Tier 1/2严格复核池设计多构象亲和力复核合同；先确定需要复核的局部几何、重复数和候选多样性原则，再启动远程计算。
-2. 复核后形成机制多样的亲和力单点实验面板；仍不组合突变，不把REU转换为实验亲和力。
-3. 表达/稳定性建模、nanoBERT/AntiFold/AbMPNN和风险修复候选继续暂停，亲和力单点面板形成后重新讨论。
+1. 远程pull后运行`bash scripts/candidate_design/submit_flex_ddg_pilot.sh`；包装器先在PyRosetta环境执行一次真实`--check_only`，随后提交8任务并发数组及`afterok`汇总任务。
+2. pull回结果后核验8/8任务、阶段耗时、峰值内存、输出规模和计时图；只据实测median/P90投影讨论正式复核纳入Tier 1/2还是Tier 1/2/3，不用两重复分数排名。
+3. 范围确定后再实现正式20样本Flex ddG复核，随后形成机制多样的亲和力单点实验面板；仍不组合突变，不把REU转换为实验亲和力。
+4. 表达/稳定性建模、nanoBERT/AntiFold/AbMPNN和风险修复候选继续暂停，亲和力单点面板形成后重新讨论。

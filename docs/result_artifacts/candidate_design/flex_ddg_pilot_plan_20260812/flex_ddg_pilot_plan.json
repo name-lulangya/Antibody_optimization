@@ -1,0 +1,34 @@
+{
+  "backrub": {
+    "branching": "same_sampled_backbone_to_independent_WT_and_mutant_branches",
+    "mutation_neighborhood_angstrom": 8.0,
+    "segment_length_residues": "3-12",
+    "sequence_during_sampling": "WT",
+    "temperature_kT": 1.2,
+    "trials": 35000
+  },
+  "candidate_count": 4,
+  "candidate_selection_performed": false,
+  "generated_at": "2026-08-12T10:58:00+08:00",
+  "interpretation": "Timing and protocol feasibility only; two samples per candidate are insufficient for scientific candidate ranking.",
+  "maximum_array_concurrency": 8,
+  "plan_name": "nb252_flex_ddg_timing_pilot",
+  "project_adaptations": [
+    "use project ref2015 instead of legacy talaris-era score weights",
+    "reuse the released prepared WT complex and project interface metrics",
+    "one final accepted 35000-trial backbone per independent sample"
+  ],
+  "protocol_identity": "project_ref2015_paired_backbone_flex_ddg_timing_pilot",
+  "published_protocol_basis": {
+    "paper_doi": "10.1371/journal.pone.0182479",
+    "rosetta_tutorial": "https://github.com/Kortemme-Lab/flex_ddG_tutorial"
+  },
+  "purpose": "production_parameter_runtime_and_protocol_feasibility_only",
+  "samples_per_candidate": 2,
+  "schema_version": 1,
+  "score_function": "ref2015",
+  "starting_structure_state": "selected_wt_prepared",
+  "status": "pass",
+  "task_count": 8,
+  "tier_3_scope_decision_performed": false
+}

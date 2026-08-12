@@ -1,0 +1,9 @@
+﻿task_index,task_id,candidate_id,tier,pilot_role,sample_index,seed,sequence_index_1based,wt_residue,mutant_residue,experimental_auth_asym_id,experimental_auth_seq_id,experimental_insertion_code,mutation_reported_label,mutation_numbering_label,mutation_source_auth_label,risk_flags
+0,task_00,Nb252_aff_seq045_R45T,tier_1,routine_low_risk_baseline,1,8122001,45,R,T,C,45,,Nb252 reported_seq R45T,Nb252 IMGT 50 R>T,Nb252 chain C auth 45 R>T,
+1,task_01,Nb252_aff_seq045_R45T,tier_1,routine_low_risk_baseline,2,8122002,45,R,T,C,45,,Nb252 reported_seq R45T,Nb252 IMGT 50 R>T,Nb252 chain C auth 45 R>T,
+2,task_02,Nb252_aff_seq102_Y102W,tier_1,source_sidechain_incomplete_large_aromatic,1,8122003,102,Y,W,C,102,,Nb252 reported_seq Y102W,Nb252 IMGT 111 Y>W,Nb252 chain C auth 102 Y>W,source_sidechain_incomplete_position
+3,task_03,Nb252_aff_seq102_Y102W,tier_1,source_sidechain_incomplete_large_aromatic,2,8122004,102,Y,W,C,102,,Nb252 reported_seq Y102W,Nb252 IMGT 111 Y>W,Nb252 chain C auth 102 Y>W,source_sidechain_incomplete_position
+4,task_04,Nb252_aff_seq105_E105W,tier_2,large_aromatic_fa_rep_increase,1,8122005,105,E,W,C,105,,Nb252 reported_seq E105W,Nb252 IMGT 111C E>W,Nb252 chain C auth 105 E>W,fa_rep_increase
+5,task_05,Nb252_aff_seq105_E105W,tier_2,large_aromatic_fa_rep_increase,2,8122006,105,E,W,C,105,,Nb252 reported_seq E105W,Nb252 IMGT 111C E>W,Nb252 chain C auth 105 E>W,fa_rep_increase
+6,task_06,Nb252_aff_seq114_S114I,tier_3,conditional_receptor_epitope_contact_loss,1,8122007,114,S,I,C,114,,Nb252 reported_seq S114I,Nb252 IMGT 116 S>I,Nb252 chain C auth 114 S>I,receptor_epitope_contact_loss;fa_rep_increase
+7,task_07,Nb252_aff_seq114_S114I,tier_3,conditional_receptor_epitope_contact_loss,2,8122008,114,S,I,C,114,,Nb252 reported_seq S114I,Nb252 IMGT 116 S>I,Nb252 chain C auth 114 S>I,receptor_epitope_contact_loss;fa_rep_increase

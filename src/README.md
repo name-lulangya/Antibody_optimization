@@ -141,6 +141,21 @@
   - 主要输入/返回：候选manifest、456行摘要、1368行重复、merge/scientific/calibration gates和关键残基集；返回完整候选Tier表、Tier/位置/区域统计、复核池和release gate。
   - 算法假设：Tier 1要求两项配对WT能量在3/3重复均为负、两侧配对WT接触保持均为1.0且`Δfa_rep`中位数不增加；Tier 2保留3/3双能量且NK2R表位保持为1.0但需局部复核者；Tier 3为其余双负中位数，Tier 4为两项中位数方向冲突，Tier 5为当前模型无双负中位数支持。层内Pareto不使用加权综合分。
   - 明确不支持：重新运行PyRosetta、删除候选、把Tier解释为实测亲和力、形成最终实验面板或生成组合突变。
+- `antibody_optimization.flex_ddg`
+  - 用途：定义Flex ddG计时pilot的固定候选/重复合同，验证逐任务结果，并以实测任务耗时投影Tier 1/2及Tier 1/2/3两种20样本复核范围。
+  - 主要输入/返回：完整456候选Tier表、8任务manifest及逐任务JSON；返回任务指标、阶段耗时统计、两种范围的并发8墙钟时间投影和可行性gate。
+  - 算法假设：pilot固定4个代表候选、每个2次独立35,000-trial样本；投影使用实测median/P90/maximum及1.2开销因子。两次样本只用于耗时和协议可行性，不进行候选排序或Tier 3范围决策。
+  - 明确不支持：导入PyRosetta、执行backrub、用pilot分数筛选候选、自动决定Tier 3是否纳入或解释实验亲和力。
+- `antibody_optimization.flex_ddg_runtime`
+  - 用途：复用`pyrosetta_runtime`的突变、repack、界面测量与结构安全逻辑，为一个任务执行WT约束最小化、局部backrub以及同一backbone上的独立WT/突变分支。
+  - 主要输入/返回：released prepared WT、候选source-auth突变、固定seed、8 Å邻域、35,000 trials和项目界面定义；返回backbone/WT/突变Pose、两分支指标及分阶段耗时。
+  - 算法假设：采用项目`ref2015`和Flex ddG的成对backbone顺序；backrub只在WT序列上采样并保留轨迹最终接受构象，随后克隆为WT与突变分支；这是适配本项目评分基线的计时pilot，不是旧talaris/GAM权重的逐字复现。
+  - 明确不支持：本地无PyRosetta运行、跨候选共享backbone、在轨迹中筛选最低能构象、候选排序、组合突变或表达/稳定性判断。
+- `antibody_optimization.flex_ddg_plot`
+  - 用途：从已验证的8任务阶段耗时和两种范围投影绘制600 dpi PNG/SVG，不绘制候选能量排名。
+  - 主要输入/返回：任务指标与范围投影行；返回阶段堆叠耗时和20样本范围墙钟时间图。
+  - 算法假设：输入必须恰为8任务和2个投影范围；图注显式声明pilot不支持候选排序；SVG使用固定hashsalt并规范化行尾。
+  - 明确不支持：读取原始任务目录、重新计算投影、选择候选或决定Tier 3范围。
 
 ## 第一阶段活动入口
 
@@ -165,3 +180,6 @@
 - `scripts/candidate_design/score_affinity_candidates_pyrosetta.py --run-kind full_scan_shard`：复用同一评分实现运行一个38候选分片，只输出WT、114行突变体重复、38行未筛选摘要、shard gate和ignored run summary；要求plan、shard ID和V2 review一致。
 - `scripts/candidate_design/merge_affinity_full_scan.py`：只在12片全部完成后合并；严格验证456候选、1368个`candidate×replicate×seed`键、分片归属、候选身份、三组WT一致性和无筛选状态，再写Git跟踪CSV/gate/600 dpi PNG/SVG及run summary。`submit_affinity_full_scan.sh`提交`0-11%4` array并以`afterok`提交合并任务；array使用PyRosetta工具环境，合并使用项目`ab_optim`环境。
 - `scripts/candidate_design/filter_affinity_full_scan.py`：本地一次性读取完整merge结果、候选manifest、关键残基集和评分release，执行统一Tier/风险/Pareto解释；默认拒绝覆盖，输出456行完整Tier表、48行严格复核池、Tier摘要、gate、600 dpi PNG/SVG和run summary，不重新评分或生成最终实验推荐。
+- `scripts/candidate_design/build_flex_ddg_pilot_plan.py`：本地固定生成4代表候选×2样本的8任务生产参数计时pilot；支持只读`--check_only`，正式输出manifest、plan及轻量run summary，默认拒绝覆盖。
+- `scripts/candidate_design/run_flex_ddg_task_pyrosetta.py`：在PyRosetta工具环境运行一个WT-backrub-成对WT/突变分支任务；`--check_only`会真实初始化固定PyRosetta并检查backrub API，但不写结果。正式任务事务性输出backbone、两分支PDB、能量/接触表和任务计时JSON。
+- `scripts/candidate_design/summarize_flex_ddg_pilot.py`：仅在8任务全部存在后验证身份与指标，输出阶段耗时、48/87候选各20样本的并发8投影、可行性gate、600 dpi PNG/SVG和run summary；不按能量筛选候选。`submit_flex_ddg_pilot.sh`先执行一次真实precheck，再提交`0-7%8`数组及`afterok`汇总任务。
