@@ -1,0 +1,23 @@
+{
+  "aggregate_shard_elapsed_seconds": 42645.718076,
+  "candidate_count": 456,
+  "candidate_filtering_applied": false,
+  "candidate_status_counts": {
+    "pass": 456
+  },
+  "cross_shard_wt_controls_consistent_within_tolerance": true,
+  "cross_shard_wt_numeric_tolerance": 1e-06,
+  "full_scan_contract": "score_all_declared_candidates_then_filter_once",
+  "gate_name": "nb252_affinity_pyrosetta_full_scan_merge",
+  "generated_at": "2026-08-11T12:14:32+00:00",
+  "merged_candidate_set_complete": true,
+  "merged_replicate_keys_complete": true,
+  "mutant_evaluation_count": 1368,
+  "replicate_count_per_candidate": 3,
+  "schema_version": 1,
+  "score_semantics": "mutant_minus_paired_WT_Rosetta_ranking_signal",
+  "shard_count": 12,
+  "status": "pass",
+  "unified_filtering_release": "ready_for_post_scan_filter_implementation",
+  "wt_control_count": 3
+}
