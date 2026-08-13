@@ -1,0 +1,34 @@
+{
+  "conditional_background_rule": "install_each_affinity_core_then_freeze_it_and_recompute_allowed_framework_positions",
+  "contract_name": "nb252_stability_expression_wt_discovery",
+  "frozen_scope": [
+    "all_CDR_positions",
+    "experimental_interface",
+    "disulfide_cysteines",
+    "terminal_SSGS"
+  ],
+  "generated_at": "2026-08-13T12:00:00+08:00",
+  "missing_framework_rule": "designable_cautiously_only_with_AF3_full_VHH_evidence",
+  "module_rules": {
+    "abmpnn_parallel_generation": false,
+    "antifold_primary_generator": true,
+    "exploratory_mutations_per_module_maximum": 4,
+    "generated_mutations": false,
+    "nanobert_evidence_level": "pending_yield_association_validation",
+    "primary_mutations_per_module_maximum": 3,
+    "primary_mutations_per_module_minimum": 1
+  },
+  "mutation_generation_performed": false,
+  "parent_contract": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stage0_contract_20260810\\stage2_design_contract.json",
+  "position_counts": {
+    "allowed_cautious_predicted_framework": 9,
+    "allowed_observed_framework": 72,
+    "designable_positions": 81,
+    "frozen_cdr_or_flank": 17,
+    "frozen_hard": 6,
+    "frozen_interface": 24,
+    "frozen_positions": 47
+  },
+  "schema_version": 1,
+  "status": "pass"
+}

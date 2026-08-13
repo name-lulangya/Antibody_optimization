@@ -1,0 +1,20 @@
+{
+  "candidate_count": 50,
+  "candidate_selection_performed": true,
+  "combination_mutations_generated": false,
+  "core_module_count": 8,
+  "core_position_count": 6,
+  "gate_name": "nb252_affinity_ensemble_core",
+  "generated_at": "2026-08-13T12:00:00+08:00",
+  "interpretation": "PyRosetta ensemble ranking evidence, not measured affinity; retained risk columns must be reviewed during combination design.",
+  "release": "ready_for_affinity_core_module_use",
+  "same_position_variants_mutually_exclusive": true,
+  "schema_version": 1,
+  "selection_definition": "both_metrics_negative_in_at_least_18_of_20_and_negative_medians",
+  "source_tier_counts": {
+    "tier_1": 2,
+    "tier_2": 6
+  },
+  "status": "pass",
+  "weighted_composite_score_used": false
+}

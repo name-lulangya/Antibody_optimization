@@ -1,0 +1,16 @@
+{
+  "allowed_cautious_predicted_framework": 9,
+  "allowed_observed_framework": 72,
+  "designable_positions": 81,
+  "frozen_cdr_or_flank": 17,
+  "frozen_hard": 6,
+  "frozen_interface": 24,
+  "frozen_positions": 47,
+  "gate_name": "nb252_stability_expression_design_contract",
+  "generated_at": "2026-08-13T12:00:00+08:00",
+  "interpretation": "This freezes design scope and evidence requirements; it does not predict stability, expression, or yield.",
+  "mutation_generation_performed": false,
+  "release": "ready_for_nanobert_association_and_antifold_minimal_route_implementation",
+  "schema_version": 1,
+  "status": "pass"
+}

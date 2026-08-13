@@ -1,0 +1,36 @@
+{
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\build_stability_expression_design_contract.py",
+    "--stage0-dir",
+    "docs\\result_artifacts\\candidate_design\\stage0_contract_20260810",
+    "--output-dir",
+    "docs\\result_artifacts\\candidate_design\\stability_expression_design_contract_20260813",
+    "--run-summary",
+    "docs\\run_summaries\\candidate_design\\stability_expression_design_contract_20260813.json",
+    "--generated-at",
+    "2026-08-13T12:00:00+08:00"
+  ],
+  "counts": {
+    "allowed_cautious_predicted_framework": 9,
+    "allowed_observed_framework": 72,
+    "designable_positions": 81,
+    "frozen_cdr_or_flank": 17,
+    "frozen_hard": 6,
+    "frozen_interface": 24,
+    "frozen_positions": 47
+  },
+  "elapsed_seconds": 0.739562,
+  "generated_at": "2026-08-13T12:00:00+08:00",
+  "mutation_generation_performed": false,
+  "outputs": {
+    "contract": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stability_expression_design_contract_20260813\\stability_expression_design_contract.json",
+    "gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stability_expression_design_contract_20260813\\stability_expression_contract_gate.json",
+    "png": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stability_expression_design_contract_20260813\\stability_expression_contract.png",
+    "positions": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stability_expression_design_contract_20260813\\stability_expression_position_contract.csv",
+    "svg": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stability_expression_design_contract_20260813\\stability_expression_contract.svg"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}

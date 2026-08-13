@@ -161,6 +161,21 @@
   - 主要输入/返回：完整Tier表、生产manifest、逐任务六文件输出；返回完成/待运行/冲突状态、任务指标、50行候选median/MAD/方向支持/接触保持摘要和600 dpi PNG/SVG。
   - 算法假设：并发数与科学任务身份解耦；只有六个输出齐全、任务身份一致、状态pass且WT/突变结构安全均通过才视为可续传的完成任务。部分或冲突输出阻断且不覆盖。
   - 明确不支持：运行PyRosetta、自动删除损坏输出、按ensemble结果筛选候选、把REU解释为实测亲和力。
+- `antibody_optimization.affinity_ensemble`
+  - 用途：把50候选×20样本Flex ddG摘要与完整456候选post-scan证据联接，按预声明的重复方向门选择可解释亲和力核心模块，并为全部50条分配多指标Pareto层。
+  - 主要输入/返回：50行ensemble摘要和456行post-scan表；返回50行完整证据、核心模块、同位点互斥组及计数。
+  - 算法假设：核心门固定为两项能量均至少18/20样本为负且中位数均为负；`fa_rep`、接触保持、prepared敏感性和原风险标签独立保留，不合成为加权分数。
+  - 明确不支持：把REU解释为实测亲和力、自动组合突变、用风险列暗中淘汰已过核心门的模块，或把同一位置的不同替换同时装入一条序列。
+- `antibody_optimization.stability_expression_contract`
+  - 用途：基于已发布128位点合同冻结稳定性/表达模块的WT发现空间，不生成任何突变。
+  - 主要输入/返回：阶段0位点表和stage2合同；返回逐位点放行/冻结状态、所需结构证据、精确计数和模块规模规则。
+  - 算法假设：只放行非界面framework；有实验坐标者正常放行，实验缺失framework仅在完整VHH AF3证据下谨慎放行；全部CDR、实验界面、Cys22/Cys95和末端SSGS冻结。
+  - 明确不支持：预测稳定性、表达或yield，调用AntiFold/nanoBERT，生成突变，或将WT背景规则视为任意亲和力背景上的可加和结论。
+- `antibody_optimization.design_contract_plot`
+  - 用途：集中绘制阶段0轨道、亲和力ensemble核心和稳定性/表达位点合同三类确定性600 dpi PNG/SVG。
+  - 主要输入/返回：各流程已验证的紧凑表；写出与表格一一对应的决策图。
+  - 算法假设：绘图只呈现输入表的机器可读状态，SVG固定hashsalt并规范化行尾。
+  - 明确不支持：重新筛选、推断位点状态、修改合同或生成候选。
 
 ## 第一阶段活动入口
 
@@ -193,3 +208,5 @@
 - `scripts/candidate_design/run_flex_ddg_task_pyrosetta.py --run-kind production`：复用pilot已验证的PyRosetta运行层执行一个正式样本；生产precheck只对固定4个代表候选各做一次真实backrub move。
 - `scripts/candidate_design/submit_flex_ddg_production.sh`：远程唯一生产提交包装；默认`--concurrency 12 --chunk-size 900`，每个Git revision只执行一次成功的真实precheck，随后按resume状态提交数组和最终`afterok`汇总，日志写入`logs/flex_ddg_production/`。中断或取消全部在途任务后可用新并发重跑；排队/运行期间可执行`set_flex_ddg_production_concurrency.sh --submission-dir <本次目录> --concurrency N`修改本次所有数组节流，不改变任务身份。
 - `scripts/candidate_design/summarize_flex_ddg_production.py`：仅在1000任务全部pass后输出任务表、50行未筛选ensemble摘要、gate、600 dpi PNG/SVG和run summary；`candidate_selection_performed=false`，后续另行设计统一ensemble筛选。
+- `scripts/candidate_design/select_affinity_ensemble_core.py`：本地读取50×20生产摘要与456候选post-scan表，按双指标18/20重复方向门选择核心；输出50行完整证据、8个单点模块、6个位置互斥组、gate、600 dpi PNG/SVG和run summary。该入口执行模块选择但不生成组合突变。
+- `scripts/candidate_design/build_stability_expression_design_contract.py`：本地读取阶段0的128位点合同，输出81个可设计framework位点与47个冻结位点的逐位置合同、设计规则、gate、600 dpi PNG/SVG和run summary；只建立AntiFold/nanoBERT后续路线的输入边界，不生成突变或性质预测。

@@ -1,0 +1,39 @@
+{
+  "candidate_selection_performed": true,
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\select_affinity_ensemble_core.py",
+    "--production-result-dir",
+    "docs\\result_artifacts\\candidate_design\\flex_ddg_production_result_20260812",
+    "--post-scan-dir",
+    "docs\\result_artifacts\\candidate_design\\affinity_post_scan_filter_20260812",
+    "--output-dir",
+    "docs\\result_artifacts\\candidate_design\\affinity_ensemble_core_20260813",
+    "--run-summary",
+    "docs\\run_summaries\\candidate_design\\affinity_ensemble_core_20260813.json",
+    "--generated-at",
+    "2026-08-13T12:00:00+08:00"
+  ],
+  "counts": {
+    "candidate_count": 50,
+    "core_module_count": 8,
+    "core_position_count": 6,
+    "source_tier_counts": {
+      "tier_1": 2,
+      "tier_2": 6
+    }
+  },
+  "elapsed_seconds": 0.873004,
+  "generated_at": "2026-08-13T12:00:00+08:00",
+  "outputs": {
+    "cores": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_ensemble_core_20260813\\affinity_core_modules.csv",
+    "evidence": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_ensemble_core_20260813\\affinity_ensemble_evidence.csv",
+    "gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_ensemble_core_20260813\\affinity_ensemble_core_gate.json",
+    "png": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_ensemble_core_20260813\\affinity_ensemble_core.png",
+    "positions": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_ensemble_core_20260813\\affinity_core_positions.csv",
+    "svg": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\affinity_ensemble_core_20260813\\affinity_ensemble_core.svg"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}

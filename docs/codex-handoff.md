@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-13 10:30:00
+Last updated: 2026-08-13 12:00:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -17,7 +17,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - PyRosetta：`/data/software/env/luly25/multi_ligand`，Python 3.10.20，PyRosetta 2026.03，Rosetta commit `5e498f1409c68ade56c8ce5842bf79e1b02e8db4`。
 - nanoBERT：`/data/software/env/luly25/vhh-lm`，`NaturalAntibody/nanoBERT` revision `edc8182ad89a827f8737fa572c6b5fac6197e6b0`，使用已记录离线缓存。
 - Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；全量扫描结果提交`6268ee8`已同步，本次同步范围为结果科学复核与图布局修正。
-- 阶段2的本地阶段0、远程WT安全导入、WT评分校准v1/v2和12候选PyRosetta pilot均已运行。尚未运行456候选全量评分、AF3候选复核、nanoBERT/AntiFold或表达模型训练。
+- 阶段2的本地阶段0、远程WT安全导入、WT评分校准、456候选全量扫描、post-scan分层和50候选×20样本Flex ddG复核均已完成。尚未运行亲和力组合、AF3候选复核、nanoBERT/AntiFold或表达模型训练。
 
 ## Frozen Inputs
 
@@ -61,6 +61,8 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - `affinity_pilot_v2_scientific_review.json`将路线发布为`released_for_full_456_scan_implementation`。全量合同固定为先计算全部456候选并核验合并完整性，再统一筛选；pilot能量只作未筛选诊断，不产生实验候选推荐。
 - 456×3全量扫描已完成并通过merge gate：12片累计计算42645.718076秒，456个候选、1368个唯一重复键、3个去重WT均完整，0个runtime failure，全部摘要为`not_applied_scan_stage`。接触集合/保持率和`mutant-WT`能量差已逐行复算一致；`affinity_full_scan_scientific_review.json`发布`ready_for_post_scan_filter_implementation`，尚未选择或淘汰任何候选。
 - 统一post-scan分层已在本地完成：456条全部通过硬有效性门并互斥分为Tier 1/2/3/4/5=`18/30/39/82/287`；Tier 1/2合计48条形成严格复核池。分层使用三重复双能量方向、配对WT接触保持和`Δfa_rep`，风险标签与层内Pareto保持独立；`candidate_selection_performed=false`，尚未形成最终实验面板。
+- 亲和力ensemble核心筛选已完成：50条完整证据中8个单点通过“两项能量均至少18/20样本为负且中位数均为负”的唯一核心门，分别为`R45C/R45V/D101W/I103W/E105F/E105L/N107A/S114M`，覆盖6个位置；R45和E105的同位点替换互斥。风险、接触保持、prepared敏感性与Pareto层仍独立保留；未生成双突或最终实验序列。
+- 稳定性/表达WT发现合同已完成：128位中72个有实验坐标的非界面framework正常放行，9个实验缺失framework仅在完整VHH AF3证据下谨慎放行；24个实验界面、17个CDR/terminal flank、Cys22/Cys95和末端SSGS共47位冻结。合同不生成突变，也不声称性质改善。
 - `finalize_input_baseline.py` 已用真实 structure mapping/interface 重建 canonical 128 位点图和 `stage1_gate.json`。程序 `status=pass` 不代表科学 release gate 自动通过。
 
 ## Stage-2 Phase 0 Result
@@ -73,18 +75,21 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 1. **远程WT结构门（已完成，实测14.123538秒）**：PyRosetta 2026.03直接导入未补全实验complex，396个polymer残基和4个预期断点均安全，映射与二硫键通过；未做relax、补全、突变或候选评分。权威结果位于`structure_preparation/pyrosetta_wt_import_20260810/pyrosetta_wt_import_gate.json`。
 2. **WT评分协议校准（已完成，实测465.154733秒）**：schema v2 gate通过并唯一选择受约束局部最小化；代表WT、逐位置接触变化、重复表、逐残基能量和QC图均已同步。该步骤只释放成对相对候选评分，不生成突变或给出实验亲和力结论。
-3. **总体多目标架构（保留，但调整执行顺序）**：最终仍采用亲和力与稳定性/表达两条主轨从同一authoritative WT独立发现、风险作为横向监测层、汇合后少量组合、实验后再串行迭代。当前先完整完成证据最确定的亲和力轨道；稳定性/表达候选、47条yield小模型、nanoBERT PLL相关性和风险修复候选均暂停，待亲和力单点结果形成后另行讨论，不让未验证模型阻断亲和力进度。
+3. **总体多目标架构（已确认）**：采用“并行发现、条件化组合”。亲和力与稳定性/表达模块先从同一authoritative WT独立发现，以保留因果归因和统一基线；随后不做机械拼接，而是选择多个亲和力核心作为新序列上下文，固定其亲和力突变、实验表位/界面关键约束、Cys22/Cys95和末端SSGS，再重新设计和筛选稳定性/表达模块。最终完整组合必须重新计算亲和力、结构相容性、序列相容性和开发性指标，不能相加单模块分数，也不锁定唯一亲和力母本。
 4. **亲和力单点空间（本地已完成，实测约2秒）**：`affinity_single_mutants_20260811/`已从阶段0合同、实验24位界面、可逆编号和v2评分gate生成每个位点19种非WT替换，共456个单点；每条均保留完整128-aa序列、reported/IMGT/source-auth编号、实验接触和prepared WT敏感标记。12个pilot候选覆盖FR/CDR、保守/跨类替换及E46/D101/I103，未按prepared接触或主观化学偏好预删候选。
 5. **成对PyRosetta亲和力pilot V2（已完成，实测19.116154分钟）**：12候选×3重复和共享WT运行全部有效，配对WT相对接触指标复算一致，扫描阶段未筛选候选；路线已释放456全量扫描实现。
 6. **456单点全量扫描（已完成）**：12片累计11.846小时计算量，完整得到456候选×3重复且没有扫描中筛选。未筛选景观中113个候选`ΔdG<0`、143个跨界面能变化<0、87个两者均<0，但这些只是描述性计数；82个候选两指标方向不一致，说明后续不能使用单一能量列筛选。
 7. **统一筛选（已完成，本地实测约1.5秒）**：完整456候选按统一规则分为`18/30/39/82/287`，48条Tier 1/2进入严格复核池；未删除候选、未形成最终实验推荐。
 8. **Flex ddG生产参数计时pilot（已完成）**：4代表候选×2独立样本共8任务全部pass，累计1.666723 job-hours；单任务中位717.980720秒、P90 874.753734秒，backrub占累计任务时间94.7212%，峰值内存975.65–1000.62 MiB。全部WT/突变映射、断点和二硫键检查通过。两重复只验证生产参数、耗时和协议可行性；代表候选存在样本间能量方向翻转，因此不得用pilot分数排名。
-9. **亲和力严格复核（已完成）**：50候选×20样本=1000任务全部pass，身份、有限数值及WT/突变映射、断点、二硫键检查均通过；累计212.3655 job-hours，单任务中位760.8766秒、P90 871.7730秒，backrub占94.8628%。50条中38条两项能量中位数均为负，但只有8条在两项指标上都达到至少18/20负向支持，说明原三重复Tier不能直接充当最终ensemble排名。全部候选的配对WT接触最低保持率为VHH 0.9130、NK2R 0.9444。选入的Tier 3中`D33N`能量方向冲突，`Y115F`仅为弱双负中位数且ΔdG支持10/20；结果仍是模型特异REU而非实测亲和力，尚未筛选最终候选。
+9. **亲和力严格复核与核心选择（已完成）**：50候选×20样本=1000任务全部pass；随后按唯一双指标18/20方向门从完整50条中选择8个核心单点、覆盖6个位置。该选择不使用加权综合分，仍保留全部50条证据和每个核心的`fa_rep`、接触及prepared风险；当前只释放核心模块使用，不代表8条均等安全，也未生成亲和力双突。
+10. **模块与组合层级（已确认）**：单突是证据模块而非最终设计上限。亲和力先从20样本结果形成约6–8个机制多样单突核心，再主要探索双亲和力组合；稳定性/表达模块允许1–3个协调framework突变，必要时保留极少数4突变探索项；跨轨道完整候选以总计2–4个突变为主，极少超过4个。最终30条以重新评价的多目标组合为主体，同时保留少量WT/单模块对照以解释实验结果。
+11. **工具分工（当前选择）**：AntiFold作为结构条件稳定性/表达模块的主要生成器，暂不并行部署同类AbMPNN；nanoBERT用于VHH序列相容性，并先以47条yield验证其分数是否具有表达相关信息，未经验证不得称为表达预测器；PyRosetta用于完整亲和力组合和跨轨道组合的界面/结构复核；理化、聚集和化学风险作为所有完整序列的横向过滤；AF3仅用于少量终选完整组合的构象复核。
+12. **稳定性/表达设计合同（已完成）**：WT发现空间固定为81个非界面framework位点，其中9个缺失坐标位点要求AF3证据；47位冻结。主要模块允许1–3突变、极少数探索模块最多4突变；此处只有范围和证据合同，AntiFold/nanoBERT尚未运行。
 
 ## Verification
 
 - 阶段0专项：`3 passed`；覆盖真实128位合同、过期哈希拒绝、CSV BOM/LF、拒绝覆盖、固定时间戳双跑六制品逐字节一致。
-- 阶段0图、亲和力候选空间图及post-scan四面板图均已人工检查，坐标轴、图例和说明无遮挡。当前全套验收为`141 passed, 1 skipped, 4 subtests passed`；唯一skip仍是Windows真实symlink权限测试。
+- 阶段0图、亲和力候选空间图、post-scan四面板图、ensemble核心图和稳定性/表达合同图均已人工检查，坐标轴、图例和说明无遮挡。当前全套验收为`162 passed, 1 skipped, 4 subtests passed`；唯一skip仍是Windows真实symlink权限测试。
 - `pip check`、`python -m compileall -q src scripts tests`、`git diff --check` 均通过。
 - v2结果一致性复核：schema 2 gate为pass、16行重复数据和67行接触状态与gate一致、代表PDB含396个polymer残基；评分校准专项测试`8 passed`。
 - pilot V2一致性复核：3行WT、36行候选重复、12行候选汇总与machine gate一致；0个runtime failure，36/36重复和12/12摘要为pass，全部摘要未筛选。接触集合计数及配对WT保持率复算一致；V1/V2共同数值字段逐字一致。
@@ -95,7 +100,8 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Required Next Steps
 
-1. 设计一次显式ensemble统一筛选：联合20样本双指标方向支持、中位数/MAD、`Δfa_rep`、两侧接触保持、prepared敏感性和位点/化学多样性；先形成亲和力单点短名单，不机械沿用旧Tier或单列排序。
-2. 根据最终仅交付30条序列的限制，确定亲和力单点、稳定性/表达候选、少量组合设计及对照的名额分配；在此之前不把50条Flex ddG结果直接截成前30。
-3. 对亲和力短名单做序列可开发性/稳定性风险复核，再决定少量可解释组合；仍不把REU转换为实验亲和力。
-4. 重新讨论表达/稳定性路线，包括47条yield的探索性利用和nanoBERT/AntiFold/AbMPNN的必要最小组合。
+1. 先在47条yield上检验nanoBERT分数和少量预声明理化特征的相关性、留一来源/交叉验证稳定性，决定nanoBERT只作序列相容性过滤还是可提供弱排序证据；不训练高容量模型。
+2. 建立AntiFold最小运行路线，先在WT完整VHH结构上验证81位合同、冻结位点和1–3突变模块输出；不同时部署同类型AbMPNN。
+3. 依据8个核心模块的风险和同位点互斥关系，设计少量机制互补亲和力双突并用完整组合重新评分；不是把单点REU相加。
+4. 将稳定性/表达模块分别放入多个亲和力核心背景重新评价，生成受控的2–4突变完整组合；快速多目标筛选后，只对有限组合运行多突变PyRosetta/Flex ddG，并对少量终选使用AF3。
+5. 在完整组合证据形成后确定最终30条及必要对照；不把REU、语言模型分数或AntiFold输出解释为实验性质。

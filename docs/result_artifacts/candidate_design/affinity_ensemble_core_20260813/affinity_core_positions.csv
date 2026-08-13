@@ -1,0 +1,7 @@
+﻿sequence_index_1based,wt_residue,region,core_module_count,core_candidate_ids,mutant_residues,same_position_modules_mutually_exclusive
+45,R,FR2,2,Nb252_aff_seq045_R45C;Nb252_aff_seq045_R45V,C;V,True
+101,D,CDR3,1,Nb252_aff_seq101_D101W,W,False
+103,I,CDR3,1,Nb252_aff_seq103_I103W,W,False
+105,E,CDR3,2,Nb252_aff_seq105_E105F;Nb252_aff_seq105_E105L,F;L,True
+107,N,CDR3,1,Nb252_aff_seq107_N107A,A,False
+114,S,CDR3,1,Nb252_aff_seq114_S114M,M,False
