@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-13 14:00:00
+Last updated: 2026-08-13 16:30:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -17,7 +17,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - PyRosetta：`/data/software/env/luly25/multi_ligand`，Python 3.10.20，PyRosetta 2026.03，Rosetta commit `5e498f1409c68ade56c8ce5842bf79e1b02e8db4`。
 - nanoBERT：`/data/software/env/luly25/vhh-lm`，`NaturalAntibody/nanoBERT` revision `edc8182ad89a827f8737fa572c6b5fac6197e6b0`，使用已记录离线缓存。
 - Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；亲和力ensemble核心与稳定性/表达合同提交`a243399`已同步。
-- 阶段2的本地阶段0、远程WT安全导入、WT评分校准、456候选全量扫描、post-scan分层和50候选×20样本Flex ddG复核均已完成。尚未运行亲和力组合、AF3候选复核、nanoBERT/AntiFold或表达模型训练。
+- 阶段2的本地阶段0、远程WT安全导入、WT评分校准、456候选全量扫描、post-scan分层、50候选×20样本Flex ddG复核和nanoBERT—yield验证均已完成。尚未运行亲和力组合、AF3候选复核、AntiFold或表达模型训练。
 
 ## Frozen Inputs
 
@@ -63,6 +63,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 统一post-scan分层已在本地完成：456条全部通过硬有效性门并互斥分为Tier 1/2/3/4/5=`18/30/39/82/287`；Tier 1/2合计48条形成严格复核池。分层使用三重复双能量方向、配对WT接触保持和`Δfa_rep`，风险标签与层内Pareto保持独立；`candidate_selection_performed=false`，尚未形成最终实验面板。
 - 亲和力ensemble核心筛选已完成：50条完整证据中8个单点通过“两项能量均至少18/20样本为负且中位数均为负”的唯一核心门，分别为`R45C/R45V/D101W/I103W/E105F/E105L/N107A/S114M`，覆盖6个位置；R45和E105的同位点替换互斥。风险、接触保持、prepared敏感性与Pareto层仍独立保留；未生成双突或最终实验序列。
 - 稳定性/表达WT发现合同已完成：128位中72个有实验坐标的非界面framework正常放行，9个实验缺失framework仅在完整VHH AF3证据下谨慎放行；24个实验界面、17个CDR/terminal flank、Cys22/Cys95和末端SSGS共47位冻结。合同不生成突变，也不声称性质改善。
+- nanoBERT—reported yield验证gate为`pass`，但证据等级为`no_supported_use`、release为`nanobert_not_supported_for_candidate_use`。主指标完整reported序列mean PLL在31条LTT/WCC上的来源分层Spearman为-0.2295，长度调整partial Spearman为-0.2020，LTT/WCC内部为-0.2413/0.0602；95% bootstrap CI为[-0.5982, 0.2219]，来源内置换p=0.2799，加入nanoBERT后的LOOCV Spearman增益为-0.0507。16条LLJ有序/删失Kendall tau-b为-0.2308。不得用nanoBERT为Nb252稳定性、表达或候选序列打分/排序。
 - `finalize_input_baseline.py` 已用真实 structure mapping/interface 重建 canonical 128 位点图和 `stage1_gate.json`。程序 `status=pass` 不代表科学 release gate 自动通过。
 
 ## Stage-2 Phase 0 Result
@@ -83,9 +84,9 @@ Timezone: Asia/Shanghai (UTC+08:00)
 8. **Flex ddG生产参数计时pilot（已完成）**：4代表候选×2独立样本共8任务全部pass，累计1.666723 job-hours；单任务中位717.980720秒、P90 874.753734秒，backrub占累计任务时间94.7212%，峰值内存975.65–1000.62 MiB。全部WT/突变映射、断点和二硫键检查通过。两重复只验证生产参数、耗时和协议可行性；代表候选存在样本间能量方向翻转，因此不得用pilot分数排名。
 9. **亲和力严格复核与核心选择（已完成）**：50候选×20样本=1000任务全部pass；随后按唯一双指标18/20方向门从完整50条中选择8个核心单点、覆盖6个位置。该选择不使用加权综合分，仍保留全部50条证据和每个核心的`fa_rep`、接触及prepared风险；当前只释放核心模块使用，不代表8条均等安全，也未生成亲和力双突。
 10. **模块与组合层级（已确认）**：单突是证据模块而非最终设计上限。亲和力先从20样本结果形成约6–8个机制多样单突核心，再主要探索双亲和力组合；稳定性/表达模块允许1–3个协调framework突变，必要时保留极少数4突变探索项；跨轨道完整候选以总计2–4个突变为主，极少超过4个。最终30条以重新评价的多目标组合为主体，同时保留少量WT/单模块对照以解释实验结果。
-11. **工具分工（当前选择）**：AntiFold作为结构条件稳定性/表达模块的主要生成器，暂不并行部署同类AbMPNN；nanoBERT用于VHH序列相容性，并先以47条yield验证其分数是否具有表达相关信息，未经验证不得称为表达预测器；PyRosetta用于完整亲和力组合和跨轨道组合的界面/结构复核；理化、聚集和化学风险作为所有完整序列的横向过滤；AF3仅用于少量终选完整组合的构象复核。
-12. **稳定性/表达设计合同（已完成）**：WT发现空间固定为81个非界面framework位点，其中9个缺失坐标位点要求AF3证据；47位冻结。主要模块允许1–3突变、极少数探索模块最多4突变；此处只有范围和证据合同，AntiFold/nanoBERT尚未运行。
-13. **nanoBERT—yield验证（实现和本地计划已完成，待远程单任务）**：47条真实序列计划已冻结；31条LTT/WCC个体近似值用于主要数值关联，16条LLJ只作三档有序/删失检查。主分数为固定revision nanoBERT逐残基single-mask的完整reported序列mean PLL；同时检验来源内秩相关、长度调整、5000次分层bootstrap/permutation、provider-intercept LOOCV和少量理化基线。尚无模型分数或关联结论，远程结果不得预填。
+11. **工具分工（当前选择）**：AntiFold作为结构条件稳定性/表达模块的主要生成器，暂不并行部署同类AbMPNN；nanoBERT已因47条yield验证不支持而退出本项目候选排序/过滤路线；PyRosetta用于完整亲和力组合和跨轨道组合的界面/结构复核；理化、聚集和化学风险作为所有完整序列的横向过滤；AF3仅用于少量终选完整组合的构象复核。
+12. **稳定性/表达设计合同（已完成）**：WT发现空间固定为81个非界面framework位点，其中9个缺失坐标位点要求AF3证据；47位冻结。主要模块允许1–3突变、极少数探索模块最多4突变；此处只有范围和证据合同，AntiFold尚未运行。
+13. **nanoBERT—yield验证（已完成）**：47条真实序列均完成固定revision逐残基single-mask评分；主指标未通过方向、跨来源稳定性、不确定性或LOOCV门，证据等级为`no_supported_use`。全样本合并ρ=0.1887与来源分层ρ=-0.2295方向相反，显示来源混杂；nanoBERT从稳定性/表达候选评价路线中移除，不作为排序或过滤信号。理化特征只产生未校正的探索性关联，当前也不得作为表达优化方向或训练模型依据。
 
 ## Verification
 
@@ -101,8 +102,8 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Required Next Steps
 
-1. 远程运行`bash scripts/candidate_design/submit_nanobert_yield_validation.sh`；完成并pull后核验真实模型revision、47条评分、关联gate和结果图，再决定nanoBERT证据等级。预计低于1小时，无断点续传。
-2. 建立AntiFold最小运行路线，先在WT完整VHH结构上验证81位合同、冻结位点和1–3突变模块输出；不同时部署同类型AbMPNN。
-3. 依据8个核心模块的风险和同位点互斥关系，设计少量机制互补亲和力双突并用完整组合重新评分；不是把单点REU相加。
-4. 将稳定性/表达模块分别放入多个亲和力核心背景重新评价，生成受控的2–4突变完整组合；快速多目标筛选后，只对有限组合运行多突变PyRosetta/Flex ddG，并对少量终选使用AF3。
-5. 在完整组合证据形成后确定最终30条及必要对照；不把REU、语言模型分数或AntiFold输出解释为实验性质。
+1. 建立AntiFold最小运行路线，先在WT完整VHH结构上验证81位合同、冻结位点和1–3突变模块输出；不同时部署同类型AbMPNN，也不再接入nanoBERT评分。
+2. 依据8个核心模块的风险和同位点互斥关系，设计少量机制互补亲和力双突并用完整组合重新评分；不是把单点REU相加。
+3. 对AntiFold模块使用结构相容性、保守位点、聚集/化学风险及基础理化边界筛选；现有47条理化关联仅作探索背景，不能作为表达量训练标签或单向优化目标。
+4. 将稳定性/表达模块分别放入多个亲和力核心背景重新评价，生成受控的2–4突变完整组合；只对有限组合运行多突变PyRosetta/Flex ddG，并对少量终选使用AF3。
+5. 在完整组合证据形成后确定最终30条及必要对照；不把REU、AntiFold输出或未验证理化趋势解释为实验性质。
