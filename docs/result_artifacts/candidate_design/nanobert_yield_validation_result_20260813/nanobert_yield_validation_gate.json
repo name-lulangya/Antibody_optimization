@@ -1,0 +1,38 @@
+{
+  "decision_reasons": [
+    "primary_direction_or_cross_source_stability_not_supported"
+  ],
+  "evidence_level": "no_supported_use",
+  "gate_name": "nb252_nanobert_reported_yield_validation",
+  "generated_at": "2026-08-13T16:00:16+08:00",
+  "high_capacity_model_trained": false,
+  "interpretation": "Association with collaborator-reported yield; not an expression-rate or mg/L predictor.",
+  "llj_ordinal_censored_count": 16,
+  "nb252_expression_prediction_validated": false,
+  "numeric_individual_count": 31,
+  "primary_feature": "nanobert_mean_pll_raw",
+  "primary_statistics": {
+    "bootstrap_95ci_high": 0.22190198342049622,
+    "bootstrap_95ci_low": -0.5981671954349806,
+    "feature": "nanobert_mean_pll_raw",
+    "length_adjusted_partial_spearman": -0.20196260562832433,
+    "llj_kendall_tau_b": -0.23078316568852544,
+    "llj_ordinal_n": 16,
+    "loocv_increment_over_provider": -0.05070075800560697,
+    "loocv_log1p_yield_spearman": -0.3016851208553005,
+    "ltt_spearman_rho": -0.24134532083059632,
+    "numeric_n": 31,
+    "pooled_kendall_p": 0.34061689209800905,
+    "pooled_kendall_tau_b": 0.1213469350646116,
+    "pooled_spearman_p": 0.3093823849633458,
+    "pooled_spearman_rho": 0.18867932307672644,
+    "provider_only_loocv_spearman": -0.25098436284969355,
+    "stratified_permutation_p": 0.27994401119776047,
+    "stratified_spearman_rho": -0.2294539147360127,
+    "wcc_spearman_rho": 0.06024533658898499
+  },
+  "release": "nanobert_not_supported_for_candidate_use",
+  "sample_count": 47,
+  "schema_version": 1,
+  "status": "pass"
+}
