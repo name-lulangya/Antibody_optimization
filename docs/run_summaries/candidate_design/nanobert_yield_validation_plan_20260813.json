@@ -1,0 +1,15 @@
+{
+  "elapsed_seconds": 0.043316,
+  "generated_at": "2026-08-13T14:00:00+08:00",
+  "llj_ordinal_count": 16,
+  "numeric_count": 31,
+  "outputs": {
+    "contract": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\nanobert_yield_validation_plan_20260813\\nanobert_yield_validation_contract.json",
+    "regions": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\nanobert_yield_validation_plan_20260813\\nanobert_validation_regions.csv",
+    "samples": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\nanobert_yield_validation_plan_20260813\\nanobert_validation_samples.csv"
+  },
+  "python": "3.11.15",
+  "sample_count": 47,
+  "schema_version": 1,
+  "status": "pass"
+}

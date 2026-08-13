@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-13 12:00:00
+Last updated: 2026-08-13 14:00:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -16,7 +16,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 远程项目环境：`/data/software/env/luly25/ab_optim`；计划检出父目录 `/homes/Tianlab/luly25/`，登录别名尚未建立。
 - PyRosetta：`/data/software/env/luly25/multi_ligand`，Python 3.10.20，PyRosetta 2026.03，Rosetta commit `5e498f1409c68ade56c8ce5842bf79e1b02e8db4`。
 - nanoBERT：`/data/software/env/luly25/vhh-lm`，`NaturalAntibody/nanoBERT` revision `edc8182ad89a827f8737fa572c6b5fac6197e6b0`，使用已记录离线缓存。
-- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；全量扫描结果提交`6268ee8`已同步，本次同步范围为结果科学复核与图布局修正。
+- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；亲和力ensemble核心与稳定性/表达合同提交`a243399`已同步。
 - 阶段2的本地阶段0、远程WT安全导入、WT评分校准、456候选全量扫描、post-scan分层和50候选×20样本Flex ddG复核均已完成。尚未运行亲和力组合、AF3候选复核、nanoBERT/AntiFold或表达模型训练。
 
 ## Frozen Inputs
@@ -85,11 +85,12 @@ Timezone: Asia/Shanghai (UTC+08:00)
 10. **模块与组合层级（已确认）**：单突是证据模块而非最终设计上限。亲和力先从20样本结果形成约6–8个机制多样单突核心，再主要探索双亲和力组合；稳定性/表达模块允许1–3个协调framework突变，必要时保留极少数4突变探索项；跨轨道完整候选以总计2–4个突变为主，极少超过4个。最终30条以重新评价的多目标组合为主体，同时保留少量WT/单模块对照以解释实验结果。
 11. **工具分工（当前选择）**：AntiFold作为结构条件稳定性/表达模块的主要生成器，暂不并行部署同类AbMPNN；nanoBERT用于VHH序列相容性，并先以47条yield验证其分数是否具有表达相关信息，未经验证不得称为表达预测器；PyRosetta用于完整亲和力组合和跨轨道组合的界面/结构复核；理化、聚集和化学风险作为所有完整序列的横向过滤；AF3仅用于少量终选完整组合的构象复核。
 12. **稳定性/表达设计合同（已完成）**：WT发现空间固定为81个非界面framework位点，其中9个缺失坐标位点要求AF3证据；47位冻结。主要模块允许1–3突变、极少数探索模块最多4突变；此处只有范围和证据合同，AntiFold/nanoBERT尚未运行。
+13. **nanoBERT—yield验证（实现和本地计划已完成，待远程单任务）**：47条真实序列计划已冻结；31条LTT/WCC个体近似值用于主要数值关联，16条LLJ只作三档有序/删失检查。主分数为固定revision nanoBERT逐残基single-mask的完整reported序列mean PLL；同时检验来源内秩相关、长度调整、5000次分层bootstrap/permutation、provider-intercept LOOCV和少量理化基线。尚无模型分数或关联结论，远程结果不得预填。
 
 ## Verification
 
 - 阶段0专项：`3 passed`；覆盖真实128位合同、过期哈希拒绝、CSV BOM/LF、拒绝覆盖、固定时间戳双跑六制品逐字节一致。
-- 阶段0图、亲和力候选空间图、post-scan四面板图、ensemble核心图和稳定性/表达合同图均已人工检查，坐标轴、图例和说明无遮挡。当前全套验收为`162 passed, 1 skipped, 4 subtests passed`；唯一skip仍是Windows真实symlink权限测试。
+- 阶段0图、亲和力候选空间图、post-scan四面板图、ensemble核心图和稳定性/表达合同图均已人工检查，坐标轴、图例和说明无遮挡。当前全套验收为`166 passed, 1 skipped, 4 subtests passed`；唯一skip仍是Windows真实symlink权限测试。
 - `pip check`、`python -m compileall -q src scripts tests`、`git diff --check` 均通过。
 - v2结果一致性复核：schema 2 gate为pass、16行重复数据和67行接触状态与gate一致、代表PDB含396个polymer残基；评分校准专项测试`8 passed`。
 - pilot V2一致性复核：3行WT、36行候选重复、12行候选汇总与machine gate一致；0个runtime failure，36/36重复和12/12摘要为pass，全部摘要未筛选。接触集合计数及配对WT保持率复算一致；V1/V2共同数值字段逐字一致。
@@ -100,7 +101,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Required Next Steps
 
-1. 先在47条yield上检验nanoBERT分数和少量预声明理化特征的相关性、留一来源/交叉验证稳定性，决定nanoBERT只作序列相容性过滤还是可提供弱排序证据；不训练高容量模型。
+1. 远程运行`bash scripts/candidate_design/submit_nanobert_yield_validation.sh`；完成并pull后核验真实模型revision、47条评分、关联gate和结果图，再决定nanoBERT证据等级。预计低于1小时，无断点续传。
 2. 建立AntiFold最小运行路线，先在WT完整VHH结构上验证81位合同、冻结位点和1–3突变模块输出；不同时部署同类型AbMPNN。
 3. 依据8个核心模块的风险和同位点互斥关系，设计少量机制互补亲和力双突并用完整组合重新评分；不是把单点REU相加。
 4. 将稳定性/表达模块分别放入多个亲和力核心背景重新评价，生成受控的2–4突变完整组合；快速多目标筛选后，只对有限组合运行多突变PyRosetta/Flex ddG，并对少量终选使用AF3。

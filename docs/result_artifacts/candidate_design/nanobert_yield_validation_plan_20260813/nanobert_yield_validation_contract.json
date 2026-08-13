@@ -1,0 +1,28 @@
+{
+  "bootstrap": {
+    "replicates": 5000,
+    "seed": 252031
+  },
+  "evidence_levels": [
+    "weak_ranking_evidence",
+    "compatibility_filter_only",
+    "no_supported_use"
+  ],
+  "generated_at": "2026-08-13T14:00:00+08:00",
+  "high_capacity_model_training": false,
+  "llj_use": "16_group_ordinal_or_censored_observations_only",
+  "model_id": "NaturalAntibody/nanoBERT",
+  "model_license": "cc-by-nc-sa-4.0",
+  "model_revision": "edc8182ad89a827f8737fa572c6b5fac6197e6b0",
+  "permutation": {
+    "replicates": 5000,
+    "seed": 252032
+  },
+  "primary_numeric_analysis": "31_LTT_WCC_individual_approximate",
+  "primary_score": "mean_pll_over_complete_reported_sequence",
+  "release": "ready_for_remote_nanobert_scoring",
+  "schema_version": 1,
+  "score_definition": "per-residue single-mask pseudo-log-likelihood; natural log of WT residue probability",
+  "source_control": "within-provider_stratified_ranks_and_provider_intercept_LOOCV",
+  "status": "pass"
+}

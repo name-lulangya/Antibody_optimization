@@ -176,6 +176,11 @@
   - 主要输入/返回：各流程已验证的紧凑表；写出与表格一一对应的决策图。
   - 算法假设：绘图只呈现输入表的机器可读状态，SVG固定hashsalt并规范化行尾。
   - 明确不支持：重新筛选、推断位点状态、修改合同或生成候选。
+- `antibody_optimization.nanobert_yield`与`nanobert_yield_plot`
+  - 用途：冻结47条reported序列/表型语义，计算少量可解释理化基线，并在nanoBERT逐位mask评分完成后执行来源内秩相关、分层bootstrap/permutation、provider-intercept LOOCV和LLJ有序一致性分析。
+  - 主要输入/返回：47行表达记录、provisional IMGT位置、47行nanoBERT样本分数；返回逐样本证据、逐特征统计、三档证据gate和600 dpi PNG/SVG。
+  - 算法假设：主指标为完整reported序列逐残基single-mask WT自然对数概率的长度归一化均值；31条LTT/WCC个体近似值用于主要数值关联，16条LLJ只保留`~2/~10/>20`有序/删失语义；固定5000次分层bootstrap和permutation，不训练高容量模型。
+  - 明确不支持：把pseudo-log-likelihood称为表达预测、把LLJ分档插值为个体产量、把reported yield改称mg/L、从47条样本训练高容量模型，或未经gate将分数转移到Nb252突变体。
 
 ## 第一阶段活动入口
 
@@ -210,3 +215,7 @@
 - `scripts/candidate_design/summarize_flex_ddg_production.py`：仅在1000任务全部pass后输出任务表、50行未筛选ensemble摘要、gate、600 dpi PNG/SVG和run summary；`candidate_selection_performed=false`，后续另行设计统一ensemble筛选。
 - `scripts/candidate_design/select_affinity_ensemble_core.py`：本地读取50×20生产摘要与456候选post-scan表，按双指标18/20重复方向门选择核心；输出50行完整证据、8个单点模块、6个位置互斥组、gate、600 dpi PNG/SVG和run summary。该入口执行模块选择但不生成组合突变。
 - `scripts/candidate_design/build_stability_expression_design_contract.py`：本地读取阶段0的128位点合同，输出81个可设计framework位点与47个冻结位点的逐位置合同、设计规则、gate、600 dpi PNG/SVG和run summary；只建立AntiFold/nanoBERT后续路线的输入边界，不生成突变或性质预测。
+- `scripts/candidate_design/build_nanobert_yield_validation_plan.py`：本地冻结47条序列、31条数值与16条LLJ有序/删失表型、provisional IMGT区域和预声明统计门，输出评分样本表、区域映射、合同及run summary。
+- `scripts/candidate_design/score_nanobert_sequences.py`：在固定nanoBERT revision离线快照中逐残基单独mask，输出47行样本PLL、逐位置WT概率和模型运行记录；WCC__4-28只生成完整序列分数，不虚构FR/CDR分数。
+- `scripts/candidate_design/analyze_nanobert_yield_validation.py`：联接固定计划与真实nanoBERT分数，计算理化基线、相关/重采样/LOOCV，输出逐样本和逐指标紧凑表、证据gate、600 dpi PNG/SVG及run summary。
+- `scripts/candidate_design/submit_nanobert_yield_validation.sh`与`.slurm`：远程单GPU、12 CPU、1小时唯一提交路线；模型阶段使用固定`vhh-lm`离线环境，统计绘图切换项目`ab_optim`，日志写入`logs/nanobert_yield_validation/`。短任务默认拒绝已有输出，不实现断点续传。
