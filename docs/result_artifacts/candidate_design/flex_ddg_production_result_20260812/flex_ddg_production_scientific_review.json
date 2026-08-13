@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-08-13T10:30:00+08:00",
+  "source_result_commit": "41f6983",
+  "source_files": {
+    "manifest": "../flex_ddg_production_plan_20260812/flex_ddg_production_manifest.csv",
+    "task_metrics": "flex_ddg_production_task_metrics.csv",
+    "candidate_summary": "flex_ddg_production_candidate_summary.csv",
+    "gate": "flex_ddg_production_gate.json"
+  },
+  "integrity_review": {
+    "status": "pass",
+    "manifest_task_identity_matches": true,
+    "task_count": 1000,
+    "unique_task_count": 1000,
+    "unique_candidate_sample_seed_count": 1000,
+    "candidate_count": 50,
+    "samples_per_candidate": 20,
+    "task_status_pass_count": 1000,
+    "all_metrics_finite": true,
+    "all_wt_and_mutant_mapping_break_disulfide_checks_pass": true
+  },
+  "execution": {
+    "aggregate_task_seconds": 764515.9382804917,
+    "aggregate_task_hours": 212.3655384112477,
+    "task_elapsed_seconds": {
+      "minimum": 554.7669170099543,
+      "median": 760.8766069564736,
+      "p90": 871.7729986226302,
+      "maximum": 959.101891709026
+    },
+    "backrub_fraction_of_aggregate_task_time": 0.9486275187679944,
+    "peak_rss_mb": {
+      "minimum": 964.8125,
+      "median": 995.044921875,
+      "maximum": 1009.05859375
+    },
+    "output_size_bytes_per_task": {
+      "minimum": 1699756,
+      "median": 1700962.5,
+      "maximum": 1702084
+    },
+    "wall_time_not_available_from_tracked_artifacts": true
+  },
+  "ensemble_summary": {
+    "both_energy_medians_negative": 38,
+    "delta_dG_separated_median_negative": 38,
+    "delta_cross_interface_energy_median_negative": 47,
+    "both_energy_medians_positive": 3,
+    "median_energy_direction_conflict": 9,
+    "both_negative_sample_support": {
+      "20_of_20": 1,
+      "at_least_19_of_20": 5,
+      "at_least_18_of_20": 8,
+      "at_least_16_of_20": 13,
+      "at_least_15_of_20": 17
+    },
+    "at_least_18_of_20_for_both_candidate_ids_descriptive_not_selected": [
+      "Nb252_aff_seq045_R45C",
+      "Nb252_aff_seq107_N107A",
+      "Nb252_aff_seq045_R45V",
+      "Nb252_aff_seq101_D101W",
+      "Nb252_aff_seq103_I103W",
+      "Nb252_aff_seq105_E105F",
+      "Nb252_aff_seq105_E105L",
+      "Nb252_aff_seq114_S114M"
+    ],
+    "candidate_count_with_any_median_sign_change_vs_three_replicate_scan": 12,
+    "minimum_vhh_contact_retention_across_candidates": 0.9130434782608695,
+    "minimum_receptor_epitope_retention_across_candidates": 0.9444444444444444,
+    "both_contact_retentions_exactly_one_candidate_count": 20
+  },
+  "tier_descriptive_summary": {
+    "tier_1": {
+      "candidate_count": 18,
+      "both_energy_medians_negative": 15
+    },
+    "tier_2": {
+      "candidate_count": 30,
+      "both_energy_medians_negative": 22
+    },
+    "selected_tier_3": {
+      "candidate_count": 2,
+      "both_energy_medians_negative": 1
+    }
+  },
+  "selected_tier_3_review": {
+    "Nb252_aff_seq033_D33N": {
+      "negative_delta_dG_samples": 10,
+      "negative_delta_cross_interface_samples": 15,
+      "delta_dG_separated_median": 0.05950716530864497,
+      "delta_cross_interface_energy_median": -0.9927283811492131,
+      "interpretation": "energy_direction_conflict"
+    },
+    "Nb252_aff_seq115_Y115F": {
+      "negative_delta_dG_samples": 10,
+      "negative_delta_cross_interface_samples": 18,
+      "delta_dG_separated_median": -0.025346132611900885,
+      "delta_cross_interface_energy_median": -0.19661349477846102,
+      "interpretation": "weak_double_negative_median_with_uncertain_delta_dG_support"
+    }
+  },
+  "interpretation_limits": {
+    "candidate_selection_performed": false,
+    "old_tiers_are_not_final_ensemble_ranks": true,
+    "model_specific_reu_are_not_measured_affinity": true,
+    "contact_retention_is_relative_to_each_sample_paired_wt": true,
+    "next_release": "ready_for_explicit_ensemble_filter_design"
+  }
+}

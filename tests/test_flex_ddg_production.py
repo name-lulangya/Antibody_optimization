@@ -103,6 +103,41 @@ def test_production_slurm_contracts_are_configurable_and_use_logs() -> None:
     assert "--run-kind production" in array
 
 
+def test_real_production_scientific_review_recomputes_from_result_tables() -> None:
+    result_dir = (
+        PROJECT_ROOT
+        / "docs/result_artifacts/candidate_design/flex_ddg_production_result_20260812"
+    )
+    candidate_rows = _csv(result_dir / "flex_ddg_production_candidate_summary.csv")
+    task_rows = _csv(result_dir / "flex_ddg_production_task_metrics.csv")
+    review = json.loads(
+        (result_dir / "flex_ddg_production_scientific_review.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert len(task_rows) == review["integrity_review"]["task_count"] == 1000
+    assert all(row["status"] == "pass" for row in task_rows)
+    double_negative = [
+        row
+        for row in candidate_rows
+        if float(row["delta_dG_separated_median"]) < 0
+        and float(row["delta_cross_interface_energy_median"]) < 0
+    ]
+    assert len(double_negative) == review["ensemble_summary"]["both_energy_medians_negative"]
+    strong = {
+        row["candidate_id"]
+        for row in candidate_rows
+        if int(row["negative_delta_dG_count"]) >= 18
+        and int(row["negative_delta_cross_interface_count"]) >= 18
+    }
+    assert strong == set(
+        review["ensemble_summary"][
+            "at_least_18_of_20_for_both_candidate_ids_descriptive_not_selected"
+        ]
+    )
+    assert all(row["candidate_selection_performed"] == "False" for row in candidate_rows)
+
+
 def _task_result(row: dict[str, object]) -> dict[str, object]:
     result = {field: 1.0 for field in TASK_METRIC_FIELDS}
     result.update({field: row[field] for field in ("task_index", "task_id", "candidate_id", "tier", "sample_index", "seed")})

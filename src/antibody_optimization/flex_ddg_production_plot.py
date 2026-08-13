@@ -19,7 +19,9 @@ def render_flex_ddg_production_figure(
     if len(rows) != 50:
         raise ValueError("Production figure requires all 50 candidates")
     colors = {"tier_1": "#2878B5", "tier_2": "#F28E2B", "tier_3": "#59A14F"}
-    fig, axes = plt.subplots(1, 3, figsize=(12.2, 3.8))
+    fig, axes = plt.subplots(
+        1, 3, figsize=(15.8, 4.6), constrained_layout=True
+    )
     for tier, color in colors.items():
         selected = [row for row in rows if row["tier"] == tier]
         axes[0].scatter(
@@ -52,8 +54,16 @@ def render_flex_ddg_production_figure(
     for label, axis in zip(("A", "B", "C"), axes, strict=True):
         axis.text(-0.14, 1.04, label, transform=axis.transAxes, fontweight="bold")
         axis.grid(color="#E5E5E5", linewidth=0.6)
-    fig.suptitle("Nb252 Tier 1–3 Flex ddG ensemble review (unfiltered)", fontsize=11)
-    fig.tight_layout(rect=(0, 0, 1, 0.96))
+    fig.suptitle(
+        "Nb252 Flex ddG ensemble review: 48 Tier 1/2 + 2 selected Tier 3",
+        fontsize=12,
+    )
     fig.savefig(png_path, dpi=600, bbox_inches="tight")
     fig.savefig(svg_path, bbox_inches="tight")
     plt.close(fig)
+    lines = svg_path.read_text(encoding="utf-8").splitlines()
+    svg_path.write_text(
+        "\n".join(line.rstrip() for line in lines) + "\n",
+        encoding="utf-8",
+        newline="\n",
+    )
