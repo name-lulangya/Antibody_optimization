@@ -1,0 +1,29 @@
+{
+  "candidate_count": 50,
+  "candidate_selection_performed": false,
+  "command_argv": [
+    "/data/software/env/luly25/ab_optim/bin/python",
+    "/homes/Tianlab/luly25/Antibody_optimization/scripts/candidate_design/summarize_flex_ddg_production.py",
+    "--plan-dir",
+    "docs/result_artifacts/candidate_design/flex_ddg_production_plan_20260812",
+    "--task-root",
+    "results/candidate_design/flex_ddg_production_20260812/tasks",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/flex_ddg_production_result_20260812",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/flex_ddg_production_result_20260812.json"
+  ],
+  "elapsed_seconds": 15.516139,
+  "generated_at": "2026-08-13T10:01:33+08:00",
+  "outputs": {
+    "candidates": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/flex_ddg_production_result_20260812/flex_ddg_production_candidate_summary.csv",
+    "gate": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/flex_ddg_production_result_20260812/flex_ddg_production_gate.json",
+    "png": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/flex_ddg_production_result_20260812/flex_ddg_production_qc.png",
+    "svg": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/flex_ddg_production_result_20260812/flex_ddg_production_qc.svg",
+    "tasks": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/flex_ddg_production_result_20260812/flex_ddg_production_task_metrics.csv"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass",
+  "task_count": 1000
+}

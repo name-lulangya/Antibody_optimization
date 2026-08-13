@@ -1,0 +1,13 @@
+{
+  "candidate_count": 50,
+  "candidate_selection_performed": false,
+  "gate_name": "nb252_flex_ddg_production",
+  "generated_at": "2026-08-13T10:01:33+08:00",
+  "interpretation": "Complete model-specific ensemble evidence; not measured affinity.",
+  "release": "ready_for_ensemble_filter_design",
+  "samples_per_candidate": 20,
+  "schema_version": 1,
+  "scope": "all_tier_1_and_2_plus_two_selected_tier_3",
+  "status": "pass",
+  "task_count": 1000
+}
