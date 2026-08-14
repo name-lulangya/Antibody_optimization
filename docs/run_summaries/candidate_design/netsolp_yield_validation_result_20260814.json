@@ -1,0 +1,21 @@
+{
+  "counts": {
+    "features": 15,
+    "llj_ordinal_censored": 16,
+    "numeric": 31,
+    "samples": 47
+  },
+  "elapsed_seconds": 7.856325,
+  "evidence_level": "compatibility_filter_only",
+  "generated_at": "2026-08-14T09:58:38+08:00",
+  "outputs": {
+    "gate": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/netsolp_yield_validation_result_20260814/netsolp_yield_validation_gate.json",
+    "metrics": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/netsolp_yield_validation_result_20260814/netsolp_yield_associations.csv",
+    "png": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/netsolp_yield_validation_result_20260814/netsolp_yield_validation.png",
+    "samples": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/netsolp_yield_validation_result_20260814/netsolp_yield_sample_evidence.csv",
+    "svg": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/netsolp_yield_validation_result_20260814/netsolp_yield_validation.svg"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}
