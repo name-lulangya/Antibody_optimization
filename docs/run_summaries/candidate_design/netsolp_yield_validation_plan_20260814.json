@@ -1,0 +1,16 @@
+{
+  "elapsed_seconds": 3.378801,
+  "generated_at": "2026-08-14T09:41:05+08:00",
+  "llj_ordinal_count": 16,
+  "numeric_count": 31,
+  "outputs": {
+    "contract": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\netsolp_yield_validation_plan_20260814\\netsolp_yield_validation_contract.json",
+    "fasta": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\netsolp_yield_validation_plan_20260814\\netsolp_validation_sequences.fasta",
+    "samples": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\netsolp_yield_validation_plan_20260814\\netsolp_validation_samples.csv"
+  },
+  "python": "3.11.15",
+  "sample_count": 47,
+  "schema_version": 1,
+  "sequence_cluster_count_90": 40,
+  "status": "pass"
+}

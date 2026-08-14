@@ -167,7 +167,7 @@
   - 算法假设：核心门固定为两项能量均至少18/20样本为负且中位数均为负；`fa_rep`、接触保持、prepared敏感性和原风险标签独立保留，不合成为加权分数。
   - 明确不支持：把REU解释为实测亲和力、自动组合突变、用风险列暗中淘汰已过核心门的模块，或把同一位置的不同替换同时装入一条序列。
 - `antibody_optimization.stability_expression_contract`
-  - 用途：基于已发布128位点合同冻结稳定性/表达模块的WT发现空间，不生成任何突变。
+  - 用途：基于已发布128位点合同冻结稳定性/表达模块的WT发现空间，作为已完成的历史范围证据；当前framework保持路线不再用它生成候选。
   - 主要输入/返回：阶段0位点表和stage2合同；返回逐位点放行/冻结状态、所需结构证据、精确计数和模块规模规则。
   - 算法假设：只放行非界面framework；有实验坐标者正常放行，实验缺失framework仅在完整VHH AF3证据下谨慎放行；全部CDR、实验界面、Cys22/Cys95和末端SSGS冻结。
   - 明确不支持：预测稳定性、表达或yield，调用AntiFold/nanoBERT，生成突变，或将WT背景规则视为任意亲和力背景上的可加和结论。
@@ -181,6 +181,11 @@
   - 主要输入/返回：47行表达记录、provisional IMGT位置、47行nanoBERT样本分数；返回逐样本证据、逐特征统计、三档证据gate和600 dpi PNG/SVG。
   - 算法假设：主指标为完整reported序列逐残基single-mask WT自然对数概率的长度归一化均值；31条LTT/WCC个体近似值用于主要数值关联，16条LLJ只保留`~2/~10/>20`有序/删失语义；固定5000次分层bootstrap和permutation，不训练高容量模型。
   - 明确不支持：把pseudo-log-likelihood称为表达预测、把LLJ分档插值为个体产量、把reported yield改称mg/L、从47条样本训练高容量模型，或未经gate将分数转移到Nb252突变体。
+- `antibody_optimization.netsolp_yield`与`netsolp_yield_plot`
+  - 用途：复用既有47条表型语义和统计实现，建立NetSolP Distilled `Usability`（主）/`Solubility`（辅）与BL21 reported yield的固定验证路线，并生成决策图。
+  - 主要输入/返回：47条表达记录、provisional IMGT审核、官方NetSolP原始CSV；返回带90%序列簇的评分计划、规范化U/S分数、逐样本证据、关联/增量统计、证据gate和600 dpi PNG/SVG。
+  - 算法假设：官方输出必须与计划中的47个ID和完整序列逐条一致；序列簇按归一化Levenshtein identity不低于0.90的single-linkage定义；31条LTT/WCC用于来源分层相关、bootstrap/permutation及普通LOOCV与leave-one-cluster-out增量比较，16条LLJ只保留有序/删失分析。
+  - 明确不支持：把U/S称为实测表达量、把LLJ分档变成个体点估计、训练47样本深度模型、从未通过证据门的相关性推导突变方向，或把同簇近邻当作独立外推证据。
 
 ## 第一阶段活动入口
 
@@ -214,8 +219,12 @@
 - `scripts/candidate_design/submit_flex_ddg_production.sh`：远程唯一生产提交包装；默认`--concurrency 12 --chunk-size 900`，每个Git revision只执行一次成功的真实precheck，随后按resume状态提交数组和最终`afterok`汇总，日志写入`logs/flex_ddg_production/`。中断或取消全部在途任务后可用新并发重跑；排队/运行期间可执行`set_flex_ddg_production_concurrency.sh --submission-dir <本次目录> --concurrency N`修改本次所有数组节流，不改变任务身份。
 - `scripts/candidate_design/summarize_flex_ddg_production.py`：仅在1000任务全部pass后输出任务表、50行未筛选ensemble摘要、gate、600 dpi PNG/SVG和run summary；`candidate_selection_performed=false`，后续另行设计统一ensemble筛选。
 - `scripts/candidate_design/select_affinity_ensemble_core.py`：本地读取50×20生产摘要与456候选post-scan表，按双指标18/20重复方向门选择核心；输出50行完整证据、8个单点模块、6个位置互斥组、gate、600 dpi PNG/SVG和run summary。该入口执行模块选择但不生成组合突变。
-- `scripts/candidate_design/build_stability_expression_design_contract.py`：本地读取阶段0的128位点合同，输出81个可设计framework位点与47个冻结位点的逐位置合同、设计规则、gate、600 dpi PNG/SVG和run summary；只建立AntiFold/nanoBERT后续路线的输入边界，不生成突变或性质预测。
+- `scripts/candidate_design/build_stability_expression_design_contract.py`：本地读取阶段0的128位点合同，输出81个可设计framework位点与47个冻结位点的逐位置合同、设计规则、gate、600 dpi PNG/SVG和run summary；该制品当前仅作历史范围证据，不再驱动framework候选生成。
 - `scripts/candidate_design/build_nanobert_yield_validation_plan.py`：本地冻结47条序列、31条数值与16条LLJ有序/删失表型、provisional IMGT区域和预声明统计门，输出评分样本表、区域映射、合同及run summary。
 - `scripts/candidate_design/score_nanobert_sequences.py`：在固定nanoBERT revision离线快照中逐残基单独mask，输出47行样本PLL、逐位置WT概率和模型运行记录；WCC__4-28只生成完整序列分数，不虚构FR/CDR分数。
 - `scripts/candidate_design/analyze_nanobert_yield_validation.py`：联接固定计划与真实nanoBERT分数，计算理化基线、相关/重采样/LOOCV，输出逐样本和逐指标紧凑表、证据gate、600 dpi PNG/SVG及run summary。
 - `scripts/candidate_design/submit_nanobert_yield_validation.sh`与`.slurm`：远程单GPU、12 CPU、1小时唯一提交路线；模型阶段使用固定`vhh-lm`离线环境，统计绘图切换项目`ab_optim`，日志写入`logs/nanobert_yield_validation/`。短任务默认拒绝已有输出，不实现断点续传。
+- `scripts/candidate_design/build_netsolp_yield_validation_plan.py`：本地从规范表达记录确定性导出47条完整reported序列，保留31条数值与16条LLJ有序/删失语义，并冻结官方Distilled `SU`调用、U/S主辅角色、90%序列簇及统计门；支持一次只读`--check_only`，默认拒绝覆盖。
+- `scripts/candidate_design/score_netsolp_sequences.py`：在独立NetSolP环境和固定顶层工作目录调用官方`predict.py`，逐条核对官方输出ID、序列和概率范围，输出原始预测、47行规范U/S表及模型运行记录；不执行统计解释。
+- `scripts/candidate_design/analyze_netsolp_yield_validation.py`：在项目`ab_optim`环境联接固定计划和真实U/S分数，复用nanoBERT验证中的表型与统计工具，增加leave-one-sequence-cluster-out检验，输出逐样本证据、统计表、机器gate、600 dpi PNG/SVG和run summary。
+- `scripts/candidate_design/submit_netsolp_yield_validation.sh`与`.slurm`：远程单任务路线；Slurm固定`batch`、1 GPU、12 CPU、30分钟，评分阶段使用`netsolp`环境、分析阶段切换项目`ab_optim`，日志写入`logs/netsolp_yield_validation/`。预计低于1小时，因此默认拒绝已有输出且不实现断点续传。
