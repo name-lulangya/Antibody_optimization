@@ -1,0 +1,19 @@
+{
+  "elapsed_seconds": 3.364698,
+  "eligible_count": 43,
+  "eligible_sequence_cluster_count_90": 37,
+  "execution": "one_slurm_job_one_process_sequential_43",
+  "generated_at": "2026-08-14T23:40:00+08:00",
+  "llj_eligible_count": 16,
+  "not_applicable_count": 4,
+  "numeric_eligible_count": 27,
+  "outputs": {
+    "contract": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\tnp_yield_validation_plan_v2_20260814\\tnp_yield_validation_contract.json",
+    "fasta": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\tnp_yield_validation_plan_v2_20260814\\tnp_validation_sequences.fasta",
+    "samples": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\tnp_yield_validation_plan_v2_20260814\\tnp_validation_samples.csv"
+  },
+  "python": "3.11.15",
+  "sample_count": 47,
+  "schema_version": 2,
+  "status": "pass"
+}

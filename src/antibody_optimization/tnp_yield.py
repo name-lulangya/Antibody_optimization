@@ -37,10 +37,27 @@ TNP_FEATURES = (
 PRIMARY_FEATURE = "tnp_psh"
 BOOTSTRAP_SEED = 252041
 RESAMPLING_REPLICATES = 5000
+TNP_NOT_APPLICABLE = {
+    "WCC__4-1": "tnp_anarci_rejected_incomplete_heavy_domain",
+    "WCC__4-28": "tnp_anarci_rejected_unrecognized_antibody_domain",
+    "WCC__4-11": "tnp_anarci_rejected_project_anarcii_light_chain",
+    "WCC__4-42": "nanobodybuilder2_rejected_too_many_missing_residues",
+}
+ELIGIBLE_COUNT = 43
+ELIGIBLE_NUMERIC_COUNT = 27
 
 
 class TNPYieldError(ValueError):
     """Raised when TNP plan, score, or phenotype evidence violates the contract."""
+
+
+def verify_immune_builder_refine_patch(source_text: str) -> None:
+    """Require the two intended OpenMM CPU calls and reject the buggy set literal."""
+
+    broken = "platform, {'Threads', str(n_threads)})"
+    corrected = "platform, {'Threads': str(n_threads)})"
+    if broken in source_text or source_text.count(corrected) != 2:
+        raise TNPYieldError("ImmuneBuilder OpenMM Threads mapping patch is absent or unexpected")
 
 
 def build_tnp_validation_inputs(
@@ -50,7 +67,17 @@ def build_tnp_validation_inputs(
 ) -> dict[str, object]:
     """Return the frozen phenotype rows with the existing 90% sequence clusters."""
 
-    return build_netsolp_validation_inputs(expression_rows, numbering_rows, position_rows)
+    result = build_netsolp_validation_inputs(expression_rows, numbering_rows, position_rows)
+    samples = [dict(row) for row in result["sample_rows"]]
+    for row in samples:
+        uid = str(row["sample_uid"])
+        reason = TNP_NOT_APPLICABLE.get(uid, "")
+        row["tnp_applicability"] = "not_applicable" if reason else "eligible"
+        row["tnp_inapplicability_reason"] = reason
+        row["tnp_scoring_requested"] = not bool(reason)
+    if sum(row["tnp_applicability"] == "eligible" for row in samples) != ELIGIBLE_COUNT:
+        raise TNPYieldError("Unexpected TNP-eligible sample count")
+    return {"sample_rows": samples}
 
 
 def normalize_tnp_result(
@@ -123,6 +150,14 @@ def failed_tnp_result(sample: Mapping[str, object], reason: str, elapsed_seconds
     }
 
 
+def not_applicable_tnp_result(sample: Mapping[str, object]) -> dict[str, object]:
+    """Preserve one explicit unscored row for a documented out-of-domain sequence."""
+
+    row = failed_tnp_result(sample, str(sample["tnp_inapplicability_reason"]), 0.0)
+    row["scoring_status"] = "not_applicable"
+    return row
+
+
 def analyze_tnp_associations(
     sample_rows: Sequence[Mapping[str, object]],
     score_rows: Sequence[Mapping[str, object]],
@@ -137,11 +172,20 @@ def analyze_tnp_associations(
     expected = {str(row["sample_uid"]) for row in sample_rows}
     if set(scores) != expected or set(netsolp) != expected:
         raise TNPYieldError("TNP/NetSolP identities do not match the validation plan")
-    passed = [row for row in sample_rows if str(scores[str(row["sample_uid"])]["scoring_status"]) == "pass"]
+    eligible = [row for row in sample_rows if str(row["tnp_applicability"]) == "eligible"]
+    not_applicable = [row for row in sample_rows if str(row["tnp_applicability"]) == "not_applicable"]
+    if len(eligible) != ELIGIBLE_COUNT or {str(row["sample_uid"]) for row in not_applicable} != set(TNP_NOT_APPLICABLE):
+        raise TNPYieldError("TNP V2 applicability identities do not match the fixed contract")
+    for sample in sample_rows:
+        expected_status = "not_applicable" if sample["tnp_applicability"] == "not_applicable" else "pass"
+        observed_status = str(scores[str(sample["sample_uid"])]["scoring_status"])
+        if observed_status != expected_status:
+            raise TNPYieldError(f'TNP V2 status mismatch for {sample["sample_uid"]}: {observed_status}')
+    passed = [row for row in eligible if str(scores[str(row["sample_uid"])]["scoring_status"]) == "pass"]
     numeric_passed = [row for row in passed if row["observation_semantics"] == "individual_approximate"]
     providers = {str(row["provider_code"]) for row in numeric_passed}
-    if len(passed) < 46 or len(numeric_passed) < 30 or not {"LTT", "WCC"}.issubset(providers):
-        raise TNPYieldError("TNP coverage gate failed: require >=46 total, >=30 numeric, and both LTT/WCC")
+    if len(passed) != ELIGIBLE_COUNT or len(numeric_passed) != ELIGIBLE_NUMERIC_COUNT or not {"LTT", "WCC"}.issubset(providers):
+        raise TNPYieldError("TNP V2 coverage gate requires 43/43 eligible and 27/27 numeric samples")
 
     combined: list[dict[str, object]] = []
     for sample in sample_rows:
@@ -181,7 +225,14 @@ def analyze_tnp_associations(
         "primary": primary,
         "evidence_level": level,
         "decision_reasons": reasons,
-        "coverage": {"planned": 47, "passed": len(passed), "numeric_passed": len(numeric), "llj_passed": len(llj)},
+        "coverage": {
+            "planned": 47,
+            "eligible": len(eligible),
+            "not_applicable": len(not_applicable),
+            "eligible_passed": len(passed),
+            "numeric_eligible_passed": len(numeric),
+            "llj_eligible_passed": len(llj),
+        },
     }
 
 

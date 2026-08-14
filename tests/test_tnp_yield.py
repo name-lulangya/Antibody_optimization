@@ -5,7 +5,15 @@ from pathlib import Path
 
 import pytest
 
-from antibody_optimization.tnp_yield import TNPYieldError, analyze_tnp_associations, build_tnp_validation_inputs, normalize_tnp_result
+from antibody_optimization.tnp_yield import (
+    TNP_NOT_APPLICABLE,
+    TNPYieldError,
+    analyze_tnp_associations,
+    build_tnp_validation_inputs,
+    normalize_tnp_result,
+    not_applicable_tnp_result,
+    verify_immune_builder_refine_patch,
+)
 from antibody_optimization.tnp_yield_plot import render_tnp_yield_figure
 
 
@@ -33,7 +41,13 @@ def test_real_47_tnp_plan_reuses_frozen_clusters() -> None:
     samples = _real_samples()
     assert len(samples) == 47
     assert len({row["sequence_cluster_90"] for row in samples}) == 40
-    assert next(row for row in samples if row["sample_uid"] == "WCC__4-28")["numbering_status"] == "failed"
+    eligible = [row for row in samples if row["tnp_applicability"] == "eligible"]
+    excluded = [row for row in samples if row["tnp_applicability"] == "not_applicable"]
+    assert len(eligible) == 43
+    assert len({row["sequence_cluster_90"] for row in eligible}) == 37
+    assert {row["sample_uid"] for row in excluded} == set(TNP_NOT_APPLICABLE)
+    assert sum(row["observation_semantics"] == "individual_approximate" for row in eligible) == 27
+    assert next(row for row in excluded if row["sample_uid"] == "WCC__4-42")["tnp_inapplicability_reason"] == "nanobodybuilder2_rejected_too_many_missing_residues"
 
 
 def test_normalize_tnp_result_records_unique_terminal_trim_and_flags() -> None:
@@ -51,15 +65,25 @@ def test_tnp_analysis_keeps_psh_primary_compares_netsolp_and_renders(tmp_path: P
     samples = _real_samples()
     scores, netsolp = [], []
     for index, sample in enumerate(samples):
-        psh = 200.0 - float(sample["numeric_yield_value"]) if sample["observation_semantics"] == "individual_approximate" else 150.0 - 10.0 * int(sample["llj_ordinal_level"])
-        scores.append(normalize_tnp_result(sample, _result(str(sample["sample_uid"]), psh), modelled_sequence=str(sample["sequence_raw"]), elapsed_seconds=1.0))
+        if sample["tnp_applicability"] == "not_applicable":
+            scores.append(not_applicable_tnp_result(sample))
+        else:
+            psh = 200.0 - float(sample["numeric_yield_value"]) if sample["observation_semantics"] == "individual_approximate" else 150.0 - 10.0 * int(sample["llj_ordinal_level"])
+            scores.append(normalize_tnp_result(sample, _result(str(sample["sample_uid"]), psh), modelled_sequence=str(sample["sequence_raw"]), elapsed_seconds=1.0))
         netsolp.append({"sample_uid": sample["sample_uid"], "predicted_usability": 0.2 + index / 100.0})
     result = analyze_tnp_associations(samples, scores, netsolp)
     assert result["primary"]["feature"] == "tnp_psh"
-    assert result["coverage"] == {"planned": 47, "passed": 47, "numeric_passed": 31, "llj_passed": 16}
+    assert result["coverage"] == {"planned": 47, "eligible": 43, "not_applicable": 4, "eligible_passed": 43, "numeric_eligible_passed": 27, "llj_eligible_passed": 16}
     assert [row["model"] for row in result["cv_rows"]] == ["Provider only", "NetSolP U", "TNP PSH", "NetSolP U + TNP PSH"]
     assert all("pooled_spearman_bh_fdr" in row for row in result["metric_rows"])
     png, svg = tmp_path / "tnp.png", tmp_path / "tnp.svg"
     render_tnp_yield_figure(result["sample_rows"], result["metric_rows"], result["cv_rows"], png_path=png, svg_path=svg)
     assert png.stat().st_size > 1000
     assert svg.stat().st_size > 1000
+
+
+def test_immune_builder_openmm_patch_contract() -> None:
+    corrected = "\n".join(["platform, {'Threads': str(n_threads)})"] * 2)
+    verify_immune_builder_refine_patch(corrected)
+    with pytest.raises(TNPYieldError, match="patch"):
+        verify_immune_builder_refine_patch("platform, {'Threads', str(n_threads)})")
