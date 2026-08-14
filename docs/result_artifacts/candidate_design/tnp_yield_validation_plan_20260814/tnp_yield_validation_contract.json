@@ -1,0 +1,58 @@
+{
+  "coverage_gate": {
+    "numeric_pass_min": 30,
+    "require_ltt_and_wcc": true,
+    "total_pass_min": 46
+  },
+  "execution": {
+    "array": false,
+    "processes": 1,
+    "samples_sequential": 47,
+    "slurm_jobs": 1,
+    "tnp_ncores": 1
+  },
+  "expected_primary_direction": "higher_PSH_associated_with_lower_yield",
+  "expression_system": "BL21_E_coli",
+  "generated_at": "2026-08-14T22:30:00+08:00",
+  "high_capacity_model_training": false,
+  "hydrophobicity_scale": {
+    "argument": 0,
+    "name": "Kyte-Doolittle"
+  },
+  "nanobodybuilder2_weight_md5": {
+    "nanobody_model_1": "4591075f467ca9f76a37a5d1d3cfe591",
+    "nanobody_model_2": "620fc916720bc7068cd18c7afa1aea8d",
+    "nanobody_model_3": "f1ef0a66a54efb9d14ddbb97fdc30785",
+    "nanobody_model_4": "a7e14a33f4c00e96df896120e9cf8522"
+  },
+  "primary_score": "tnp_psh",
+  "release": "ready_for_remote_single_process_tnp_scoring",
+  "remote_entry_point": "/data/software/env/luly25/tnp/bin/TNP",
+  "remote_environment": "/data/software/env/luly25/tnp",
+  "remote_source": "/homes/Tianlab/luly25/software/TNP",
+  "required_pythonpath": "/homes/Tianlab/luly25/software/TNP",
+  "resampling": {
+    "replicates": 5000,
+    "seed": 252041
+  },
+  "schema_version": 1,
+  "secondary_scores": [
+    "tnp_total_cdr_length",
+    "tnp_cdr3_length",
+    "tnp_cdr3_compactness",
+    "tnp_ppc",
+    "tnp_pnc"
+  ],
+  "sequence_cluster_identity": 0.9,
+  "software": {
+    "anarci": "2024.05.21",
+    "biopython": "1.77",
+    "dssp": "4.6.1",
+    "immune_builder": "1.2",
+    "openmm": "8.5.2",
+    "tnp": "0.0.1",
+    "tnp_commit": "29dcac72f1380e8538e8870f45a699d3c6156162",
+    "torch": "2.7.1+cu126"
+  },
+  "status": "pass"
+}

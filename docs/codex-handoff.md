@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-14 10:00:13
+Last updated: 2026-08-14 22:30:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -17,8 +17,9 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - PyRosetta：`/data/software/env/luly25/multi_ligand`，Python 3.10.20，PyRosetta 2026.03，Rosetta commit `5e498f1409c68ade56c8ce5842bf79e1b02e8db4`。
 - nanoBERT：`/data/software/env/luly25/vhh-lm`，`NaturalAntibody/nanoBERT` revision `edc8182ad89a827f8737fa572c6b5fac6197e6b0`，使用已记录离线缓存。
 - NetSolP：`/data/software/env/luly25/netsolp`；官方5.63 GB发行包解压在`/homes/Tianlab/luly25/software/netsolp`。固定从该顶层工作目录调用`predict.py`，使用`MODEL_TYPE=Distilled`、`PREDICTION_TYPE=SU`，以Usability为主指标、Solubility为辅指标；环境快照保存在远程软件目录的`environment.freeze.txt`。官方3序列测试同时完成S/U预测，实测57.812787秒。
+- TNP：`/data/software/env/luly25/tnp`，TNP 0.0.1 commit `29dcac72f1380e8538e8870f45a699d3c6156162`、ImmuneBuilder 1.2、ANARCI 2024.05.21、Biopython 1.77、OpenMM 8.5.2、DSSP 4.6.1、Torch 2.7.1+cu126。固定入口为该环境的`bin/TNP`，并设置`PYTHONPATH=/homes/Tianlab/luly25/software/TNP`；Nb252 smoke已成功，完整128-aa输入建模126 aa并仅裁掉末端`GS`，不改变authoritative 128-aa母本或`SSGS`冻结规则。
 - Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；NetSolP真实结果提交`cddc166`已同步。
-- 阶段2的本地阶段0、远程WT安全导入、WT评分校准、456候选全量扫描、post-scan分层、50候选×20样本Flex ddG复核和nanoBERT—yield验证均已完成。尚未运行亲和力组合、AF3候选复核、AntiFold或表达模型训练。
+- 阶段2的本地阶段0、远程WT安全导入、WT评分校准、456候选全量扫描、post-scan分层、50候选×20样本Flex ddG复核、nanoBERT和NetSolP yield验证均已完成。TNP部署/smoke及47条验证计划已完成，尚未运行47条TNP评分、亲和力组合、AF3候选复核或AntiFold。
 
 ## Frozen Inputs
 
@@ -67,6 +68,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 稳定性/表达WT发现合同已完成并作为历史证据保留：它曾放行81个非界面framework位点，但当前路线已明确取代其候选生成用途；不得据此启动独立framework突变发现。
 - nanoBERT—reported yield验证gate为`pass`，但证据等级为`no_supported_use`、release为`nanobert_not_supported_for_candidate_use`。主指标完整reported序列mean PLL在31条LTT/WCC上的来源分层Spearman为-0.2295，长度调整partial Spearman为-0.2020，LTT/WCC内部为-0.2413/0.0602；95% bootstrap CI为[-0.5982, 0.2219]，来源内置换p=0.2799，加入nanoBERT后的LOOCV Spearman增益为-0.0507。16条LLJ有序/删失Kendall tau-b为-0.2308。不得用nanoBERT为Nb252稳定性、表达或候选序列打分/排序。
 - NetSolP—BL21 yield验证gate为`pass`，科学证据等级为`compatibility_filter_only`、release为`netsolp_compatibility_filter_only`。主指标U在31条LTT/WCC上的来源分层Spearman为0.3943、长度调整partial Spearman为0.2858，但LTT/WCC内部为0.4154/-0.1205，95% bootstrap CI为[-0.0665, 0.7478]、来源内置换p=0.05039；普通和leave-cluster-out相对provider-only增益为0.3600/0.2661，但其绝对预测Spearman均仅约0.108。LLJ有序/删失tau-b为-0.1648。U/S只能作为完整候选的辅助相容性信号，不能单独排名、硬过滤或解释为产量；辅助S的跨来源/CV表现更一致，但未经过主指标同等级的预声明重采样门，保持探索性。
+- TNP—BL21 yield验证计划位于`tnp_yield_validation_plan_20260814/`：47条真实序列、31条LTT/WCC数值和16条LLJ有序/删失记录，固定PSH为唯一主指标且预期负相关。远程路线为一个Slurm作业、一个Python进程顺序处理47条，不使用array或TNP多进程；随后比较provider-only、NetSolP U、TNP PSH及U+PSH的普通/90%序列簇外CV。当前仅计划release，尚无47条TNP关联结果。
 - `finalize_input_baseline.py` 已用真实 structure mapping/interface 重建 canonical 128 位点图和 `stage1_gate.json`。程序 `status=pass` 不代表科学 release gate 自动通过。
 
 ## Stage-2 Phase 0 Result
@@ -87,14 +89,14 @@ Timezone: Asia/Shanghai (UTC+08:00)
 8. **Flex ddG生产参数计时pilot（已完成）**：4代表候选×2独立样本共8任务全部pass，累计1.666723 job-hours；单任务中位717.980720秒、P90 874.753734秒，backrub占累计任务时间94.7212%，峰值内存975.65–1000.62 MiB。全部WT/突变映射、断点和二硫键检查通过。两重复只验证生产参数、耗时和协议可行性；代表候选存在样本间能量方向翻转，因此不得用pilot分数排名。
 9. **亲和力严格复核与核心选择（已完成）**：50候选×20样本=1000任务全部pass；随后按唯一双指标18/20方向门从完整50条中选择8个核心单点、覆盖6个位置。该选择不使用加权综合分，仍保留全部50条证据和每个核心的`fa_rep`、接触及prepared风险；当前只释放核心模块使用，不代表8条均等安全，也未生成亲和力双突。
 10. **候选与组合层级（已更新）**：单突是证据模块而非最终设计上限；主要探索CDR3亲和力核心的机制互补双突，必要时保留极少量三突。完整组合逐条重新评价，不把单点REU或性质分数相加。最终30条覆盖不同Pareto权衡并保留少量WT/单突对照。现有FR2界面候选`R45C/R45V`降为高风险单突对照：`R45C`因额外未配对Cys退出主组合，`R45V`因改变VHH hallmark位置不进入常规多突组合。
-11. **工具分工（当前选择）**：AntiFold只评价亲和力候选对既定Nb252结构的条件相容性，不再负责大范围framework突变生成；nanoBERT已退出排序/过滤。NetSolP验证已完成，U/S仅保留为完整候选的辅助相容性证据；之后以一个VHH专用Tm预测器和TNP分别提供热稳定性与developability风险，同类型工具不重复投票。PyRosetta复核完整亲和力组合，AF3只复核少量终选构象。
+11. **工具分工（当前选择）**：AntiFold只评价亲和力候选对既定Nb252结构的条件相容性，不再负责大范围framework突变生成；nanoBERT已退出排序/过滤。NetSolP验证已完成，U/S仅保留为完整候选的辅助相容性证据；TNP已部署并进入47条yield关联验证，之后仍只作为developability风险工具。另选一个VHH专用Tm预测器提供热稳定性证据，同类型工具不重复投票。PyRosetta复核完整亲和力组合，AF3只复核少量终选构象。
 12. **framework政策（当前有效）**：现有81位稳定性/表达合同仅作历史范围记录，当前不生成framework候选。序列复核显示Nb252的完整可比framework在`LTT__Nb232`、`LLJ__2C8`和`LLJ__2H8`中重复出现，多条LTT/LLJ也仅相差1–2个framework残基，支持把它视为现有数据中的高频近公共框架；这不是其为正式通用框架的实验声明。若后续确需补救，只考虑非界面、非VHH hallmark、非CDR支撑网络且有多源证据的少数保守替换，并重新评价亲和力。
 13. **nanoBERT—yield验证（已完成）**：47条真实序列均完成固定revision逐残基single-mask评分；主指标未通过方向、跨来源稳定性、不确定性或LOOCV门，证据等级为`no_supported_use`。全样本合并ρ=0.1887与来源分层ρ=-0.2295方向相反，显示来源混杂；nanoBERT从稳定性/表达候选评价路线中移除，不作为排序或过滤信号。理化特征只产生未校正的探索性关联，当前也不得作为表达优化方向或训练模型依据。
 
 ## Verification
 
 - 阶段0专项：`3 passed`；覆盖真实128位合同、过期哈希拒绝、CSV BOM/LF、拒绝覆盖、固定时间戳双跑六制品逐字节一致。
-- 阶段0图、亲和力候选空间图、post-scan四面板图、ensemble核心图和稳定性/表达合同图均已人工检查，坐标轴、图例和说明无遮挡。当前全套验收为`170 passed, 1 skipped, 4 subtests passed`；唯一skip仍是Windows真实symlink权限测试。
+- 阶段0图、亲和力候选空间图、post-scan四面板图、ensemble核心图和稳定性/表达合同图均已人工检查，坐标轴、图例和说明无遮挡。当前全套验收为`173 passed, 1 skipped, 4 subtests passed`；唯一skip仍是Windows真实symlink权限测试。
 - `pip check`、`python -m compileall -q src scripts tests`、`git diff --check` 均通过。
 - NetSolP真实结果含47条样本、15项指标和完整gate；本地从紧凑样本表重算主指标全部10个关键统计及证据等级，与gate逐项一致。600 dpi PNG已人工检查，四个面板、坐标轴、图例和说明无遮挡。
 - v2结果一致性复核：schema 2 gate为pass、16行重复数据和67行接触状态与gate一致、代表PDB含396个polymer残基；评分校准专项测试`8 passed`。
@@ -106,7 +108,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Required Next Steps
 
-1. 逐个部署一个VHH专用Tm预测器和TNP；每类只保留一个工具。47条只能检验它们与产量的间接关联，不能验证Tm或聚集预测准确性。
-2. 建立AntiFold最小评分路线，在WT和现有亲和力核心上验证结构条件相容性；不启动81位framework采样，也不并行部署同类AbMPNN。
-3. 排除`R45C/R45V`常规组合后设计少量机制互补CDR3亲和力双突；对WT、单突和完整组合统一计算亲和力、NetSolP U/S、Tm、TNP、AntiFold与化学风险，并按Pareto关系分层，NetSolP不设单独硬门。
-4. 仅对有限组合运行多突PyRosetta/Flex ddG，对少量终选运行AF3；形成最终30条及必要对照。若主路线无法获得足够合格候选，再单独审议是否释放少量framework补救突变。
+1. 远程运行单进程TNP—yield验证并同步紧凑结果；47条只能检验TNP指标与产量的间接关联，不能验证聚集或其他developability终点。
+2. 逐步部署一个VHH专用Tm预测器；不部署同类型重复工具。
+3. 建立AntiFold最小评分路线，在WT和现有亲和力核心上验证结构条件相容性；不启动81位framework采样，也不并行部署同类AbMPNN。
+4. 排除`R45C/R45V`常规组合后设计少量机制互补CDR3亲和力双突；对WT、单突和完整组合统一计算亲和力、NetSolP U/S、Tm、TNP、AntiFold与化学风险，再按Pareto关系分层并形成最终30条及必要对照。

@@ -186,6 +186,11 @@
   - 主要输入/返回：47条表达记录、provisional IMGT审核、官方NetSolP原始CSV；返回带90%序列簇的评分计划、规范化U/S分数、逐样本证据、关联/增量统计、证据gate和600 dpi PNG/SVG。
   - 算法假设：官方输出必须与计划中的47个ID和完整序列逐条一致；序列簇按归一化Levenshtein identity不低于0.90的single-linkage定义；31条LTT/WCC用于来源分层相关、bootstrap/permutation及普通LOOCV与leave-one-cluster-out增量比较，16条LLJ只保留有序/删失分析。
   - 明确不支持：把U/S称为实测表达量、把LLJ分档变成个体点估计、训练47样本深度模型、从未通过证据门的相关性推导突变方向，或把同簇近邻当作独立外推证据。
+- `antibody_optimization.tnp_yield`与`tnp_yield_plot`
+  - 用途：规范化官方TNP的6项VHH developability指标及颜色flag，显式记录NanoBodyBuilder2建模序列相对完整reported序列的末端裁剪，并检验这些指标与BL21 reported yield的间接关联。
+  - 主要输入/返回：固定47条表型/90%序列簇、逐样本TNP结果/模型序列和既有NetSolP U证据；返回逐样本证据、6指标相关与BH-FDR、PSH预声明证据门、provider/NetSolP/TNP联合的普通及leave-cluster-out CV比较，以及600 dpi PNG/SVG。
+  - 算法假设：PSH是唯一预声明主指标，方向为PSH越高则yield越低；31条LTT/WCC用于保留来源的数值分析，16条LLJ只作有序/删失Kendall分析。至少46/47总样本、30/31数值样本且LTT/WCC均存在才放行分析。
+  - 明确不支持：把TNP指标解释为实测表达、Tm或mg/L，训练高容量yield模型，或因yield相关性弱就否定TNP自身的developability风险flag。
 
 ## 第一阶段活动入口
 
@@ -228,3 +233,7 @@
 - `scripts/candidate_design/score_netsolp_sequences.py`：在独立NetSolP环境和固定顶层工作目录调用官方`predict.py`，逐条核对官方输出ID、序列和概率范围，输出原始预测、47行规范U/S表及模型运行记录；不执行统计解释。
 - `scripts/candidate_design/analyze_netsolp_yield_validation.py`：在项目`ab_optim`环境联接固定计划和真实U/S分数，复用nanoBERT验证中的表型与统计工具，增加leave-one-sequence-cluster-out检验，输出逐样本证据、统计表、机器gate、600 dpi PNG/SVG和run summary。
 - `scripts/candidate_design/submit_netsolp_yield_validation.sh`与`.slurm`：远程单任务路线；Slurm固定`batch`、1 GPU、12 CPU、30分钟，评分阶段使用`netsolp`环境、分析阶段切换项目`ab_optim`，日志写入`logs/netsolp_yield_validation/`。预计低于1小时，因此默认拒绝已有输出且不实现断点续传。
+- `scripts/candidate_design/build_tnp_yield_validation_plan.py`：本地冻结47条真实序列、表型语义、90%序列簇、TNP部署合同、PSH主指标方向和覆盖/统计门；支持一次`--check_only`并默认拒绝覆盖。
+- `scripts/candidate_design/score_tnp_sequences.py`：在一个进程中按计划顺序逐条调用固定TNP入口，保留每条原始输出和日志，规范化6项指标、flags、建模序列及可解释末端裁剪；单样本错误保留显式失败行，不用模拟数据替代。
+- `scripts/candidate_design/analyze_tnp_yield_validation.py`：联接TNP、表型和已完成NetSolP证据，执行分层相关、PSH bootstrap/permutation、BH-FDR、LLJ有序分析与普通/序列簇外CV增量比较，输出紧凑表、gate、600 dpi PNG/SVG和run summary。
+- `scripts/candidate_design/submit_tnp_yield_validation.sh`与`.slurm`：远程唯一执行路线；一个Slurm作业、一个Python进程顺序处理47条并逐样本输出进度，不使用数组或TNP多进程。固定`batch`、1 GPU、12 CPU、4小时上限，日志写入`logs/tnp_yield_validation/`；预计1–3小时且低于5小时，因此不实现断点续传。
