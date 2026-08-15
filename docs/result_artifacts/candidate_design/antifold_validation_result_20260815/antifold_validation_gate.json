@@ -1,0 +1,19 @@
+{
+  "all_view_direction_concordant_count": 5,
+  "candidate_count": 8,
+  "candidate_selection_performed": false,
+  "evaluation_status_counts": {
+    "pass": 24
+  },
+  "evidence_row_count": 24,
+  "experimental_context_direction_change_count": 2,
+  "experimental_vs_af3_direction_change_count": 2,
+  "gate_name": "nb252_antifold_minimal_validation",
+  "generated_at": "2026-08-15T19:42:53+08:00",
+  "interpretation": "AntiFold structure-conditioned compatibility only; no affinity, stability, expression, yield, or experimental-effect threshold was applied.",
+  "release": "ready_for_antifold_compatibility_use",
+  "schema_version": 1,
+  "scientific_score_threshold_applied": false,
+  "status": "pass",
+  "view_count": 3
+}
