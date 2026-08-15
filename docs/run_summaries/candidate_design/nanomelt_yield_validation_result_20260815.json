@@ -1,0 +1,30 @@
+{
+  "coverage": {
+    "llj_ordinal_censored_scored": 16,
+    "nanomelt_not_scored": 4,
+    "nanomelt_not_scored_sample_uids": [
+      "WCC__4-1",
+      "WCC__4-28",
+      "WCC__4-11",
+      "WCC__4-40"
+    ],
+    "numeric_scored": 27,
+    "planned": 47,
+    "scored": 43
+  },
+  "elapsed_seconds": 12.62912,
+  "evidence_level": "no_supported_use",
+  "generated_at": "2026-08-15T16:19:41+08:00",
+  "outputs": {
+    "cv": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/nanomelt_yield_validation_result_20260815/nanomelt_yield_cv_comparison.csv",
+    "gate": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/nanomelt_yield_validation_result_20260815/nanomelt_yield_validation_gate.json",
+    "influence": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/nanomelt_yield_validation_result_20260815/nanomelt_yield_leave_one_out.csv",
+    "metrics": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/nanomelt_yield_validation_result_20260815/nanomelt_yield_associations.csv",
+    "png": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/nanomelt_yield_validation_result_20260815/nanomelt_yield_validation.png",
+    "samples": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/nanomelt_yield_validation_result_20260815/nanomelt_yield_sample_evidence.csv",
+    "svg": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/nanomelt_yield_validation_result_20260815/nanomelt_yield_validation.svg"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}

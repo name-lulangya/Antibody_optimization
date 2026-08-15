@@ -1,0 +1,3 @@
+﻿model,loocv_spearman,leave_cluster_out_spearman,increment_over_provider,cluster_increment_over_provider
+provider_only,-0.6410883521858759,-0.49072963486860316,0.0,0.0
+provider_plus_nanomelt_tm,-0.7481291321798962,-0.746907198113453,-0.10704077999402029,-0.2561775632448498
