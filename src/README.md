@@ -201,6 +201,11 @@
   - 主要输入/返回：阶段0母本合同、关键残基事实、实验/AF3映射、8个亲和力核心模块及三个AntiFold原始CSV；返回派生结构元数据、逐候选×视图证据、候选汇总和无科学阈值的使用gate。
   - 算法假设：AntiFold输入VHH按IMGT编号且保留插入码；实验未解析残基不补全，编号域外末端`GS`从AntiFold V域输入排除但仍属于不可突变128-aa母本；正`ΔlogP`仅表示给定骨架下模型更偏好突变残基。实验与AF3结果始终独立，风险标签不会被模型分数解除。
   - 明确不支持：生成候选、预测亲和力/稳定性/表达/yield、把AF3证据转写为实验事实、机械累加多突分数，或以未经校准的AntiFold阈值筛选候选。
+- `antibody_optimization.unified_single_mutants`与`unified_single_mutant_plot`
+  - 用途：在128-aa authoritative Nb252母本上建立统一单突合同，枚举每个非硬冻结位置的19种非WT替换，并把已有界面PyRosetta全量扫描身份、亲和力核心、结构缺失状态、化学启发式和既有AntiFold逐位点分数联接到同一证据空间。
+  - 主要输入/返回：阶段0位点/母本合同、关键残基事实、456条界面单突及其三重复摘要、8个ensemble核心和三个AntiFold WT视图；返回128行位置合同、2318行完整单突表及一行一候选的三视图AntiFold证据。
+  - 算法假设：界面456条复用既有PyRosetta结果且不重算；非界面有坐标位置进入稳定性/可开发性发现路线，待少量初筛后才做亲和力非劣复核；实验缺失坐标位置只作审计记录并暂缓。AntiFold通过既有WT逐位点log-probability查表计算`log P(mutant)-log P(WT)`，实验complex-context为主视图，VHH-only和AF3只作敏感性证据。
+  - 明确不支持：重新运行AntiFold或界面PyRosetta扫描、把缺失坐标候选释放到本轮、以FR/CDR划分代替证据门、把AntiFold或化学启发式解释为亲和力/稳定性/表达/yield，或在本阶段选择候选。
 
 ## 第一阶段活动入口
 
@@ -255,3 +260,6 @@
 - `scripts/candidate_design/score_antifold_validation.py`：在固定`antifold`环境中一次加载GPU模型，以`num_threads=0`依次评分三个WT结构视图并保存高精度逐残基log-probability；运行前只核对已冻结环境合同和模型符号链接，不采样序列。
 - `scripts/candidate_design/analyze_antifold_validation.py`：本地将8个既有核心单突映射到三个WT结构概率表，计算`ΔlogP`、perplexity和跨构象方向一致性，输出证据表、无筛选阈值gate及600 dpi PNG/SVG。
 - `scripts/candidate_design/submit_antifold_validation.sh`与`.slurm`：单个`batch`作业、1 GPU、12 CPU、30分钟上限、无数组或断点续传，日志写入`logs/antifold_validation/`；评分后切回项目环境完成分析。
+- `scripts/candidate_design/build_unified_single_mutant_plan.py`：本地读取阶段0、关键残基、456条界面单突/三重复结果、8个ensemble核心和AntiFold发布门，生成统一合同、128行位置表、2318行完整单突表/FASTA、状态计数、gate及600 dpi PNG/SVG；界面候选保留原`candidate_id`并直接携带已有PyRosetta摘要，不重复评分。
+- `scripts/candidate_design/analyze_unified_single_mutant_antifold.py`：读取既有三个AntiFold WT逐位点CSV，为2318条单突查表计算三视图`ΔlogP`并输出一行一候选的紧凑证据、无科学阈值gate及600 dpi PNG/SVG；不加载或运行AntiFold模型。
+- `scripts/candidate_design/submit_unified_single_mutant_antifold.sh`与`.slurm`：远程轻量联接入口；单个`batch`作业、1 GPU（集群提交约束）、12 CPU、30分钟，日志写入`logs/unified_single_mutant_antifold/`。GPU不用于新推理，脚本仅复用`antifold_validation_20260815/model_scores`。

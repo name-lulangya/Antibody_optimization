@@ -1,0 +1,54 @@
+{
+  "antifold_reuse": {
+    "interpretation": "structure-conditioned sequence compatibility only",
+    "model_rerun_required": false,
+    "primary_view": "experimental_complex_context",
+    "raw_score_source": "existing_antifold_validation_model_scores",
+    "sensitivity_views": [
+      "experimental_vhh_only",
+      "af3_vhh_only"
+    ]
+  },
+  "authoritative_parent": {
+    "length": 128,
+    "numbering_scheme": "IMGT_provisional_with_reported_sequence_index",
+    "sample_uid": "LTT__Nb252",
+    "sequence": "QVQLQESGGGLVQAGGSLRLSCAASGTIFFGYDMGWYRQAPGKEREFVASITTGSNTNYADSVKGRFTISRDNAKNTVYLQMNSLKPEDTAVYYCAVDTIDYIIEWNVYYYIFSYWGQGTQVTVSSGS",
+    "sequence_sha256": "df5b83ddde8a3486383c12afe45e22af6a358f507eab5503d5dbd4430710288d"
+  },
+  "chemistry_features": {
+    "formal_charge": "D/E=-1; K/R=+1; all others=0",
+    "hydrophobic_set": "AVILMFWY",
+    "motifs": [
+      "N-X-[ST], X != P",
+      "N-[GST]",
+      "D-[GST]",
+      "M/W count"
+    ],
+    "semantics": "sequence heuristics; no scientific filtering applied"
+  },
+  "contract_name": "nb252_unified_single_mutant_design",
+  "generated_at": "2026-08-15T20:19:19+08:00",
+  "hard_constraints": [
+    "do_not_mutate_reported_positions_22_95_125_126_127_128",
+    "do_not_introduce_extra_unpaired_cysteine",
+    "validate_parent_wt_identity"
+  ],
+  "historical_stability_contract_role": "provenance_only_superseded_scope_not_active_filter",
+  "policies": {
+    "candidate_selection_performed": false,
+    "experimental_interface": "reuse_existing_456_member_pyrosetta_scan_and_do_not_rescore",
+    "experimental_missing_coordinates": "audit_only_not_released_current_round",
+    "fr_cdr_partition_is_not_a_design_boundary": true,
+    "noninterface_observed": "stability_developability_discovery_then_shortlist_for_affinity_noninferiority"
+  },
+  "pyrosetta_reuse": {
+    "interface_candidate_count": 456,
+    "model_rerun_required": false,
+    "source_candidate_table": "docs\\result_artifacts\\candidate_design\\affinity_single_mutants_20260811\\affinity_single_mutants.csv",
+    "source_result_table": "docs\\result_artifacts\\candidate_design\\affinity_pyrosetta_full_scan_20260811\\candidate_summary.csv"
+  },
+  "schema_version": 1,
+  "scope": "all_19_non_wt_substitutions_at_each_non_hard_immutable_reported_position_with_separate_release_and_evidence_routes",
+  "status": "pass"
+}

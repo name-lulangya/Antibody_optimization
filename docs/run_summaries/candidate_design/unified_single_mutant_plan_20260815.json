@@ -1,0 +1,51 @@
+{
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\build_unified_single_mutant_plan.py",
+    "--stage0-dir",
+    "docs/result_artifacts/candidate_design/stage0_contract_20260810",
+    "--critical-facts",
+    "docs/result_artifacts/input_baseline/reviews/nb252_critical_residue_sets.json",
+    "--affinity-core-dir",
+    "docs/result_artifacts/candidate_design/affinity_ensemble_core_20260813",
+    "--affinity-single-mutant-dir",
+    "docs/result_artifacts/candidate_design/affinity_single_mutants_20260811",
+    "--affinity-full-scan-dir",
+    "docs/result_artifacts/candidate_design/affinity_pyrosetta_full_scan_20260811",
+    "--antifold-plan-dir",
+    "docs/result_artifacts/candidate_design/antifold_validation_plan_20260815",
+    "--antifold-result-dir",
+    "docs/result_artifacts/candidate_design/antifold_validation_result_20260815",
+    "--historical-stability-contract-dir",
+    "docs/result_artifacts/candidate_design/stability_expression_design_contract_20260813",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/unified_single_mutant_plan_20260815",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/unified_single_mutant_plan_20260815.json",
+    "--generated-at",
+    "2026-08-15T20:19:19+08:00"
+  ],
+  "counts": {
+    "blocked_new_unpaired_cys": 122,
+    "candidates": 2318,
+    "deferred_missing_experimental_coordinates": 234,
+    "eligible_current_round": 1962,
+    "positions": 128
+  },
+  "elapsed_seconds": 1.735766,
+  "generated_at": "2026-08-15T20:19:19+08:00",
+  "outputs": {
+    "candidates": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\unified_single_mutant_plan_20260815\\unified_single_mutant_candidates.csv",
+    "contract": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\unified_single_mutant_plan_20260815\\unified_single_mutant_contract.json",
+    "counts": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\unified_single_mutant_plan_20260815\\unified_candidate_status_counts.csv",
+    "fasta": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\unified_single_mutant_plan_20260815\\unified_single_mutant_candidates.fasta",
+    "gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\unified_single_mutant_plan_20260815\\unified_single_mutant_plan_gate.json",
+    "png": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\unified_single_mutant_plan_20260815\\unified_single_mutant_space.png",
+    "positions": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\unified_single_mutant_plan_20260815\\unified_position_space.csv",
+    "svg": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\unified_single_mutant_plan_20260815\\unified_single_mutant_space.svg"
+  },
+  "python": "3.11.15",
+  "release": "ready_for_existing_antifold_landscape_join",
+  "schema_version": 1,
+  "status": "pass"
+}

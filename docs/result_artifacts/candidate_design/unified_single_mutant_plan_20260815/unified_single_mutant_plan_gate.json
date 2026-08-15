@@ -1,0 +1,26 @@
+{
+  "affinity_core_count": 8,
+  "antifold_model_rerun_required": false,
+  "candidate_count": 2318,
+  "candidate_selection_performed": false,
+  "design_status_counts": {
+    "blocked_new_unpaired_cys": 122,
+    "deferred_missing_experimental_coordinates": 234,
+    "eligible_current_round": 1962
+  },
+  "design_track_counts": {
+    "affinity_existing_interface_scan": 456,
+    "audit_only_missing_coordinates": 247,
+    "stability_developability_discovery": 1615
+  },
+  "enumerated_position_count": 122,
+  "existing_affinity_scan_candidate_count": 456,
+  "gate_name": "nb252_unified_single_mutant_plan",
+  "generated_at": "2026-08-15T20:19:19+08:00",
+  "position_count": 128,
+  "pyrosetta_rescoring_performed": false,
+  "release": "ready_for_existing_antifold_landscape_join",
+  "schema_version": 1,
+  "scientific_score_threshold_applied": false,
+  "status": "pass"
+}
