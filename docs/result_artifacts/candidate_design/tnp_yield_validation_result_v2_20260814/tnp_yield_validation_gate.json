@@ -1,0 +1,44 @@
+{
+  "coverage": {
+    "eligible": 43,
+    "eligible_passed": 43,
+    "llj_eligible_passed": 16,
+    "not_applicable": 4,
+    "numeric_eligible_passed": 27,
+    "planned": 47
+  },
+  "decision_reasons": [
+    "psh_has_partial_expected_direction_but_full_weak_ranking_gate_not_met"
+  ],
+  "evidence_level": "compatibility_filter_only",
+  "expected_direction": "higher_PSH_lower_yield",
+  "gate_name": "nb252_tnp_bl21_reported_yield_validation_v2",
+  "generated_at": "2026-08-15T10:05:03+08:00",
+  "high_capacity_model_trained": false,
+  "interpretation": "Association within the TNP-applicable subset of collaborator-reported BL21 yield; TNP remains a developability-risk profiler and is not a measured expression or mg/L predictor.",
+  "nb252_expression_prediction_validated": false,
+  "primary_feature": "tnp_psh",
+  "primary_statistics": {
+    "bootstrap_95ci_high": 0.38197546082980965,
+    "bootstrap_95ci_low": -0.537733642301795,
+    "cluster_cv_increment_over_provider": 0.16916380833195727,
+    "feature": "tnp_psh",
+    "length_adjusted_partial_spearman": 0.06650136236727296,
+    "llj_kendall_tau_b": -0.07692772189617514,
+    "llj_ordinal_n": 16,
+    "loocv_increment_over_provider": 0.12750144649600226,
+    "ltt_spearman_rho": -0.0840752142237733,
+    "numeric_n": 27,
+    "pooled_spearman_bh_fdr": 0.634169431041498,
+    "pooled_spearman_p": 0.634169431041498,
+    "pooled_spearman_rho": -0.09590716511519727,
+    "stratified_permutation_p": 0.6900619876024795,
+    "stratified_spearman_rho": -0.08562996273694871,
+    "wcc_spearman_rho": -0.39999999999999997
+  },
+  "release": "tnp_developability_compatibility_only",
+  "schema_version": 2,
+  "selection_bias": "four_WCC_sequences_are_not_applicable_and_WCC_numeric_n_is_4",
+  "selection_scope": "43_TNP_applicable_sequences_not_all_47_records",
+  "status": "pass"
+}

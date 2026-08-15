@@ -1,0 +1,24 @@
+{
+  "coverage": {
+    "eligible": 43,
+    "eligible_passed": 43,
+    "llj_eligible_passed": 16,
+    "not_applicable": 4,
+    "numeric_eligible_passed": 27,
+    "planned": 47
+  },
+  "elapsed_seconds": 8.019517,
+  "evidence_level": "compatibility_filter_only",
+  "generated_at": "2026-08-15T10:05:03+08:00",
+  "outputs": {
+    "cv": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/tnp_yield_validation_result_v2_20260814/tnp_yield_cv_comparison.csv",
+    "gate": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/tnp_yield_validation_result_v2_20260814/tnp_yield_validation_gate.json",
+    "metrics": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/tnp_yield_validation_result_v2_20260814/tnp_yield_associations.csv",
+    "png": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/tnp_yield_validation_result_v2_20260814/tnp_yield_validation.png",
+    "samples": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/tnp_yield_validation_result_v2_20260814/tnp_yield_sample_evidence.csv",
+    "svg": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/tnp_yield_validation_result_v2_20260814/tnp_yield_validation.svg"
+  },
+  "python": "3.11.15",
+  "schema_version": 2,
+  "status": "pass"
+}
