@@ -1,0 +1,20 @@
+{
+  "counts": {
+    "affinity_existing_interface_scan": 432,
+    "candidate_rows": 1962,
+    "score_rows": 1963,
+    "stability_developability_discovery": 1530
+  },
+  "elapsed_seconds": 0.039667,
+  "generated_at": "2026-08-15T20:47:55+08:00",
+  "outputs": {
+    "contract": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\unified_property_scoring_plan_20260815\\unified_property_scoring_contract.json",
+    "fasta": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\unified_property_scoring_plan_20260815\\unified_property_sequences.fasta",
+    "gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\unified_property_scoring_plan_20260815\\unified_property_scoring_plan_gate.json",
+    "samples": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\unified_property_scoring_plan_20260815\\unified_property_samples.csv"
+  },
+  "python": "3.11.15",
+  "release": "ready_for_parallel_netsolp_and_nanomelt_scoring",
+  "schema_version": 1,
+  "status": "pass"
+}

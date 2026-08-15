@@ -1,0 +1,62 @@
+{
+  "analysis": {
+    "chemical_risks_are_separate_review_flags": true,
+    "pareto_layers": "track_specific_first_two_fronts",
+    "tracks": [
+      "affinity_existing_interface_scan",
+      "stability_developability_discovery"
+    ],
+    "weighted_composite_score": false,
+    "yield_prediction": false
+  },
+  "candidate_count": 1962,
+  "candidate_selection_performed": false,
+  "contract_name": "nb252_unified_single_mutant_property_scoring",
+  "generated_at": "2026-08-15T20:47:55+08:00",
+  "nanomelt": {
+    "entry_point": "/data/software/env/luly25/nanomelt/bin/nanomelt",
+    "environment": "/data/software/env/luly25/nanomelt",
+    "expected_pass_count": 1963,
+    "expected_scored_length_aa": 126,
+    "immune_builder_refine": "/data/software/env/luly25/nanomelt/lib/python3.10/site-packages/ImmuneBuilder/refine.py",
+    "input_length_aa": 128,
+    "required_openmm_platforms": [
+      "Reference",
+      "CPU"
+    ],
+    "required_trimmed_c_terminal": "GS",
+    "semantics": "predicted apparent Tm relative to WT; not experimental Tm or yield",
+    "software": {
+      "anarci_bioconda": "2024.05.21",
+      "immune_builder": "1.2",
+      "nanomelt": "1.4.0",
+      "openmm": "8.5.2",
+      "pdbfixer": "1.12.0",
+      "python": "3.10.20",
+      "torch": "2.7.1+cu126",
+      "transformers": "4.56.1"
+    }
+  },
+  "netsolp": {
+    "environment": "/data/software/env/luly25/netsolp",
+    "model_type": "Distilled",
+    "outputs": [
+      "predicted_usability",
+      "predicted_solubility"
+    ],
+    "prediction_type": "SU",
+    "semantics": "compatibility signals relative to WT; not yield",
+    "working_directory": "/homes/Tianlab/luly25/software/netsolp"
+  },
+  "runtime_estimate": {
+    "each_likely_over_five_hours": false,
+    "each_likely_over_one_hour": false,
+    "nanomelt": "approximately 5-20 minutes",
+    "netsolp": "approximately 15-60 minutes",
+    "resume_required": false
+  },
+  "schema_version": 1,
+  "score_row_count": 1963,
+  "status": "pass",
+  "wt_score_id": "LTT__Nb252__WT"
+}

@@ -98,11 +98,12 @@ def normalize_nanomelt_scores(
     raw_rows: Sequence[Mapping[str, object]],
     *,
     expected_pass_count: int | None = None,
+    expected_plan_count: int = 47,
 ) -> list[dict[str, object]]:
     """Validate official NanoMelt CSV and map its scored domain to each raw sequence."""
 
-    if len(samples) != 47:
-        raise NanoMeltYieldError("Expected 47 plan rows")
+    if expected_plan_count < 1 or len(samples) != expected_plan_count:
+        raise NanoMeltYieldError(f"Expected {expected_plan_count} plan rows")
     if expected_pass_count is not None and len(raw_rows) != expected_pass_count:
         raise NanoMeltYieldError(
             f"Expected {expected_pass_count} NanoMelt output rows, found {len(raw_rows)}"

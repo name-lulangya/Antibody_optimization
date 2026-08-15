@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-15 20:33:01
+Last updated: 2026-08-15 20:56:19
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -21,6 +21,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - AntiFold：独立环境`/data/software/env/luly25/antifold`，AntiFold 0.3.1、Torch 2.2.0+cu121、PyG 2.4.0；模型位于`/homes/Tianlab/luly25/software/AntiFold/models/model.pt`。A100模型加载、官方纳米抗体评分及CDR1采样smoke均通过。0.3.1加载器忽略普通`checkpoint_path`，因此环境内固定模型路径使用符号链接，CUDA评分必须`num_threads=0`；完整版本和模型身份只记录在`antifold_validation_plan_20260815/antifold_environment_contract.json`。
 - Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；统一AntiFold结果提交`d119307`已同步，当前`HEAD=origin/main`。
 - 统一单突AntiFold复用已完成且gate为`pass/ready_for_unified_property_scoring`：2318条均有记录，1962条本轮候选三视图全部可评价，247条实验缺失坐标候选仅AF3可评价；模型没有重新运行。1962条中66条三视图均为正、1733条均为负、163条方向不一致。界面432条中30条三视图均正，性质发现1530条中36条三视图均正；结合既有20构象严格亲和力门后仍只有R45V和E105L为兼容性方向一致的亲和力核心，没有新增核心。
+- 统一性质评分步骤1–5已实现但远程模型尚未运行：本地计划gate为`pass/ready_for_parallel_netsolp_and_nanomelt_scoring`，固定WT加1962条候选；NetSolP和NanoMelt分别批量评分并行提交，随后联接相对WT值、化学风险和既有证据，按界面亲和力/非界面性质发现两轨分别计算Pareto层。无yield预测、加权总分、TNP、双突或最终候选选择。
 
 ## Frozen Inputs
 
@@ -100,7 +101,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Verification
 
-- 阶段0专项：`3 passed`；统一单突专项`4 passed`，覆盖2318条真实空间、456条既有PyRosetta身份复用、缺失坐标/新Cys状态和三视图AntiFold查表门；当前全套为`193 passed, 1 skipped, 4 subtests passed`。覆盖真实128位合同、过期哈希拒绝、CSV BOM/LF、拒绝覆盖、固定时间戳双跑六制品逐字节一致。
+- 阶段0专项：`3 passed`；统一单突专项`4 passed`，覆盖2318条真实空间、456条既有PyRosetta身份复用、缺失坐标/新Cys状态和三视图AntiFold查表门；统一性质评分专项与既有NetSolP/NanoMelt回归共`16 passed`，并真实渲染结果PNG/SVG；当前全套为`197 passed, 1 skipped, 4 subtests passed`。覆盖真实128位合同、过期哈希拒绝、CSV BOM/LF、拒绝覆盖、固定时间戳双跑六制品逐字节一致。
 - 阶段0图、亲和力候选空间图、post-scan四面板图、ensemble核心图、稳定性/表达合同图和统一单突/AntiFold图均已人工检查，坐标轴、图例和说明无遮挡。统一结果2318个candidate ID唯一，三视图`ΔlogP`由WT/突变log-probability重算的最大绝对误差为`3.552713678800501e-15`。唯一skip仍是Windows真实symlink权限测试。
 - `pip check`、`python -m compileall -q src scripts tests`、`git diff --check` 均通过。
 - NetSolP真实结果含47条样本、15项指标和完整gate；本地从紧凑样本表重算主指标全部10个关键统计及证据等级，与gate逐项一致。600 dpi PNG已人工检查，四个面板、坐标轴、图例和说明无遮挡。
@@ -115,6 +116,6 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Required Next Steps
 
-1. 对1962条本轮候选进行批量NetSolP和NanoMelt相对WT评价，并联接化学风险；AntiFold仅作兼容性维度。TNP结构流程只用于前述结果形成的较小候选池，不对全空间运行。456条界面单突继续复用已有Rosetta；1530条性质发现单突仅在多工具初筛后对少量条目补做亲和力非劣复核。
-2. 从双向过门的单突模块生成亲和力×亲和力、性质×性质和亲和力×性质双突；先对完整组合运行快速统一评分，再只对入围组合运行20构象Flex ddG，必要时以AF3复核少量终选构象。
-3. 按硬约束加Pareto关系形成最终30条：分别标为亲和力优先、稳定性/可开发性优先和平衡组合，保留必要WT/单突对照及全部原始分项，不使用yield综合分，也不把计算类别写成实验改善结论。
+1. 远程pull后运行`bash scripts/candidate_design/submit_unified_property_scoring.sh`；它并行提交NetSolP和NanoMelt并以`afterok`自动汇总。预期评分输入1963条、结果候选1962条；任何工具未完整返回均阻断，不静默删除候选。
+2. 同步并复核统一性质结果后，再确定50–100条TNP小池；TNP不对全空间运行。性质发现候选随后只对约20–40条补做PyRosetta亲和力非劣检查。
+3. 从双向过门的单突模块生成三类双突并重新评分，最后按硬约束和Pareto关系形成30条实验序列。

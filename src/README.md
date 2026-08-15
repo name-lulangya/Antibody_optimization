@@ -206,6 +206,11 @@
   - 主要输入/返回：阶段0位点/母本合同、关键残基事实、456条界面单突及其三重复摘要、8个ensemble核心和三个AntiFold WT视图；返回128行位置合同、2318行完整单突表及一行一候选的三视图AntiFold证据。
   - 算法假设：界面456条复用既有PyRosetta结果且不重算；非界面有坐标位置进入稳定性/可开发性发现路线，待少量初筛后才做亲和力非劣复核；实验缺失坐标位置只作审计记录并暂缓。AntiFold通过既有WT逐位点log-probability查表计算`log P(mutant)-log P(WT)`，实验complex-context为主视图，VHH-only和AF3只作敏感性证据。
   - 明确不支持：重新运行AntiFold或界面PyRosetta扫描、把缺失坐标候选释放到本轮、以FR/CDR划分代替证据门、把AntiFold或化学启发式解释为亲和力/稳定性/表达/yield，或在本阶段选择候选。
+- `antibody_optimization.unified_property_scoring`与`unified_property_plot`
+  - 用途：冻结WT加1962条已释放单突，联接NetSolP U/S、NanoMelt预测表观Tm、AntiFold、既有界面PyRosetta及化学风险，并分别为亲和力界面轨道和性质发现轨道计算前两层Pareto关系。
+  - 主要输入/返回：统一AntiFold逐候选证据、1963行评分计划、NetSolP/NanoMelt规范分数；返回1962行相对WT的统一性质证据、按轨道/层级计数、gate及600 dpi PNG/SVG。
+  - 算法假设：NanoMelt必须为每条128-aa输入保留前126-aa评分域并只裁末端`GS`；界面轨道Pareto同时使用既有PyRosetta双能量，非界面轨道不伪造Rosetta值。所有模型值按相对WT解释，化学风险独立保留，不进入加权总分。
+  - 明确不支持：预测yield、把预测Tm称为实验Tm、跨轨道混排不可比候选、以AntiFold单独硬筛、运行TNP、生成双突或选择最终实验序列。
 
 ## 第一阶段活动入口
 
@@ -263,3 +268,7 @@
 - `scripts/candidate_design/build_unified_single_mutant_plan.py`：本地读取阶段0、关键残基、456条界面单突/三重复结果、8个ensemble核心和AntiFold发布门，生成统一合同、128行位置表、2318行完整单突表/FASTA、状态计数、gate及600 dpi PNG/SVG；界面候选保留原`candidate_id`并直接携带已有PyRosetta摘要，不重复评分。
 - `scripts/candidate_design/analyze_unified_single_mutant_antifold.py`：读取既有三个AntiFold WT逐位点CSV，为2318条单突查表计算三视图`ΔlogP`并输出一行一候选的紧凑证据、无科学阈值gate及600 dpi PNG/SVG；不加载或运行AntiFold模型。
 - `scripts/candidate_design/submit_unified_single_mutant_antifold.sh`与`.slurm`：远程轻量联接入口；单个`batch`作业、1 GPU（集群提交约束）、12 CPU、30分钟，日志写入`logs/unified_single_mutant_antifold/`。GPU不用于新推理，脚本仅复用`antifold_validation_20260815/model_scores`。
+- `scripts/candidate_design/build_unified_property_scoring_plan.py`：本地读取已发布统一AntiFold结果，冻结WT加1962条候选的CSV/FASTA、NetSolP/NanoMelt环境和评分域合同及计划gate；支持只读`--check_only`并默认拒绝覆盖。
+- `scripts/candidate_design/score_unified_property_netsolp.py`与`score_unified_property_nanomelt.py`：分别在既有工具环境中执行一个1963序列批次，复用通用规范化函数并严格核对ID、完整输入序列和NanoMelt前126-aa评分域；输出保存在ignored结果目录，不执行候选筛选。
+- `scripts/candidate_design/analyze_unified_property_scoring.py`：在项目环境中计算相对WT的`ΔU/ΔS/Δ预测Tm`，联接既有AntiFold/PyRosetta/化学风险，按两条轨道分别计算Pareto 1/2/background并生成紧凑证据、gate和600 dpi PNG/SVG；无加权总分或yield预测。
+- `scripts/candidate_design/submit_unified_property_scoring.sh`及三个`.slurm`：远程唯一提交路线；NetSolP与NanoMelt两个独立`batch`作业并行，均为1 GPU/12 CPU且预计各低于1小时，分析作业通过`afterok`等待两者成功。无数组、checkpoint或断点续传，日志统一写入`logs/unified_property_scoring/`。

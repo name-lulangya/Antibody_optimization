@@ -124,17 +124,21 @@ def analyze_netsolp_associations(
 def normalize_netsolp_scores(
     samples: Sequence[Mapping[str, object]],
     raw_rows: Sequence[Mapping[str, object]],
+    *,
+    expected_count: int = 47,
 ) -> list[dict[str, object]]:
     """Validate official Distilled SU output and preserve plan order."""
 
-    if len(samples) != 47 or len(raw_rows) != 47:
-        raise NetSolPYieldError("Expected 47 plan and NetSolP raw-output rows")
+    if expected_count < 1 or len(samples) != expected_count or len(raw_rows) != expected_count:
+        raise NetSolPYieldError(
+            f"Expected {expected_count} plan and NetSolP raw-output rows"
+        )
     required = {"sid", "fasta", PRIMARY_FEATURE, SECONDARY_FEATURE}
     if not raw_rows or not required.issubset(raw_rows[0]):
         raise NetSolPYieldError("NetSolP raw output lacks required Distilled SU columns")
     by_id = {str(row["sid"]): row for row in raw_rows}
     expected = {str(row["sample_uid"]) for row in samples}
-    if len(by_id) != 47 or set(by_id) != expected:
+    if len(by_id) != expected_count or set(by_id) != expected:
         raise NetSolPYieldError("NetSolP raw output IDs do not match the 47-sample plan")
     normalized = []
     for sample in samples:
