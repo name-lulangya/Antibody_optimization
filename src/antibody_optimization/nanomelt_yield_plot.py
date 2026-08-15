@@ -20,8 +20,11 @@ def render_nanomelt_yield_figure(
 ) -> None:
     """Render the exact numeric, stratified, ordinal, and transfer evidence."""
 
-    numeric = [row for row in sample_rows if row["observation_semantics"] == "individual_approximate"]
-    llj = [row for row in sample_rows if row["provider_code"] == "LLJ"]
+    numeric = [
+        row for row in sample_rows
+        if row["scoring_status"] == "pass" and row["observation_semantics"] == "individual_approximate"
+    ]
+    llj = [row for row in sample_rows if row["scoring_status"] == "pass" and row["provider_code"] == "LLJ"]
     colors = {"LTT": "#0072B2", "WCC": "#D55E00"}
     fig, axes = plt.subplots(2, 2, figsize=(10.8, 8.2), constrained_layout=True)
 
@@ -91,7 +94,11 @@ def render_nanomelt_yield_figure(
     axes[1, 1].text(
         0.02,
         0.98,
-        f"Leave-one-out ρ range: {min(loo_values):.2f} to {max(loo_values):.2f}",
+        (
+            f"Coverage: {int(metric['scored_n'])}/47; "
+            f"{int(metric['not_scored_count'])} NanoMelt-not-scored\n"
+            f"Leave-one-out ρ range: {min(loo_values):.2f} to {max(loo_values):.2f}"
+        ),
         transform=axes[1, 1].transAxes,
         va="top",
         fontsize=9,

@@ -19,6 +19,7 @@ from antibody_optimization.nanomelt_yield_plot import render_nanomelt_yield_figu
 
 
 ROOT = Path(__file__).resolve().parents[1]
+TEST_ONLY_NANOMELT_NOT_SCORED = {"WCC__4-1", "WCC__4-28", "WCC__4-11", "WCC__4-42"}
 
 
 def _csv(path: Path) -> list[dict[str, str]]:
@@ -34,9 +35,11 @@ def _real_samples() -> list[dict[str, object]]:
     )["sample_rows"]
 
 
-def _raw_scores(samples, *, correlated: bool = False):
+def _raw_scores(samples, *, correlated: bool = False, omit=frozenset()):
     rows = []
     for index, sample in enumerate(samples):
+        if sample["sample_uid"] in omit:
+            continue
         sequence = str(sample["sequence_raw"])
         scored = sequence[:-2] if sample["sample_uid"] == "LTT__Nb252" else sequence
         if correlated and sample["observation_semantics"] == "individual_approximate":
@@ -99,6 +102,19 @@ def test_normalization_records_exact_nb252_domain_trimming() -> None:
     assert nb252["trimmed_c_terminal"] == "GS"
 
 
+def test_normalization_preserves_47_identities_with_four_nanomelt_not_scored() -> None:
+    samples = _real_samples()
+    normalized = normalize_nanomelt_scores(
+        samples,
+        _raw_scores(samples, omit=TEST_ONLY_NANOMELT_NOT_SCORED),
+        expected_pass_count=43,
+    )
+    assert len(normalized) == 47
+    assert sum(row["scoring_status"] == "pass" for row in normalized) == 43
+    excluded = {row["sample_uid"] for row in normalized if row["scoring_status"] == "nanomelt_not_scored"}
+    assert excluded == TEST_ONLY_NANOMELT_NOT_SCORED
+
+
 def test_normalization_rejects_nonunique_or_mismatched_domains() -> None:
     samples = _real_samples()
     raw = _raw_scores(samples)
@@ -111,23 +127,24 @@ def test_normalization_rejects_nonunique_or_mismatched_domains() -> None:
 def test_association_reports_cluster_cv_llj_and_nb252_influence(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(nanomelt_yield, "RESAMPLING_REPLICATES", 200)
     samples = _real_samples()
-    scores = normalize_nanomelt_scores(samples, _raw_scores(samples, correlated=True))
+    scores = normalize_nanomelt_scores(
+        samples,
+        _raw_scores(samples, correlated=True, omit=TEST_ONLY_NANOMELT_NOT_SCORED),
+        expected_pass_count=43,
+    )
     result = analyze_nanomelt_associations(samples, scores)
     primary = result["primary"]
-    assert primary["numeric_n"] == 31
+    assert primary["numeric_n"] == 27
     assert primary["llj_ordinal_n"] == 16
+    assert primary["not_scored_count"] == 4
     assert primary["stratified_spearman_rho"] > 0
     assert primary["without_nb252_stratified_spearman_rho"] > 0
-    assert len(result["leave_one_out_rows"]) == 31
+    assert len(result["leave_one_out_rows"]) == 27
     assert {row["model"] for row in result["cv_rows"]} == {
         "provider_only",
         "provider_plus_nanomelt_tm",
     }
-    assert result["evidence_level"] in {
-        "weak_ranking_evidence",
-        "compatibility_filter_only",
-        "no_supported_use",
-    }
+    assert result["evidence_level"] == "weak_ranking_evidence"
 
 
 def test_plot_renders_exact_compact_analysis(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -135,7 +152,11 @@ def test_plot_renders_exact_compact_analysis(tmp_path: Path, monkeypatch: pytest
     samples = _real_samples()
     result = analyze_nanomelt_associations(
         samples,
-        normalize_nanomelt_scores(samples, _raw_scores(samples, correlated=True)),
+        normalize_nanomelt_scores(
+            samples,
+            _raw_scores(samples, correlated=True, omit=TEST_ONLY_NANOMELT_NOT_SCORED),
+            expected_pass_count=43,
+        ),
     )
     png, svg = tmp_path / "result.png", tmp_path / "result.svg"
     render_nanomelt_yield_figure(

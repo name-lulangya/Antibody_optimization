@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run one official NanoMelt batch and normalize all 47 predictions."""
+"""Run one official NanoMelt batch and preserve 43 scores plus 4 exclusions."""
 
 from __future__ import annotations
 
@@ -117,11 +117,19 @@ def main() -> int:
             "-v",
         ]
         subprocess.run(command, check=True, text=True)
-        score_rows = normalize_nanomelt_scores(samples, _csv(raw))
+        score_rows = normalize_nanomelt_scores(
+            samples,
+            _csv(raw),
+            expected_pass_count=contract["coverage_gate"]["scoring_pass_required"],
+        )
         scores = stage / targets[1].name
         model_run = stage / targets[2].name
         _write_csv(scores, score_rows)
         nb252 = next(row for row in score_rows if row["sample_uid"] == "LTT__Nb252")
+        if nb252["scoring_status"] != "pass":
+            raise RuntimeError("NanoMelt did not score Nb252")
+        pass_count = sum(row["scoring_status"] == "pass" for row in score_rows)
+        not_scored_uids = [row["sample_uid"] for row in score_rows if row["scoring_status"] == "nanomelt_not_scored"]
         _write_json(
             model_run,
             {
@@ -132,7 +140,9 @@ def main() -> int:
                 "elapsed_seconds": round(time.perf_counter() - started, 6),
                 "command": command,
                 "sample_count": len(score_rows),
-                "scoring_pass_count": len(score_rows),
+                "scoring_pass_count": pass_count,
+                "not_scored_count": len(not_scored_uids),
+                "not_scored_sample_uids": not_scored_uids,
                 "cuda_device": torch.cuda.get_device_name(0),
                 "torch": torch.__version__,
                 "torch_cuda": torch.version.cuda,

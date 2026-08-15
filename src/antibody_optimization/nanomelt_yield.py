@@ -96,23 +96,45 @@ def build_nanomelt_validation_inputs(
 def normalize_nanomelt_scores(
     samples: Sequence[Mapping[str, object]],
     raw_rows: Sequence[Mapping[str, object]],
+    *,
+    expected_pass_count: int | None = None,
 ) -> list[dict[str, object]]:
     """Validate official NanoMelt CSV and map its scored domain to each raw sequence."""
 
-    if len(samples) != 47 or len(raw_rows) != 47:
-        raise NanoMeltYieldError("Expected 47 plan rows and 47 NanoMelt output rows")
+    if len(samples) != 47:
+        raise NanoMeltYieldError("Expected 47 plan rows")
+    if expected_pass_count is not None and len(raw_rows) != expected_pass_count:
+        raise NanoMeltYieldError(
+            f"Expected {expected_pass_count} NanoMelt output rows, found {len(raw_rows)}"
+        )
     required = {"ID", "Aligned Sequence", "Sequence", "NanoMelt Tm (C)"}
     if not raw_rows or not required.issubset(raw_rows[0]):
         raise NanoMeltYieldError("NanoMelt output lacks required columns")
     by_id = {str(row["ID"]): row for row in raw_rows}
     expected = {str(row["sample_uid"]) for row in samples}
-    if len(by_id) != 47 or set(by_id) != expected:
-        raise NanoMeltYieldError("NanoMelt output IDs do not match the 47-sample plan")
+    if len(by_id) != len(raw_rows) or not set(by_id).issubset(expected):
+        raise NanoMeltYieldError("NanoMelt output contains duplicate or unknown IDs")
 
     normalized = []
     for sample in samples:
         uid = str(sample["sample_uid"])
         raw_sequence = str(sample["sequence_raw"])
+        if uid not in by_id:
+            normalized.append(
+                {
+                    "sample_uid": uid,
+                    "sequence_raw": raw_sequence,
+                    "aligned_sequence": "",
+                    "scored_ungapped_sequence": "",
+                    "scored_length_aa": "",
+                    "trimmed_n_terminal": "",
+                    "trimmed_c_terminal": "",
+                    PRIMARY_FEATURE: "",
+                    "scoring_status": "nanomelt_not_scored",
+                    "not_scored_reason": "not_returned_by_nanomelt_anarci_alignment",
+                }
+            )
+            continue
         raw = by_id[uid]
         aligned = str(raw["Aligned Sequence"]).strip().upper()
         scored = str(raw["Sequence"]).strip().upper()
@@ -135,6 +157,7 @@ def normalize_nanomelt_scores(
                 "trimmed_c_terminal": raw_sequence[start + len(scored) :],
                 PRIMARY_FEATURE: tm,
                 "scoring_status": "pass",
+                "not_scored_reason": "",
             }
         )
     return normalized
@@ -156,17 +179,29 @@ def analyze_nanomelt_associations(
     for sample in sample_rows:
         uid = str(sample["sample_uid"])
         score = scores[uid]
-        if score.get("scoring_status") != "pass" or score.get("sequence_raw") != sample["sequence_raw"]:
+        if score.get("scoring_status") not in {"pass", "nanomelt_not_scored"} or score.get("sequence_raw") != sample["sequence_raw"]:
             raise NanoMeltYieldError(f"NanoMelt score identity/status mismatch for {uid}")
         row = dict(sample)
         row.update(score)
         combined.append(row)
 
-    numeric = [row for row in combined if row["observation_semantics"] == "individual_approximate"]
-    llj = [row for row in combined if row["provider_code"] == "LLJ"]
-    if len(numeric) != 31 or len(llj) != 16:
-        raise NanoMeltYieldError("Expected 31 numeric and 16 LLJ ordinal records")
+    passed = [row for row in combined if row["scoring_status"] == "pass"]
+    not_scored = [row for row in combined if row["scoring_status"] == "nanomelt_not_scored"]
+    if len(passed) != 43 or len(not_scored) != 4:
+        raise NanoMeltYieldError("Expected 43 scored and 4 NanoMelt-not-scored records")
+    numeric = [row for row in passed if row["observation_semantics"] == "individual_approximate"]
+    llj = [row for row in passed if row["provider_code"] == "LLJ"]
+    if NB252_UID not in {str(row["sample_uid"]) for row in numeric} or {row["provider_code"] for row in numeric} != {"LTT", "WCC"}:
+        raise NanoMeltYieldError("Scored numeric subset must retain Nb252 and both numeric providers")
     primary = _primary_metric(numeric, llj)
+    primary.update(
+        {
+            "planned_n": 47,
+            "scored_n": len(passed),
+            "not_scored_count": len(not_scored),
+            "not_scored_sample_uids": "|".join(str(row["sample_uid"]) for row in not_scored),
+        }
+    )
     low, high = _stratified_bootstrap_ci(numeric)
     primary.update(
         {
@@ -182,6 +217,7 @@ def analyze_nanomelt_associations(
     primary["leave_one_out_rho_max"] = max(leave_one_out.values())
     primary["without_nb252_stratified_spearman_rho"] = leave_one_out[NB252_UID]
     level, reasons = _classify_evidence(primary)
+    reasons.append("association_scope_is_nanomelt_scored_standard_vhh_domains_only")
     primary["evidence_level"] = level
     cv_rows = [
         {
@@ -210,6 +246,7 @@ def analyze_nanomelt_associations(
         "primary": primary,
         "evidence_level": level,
         "decision_reasons": reasons,
+        "not_scored_uids": [str(row["sample_uid"]) for row in not_scored],
     }
 
 

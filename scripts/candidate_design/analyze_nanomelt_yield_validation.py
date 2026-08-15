@@ -52,7 +52,12 @@ def main() -> int:
     contract, model_run = _json(sources[1]), _json(sources[3])
     if contract.get("schema_version") != 1 or contract.get("status") != "pass":
         raise ValueError("NanoMelt plan is not released")
-    if model_run.get("schema_version") != 1 or model_run.get("status") != "pass" or model_run.get("sample_count") != 47:
+    if (
+        model_run.get("schema_version") != 1
+        or model_run.get("status") != "pass"
+        or model_run.get("sample_count") != 47
+        or model_run.get("scoring_pass_count") != contract["coverage_gate"]["scoring_pass_required"]
+    ):
         raise ValueError("NanoMelt model run is incomplete")
     result = analyze_nanomelt_associations(_csv(sources[0]), _csv(sources[2]))
 
@@ -64,7 +69,7 @@ def main() -> int:
         path.parent.mkdir(parents=True, exist_ok=True)
     final = dict(zip((*NAMES, "summary"), valid.target_paths, strict=True))
     release = {
-        "weak_ranking_evidence": "nanomelt_ready_for_weak_candidate_ranking_use",
+        "weak_ranking_evidence": "nanomelt_ready_for_weak_applicable_vhh_domain_ranking_use",
         "compatibility_filter_only": "nanomelt_stability_compatibility_only",
         "no_supported_use": "nanomelt_not_supported_for_yield_use",
     }[result["evidence_level"]]
@@ -73,7 +78,14 @@ def main() -> int:
         "gate_name": "nb252_nanomelt_predicted_tm_bl21_reported_yield_validation",
         "status": "pass",
         "generated_at": generated,
-        "coverage": {"planned": 47, "scored": 47, "numeric": 31, "llj_ordinal_censored": 16},
+        "coverage": {
+            "planned": 47,
+            "scored": result["primary"]["scored_n"],
+            "nanomelt_not_scored": result["primary"]["not_scored_count"],
+            "nanomelt_not_scored_sample_uids": result["not_scored_uids"],
+            "numeric_scored": result["primary"]["numeric_n"],
+            "llj_ordinal_censored_scored": result["primary"]["llj_ordinal_n"],
+        },
         "primary_feature": "nanomelt_predicted_apparent_tm_c",
         "expected_direction": "higher_predicted_apparent_tm_higher_reported_yield",
         "primary_statistics": result["primary"],
@@ -82,8 +94,10 @@ def main() -> int:
         "high_capacity_model_trained": False,
         "experimental_tm_available": False,
         "nb252_expression_prediction_validated": False,
+        "selection_scope": "nanomelt_scored_standard_vhh_domains_only",
+        "coverage_limitation": "four_input_records_were_not_returned_by_nanomelt_anarci_alignment",
         "release": release,
-        "interpretation": "Association of NanoMelt-predicted apparent Tm for tool-aligned VHH domains with collaborator-reported BL21 yield; not measured Tm, causal evidence, or an mg/L predictor.",
+        "interpretation": "Association within NanoMelt-scored standard VHH domains between predicted apparent Tm and collaborator-reported BL21 yield; not measured Tm, causal evidence, an mg/L predictor, or evidence for unscored inputs.",
     }
     with tempfile.TemporaryDirectory(prefix=".nanomelt-analysis-", dir=ROOT) as temp:
         stage = Path(temp)

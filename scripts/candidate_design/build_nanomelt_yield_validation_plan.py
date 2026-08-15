@@ -94,7 +94,7 @@ def main() -> int:
             "new_expression": "{'Threads': str(n_threads)}",
         },
         "esm_cache": "/homes/Tianlab/luly25/.cache/torch/hub/checkpoints",
-        "scoring": {"do_align": True, "ncpu": 1, "single_batch": True, "expected_rows": 47},
+        "scoring": {"do_align": True, "ncpu": 1, "single_batch": True, "input_rows": 47, "output_rows": 43},
         "smoke_result": {
             "sample_uid": "LTT__Nb252",
             "input_length_aa": 128,
@@ -111,8 +111,15 @@ def main() -> int:
         "resampling": {"replicates": RESAMPLING_REPLICATES, "bootstrap_seed": BOOTSTRAP_SEED, "permutation_seed": BOOTSTRAP_SEED + 1},
         "influence_check": "leave_each_numeric_sample_out_and_report_without_Nb252",
         "high_capacity_model_training": False,
-        "coverage_gate": {"planned": 47, "scoring_pass_required": 47, "numeric_required": 31, "llj_required": 16},
+        "coverage_gate": {
+            "planned": 47,
+            "scoring_pass_required": 43,
+            "nanomelt_not_scored_required": 4,
+            "numeric_planned": 31,
+            "llj_planned": 16,
+        },
         "weak_ranking_gate": {
+            "release_scope": "nanomelt_scored_standard_vhh_domains_only",
             "stratified_spearman_min": 0.30,
             "bootstrap_95ci_low_strictly_positive": True,
             "stratified_permutation_p_max": 0.05,

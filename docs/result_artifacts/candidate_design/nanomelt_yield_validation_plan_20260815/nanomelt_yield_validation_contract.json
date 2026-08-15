@@ -1,9 +1,10 @@
 {
   "coverage_gate": {
-    "llj_required": 16,
-    "numeric_required": 31,
+    "llj_planned": 16,
+    "nanomelt_not_scored_required": 4,
+    "numeric_planned": 31,
     "planned": 47,
-    "scoring_pass_required": 47
+    "scoring_pass_required": 43
   },
   "anarci_runtime_contract": {
     "distribution_metadata_is_not_a_version_gate": true,
@@ -50,8 +51,9 @@
   "schema_version": 1,
   "scoring": {
     "do_align": true,
-    "expected_rows": 47,
+    "input_rows": 47,
     "ncpu": 1,
+    "output_rows": 43,
     "single_batch": true
   },
   "sequence_cluster_identity": 0.9,
@@ -77,6 +79,7 @@
   "weak_ranking_gate": {
     "bootstrap_95ci_low_strictly_positive": true,
     "cluster_cv_increment_positive": true,
+    "release_scope": "nanomelt_scored_standard_vhh_domains_only",
     "ltt_and_wcc_directions_positive": true,
     "scored_length_adjusted_direction_positive": true,
     "stratified_permutation_p_max": 0.05,
