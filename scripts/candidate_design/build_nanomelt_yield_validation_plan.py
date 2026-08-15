@@ -81,7 +81,7 @@ def main() -> int:
             "openmm": "8.5.2",
             "pdbfixer": "1.12.0",
         },
-        "openmm_platforms": ["Reference", "CPU"],
+        "required_openmm_platforms": ["Reference", "CPU"],
         "anarci_runtime_contract": {
             "required_api": ["anarci", "run_anarci", "validate_sequence", "scheme_short_to_long"],
             "required_hmm_database": "dat/HMMs/ALL.hmm_with_pressed_indexes",

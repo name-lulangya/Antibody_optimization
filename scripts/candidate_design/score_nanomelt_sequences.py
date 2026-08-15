@@ -26,6 +26,7 @@ from antibody_optimization.file_transaction import replace_staged_files, validat
 from antibody_optimization.nanomelt_yield import (  # noqa: E402
     normalize_nanomelt_scores,
     verify_anarci_runtime,
+    verify_required_openmm_platforms,
 )
 
 
@@ -84,11 +85,10 @@ def main() -> int:
         raise ValueError("ImmuneBuilder OpenMM Threads mapping patch is missing")
     if not torch.cuda.is_available():
         raise RuntimeError("NanoMelt scoring requires a visible CUDA GPU")
-    openmm_platforms = [Platform.getPlatform(index).getName() for index in range(Platform.getNumPlatforms())]
-    if openmm_platforms != contract["openmm_platforms"]:
-        raise ValueError(
-            f"OpenMM platform mismatch: {openmm_platforms} != {contract['openmm_platforms']}"
-        )
+    openmm_platforms = verify_required_openmm_platforms(
+        [Platform.getPlatform(index).getName() for index in range(Platform.getNumPlatforms())],
+        contract["required_openmm_platforms"],
+    )
 
     output_dir = args.output_dir.absolute()
     targets = [

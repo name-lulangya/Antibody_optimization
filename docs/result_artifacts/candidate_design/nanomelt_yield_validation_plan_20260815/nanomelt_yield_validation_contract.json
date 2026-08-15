@@ -33,7 +33,7 @@
   },
   "influence_check": "leave_each_numeric_sample_out_and_report_without_Nb252",
   "llj_use": "16_group_ordinal_or_censored_observations_only",
-  "openmm_platforms": [
+  "required_openmm_platforms": [
     "Reference",
     "CPU"
   ],

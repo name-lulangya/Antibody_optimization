@@ -13,6 +13,7 @@ from antibody_optimization.nanomelt_yield import (
     build_nanomelt_validation_inputs,
     normalize_nanomelt_scores,
     verify_anarci_runtime,
+    verify_required_openmm_platforms,
 )
 from antibody_optimization.nanomelt_yield_plot import render_nanomelt_yield_figure
 
@@ -78,6 +79,14 @@ def test_anarci_runtime_validation_ignores_stale_distribution_metadata(tmp_path:
     result = verify_anarci_runtime(module, tmp_path, expected_conda_version="2024.05.21")
     assert result["conda_package_version"] == "2024.05.21"
     assert result["hmm_pressed_index_count"] == 4
+
+
+def test_openmm_platform_gate_allows_compute_node_extras() -> None:
+    assert verify_required_openmm_platforms(
+        ["Reference", "CPU", "OpenCL"], ["Reference", "CPU"]
+    ) == ["Reference", "CPU", "OpenCL"]
+    with pytest.raises(NanoMeltYieldError, match="lacks required platforms"):
+        verify_required_openmm_platforms(["Reference", "OpenCL"], ["Reference", "CPU"])
 
 
 def test_normalization_records_exact_nb252_domain_trimming() -> None:

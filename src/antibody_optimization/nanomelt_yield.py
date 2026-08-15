@@ -32,6 +32,18 @@ class NanoMeltYieldError(ValueError):
     """Raised when NanoMelt inputs or scores violate the validation contract."""
 
 
+def verify_required_openmm_platforms(
+    observed: Sequence[str], required: Sequence[str]
+) -> list[str]:
+    """Require baseline OpenMM platforms while allowing node-specific extras."""
+
+    observed_names = [str(name) for name in observed]
+    missing = sorted(set(required) - set(observed_names))
+    if missing:
+        raise NanoMeltYieldError(f"OpenMM runtime lacks required platforms: {missing}")
+    return observed_names
+
+
 def verify_anarci_runtime(
     module: object,
     environment_root: Path,
