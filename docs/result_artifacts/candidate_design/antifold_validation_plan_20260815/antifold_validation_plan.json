@@ -1,0 +1,36 @@
+{
+  "authoritative_parent": {
+    "length": 128,
+    "numbering_scheme": "IMGT_provisional_with_reported_sequence_index",
+    "sample_uid": "LTT__Nb252",
+    "sequence": "QVQLQESGGGLVQAGGSLRLSCAASGTIFFGYDMGWYRQAPGKEREFVASITTGSNTNYADSVKGRFTISRDNAKNTVYLQMNSLKPEDTAVYYCAVDTIDYIIEWNVYYYIFSYWGQGTQVTVSSGS",
+    "sequence_sha256": "df5b83ddde8a3486383c12afe45e22af6a358f507eab5503d5dbd4430710288d"
+  },
+  "candidate_count": 8,
+  "candidate_filtering_applied": false,
+  "candidate_generation_performed": false,
+  "evaluation_entity_count": 9,
+  "generated_at": "2026-08-15T19:15:00+08:00",
+  "inputs": {
+    "af3_cif": "data\\structures\\cxs_exports\\fold_2r_252_nomg_model_0__native.cif",
+    "core_gate": "docs\\result_artifacts\\candidate_design\\affinity_ensemble_core_20260813\\affinity_ensemble_core_gate.json",
+    "core_modules": "docs\\result_artifacts\\candidate_design\\affinity_ensemble_core_20260813\\affinity_core_modules.csv",
+    "critical_facts": "docs\\result_artifacts\\input_baseline\\reviews\\nb252_critical_residue_sets.json",
+    "experimental_cif": "data\\structures\\cxs_exports\\NK2R-252__native.cif",
+    "mapping": "docs\\result_artifacts\\input_baseline\\structure_released_20260810\\nb252_sequence_structure_mapping.csv",
+    "stage0_preflight": "docs\\result_artifacts\\candidate_design\\stage0_contract_20260810\\stage2_preflight.json",
+    "stage2": "docs\\result_artifacts\\candidate_design\\stage0_contract_20260810\\stage2_design_contract.json",
+    "structure_manifest": "docs\\result_artifacts\\input_baseline\\structure_released_20260810\\structure_baseline_manifest.json"
+  },
+  "interpretation": "supportive structure-conditioned sequence compatibility; not affinity, stability, expression, yield, or experimental validation",
+  "plan_name": "nb252_antifold_minimal_validation",
+  "schema_version": 1,
+  "scoring_definition": "mutant_log_probability_minus_wt_log_probability_at_same_imgt_position",
+  "status": "pass",
+  "view_count": 3,
+  "views": [
+    "experimental_vhh_only",
+    "experimental_complex_context",
+    "af3_vhh_only"
+  ]
+}

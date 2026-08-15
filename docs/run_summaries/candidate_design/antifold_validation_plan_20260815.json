@@ -1,0 +1,44 @@
+{
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\build_antifold_validation_plan.py",
+    "--stage0-dir",
+    "docs/result_artifacts/candidate_design/stage0_contract_20260810",
+    "--structure-baseline-dir",
+    "docs/result_artifacts/input_baseline/structure_released_20260810",
+    "--critical-facts",
+    "docs/result_artifacts/input_baseline/reviews/nb252_critical_residue_sets.json",
+    "--affinity-core-dir",
+    "docs/result_artifacts/candidate_design/affinity_ensemble_core_20260813",
+    "--experimental-cif",
+    "data/structures/cxs_exports/NK2R-252__native.cif",
+    "--af3-cif",
+    "data/structures/cxs_exports/fold_2r_252_nomg_model_0__native.cif",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/antifold_validation_plan_20260815",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/antifold_validation_plan_20260815.json",
+    "--generated-at",
+    "2026-08-15T19:15:00+08:00"
+  ],
+  "counts": {
+    "core_candidates": 8,
+    "views": 3
+  },
+  "elapsed_seconds": 0.096123,
+  "generated_at": "2026-08-15T19:15:00+08:00",
+  "outputs": {
+    "antifold_candidate_panel.csv": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\antifold_validation_plan_20260815\\antifold_candidate_panel.csv",
+    "antifold_environment_contract.json": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\antifold_validation_plan_20260815\\antifold_environment_contract.json",
+    "antifold_structure_mapping.csv": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\antifold_validation_plan_20260815\\antifold_structure_mapping.csv",
+    "antifold_structure_views.csv": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\antifold_validation_plan_20260815\\antifold_structure_views.csv",
+    "antifold_validation_plan.json": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\antifold_validation_plan_20260815\\antifold_validation_plan.json",
+    "antifold_validation_plan_gate.json": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\antifold_validation_plan_20260815\\antifold_validation_plan_gate.json",
+    "nb252_af3_vhh_imgt.pdb": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\antifold_validation_plan_20260815\\structures\\nb252_af3_vhh_imgt.pdb",
+    "nb252_experimental_complex_imgt.pdb": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\antifold_validation_plan_20260815\\structures\\nb252_experimental_complex_imgt.pdb",
+    "nb252_experimental_vhh_imgt.pdb": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\antifold_validation_plan_20260815\\structures\\nb252_experimental_vhh_imgt.pdb"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}

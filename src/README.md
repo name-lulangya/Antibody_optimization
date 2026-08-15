@@ -196,6 +196,11 @@
   - 主要输入/返回：固定47行计划和官方NanoMelt 43行批量CSV；返回47行逐样本证据（43条`pass`、4条`nanomelt_not_scored`）、实际评分域/末端裁剪/Tm、预声明主统计、普通及90%序列簇外CV、leave-one-out结果、三档证据gate和600 dpi PNG/SVG。
   - 算法假设：统计只使用官方实际返回的样本；LTT/WCC个体近似值用于主要数值分析，LLJ仅作有序/删失分析，固定10000次来源分层bootstrap与permutation。评分域必须是对应reported序列中的唯一连续片段；Nb252已知由128 aa输入评分126 aa并固定裁去末端`GS`，该事实不回写或改变authoritative序列。若预声明统计门通过，弱排序证据仅适用于NanoMelt可评分的标准VHH域候选，不能外推到4条未评分输入。
   - 明确不支持：把预测表观Tm称为实验Tm、因果表达机制或mg/L预测，修补被工具拒绝的序列，训练47样本高容量模型，或未通过证据门就用Tm单独排序/淘汰候选。
+- `antibody_optimization.antifold_validation`与`antifold_plot`
+  - 用途：从released Nb252映射生成不补全、不混合来源的IMGT编号AntiFold派生结构，规范化逐残基log-probability，并为既有单突计算同一结构/位置上的`log P(mutant)-log P(WT)`及三视图构象敏感性；绘制实验VHH-only、实验complex-context和AF3 VHH的紧凑比较图。
+  - 主要输入/返回：阶段0母本合同、关键残基事实、实验/AF3映射、8个亲和力核心模块及三个AntiFold原始CSV；返回派生结构元数据、逐候选×视图证据、候选汇总和无科学阈值的使用gate。
+  - 算法假设：AntiFold输入VHH按IMGT编号且保留插入码；实验未解析残基不补全，编号域外末端`GS`从AntiFold V域输入排除但仍属于不可突变128-aa母本；正`ΔlogP`仅表示给定骨架下模型更偏好突变残基。实验与AF3结果始终独立，风险标签不会被模型分数解除。
+  - 明确不支持：生成候选、预测亲和力/稳定性/表达/yield、把AF3证据转写为实验事实、机械累加多突分数，或以未经校准的AntiFold阈值筛选候选。
 
 ## 第一阶段活动入口
 
@@ -246,3 +251,7 @@
 - `scripts/candidate_design/score_nanomelt_sequences.py`：在独立`nanomelt`环境中一次调用官方`nanomelt predict -align -ncpu 1`提交47条，要求官方返回43条并将缺失4条按真实ID差集标为工具特异的`nanomelt_not_scored`；运行前核对固定软件版本、ANARCI实际导入路径/API/HMM数据库、OpenMM必需平台子集、ImmuneBuilder补丁和GPU可见性。计算节点额外提供的OpenMM平台会被记录但不阻断；ANARCI可能残留旧pip distribution metadata，因此该metadata只记录诊断而不充当版本门。运行后逐条验证ID及评分域到reported序列的唯一映射，不静默修补、伪造Tm或把未评分样本当作低分。
 - `scripts/candidate_design/analyze_nanomelt_yield_validation.py`：在项目`ab_optim`环境执行来源分层相关、10000次重采样、长度调整、普通/序列簇外CV、LLJ有序分析及Nb252/逐样本影响分析，输出紧凑表、机器gate、600 dpi PNG/SVG和run summary。
 - `scripts/candidate_design/submit_nanomelt_yield_validation.sh`与`.slurm`：远程唯一提交路线；一个`batch`作业、1 GPU、12 CPU、2小时上限，不使用数组或断点续传，日志写入`logs/nanomelt_yield_validation/`。预计约30–90分钟，正式输出已存在时拒绝覆盖。
+- `scripts/candidate_design/build_antifold_validation_plan.py`：本地读取released关键残基、映射和8个亲和力核心模块，生成实验VHH-only、实验complex-context、AF3 VHH三个IMGT编号派生PDB、映射表、环境合同和远程评分gate；不补全结构或生成突变。
+- `scripts/candidate_design/score_antifold_validation.py`：在固定`antifold`环境中一次加载GPU模型，以`num_threads=0`依次评分三个WT结构视图并保存高精度逐残基log-probability；运行前只核对已冻结环境合同和模型符号链接，不采样序列。
+- `scripts/candidate_design/analyze_antifold_validation.py`：本地将8个既有核心单突映射到三个WT结构概率表，计算`ΔlogP`、perplexity和跨构象方向一致性，输出证据表、无筛选阈值gate及600 dpi PNG/SVG。
+- `scripts/candidate_design/submit_antifold_validation.sh`与`.slurm`：单个`batch`作业、1 GPU、12 CPU、30分钟上限、无数组或断点续传，日志写入`logs/antifold_validation/`；评分后切回项目环境完成分析。

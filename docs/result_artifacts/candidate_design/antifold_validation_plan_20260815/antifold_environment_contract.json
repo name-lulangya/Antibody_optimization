@@ -1,0 +1,33 @@
+{
+  "environment_path": "/data/software/env/luly25/antifold",
+  "gpu_smoke": {
+    "device": "NVIDIA A100-PCIE-40GB",
+    "model_type": "GVPTransformerModel",
+    "status": "pass"
+  },
+  "known_loader_behavior": "AntiFold 0.3.1 ignores ordinary checkpoint_path values and loads loader_expected_path; the deployed symlink is required.",
+  "loader_expected_path": "/data/software/env/luly25/antifold/lib/python3.10/site-packages/models/model.pt",
+  "loader_expected_path_resolves_to": "/homes/Tianlab/luly25/software/AntiFold/models/model.pt",
+  "model_path": "/homes/Tianlab/luly25/software/AntiFold/models/model.pt",
+  "model_sha256": "d5c442fa0372c28f4d0026d2f551b6f8ba7e7a127cb6837813a88093ed233e9e",
+  "num_threads": 0,
+  "packages": {
+    "antifold": "0.3.1",
+    "biopython": "1.83",
+    "biotite": "0.38.0",
+    "fsspec": "2026.7.0",
+    "numpy": "1.26.4",
+    "pandas": "2.3.3",
+    "pygam": "0.9.1",
+    "torch": "2.2.0",
+    "torch_cuda_build": "12.1",
+    "torch_geometric": "2.4.0",
+    "torch_scatter": "2.1.2"
+  },
+  "python": "3.10.20",
+  "schema_version": 1,
+  "source_commit": null,
+  "source_commit_note": "Unavailable because the installed source tree has no .git metadata.",
+  "source_version": "0.3.1",
+  "status": "validated_by_remote_smoke"
+}

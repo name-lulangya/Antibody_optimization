@@ -1,0 +1,12 @@
+{
+  "all_core_positions_uniquely_mapped": true,
+  "core_candidate_count": 8,
+  "experimental_predicted_coordinates_mixed": false,
+  "gate_name": "nb252_antifold_validation_plan",
+  "generated_at": "2026-08-15T19:15:00+08:00",
+  "missing_coordinates_completed": false,
+  "release": "ready_for_remote_antifold_wt_backbone_scoring",
+  "schema_version": 1,
+  "status": "pass",
+  "view_count": 3
+}
