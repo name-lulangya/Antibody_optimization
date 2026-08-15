@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "review_name": "nb252_unified_single_mutant_antifold_scientific_review",
+  "status": "pass",
+  "generated_at": "2026-08-15T20:33:01+08:00",
+  "source_gate": "docs/result_artifacts/candidate_design/unified_single_mutant_antifold_20260815/unified_single_mutant_antifold_gate.json",
+  "source_evidence": "docs/result_artifacts/candidate_design/unified_single_mutant_antifold_20260815/unified_single_mutant_antifold_evidence.csv",
+  "coverage": {
+    "candidate_count": 2318,
+    "eligible_current_round_count": 1962,
+    "eligible_three_view_count": 1962,
+    "three_view_count_all_statuses": 2071,
+    "af3_only_count": 247
+  },
+  "eligible_direction_summary": {
+    "all_three_positive_count": 66,
+    "all_three_negative_count": 1733,
+    "all_three_concordant_count": 1799,
+    "discordant_count": 163,
+    "experimental_complex_positive_count": 139,
+    "experimental_vhh_vs_complex_sign_change_count": 89,
+    "experimental_complex_vs_af3_sign_change_count": 136,
+    "experimental_vhh_vs_complex_spearman": 0.9829629841494659,
+    "experimental_complex_vs_af3_spearman": 0.9081822108897964
+  },
+  "track_summary": {
+    "affinity_existing_interface_scan": {
+      "eligible_count": 432,
+      "experimental_complex_positive_count": 75,
+      "all_three_positive_count": 30,
+      "all_three_positive_and_three_replicate_pyrosetta_medians_negative_count": 16
+    },
+    "stability_developability_discovery": {
+      "eligible_count": 1530,
+      "experimental_complex_positive_count": 64,
+      "all_three_positive_count": 36,
+      "all_three_positive_position_count": 11
+    }
+  },
+  "affinity_core_review": {
+    "released_core_count": 8,
+    "eligible_core_count": 7,
+    "blocked_core_ids": [
+      "Nb252_aff_seq045_R45C"
+    ],
+    "all_three_positive_core_ids": [
+      "Nb252_aff_seq045_R45V",
+      "Nb252_aff_seq105_E105L"
+    ],
+    "strict_20_sample_core_gate_change": "none",
+    "interpretation": "AntiFold adds compatibility context but does not release additional affinity cores beyond the existing Flex ddG criterion."
+  },
+  "verification": {
+    "unique_candidate_ids": 2318,
+    "maximum_delta_recalculation_absolute_error": 3.552713678800501e-15,
+    "figure_visual_review": "pass"
+  },
+  "scientific_interpretation": [
+    "Positive delta log probability means only that AntiFold prefers the mutant residue over WT on the specified fixed backbone.",
+    "The strong overall view correlation supports reuse as a compatibility sensitivity signal, while sign changes require retaining the experimental-complex view as primary evidence.",
+    "AntiFold positivity is neither a stability, expression, yield, nor affinity prediction and is not a standalone selection threshold.",
+    "Experimental-missing candidates remain AF3-only audit records and are not released in the current round."
+  ],
+  "release": "ready_for_multitool_property_scoring_without_antifold_only_selection"
+}

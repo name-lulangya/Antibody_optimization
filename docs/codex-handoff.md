@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-15 20:19:19
+Last updated: 2026-08-15 20:33:01
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -19,8 +19,8 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - NetSolP：`/data/software/env/luly25/netsolp`；官方5.63 GB发行包解压在`/homes/Tianlab/luly25/software/netsolp`。固定从该顶层工作目录调用`predict.py`，使用`MODEL_TYPE=Distilled`、`PREDICTION_TYPE=SU`，以Usability为主指标、Solubility为辅指标；环境快照保存在远程软件目录的`environment.freeze.txt`。官方3序列测试同时完成S/U预测，实测57.812787秒。
 - TNP：`/data/software/env/luly25/tnp`，TNP 0.0.1 commit `29dcac72f1380e8538e8870f45a699d3c6156162`、ImmuneBuilder 1.2、ANARCI 2024.05.21、Biopython 1.77、OpenMM 8.5.2、DSSP 4.6.1、Torch 2.7.1+cu126。固定入口为该环境的`bin/TNP`，并设置`PYTHONPATH=/homes/Tianlab/luly25/software/TNP`。ImmuneBuilder安装版`refine.py`的OpenMM `Threads` set-literal错误已按上游正确dict语义修复并由`LTT__Nb294`失败前/成功后smoke验证；V2评分入口会在运行前核对该补丁。Nb252完整128-aa输入建模126 aa并仅裁掉末端`GS`，不改变authoritative母本或`SSGS`冻结规则。
 - AntiFold：独立环境`/data/software/env/luly25/antifold`，AntiFold 0.3.1、Torch 2.2.0+cu121、PyG 2.4.0；模型位于`/homes/Tianlab/luly25/software/AntiFold/models/model.pt`。A100模型加载、官方纳米抗体评分及CDR1采样smoke均通过。0.3.1加载器忽略普通`checkpoint_path`，因此环境内固定模型路径使用符号链接，CUDA评分必须`num_threads=0`；完整版本和模型身份只记录在`antifold_validation_plan_20260815/antifold_environment_contract.json`。
-- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；AntiFold真实结果提交`d65eb51`已同步，当前`HEAD=origin/main`。
-- 阶段2的本地阶段0、远程WT安全导入、WT评分校准、456候选全量扫描、post-scan分层、50候选×20样本Flex ddG复核、三类yield关联验证及AntiFold核心兼容性验证均已完成。统一单突计划也已在本地完成：128个母本位置中122个位置枚举2318条非WT单突；456条界面单突绑定并复用既有PyRosetta结果，1615条非界面单突进入性质发现空间，247条实验缺失坐标单突只保留审计身份。AntiFold全空间评价入口只复用既有三份WT逐位点CSV，不重新运行模型；远程联接尚未执行。
+- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；统一AntiFold结果提交`d119307`已同步，当前`HEAD=origin/main`。
+- 统一单突AntiFold复用已完成且gate为`pass/ready_for_unified_property_scoring`：2318条均有记录，1962条本轮候选三视图全部可评价，247条实验缺失坐标候选仅AF3可评价；模型没有重新运行。1962条中66条三视图均为正、1733条均为负、163条方向不一致。界面432条中30条三视图均正，性质发现1530条中36条三视图均正；结合既有20构象严格亲和力门后仍只有R45V和E105L为兼容性方向一致的亲和力核心，没有新增核心。
 
 ## Frozen Inputs
 
@@ -49,6 +49,8 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 跨来源pooling为`pass`，但普通连续回归、把LLJ分组插值为个体点估计，以及未经验证地向新Nb252突变转移仍被禁止。
 
 ## Current Gates
+
+- `unified_single_mutant_antifold_landscape=pass`：2318条证据身份完整，1962条本轮候选全部具有实验VHH-only、实验complex-context和AF3三视图；release为`ready_for_unified_property_scoring`。AntiFold不得单独筛选，缺失坐标247条仍不释放。
 
 - `input_freeze_manifest.status=pass`。
 - `local_baseline_build=pass`：结构导出、清单、链身份、可逆映射和临时界面安全均已完成。
@@ -99,7 +101,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 ## Verification
 
 - 阶段0专项：`3 passed`；统一单突专项`4 passed`，覆盖2318条真实空间、456条既有PyRosetta身份复用、缺失坐标/新Cys状态和三视图AntiFold查表门；当前全套为`193 passed, 1 skipped, 4 subtests passed`。覆盖真实128位合同、过期哈希拒绝、CSV BOM/LF、拒绝覆盖、固定时间戳双跑六制品逐字节一致。
-- 阶段0图、亲和力候选空间图、post-scan四面板图、ensemble核心图、稳定性/表达合同图和统一单突空间图均已人工检查，坐标轴、图例和说明无遮挡。AntiFold既有真实结果24项ΔlogP逐项复算一致、plot data与summary逐字一致；统一全空间的远程查表结果图尚待原始CSV联接完成。唯一skip仍是Windows真实symlink权限测试。
+- 阶段0图、亲和力候选空间图、post-scan四面板图、ensemble核心图、稳定性/表达合同图和统一单突/AntiFold图均已人工检查，坐标轴、图例和说明无遮挡。统一结果2318个candidate ID唯一，三视图`ΔlogP`由WT/突变log-probability重算的最大绝对误差为`3.552713678800501e-15`。唯一skip仍是Windows真实symlink权限测试。
 - `pip check`、`python -m compileall -q src scripts tests`、`git diff --check` 均通过。
 - NetSolP真实结果含47条样本、15项指标和完整gate；本地从紧凑样本表重算主指标全部10个关键统计及证据等级，与gate逐项一致。600 dpi PNG已人工检查，四个面板、坐标轴、图例和说明无遮挡。
 - TNP V2真实结果含47条身份、43条pass、4条`not_applicable`、6项指标和4种CV模型；本地从紧凑证据表复算全部关联、5000次bootstrap/permutation及CV，最大差异不超过浮点舍入误差。结果PNG已人工检查，四面板、坐标轴、图例和说明无遮挡。
@@ -113,6 +115,6 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Required Next Steps
 
-1. 在远程运行`submit_unified_single_mutant_antifold.sh`，把既有三个AntiFold WT逐位点CSV联接到完整2318条单突；该步骤不重新运行AntiFold或界面PyRosetta。随后仅在1962条本轮候选中开展统一性质评价：456条界面单突直接复用既有Rosetta证据，1530条非界面且非Cys单突用于性质发现并在少量初筛后补做亲和力非劣复核；实验缺失坐标与新Cys条目不释放。
+1. 对1962条本轮候选进行批量NetSolP和NanoMelt相对WT评价，并联接化学风险；AntiFold仅作兼容性维度。TNP结构流程只用于前述结果形成的较小候选池，不对全空间运行。456条界面单突继续复用已有Rosetta；1530条性质发现单突仅在多工具初筛后对少量条目补做亲和力非劣复核。
 2. 从双向过门的单突模块生成亲和力×亲和力、性质×性质和亲和力×性质双突；先对完整组合运行快速统一评分，再只对入围组合运行20构象Flex ddG，必要时以AF3复核少量终选构象。
 3. 按硬约束加Pareto关系形成最终30条：分别标为亲和力优先、稳定性/可开发性优先和平衡组合，保留必要WT/单突对照及全部原始分项，不使用yield综合分，也不把计算类别写成实验改善结论。
