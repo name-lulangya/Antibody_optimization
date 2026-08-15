@@ -243,6 +243,6 @@
 - `scripts/candidate_design/analyze_tnp_yield_validation.py`：联接TNP、表型和已完成NetSolP证据，执行分层相关、PSH bootstrap/permutation、BH-FDR、LLJ有序分析与普通/序列簇外CV增量比较；6行指标表使用固定统一schema，PSH专属重采样/CV字段在其他指标行留空；输出紧凑表、gate、600 dpi PNG/SVG和run summary。
 - `scripts/candidate_design/submit_tnp_yield_validation.sh`与`.slurm`：远程唯一V2路线；一个Slurm作业、一个Python进程顺序处理43条适用序列并逐样本输出进度，不使用数组或TNP多进程。固定`batch`、1 GPU、12 CPU、1小时上限，日志写入`logs/tnp_yield_validation_v2/`；若完整评分CSV和model-run JSON已存在，则跳过已完成推理并交由分析入口重新验证后复用。失败分析留下的空结果父目录可直接复用，但任何已存在的正式结果文件仍阻断覆盖；除此之外不实现一般性断点续传。
 - `scripts/candidate_design/build_nanomelt_yield_validation_plan.py`：本地冻结47条reported序列、31/16两类表型语义、90%序列簇、NanoMelt环境/调用合同、Nb252末端`GS`裁剪事实及预声明证据门；支持一次只读`--check_only`并默认拒绝覆盖。
-- `scripts/candidate_design/score_nanomelt_sequences.py`：在独立`nanomelt`环境中一次调用官方`nanomelt predict -align -ncpu 1`批量评分47条；运行前核对固定软件版本、OpenMM平台、ImmuneBuilder补丁和GPU可见性，运行后逐条验证ID及评分域到reported序列的唯一映射，不静默修补或丢弃序列。
+- `scripts/candidate_design/score_nanomelt_sequences.py`：在独立`nanomelt`环境中一次调用官方`nanomelt predict -align -ncpu 1`批量评分47条；运行前核对固定软件版本、ANARCI实际导入路径/API/HMM数据库、OpenMM平台、ImmuneBuilder补丁和GPU可见性。ANARCI可能残留旧pip distribution metadata，因此该metadata只记录诊断而不充当版本门；运行后逐条验证ID及评分域到reported序列的唯一映射，不静默修补或丢弃序列。
 - `scripts/candidate_design/analyze_nanomelt_yield_validation.py`：在项目`ab_optim`环境执行来源分层相关、10000次重采样、长度调整、普通/序列簇外CV、LLJ有序分析及Nb252/逐样本影响分析，输出紧凑表、机器gate、600 dpi PNG/SVG和run summary。
 - `scripts/candidate_design/submit_nanomelt_yield_validation.sh`与`.slurm`：远程唯一提交路线；一个`batch`作业、1 GPU、12 CPU、2小时上限，不使用数组或断点续传，日志写入`logs/nanomelt_yield_validation/`。预计约30–90分钟，正式输出已存在时拒绝覆盖。

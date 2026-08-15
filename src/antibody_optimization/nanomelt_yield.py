@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import json
 import math
+from pathlib import Path
 from typing import Mapping, Sequence
 
 import numpy as np
@@ -28,6 +30,45 @@ NB252_UID = "LTT__Nb252"
 
 class NanoMeltYieldError(ValueError):
     """Raised when NanoMelt inputs or scores violate the validation contract."""
+
+
+def verify_anarci_runtime(
+    module: object,
+    environment_root: Path,
+    *,
+    expected_conda_version: str,
+) -> dict[str, object]:
+    """Verify the imported ANARCI code and HMM data without trusting stale dist metadata."""
+
+    module_file = Path(str(getattr(module, "__file__", ""))).resolve()
+    environment_root = environment_root.resolve()
+    if not module_file.is_relative_to(environment_root):
+        raise NanoMeltYieldError(f"ANARCI imported outside the active environment: {module_file}")
+    required_api = ("anarci", "run_anarci", "validate_sequence", "scheme_short_to_long")
+    missing_api = [name for name in required_api if not hasattr(module, name)]
+    if missing_api:
+        raise NanoMeltYieldError(f"ANARCI runtime lacks required API: {missing_api}")
+    hmm_dir = module_file.parent / "dat" / "HMMs"
+    required_hmms = [hmm_dir / f"ALL.hmm{suffix}" for suffix in ("", ".h3f", ".h3i", ".h3m", ".h3p")]
+    missing_hmms = [str(path) for path in required_hmms if not path.is_file()]
+    if missing_hmms:
+        raise NanoMeltYieldError(f"ANARCI runtime lacks required HMM data: {missing_hmms}")
+    conda_records = [
+        json.loads(path.read_text(encoding="utf-8"))
+        for path in (environment_root / "conda-meta").glob("anarci-*.json")
+    ]
+    conda_versions = {str(record.get("version")) for record in conda_records if record.get("name") == "anarci"}
+    if conda_versions != {expected_conda_version}:
+        raise NanoMeltYieldError(
+            f"ANARCI conda package mismatch: {sorted(conda_versions)} != {[expected_conda_version]}"
+        )
+    return {
+        "module_file": str(module_file),
+        "conda_package_version": expected_conda_version,
+        "required_api": list(required_api),
+        "hmm_database": str(required_hmms[0]),
+        "hmm_pressed_index_count": 4,
+    }
 
 
 def build_nanomelt_validation_inputs(

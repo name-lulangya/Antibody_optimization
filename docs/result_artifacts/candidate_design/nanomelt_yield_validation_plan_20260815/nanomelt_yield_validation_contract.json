@@ -5,6 +5,16 @@
     "planned": 47,
     "scoring_pass_required": 47
   },
+  "anarci_runtime_contract": {
+    "distribution_metadata_is_not_a_version_gate": true,
+    "required_api": [
+      "anarci",
+      "run_anarci",
+      "validate_sequence",
+      "scheme_short_to_long"
+    ],
+    "required_hmm_database": "dat/HMMs/ALL.hmm_with_pressed_indexes"
+  },
   "esm_cache": "/homes/Tianlab/luly25/.cache/torch/hub/checkpoints",
   "evidence_levels": [
     "weak_ranking_evidence",
@@ -54,7 +64,7 @@
     "trimmed_sequence": "GS"
   },
   "software": {
-    "anarci": "2024.05.21",
+    "anarci_bioconda": "2024.05.21",
     "immune_builder": "1.2",
     "nanomelt": "1.4.0",
     "openmm": "8.5.2",

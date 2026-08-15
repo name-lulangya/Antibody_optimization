@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+from types import SimpleNamespace
 from pathlib import Path
 
 import pytest
@@ -11,6 +12,7 @@ from antibody_optimization.nanomelt_yield import (
     analyze_nanomelt_associations,
     build_nanomelt_validation_inputs,
     normalize_nanomelt_scores,
+    verify_anarci_runtime,
 )
 from antibody_optimization.nanomelt_yield_plot import render_nanomelt_yield_figure
 
@@ -51,6 +53,31 @@ def test_real_plan_preserves_47_samples_and_existing_clusters() -> None:
     assert len(samples) == 47
     assert len({row["sample_uid"] for row in samples}) == 47
     assert len({row["sequence_cluster_90"] for row in samples}) == 40
+
+
+def test_anarci_runtime_validation_ignores_stale_distribution_metadata(tmp_path: Path) -> None:
+    package = tmp_path / "lib" / "python3.10" / "site-packages" / "anarci"
+    hmm_dir = package / "dat" / "HMMs"
+    hmm_dir.mkdir(parents=True)
+    module_file = package / "__init__.py"
+    module_file.write_text("", encoding="utf-8")
+    for suffix in ("", ".h3f", ".h3i", ".h3m", ".h3p"):
+        (hmm_dir / f"ALL.hmm{suffix}").write_text("test-only", encoding="utf-8")
+    conda_meta = tmp_path / "conda-meta"
+    conda_meta.mkdir()
+    (conda_meta / "anarci-2024.05.21-test.json").write_text(
+        '{"name":"anarci","version":"2024.05.21"}', encoding="utf-8"
+    )
+    module = SimpleNamespace(
+        __file__=str(module_file),
+        anarci=lambda: None,
+        run_anarci=lambda: None,
+        validate_sequence=lambda: None,
+        scheme_short_to_long={},
+    )
+    result = verify_anarci_runtime(module, tmp_path, expected_conda_version="2024.05.21")
+    assert result["conda_package_version"] == "2024.05.21"
+    assert result["hmm_pressed_index_count"] == 4
 
 
 def test_normalization_records_exact_nb252_domain_trimming() -> None:

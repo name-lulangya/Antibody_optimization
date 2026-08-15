@@ -77,11 +77,16 @@ def main() -> int:
             "torch": "2.7.1+cu126",
             "transformers": "4.56.1",
             "immune_builder": "1.2",
-            "anarci": "2024.05.21",
+            "anarci_bioconda": "2024.05.21",
             "openmm": "8.5.2",
             "pdbfixer": "1.12.0",
         },
         "openmm_platforms": ["Reference", "CPU"],
+        "anarci_runtime_contract": {
+            "required_api": ["anarci", "run_anarci", "validate_sequence", "scheme_short_to_long"],
+            "required_hmm_database": "dat/HMMs/ALL.hmm_with_pressed_indexes",
+            "distribution_metadata_is_not_a_version_gate": True,
+        },
         "immune_builder_local_patch": {
             "patch_id": "openmm_threads_mapping_fix_20260815",
             "file": "/data/software/env/luly25/nanomelt/lib/python3.10/site-packages/ImmuneBuilder/refine.py",

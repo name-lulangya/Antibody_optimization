@@ -16,13 +16,17 @@ from datetime import datetime
 from pathlib import Path
 
 import torch
+import anarci as anarci_module
 from openmm import Platform
 from packaging.version import Version
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "src"))
 from antibody_optimization.file_transaction import replace_staged_files, validate_file_paths  # noqa: E402
-from antibody_optimization.nanomelt_yield import normalize_nanomelt_scores  # noqa: E402
+from antibody_optimization.nanomelt_yield import (  # noqa: E402
+    normalize_nanomelt_scores,
+    verify_anarci_runtime,
+)
 
 
 def main() -> int:
@@ -57,7 +61,6 @@ def main() -> int:
         "torch": torch.__version__,
         "transformers": importlib.metadata.version("transformers"),
         "immune_builder": importlib.metadata.version("ImmuneBuilder"),
-        "anarci": importlib.metadata.version("anarci"),
         "openmm": importlib.metadata.version("OpenMM"),
         "pdbfixer": importlib.metadata.version("pdbfixer"),
     }
@@ -67,6 +70,15 @@ def main() -> int:
             raise ValueError(f"NanoMelt environment version mismatch for {key}: {actual[key]} != {expected_value}")
     if platform.python_version() != expected["python"]:
         raise ValueError(f"NanoMelt Python mismatch: {platform.python_version()} != {expected['python']}")
+    anarci_runtime = verify_anarci_runtime(
+        anarci_module,
+        Path(sys.prefix),
+        expected_conda_version=expected["anarci_bioconda"],
+    )
+    try:
+        anarci_metadata = importlib.metadata.version("anarci")
+    except importlib.metadata.PackageNotFoundError:
+        anarci_metadata = "unavailable"
     refine_text = refine_file.read_text(encoding="utf-8")
     if "platform, {'Threads', str(n_threads)})" in refine_text or "platform, {'Threads': str(n_threads)})" not in refine_text:
         raise ValueError("ImmuneBuilder OpenMM Threads mapping patch is missing")
@@ -124,6 +136,8 @@ def main() -> int:
                 "cuda_device": torch.cuda.get_device_name(0),
                 "torch": torch.__version__,
                 "torch_cuda": torch.version.cuda,
+                "anarci_distribution_metadata": anarci_metadata,
+                "anarci_runtime": anarci_runtime,
                 "openmm_platforms": openmm_platforms,
                 "nb252": {
                     "input_length_aa": len(str(nb252["sequence_raw"])),
