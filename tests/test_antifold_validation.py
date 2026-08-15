@@ -121,3 +121,16 @@ def test_result_gate_requires_all_three_views_for_eight_candidates():
     assert validate_result_gate(evidence, summaries)["status"] == "pass"
     evidence[-1]["evaluation_status"] = "not_evaluable"
     assert validate_result_gate(evidence, summaries)["status"] == "blocked"
+
+
+def test_slurm_enables_nounset_only_outside_conda_activation_hooks():
+    script = (ROOT / "scripts/candidate_design/submit_antifold_validation.slurm").read_text(
+        encoding="utf-8"
+    )
+    assert "set -euo pipefail" not in script
+    first_activate = script.index("conda activate /data/software/env/luly25/antifold")
+    first_nounset = script.index("\nset -u\n")
+    disable_nounset = script.index("\nset +u\n", first_nounset)
+    second_activate = script.index("conda activate /data/software/env/luly25/ab_optim")
+    second_nounset = script.index("\nset -u\n", second_activate)
+    assert first_activate < first_nounset < disable_nounset < second_activate < second_nounset
