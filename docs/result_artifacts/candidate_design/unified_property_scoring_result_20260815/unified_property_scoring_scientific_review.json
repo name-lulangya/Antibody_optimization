@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "review_name": "nb252_unified_single_mutant_property_scoring_scientific_review",
+  "status": "pass",
+  "generated_at": "2026-08-15T21:49:25+08:00",
+  "source_gate": "docs/result_artifacts/candidate_design/unified_property_scoring_result_20260815/unified_property_scoring_gate.json",
+  "source_evidence": "docs/result_artifacts/candidate_design/unified_property_scoring_result_20260815/unified_single_mutant_property_evidence.csv",
+  "coverage": {
+    "candidate_count": 1962,
+    "wt_control_count": 1,
+    "netsolp_pass_count": 1963,
+    "nanomelt_pass_count": 1963,
+    "affinity_track_count": 432,
+    "property_discovery_track_count": 1530
+  },
+  "wt_predictions": {
+    "netsolp_usability": 0.39849445,
+    "netsolp_solubility": 0.5319069,
+    "nanomelt_predicted_apparent_tm_c": 65.18
+  },
+  "all_candidate_distributions": {
+    "median_delta_netsolp_usability": -0.0054475449999999495,
+    "median_delta_netsolp_solubility": -0.0047769499999999,
+    "median_delta_nanomelt_predicted_apparent_tm_c": -0.2600000000000051,
+    "median_experimental_complex_antifold_delta_log_probability": -6.31959919,
+    "all_four_property_directions_positive_count": 17
+  },
+  "all_candidate_spearman_correlations": {
+    "netsolp_usability_vs_netsolp_solubility": 0.291,
+    "netsolp_usability_vs_nanomelt": 0.172,
+    "netsolp_usability_vs_experimental_complex_antifold": 0.318,
+    "netsolp_solubility_vs_nanomelt": 0.052,
+    "netsolp_solubility_vs_experimental_complex_antifold": 0.16,
+    "nanomelt_vs_experimental_complex_antifold": 0.376
+  },
+  "track_review": {
+    "affinity_existing_interface_scan": {
+      "candidate_count": 432,
+      "pareto_front_1_count": 65,
+      "pareto_front_2_count": 154,
+      "all_four_property_directions_positive_count": 12,
+      "all_four_positive_without_new_chemical_risk_count": 9,
+      "all_four_positive_with_both_three_replicate_pyrosetta_medians_favorable_and_no_new_chemical_risk_count": 4,
+      "descriptive_four_signal_and_pyrosetta_ids": [
+        "Nb252_aff_seq045_R45I",
+        "Nb252_aff_seq045_R45P",
+        "Nb252_aff_seq045_R45V",
+        "Nb252_aff_seq098_D98S"
+      ]
+    },
+    "stability_developability_discovery": {
+      "candidate_count": 1530,
+      "pareto_front_1_count": 49,
+      "pareto_front_2_count": 111,
+      "all_four_property_directions_positive_count": 5,
+      "all_four_positive_without_new_chemical_risk_count": 4,
+      "all_four_positive_ids": [
+        "Nb252_uni_seq001_Q1D",
+        "Nb252_uni_seq001_Q1P",
+        "Nb252_uni_seq001_Q1T",
+        "Nb252_uni_seq030_F30D",
+        "Nb252_uni_seq030_F30R"
+      ],
+      "all_four_positive_with_new_chemical_risk_ids": [
+        "Nb252_uni_seq030_F30D"
+      ]
+    }
+  },
+  "chemical_risk_review": {
+    "no_new_flag_count": 1658,
+    "one_flag_count": 300,
+    "two_or_more_flags_count": 4,
+    "flag_counts": {
+      "more_M_or_W": 208,
+      "new_isomerization_motif": 34,
+      "new_deamidation_motif": 34,
+      "new_n_linked_glycosylation_motif": 32
+    }
+  },
+  "affinity_core_review": {
+    "previously_released_core_count": 8,
+    "eligible_and_property_scored_core_count": 7,
+    "blocked_unpaired_cysteine_core_id": "Nb252_aff_seq045_R45C",
+    "only_core_with_all_four_property_directions_positive": "Nb252_aff_seq045_R45V",
+    "core_tradeoff_summary": "The other six eligible cores each have at least one unfavorable NetSolP, NanoMelt, or experimental-complex AntiFold direction; this does not invalidate their affinity evidence but requires explicit multi-objective review."
+  },
+  "verification": {
+    "unique_candidate_ids": 1962,
+    "pareto_recalculation_mismatch_count": 0,
+    "figure_visual_review": "pass"
+  },
+  "scientific_interpretation": [
+    "The median single mutation is unfavorable relative to WT for all four non-PyRosetta property signals, so property improvement is sparse rather than a broad shift.",
+    "Pareto-front membership means non-domination within a track and is not evidence that every property improves; Pareto 1 must not be used as a standalone pass criterion.",
+    "A strictly positive delta is descriptive rather than a calibrated significance threshold, especially for small NetSolP changes; it must not be converted directly into a hard pass rule.",
+    "NetSolP U/S, NanoMelt predicted apparent Tm, and AntiFold fixed-backbone compatibility are model-specific relative signals and are not measured yield, experimental Tm, or affinity.",
+    "The four affinity-track records with favorable four-signal and three-replicate PyRosetta directions are descriptive hypotheses only; R45I, R45P, and D98S have not passed the existing 20-sample affinity-core gate.",
+    "Property-discovery candidates still require developability review and PyRosetta affinity/epitope non-inferiority before combination design."
+  ],
+  "candidate_selection_performed": false,
+  "release": "ready_for_preliminary_property_pool_definition"
+}

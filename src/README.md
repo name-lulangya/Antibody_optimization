@@ -211,6 +211,11 @@
   - 主要输入/返回：统一AntiFold逐候选证据、1963行评分计划、NetSolP/NanoMelt规范分数；返回1962行相对WT的统一性质证据、按轨道/层级计数、gate及600 dpi PNG/SVG。
   - 算法假设：NanoMelt必须为每条128-aa输入保留前126-aa评分域并只裁末端`GS`；界面轨道Pareto同时使用既有PyRosetta双能量，非界面轨道不伪造Rosetta值。所有模型值按相对WT解释，化学风险独立保留，不进入加权总分。
   - 明确不支持：预测yield、把预测Tm称为实验Tm、跨轨道混排不可比候选、以AntiFold单独硬筛、运行TNP、生成双突或选择最终实验序列。
+- `antibody_optimization.unified_tnp_review`与`unified_tnp_plot`
+  - 用途：把49条性质发现Pareto 1、46条非新生Cys的Flex ddG 20样本候选和一个WT冻结为统一TNP复核池，增加U/S/预测Tm的保守幅度标签，并将六项TNP指标和官方flag逐候选与WT比较。
+  - 主要输入/返回：统一性质证据/评分计划、50条Flex ddG生产摘要和2318条统一候选；返回96条评分计划、4条阻断Cys审计记录，以及远程评分后95条候选证据、flag变化摘要、gate和600 dpi PNG/SVG。
+  - 算法假设：U、S、预测Tm相对WT的操作性中性区间分别为`[-0.01,0.01]`、`[-0.02,0.02]`和`[-1,1] °C`，边界计为中性；这些是当前库内幅度分级而非校准误差。完整128-aa输入必须保留末端`SSGS`，TNP模型域必须唯一对应前126 aa并只裁末端`GS`。TNP只提供developability风险证据，官方green/amber/red按相对WT变化保留。
+  - 明确不支持：预测yield、把TNP总分化、按flag简单投票、把49条Pareto 1或46条亲和力复核候选自动选入实验、解除新生未配对Cys阻断，或在本阶段生成组合突变。
 
 ## 第一阶段活动入口
 
@@ -272,3 +277,7 @@
 - `scripts/candidate_design/score_unified_property_netsolp.py`与`score_unified_property_nanomelt.py`：分别在既有工具环境中执行一个1963序列批次，复用通用规范化函数并严格核对ID、完整输入序列和NanoMelt前126-aa评分域；输出保存在ignored结果目录，不执行候选筛选。
 - `scripts/candidate_design/analyze_unified_property_scoring.py`：在项目环境中计算相对WT的`ΔU/ΔS/Δ预测Tm`，联接既有AntiFold/PyRosetta/化学风险，按两条轨道分别计算Pareto 1/2/background并生成紧凑证据、gate和600 dpi PNG/SVG；无加权总分或yield预测。
 - `scripts/candidate_design/submit_unified_property_scoring.sh`及三个`.slurm`：远程唯一提交路线；NetSolP与NanoMelt两个独立`batch`作业并行，均为1 GPU/12 CPU且预计各低于1小时，分析作业通过`afterok`等待两者成功。无数组、checkpoint或断点续传，日志统一写入`logs/unified_property_scoring/`。
+- `scripts/candidate_design/build_unified_tnp_review_plan.py`：本地从49条性质发现Pareto 1和完整50条Flex ddG生产记录建立固定复核池；46条非新生Cys亲和力记录进入评分，4条新生未配对Cys只进入审计，另加入WT，共96条完整128-aa TNP输入。输出合同、CSV/FASTA、审计表、gate和run summary；支持`--check_only`且默认拒绝覆盖。
+- `scripts/candidate_design/score_unified_tnp_candidates.py`：在固定TNP环境中单进程顺序评分96条，运行前只核对一次ImmuneBuilder补丁；逐样本保存官方输出和日志，要求每条模型序列为126 aa且只裁完整输入末端`GS`，96/96成功才通过模型运行门。
+- `scripts/candidate_design/analyze_unified_tnp_review.py`：联接固定计划和96条TNP结果，保留六项原始指标、相对WT差值、官方flag变化及既有U/S/预测Tm、AntiFold和化学风险；输出95条候选证据、摘要、gate和600 dpi PNG/SVG，不预测yield或选择候选。
+- `scripts/candidate_design/submit_unified_tnp_review.sh`与`.slurm`：远程唯一提交路线；单个`batch`作业、1 GPU、12 CPU、2小时上限，96条顺序评分后切换项目环境分析。预计约50–60分钟，不使用数组、checkpoint、resume或既有输出复用；日志写入`logs/unified_tnp_review/`。

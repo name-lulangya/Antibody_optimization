@@ -1,0 +1,88 @@
+{
+  "blocked_audit_ids": [
+    "Nb252_aff_seq037_Y37C",
+    "Nb252_aff_seq045_R45C",
+    "Nb252_aff_seq098_D98C",
+    "Nb252_aff_seq105_E105C"
+  ],
+  "candidate_count": 95,
+  "candidate_selection": false,
+  "candidate_sources": {
+    "affinity_flex_ddg_20_sample_pool": 46,
+    "property_pareto_front_1": 49
+  },
+  "compatibility_constraint": "experimental_complex_context_antifold_delta_log_probability",
+  "contract_name": "nb252_unified_tnp_candidate_review",
+  "execution": {
+    "array": false,
+    "processes": 1,
+    "resume": false,
+    "samples_sequential": 96,
+    "slurm_jobs": 1,
+    "tnp_ncores": 1
+  },
+  "expected_modelled_length_aa": 126,
+  "generated_at": "2026-08-15T22:24:35+08:00",
+  "hydrophobicity_scale": {
+    "argument": 0,
+    "name": "Kyte-Doolittle"
+  },
+  "immune_builder_refine": "/data/software/env/luly25/tnp/lib/python3.10/site-packages/ImmuneBuilder/refine.py",
+  "input_length_aa": 128,
+  "magnitude_threshold_role": "operational_relative_to_scanned_library_not_calibrated_uncertainty",
+  "magnitude_thresholds": {
+    "delta_nanomelt_predicted_apparent_tm_c": {
+      "neutral_inclusive": [
+        -1.0,
+        1.0
+      ]
+    },
+    "delta_netsolp_solubility": {
+      "neutral_inclusive": [
+        -0.02,
+        0.02
+      ]
+    },
+    "delta_netsolp_usability": {
+      "neutral_inclusive": [
+        -0.01,
+        0.01
+      ]
+    }
+  },
+  "planned_count": 96,
+  "primary_property_axes": [
+    "netsolp_usability",
+    "nanomelt_predicted_apparent_tm_c"
+  ],
+  "release": "ready_for_remote_single_process_unified_tnp_review",
+  "remote_entry_point": "/data/software/env/luly25/tnp/bin/TNP",
+  "remote_environment": "/data/software/env/luly25/tnp",
+  "remote_source": "/homes/Tianlab/luly25/software/TNP",
+  "required_pythonpath": "/homes/Tianlab/luly25/software/TNP",
+  "required_trimmed_c_terminal": "GS",
+  "risk_constraints": [
+    "TNP_flags",
+    "chemical_liability_flags"
+  ],
+  "runtime_estimate": {
+    "expected": "approximately 50-60 minutes from the prior 43-sequence real run",
+    "likely_over_five_hours": false,
+    "likely_over_one_hour": false
+  },
+  "schema_version": 1,
+  "software": {
+    "anarci": "2024.05.21",
+    "biopython": "1.77",
+    "dssp": "4.6.1",
+    "immune_builder": "1.2",
+    "openmm": "8.5.2",
+    "tnp": "0.0.1",
+    "tnp_commit": "29dcac72f1380e8538e8870f45a699d3c6156162",
+    "torch": "2.7.1+cu126"
+  },
+  "status": "pass",
+  "supporting_property_axis": "netsolp_solubility",
+  "wt_control_count": 1,
+  "yield_prediction": false
+}

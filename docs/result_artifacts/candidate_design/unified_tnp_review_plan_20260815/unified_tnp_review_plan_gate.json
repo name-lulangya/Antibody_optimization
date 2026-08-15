@@ -1,0 +1,15 @@
+{
+  "blocked_audit_count": 4,
+  "candidate_count": 95,
+  "gate_name": "nb252_unified_tnp_review_plan",
+  "generated_at": "2026-08-15T22:24:35+08:00",
+  "planned_count": 96,
+  "release": "ready_for_remote_single_process_unified_tnp_review",
+  "schema_version": 1,
+  "source_counts": {
+    "affinity_flex_ddg_20_sample_pool": 46,
+    "property_pareto_front_1": 49
+  },
+  "status": "pass",
+  "wt_control_count": 1
+}

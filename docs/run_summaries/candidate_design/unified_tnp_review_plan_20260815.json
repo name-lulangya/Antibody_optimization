@@ -1,0 +1,21 @@
+{
+  "blocked_audit_count": 4,
+  "candidate_count": 95,
+  "elapsed_seconds": 0.065225,
+  "generated_at": "2026-08-15T22:24:35+08:00",
+  "outputs": {
+    "blocked": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\unified_tnp_review_plan_20260815\\unified_tnp_blocked_audit.csv",
+    "contract": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\unified_tnp_review_plan_20260815\\unified_tnp_review_contract.json",
+    "fasta": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\unified_tnp_review_plan_20260815\\unified_tnp_sequences.fasta",
+    "gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\unified_tnp_review_plan_20260815\\unified_tnp_review_plan_gate.json",
+    "samples": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\unified_tnp_review_plan_20260815\\unified_tnp_samples.csv"
+  },
+  "planned_count": 96,
+  "python": "3.11.15",
+  "schema_version": 1,
+  "source_counts": {
+    "affinity_flex_ddg_20_sample_pool": 46,
+    "property_pareto_front_1": 49
+  },
+  "status": "pass"
+}
