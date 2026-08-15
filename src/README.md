@@ -235,5 +235,5 @@
 - `scripts/candidate_design/submit_netsolp_yield_validation.sh`与`.slurm`：远程单任务路线；Slurm固定`batch`、1 GPU、12 CPU、30分钟，评分阶段使用`netsolp`环境、分析阶段切换项目`ab_optim`，日志写入`logs/netsolp_yield_validation/`。预计低于1小时，因此默认拒绝已有输出且不实现断点续传。
 - `scripts/candidate_design/build_tnp_yield_validation_plan.py`：V2本地入口；冻结47条身份及4条不适用原因，只将43条适用序列写入评分FASTA，并记录ImmuneBuilder OpenMM字典补丁、PSH方向、选择偏倚和43/43覆盖门；支持一次`--check_only`并默认拒绝覆盖。
 - `scripts/candidate_design/score_tnp_sequences.py`：在一个进程中按计划顺序逐条调用43条适用序列，评分前一次核对ImmuneBuilder补丁；保留每条原始输出和日志，最终写47行状态表，4条不适用序列不调用TNP且不被混同为运行失败。
-- `scripts/candidate_design/analyze_tnp_yield_validation.py`：联接TNP、表型和已完成NetSolP证据，执行分层相关、PSH bootstrap/permutation、BH-FDR、LLJ有序分析与普通/序列簇外CV增量比较，输出紧凑表、gate、600 dpi PNG/SVG和run summary。
-- `scripts/candidate_design/submit_tnp_yield_validation.sh`与`.slurm`：远程唯一V2路线；一个Slurm作业、一个Python进程顺序处理43条适用序列并逐样本输出进度，不使用数组或TNP多进程。固定`batch`、1 GPU、12 CPU、1小时上限，日志写入`logs/tnp_yield_validation_v2/`；依据V1实测预计20–30分钟，因此不实现断点续传。
+- `scripts/candidate_design/analyze_tnp_yield_validation.py`：联接TNP、表型和已完成NetSolP证据，执行分层相关、PSH bootstrap/permutation、BH-FDR、LLJ有序分析与普通/序列簇外CV增量比较；6行指标表使用固定统一schema，PSH专属重采样/CV字段在其他指标行留空；输出紧凑表、gate、600 dpi PNG/SVG和run summary。
+- `scripts/candidate_design/submit_tnp_yield_validation.sh`与`.slurm`：远程唯一V2路线；一个Slurm作业、一个Python进程顺序处理43条适用序列并逐样本输出进度，不使用数组或TNP多进程。固定`batch`、1 GPU、12 CPU、1小时上限，日志写入`logs/tnp_yield_validation_v2/`；若完整评分CSV和model-run JSON已存在，则跳过已完成推理并交由分析入口重新验证后复用。失败分析留下的空结果父目录可直接复用，但任何已存在的正式结果文件仍阻断覆盖；除此之外不实现一般性断点续传。

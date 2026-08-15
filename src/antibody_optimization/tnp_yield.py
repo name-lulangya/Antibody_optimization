@@ -217,6 +217,16 @@ def analyze_tnp_associations(
     cv_rows = _comparison_cv(numeric)
     primary["loocv_increment_over_provider"] = next(row["increment_over_provider"] for row in cv_rows if row["model"] == "TNP PSH")
     primary["cluster_cv_increment_over_provider"] = next(row["cluster_increment_over_provider"] for row in cv_rows if row["model"] == "TNP PSH")
+    primary_only_fields = (
+        "bootstrap_95ci_low",
+        "bootstrap_95ci_high",
+        "stratified_permutation_p",
+        "loocv_increment_over_provider",
+        "cluster_cv_increment_over_provider",
+    )
+    for row in metrics:
+        for field in primary_only_fields:
+            row.setdefault(field, "")
     level, reasons = _classify_psh(primary)
     return {
         "sample_rows": combined,

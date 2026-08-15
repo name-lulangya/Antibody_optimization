@@ -76,6 +76,21 @@ def test_tnp_analysis_keeps_psh_primary_compares_netsolp_and_renders(tmp_path: P
     assert result["coverage"] == {"planned": 47, "eligible": 43, "not_applicable": 4, "eligible_passed": 43, "numeric_eligible_passed": 27, "llj_eligible_passed": 16}
     assert [row["model"] for row in result["cv_rows"]] == ["Provider only", "NetSolP U", "TNP PSH", "NetSolP U + TNP PSH"]
     assert all("pooled_spearman_bh_fdr" in row for row in result["metric_rows"])
+    primary_only_fields = {
+        "bootstrap_95ci_low",
+        "bootstrap_95ci_high",
+        "stratified_permutation_p",
+        "loocv_increment_over_provider",
+        "cluster_cv_increment_over_provider",
+    }
+    assert all(primary_only_fields <= set(row) for row in result["metric_rows"])
+    assert all(row["bootstrap_95ci_low"] == "" for row in result["metric_rows"] if row["feature"] != "tnp_psh")
+    metrics_csv = tmp_path / "tnp_metrics.csv"
+    with metrics_csv.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(result["metric_rows"][0]), lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(result["metric_rows"])
+    assert len(_csv(metrics_csv)) == len(result["metric_rows"])
     png, svg = tmp_path / "tnp.png", tmp_path / "tnp.svg"
     render_tnp_yield_figure(result["sample_rows"], result["metric_rows"], result["cv_rows"], png_path=png, svg_path=svg)
     assert png.stat().st_size > 1000

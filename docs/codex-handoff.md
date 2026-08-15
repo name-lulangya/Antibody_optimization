@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-14 23:40:00
+Last updated: 2026-08-15 09:55:40
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -19,7 +19,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - NetSolP：`/data/software/env/luly25/netsolp`；官方5.63 GB发行包解压在`/homes/Tianlab/luly25/software/netsolp`。固定从该顶层工作目录调用`predict.py`，使用`MODEL_TYPE=Distilled`、`PREDICTION_TYPE=SU`，以Usability为主指标、Solubility为辅指标；环境快照保存在远程软件目录的`environment.freeze.txt`。官方3序列测试同时完成S/U预测，实测57.812787秒。
 - TNP：`/data/software/env/luly25/tnp`，TNP 0.0.1 commit `29dcac72f1380e8538e8870f45a699d3c6156162`、ImmuneBuilder 1.2、ANARCI 2024.05.21、Biopython 1.77、OpenMM 8.5.2、DSSP 4.6.1、Torch 2.7.1+cu126。固定入口为该环境的`bin/TNP`，并设置`PYTHONPATH=/homes/Tianlab/luly25/software/TNP`。ImmuneBuilder安装版`refine.py`的OpenMM `Threads` set-literal错误已按上游正确dict语义修复并由`LTT__Nb294`失败前/成功后smoke验证；V2评分入口会在运行前核对该补丁。Nb252完整128-aa输入建模126 aa并仅裁掉末端`GS`，不改变authoritative母本或`SSGS`冻结规则。
 - Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；NetSolP真实结果提交`cddc166`已同步。
-- 阶段2的本地阶段0、远程WT安全导入、WT评分校准、456候选全量扫描、post-scan分层、50候选×20样本Flex ddG复核、nanoBERT和NetSolP yield验证均已完成。TNP V1真实运行识别出工具适用域和ImmuneBuilder错误，V2的43条适用序列计划已完成但尚未运行；亲和力组合、AF3候选复核和AntiFold亦未运行。
+- 阶段2的本地阶段0、远程WT安全导入、WT评分校准、456候选全量扫描、post-scan分层、50候选×20样本Flex ddG复核、nanoBERT和NetSolP yield验证均已完成。TNP V1真实运行识别出工具适用域和ImmuneBuilder错误；V2远程评分阶段已由用户报告完成，但结果尚未同步到本地核验，分析阶段因指标CSV schema不统一而停止。修复后会复用既有评分，不得重跑43条TNP；亲和力组合、AF3候选复核和AntiFold亦未运行。
 
 ## Frozen Inputs
 
@@ -69,7 +69,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - nanoBERT—reported yield验证gate为`pass`，但证据等级为`no_supported_use`、release为`nanobert_not_supported_for_candidate_use`。主指标完整reported序列mean PLL在31条LTT/WCC上的来源分层Spearman为-0.2295，长度调整partial Spearman为-0.2020，LTT/WCC内部为-0.2413/0.0602；95% bootstrap CI为[-0.5982, 0.2219]，来源内置换p=0.2799，加入nanoBERT后的LOOCV Spearman增益为-0.0507。16条LLJ有序/删失Kendall tau-b为-0.2308。不得用nanoBERT为Nb252稳定性、表达或候选序列打分/排序。
 - NetSolP—BL21 yield验证gate为`pass`，科学证据等级为`compatibility_filter_only`、release为`netsolp_compatibility_filter_only`。主指标U在31条LTT/WCC上的来源分层Spearman为0.3943、长度调整partial Spearman为0.2858，但LTT/WCC内部为0.4154/-0.1205，95% bootstrap CI为[-0.0665, 0.7478]、来源内置换p=0.05039；普通和leave-cluster-out相对provider-only增益为0.3600/0.2661，但其绝对预测Spearman均仅约0.108。LLJ有序/删失tau-b为-0.1648。U/S只能作为完整候选的辅助相容性信号，不能单独排名、硬过滤或解释为产量；辅助S的跨来源/CV表现更一致，但未经过主指标同等级的预声明重采样门，保持探索性。
 - TNP V1依次尝试47条、实测1416.280578秒，38 pass/9 failed；诊断确认5条触发ImmuneBuilder OpenMM set-literal错误，`LTT__Nb294`补丁后smoke已恢复。另4条WCC为TNP不适用：`WCC__4-1/4-28/4-11`被TNP ANARCI拒绝，`WCC__4-42`被NanoBodyBuilder2判定缺失过多残基；不得补写或改造其真实序列。
-- 活动V2计划位于`tnp_yield_validation_plan_v2_20260814/`：47行保留全部身份和4条不适用原因，只对43条适用序列评分；数值分析为LTT 23+WCC 4共27条，LLJ 16条，适用集合含37个90%序列簇。43/43必须pass；结论仅适用于该子集并明确4条WCC非随机排除偏倚。仍以PSH为唯一主指标，比较provider-only、NetSolP U、TNP PSH及U+PSH；当前尚无V2关联结果。
+- 活动V2计划位于`tnp_yield_validation_plan_v2_20260814/`：47行保留全部身份和4条不适用原因，只对43条适用序列评分；数值分析为LTT 23+WCC 4共27条，LLJ 16条，适用集合含37个90%序列簇。43/43必须pass；结论仅适用于该子集并明确4条WCC非随机排除偏倚。仍以PSH为唯一主指标，比较provider-only、NetSolP U、TNP PSH及U+PSH。分析写出已修正为统一6行指标schema，提交入口在发现完整评分文件时只复用并由分析入口重新验证，不重复推理；当前仍无已同步核验的V2关联结果。
 - `finalize_input_baseline.py` 已用真实 structure mapping/interface 重建 canonical 128 位点图和 `stage1_gate.json`。程序 `status=pass` 不代表科学 release gate 自动通过。
 
 ## Stage-2 Phase 0 Result

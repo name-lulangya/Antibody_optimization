@@ -25,12 +25,16 @@ conda activate /data/software/env/luly25/tnp
 export PATH="/data/software/env/luly25/tnp/bin:${PATH}"
 export PYTHONPATH="${TNP_SOURCE}"
 
-python scripts/candidate_design/score_tnp_sequences.py \
-  --plan-dir "${PLAN_DIR}" \
-  --tnp-source "${TNP_SOURCE}" \
-  --tnp-executable "${TNP_EXECUTABLE}" \
-  --immune-builder-refine "${IMMUNE_BUILDER_REFINE}" \
-  --output-dir "${SCORE_DIR}"
+if [[ -d "${SCORE_DIR}" ]]; then
+  echo "Reusing existing TNP V2 scores; the analysis entry point will validate schema, status, identities, and 43/43 coverage."
+else
+  python scripts/candidate_design/score_tnp_sequences.py \
+    --plan-dir "${PLAN_DIR}" \
+    --tnp-source "${TNP_SOURCE}" \
+    --tnp-executable "${TNP_EXECUTABLE}" \
+    --immune-builder-refine "${IMMUNE_BUILDER_REFINE}" \
+    --output-dir "${SCORE_DIR}"
+fi
 
 conda activate /data/software/env/luly25/ab_optim
 export MPLCONFIGDIR="${TMPDIR:-/tmp}/nb252-matplotlib-${SLURM_JOB_ID}"
