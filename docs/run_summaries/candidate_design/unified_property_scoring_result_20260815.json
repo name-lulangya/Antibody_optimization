@@ -1,0 +1,20 @@
+{
+  "counts": {
+    "candidates": 1962,
+    "tier_rows": 6,
+    "wt_controls": 1
+  },
+  "elapsed_seconds": 3.942599,
+  "generated_at": "2026-08-15T21:17:08+08:00",
+  "outputs": {
+    "evidence": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/unified_property_scoring_result_20260815/unified_single_mutant_property_evidence.csv",
+    "gate": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/unified_property_scoring_result_20260815/unified_property_scoring_gate.json",
+    "png": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/unified_property_scoring_result_20260815/unified_property_scoring.png",
+    "summary": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/unified_property_scoring_result_20260815/unified_property_tier_counts.csv",
+    "svg": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/unified_property_scoring_result_20260815/unified_property_scoring.svg"
+  },
+  "python": "3.11.15",
+  "release": "ready_for_preliminary_property_pool_review",
+  "schema_version": 1,
+  "status": "pass"
+}

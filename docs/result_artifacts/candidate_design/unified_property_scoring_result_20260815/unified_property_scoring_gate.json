@@ -1,0 +1,19 @@
+{
+  "candidate_count": 1962,
+  "candidate_selection_performed": false,
+  "gate_name": "nb252_unified_single_mutant_property_scoring",
+  "generated_at": "2026-08-15T21:17:08+08:00",
+  "interpretation": "Predicted relative property and compatibility evidence only; no measured affinity, stability, expression, Tm, or yield.",
+  "nanomelt_pass_count": 1963,
+  "netsolp_pass_count": 1963,
+  "release": "ready_for_preliminary_property_pool_review",
+  "schema_version": 1,
+  "status": "pass",
+  "track_counts": {
+    "affinity_existing_interface_scan": 432,
+    "stability_developability_discovery": 1530
+  },
+  "weighted_composite_score_used": false,
+  "wt_control_count": 1,
+  "yield_prediction_performed": false
+}
