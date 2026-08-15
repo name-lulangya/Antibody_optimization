@@ -191,6 +191,11 @@
   - 主要输入/返回：保留全部47条身份的V2适用域合同、43条适用序列的TNP结果/模型序列和既有NetSolP U证据；返回47行含4条`not_applicable`的状态证据、6指标相关与BH-FDR、PSH预声明证据门、provider/NetSolP/TNP联合的普通及leave-cluster-out CV比较，以及600 dpi PNG/SVG。
   - 算法假设：PSH是唯一预声明主指标，方向为PSH越高则yield越低；只在43条TNP适用序列中分析，其中27条LTT/WCC数值记录和16条LLJ有序/删失记录。4条WCC不适用是非随机选择，结果不代表原始全部47条；43/43适用序列必须全部通过才放行分析。
   - 明确不支持：把TNP指标解释为实测表达、Tm或mg/L，训练高容量yield模型，或因yield相关性弱就否定TNP自身的developability风险flag。
+- `antibody_optimization.nanomelt_yield`与`nanomelt_yield_plot`
+  - 用途：规范化NanoMelt对47条reported序列的VHH域预测表观Tm，并检验其与BL21 reported yield的来源分层关联、序列簇外增量和Nb252影响敏感性。
+  - 主要输入/返回：固定47行计划和官方NanoMelt批量CSV；返回逐样本原序列/实际评分域/末端裁剪/Tm证据、预声明主统计、普通及90%序列簇外CV、leave-one-out结果、三档证据gate和600 dpi PNG/SVG。
+  - 算法假设：31条LTT/WCC个体近似值用于主要数值分析，16条LLJ仅作有序/删失分析；固定10000次来源分层bootstrap与permutation。评分域必须是对应reported序列中的唯一连续片段；Nb252已知由128 aa输入评分126 aa并固定裁去末端`GS`，该事实不回写或改变authoritative序列。
+  - 明确不支持：把预测表观Tm称为实验Tm、因果表达机制或mg/L预测，修补被工具拒绝的序列，训练47样本高容量模型，或未通过证据门就用Tm单独排序/淘汰候选。
 
 ## 第一阶段活动入口
 
@@ -237,3 +242,7 @@
 - `scripts/candidate_design/score_tnp_sequences.py`：在一个进程中按计划顺序逐条调用43条适用序列，评分前一次核对ImmuneBuilder补丁；保留每条原始输出和日志，最终写47行状态表，4条不适用序列不调用TNP且不被混同为运行失败。
 - `scripts/candidate_design/analyze_tnp_yield_validation.py`：联接TNP、表型和已完成NetSolP证据，执行分层相关、PSH bootstrap/permutation、BH-FDR、LLJ有序分析与普通/序列簇外CV增量比较；6行指标表使用固定统一schema，PSH专属重采样/CV字段在其他指标行留空；输出紧凑表、gate、600 dpi PNG/SVG和run summary。
 - `scripts/candidate_design/submit_tnp_yield_validation.sh`与`.slurm`：远程唯一V2路线；一个Slurm作业、一个Python进程顺序处理43条适用序列并逐样本输出进度，不使用数组或TNP多进程。固定`batch`、1 GPU、12 CPU、1小时上限，日志写入`logs/tnp_yield_validation_v2/`；若完整评分CSV和model-run JSON已存在，则跳过已完成推理并交由分析入口重新验证后复用。失败分析留下的空结果父目录可直接复用，但任何已存在的正式结果文件仍阻断覆盖；除此之外不实现一般性断点续传。
+- `scripts/candidate_design/build_nanomelt_yield_validation_plan.py`：本地冻结47条reported序列、31/16两类表型语义、90%序列簇、NanoMelt环境/调用合同、Nb252末端`GS`裁剪事实及预声明证据门；支持一次只读`--check_only`并默认拒绝覆盖。
+- `scripts/candidate_design/score_nanomelt_sequences.py`：在独立`nanomelt`环境中一次调用官方`nanomelt predict -align -ncpu 1`批量评分47条；运行前核对固定软件版本、OpenMM平台、ImmuneBuilder补丁和GPU可见性，运行后逐条验证ID及评分域到reported序列的唯一映射，不静默修补或丢弃序列。
+- `scripts/candidate_design/analyze_nanomelt_yield_validation.py`：在项目`ab_optim`环境执行来源分层相关、10000次重采样、长度调整、普通/序列簇外CV、LLJ有序分析及Nb252/逐样本影响分析，输出紧凑表、机器gate、600 dpi PNG/SVG和run summary。
+- `scripts/candidate_design/submit_nanomelt_yield_validation.sh`与`.slurm`：远程唯一提交路线；一个`batch`作业、1 GPU、12 CPU、2小时上限，不使用数组或断点续传，日志写入`logs/nanomelt_yield_validation/`。预计约30–90分钟，正式输出已存在时拒绝覆盖。

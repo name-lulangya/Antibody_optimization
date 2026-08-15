@@ -1,0 +1,16 @@
+{
+  "elapsed_seconds": 4.095303,
+  "generated_at": "2026-08-15T15:00:00+08:00",
+  "llj_ordinal_count": 16,
+  "numeric_count": 31,
+  "outputs": {
+    "contract": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\nanomelt_yield_validation_plan_20260815\\nanomelt_yield_validation_contract.json",
+    "fasta": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\nanomelt_yield_validation_plan_20260815\\nanomelt_validation_sequences.fasta",
+    "samples": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\nanomelt_yield_validation_plan_20260815\\nanomelt_validation_samples.csv"
+  },
+  "python": "3.11.15",
+  "sample_count": 47,
+  "schema_version": 1,
+  "sequence_cluster_count_90": 40,
+  "status": "pass"
+}

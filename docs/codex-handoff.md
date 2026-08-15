@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-15 10:08:05
+Last updated: 2026-08-15 15:16:45
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -90,14 +90,14 @@ Timezone: Asia/Shanghai (UTC+08:00)
 8. **Flex ddG生产参数计时pilot（已完成）**：4代表候选×2独立样本共8任务全部pass，累计1.666723 job-hours；单任务中位717.980720秒、P90 874.753734秒，backrub占累计任务时间94.7212%，峰值内存975.65–1000.62 MiB。全部WT/突变映射、断点和二硫键检查通过。两重复只验证生产参数、耗时和协议可行性；代表候选存在样本间能量方向翻转，因此不得用pilot分数排名。
 9. **亲和力严格复核与核心选择（已完成）**：50候选×20样本=1000任务全部pass；随后按唯一双指标18/20方向门从完整50条中选择8个核心单点、覆盖6个位置。该选择不使用加权综合分，仍保留全部50条证据和每个核心的`fa_rep`、接触及prepared风险；当前只释放核心模块使用，不代表8条均等安全，也未生成亲和力双突。
 10. **候选与组合层级（已更新）**：单突是证据模块而非最终设计上限；主要探索CDR3亲和力核心的机制互补双突，必要时保留极少量三突。完整组合逐条重新评价，不把单点REU或性质分数相加。最终30条覆盖不同Pareto权衡并保留少量WT/单突对照。现有FR2界面候选`R45C/R45V`降为高风险单突对照：`R45C`因额外未配对Cys退出主组合，`R45V`因改变VHH hallmark位置不进入常规多突组合。
-11. **工具分工（当前选择）**：AntiFold只评价亲和力候选对既定Nb252结构的条件相容性，不再负责大范围framework突变生成；nanoBERT已退出排序/过滤。NetSolP验证已完成，U/S仅保留为完整候选的辅助相容性证据；TNP已部署并进入47条yield关联验证，之后仍只作为developability风险工具。另选一个VHH专用Tm预测器提供热稳定性证据，同类型工具不重复投票。PyRosetta复核完整亲和力组合，AF3只复核少量终选构象。
+11. **工具分工（当前选择）**：AntiFold只评价亲和力候选对既定Nb252结构的条件相容性，不再负责大范围framework突变生成；nanoBERT已退出排序/过滤。NetSolP U/S仅作完整候选的辅助相容性证据；TNP验证已完成且只保留为developability风险工具。VHH专用Tm路线固定为NanoMelt 1.4.0，不再部署同类型工具重复投票：authoritative 128-aa Nb252 smoke中实际评分126-aa VHH域、裁去不可突变末端`GS`，预测表观Tm为65.18 °C；这只是模型输出，不是实验Tm。47条BL21 yield关联计划已实现，尚待远程真实评分。PyRosetta复核完整亲和力组合，AF3只复核少量终选构象。
 12. **framework政策（当前有效）**：现有81位稳定性/表达合同仅作历史范围记录，当前不生成framework候选。序列复核显示Nb252的完整可比framework在`LTT__Nb232`、`LLJ__2C8`和`LLJ__2H8`中重复出现，多条LTT/LLJ也仅相差1–2个framework残基，支持把它视为现有数据中的高频近公共框架；这不是其为正式通用框架的实验声明。若后续确需补救，只考虑非界面、非VHH hallmark、非CDR支撑网络且有多源证据的少数保守替换，并重新评价亲和力。
 13. **nanoBERT—yield验证（已完成）**：47条真实序列均完成固定revision逐残基single-mask评分；主指标未通过方向、跨来源稳定性、不确定性或LOOCV门，证据等级为`no_supported_use`。全样本合并ρ=0.1887与来源分层ρ=-0.2295方向相反，显示来源混杂；nanoBERT从稳定性/表达候选评价路线中移除，不作为排序或过滤信号。理化特征只产生未校正的探索性关联，当前也不得作为表达优化方向或训练模型依据。
 
 ## Verification
 
 - 阶段0专项：`3 passed`；覆盖真实128位合同、过期哈希拒绝、CSV BOM/LF、拒绝覆盖、固定时间戳双跑六制品逐字节一致。
-- 阶段0图、亲和力候选空间图、post-scan四面板图、ensemble核心图和稳定性/表达合同图均已人工检查，坐标轴、图例和说明无遮挡。当前全套验收为`174 passed, 1 skipped, 4 subtests passed`；唯一skip仍是Windows真实symlink权限测试。
+- 阶段0图、亲和力候选空间图、post-scan四面板图、ensemble核心图和稳定性/表达合同图均已人工检查，坐标轴、图例和说明无遮挡。当前全套验收为`179 passed, 1 skipped, 4 subtests passed`；唯一skip仍是Windows真实symlink权限测试。
 - `pip check`、`python -m compileall -q src scripts tests`、`git diff --check` 均通过。
 - NetSolP真实结果含47条样本、15项指标和完整gate；本地从紧凑样本表重算主指标全部10个关键统计及证据等级，与gate逐项一致。600 dpi PNG已人工检查，四个面板、坐标轴、图例和说明无遮挡。
 - TNP V2真实结果含47条身份、43条pass、4条`not_applicable`、6项指标和4种CV模型；本地从紧凑证据表复算全部关联、5000次bootstrap/permutation及CV，最大差异不超过浮点舍入误差。结果PNG已人工检查，四面板、坐标轴、图例和说明无遮挡。
@@ -110,6 +110,6 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Required Next Steps
 
-1. 逐步部署一个VHH专用Tm预测器；不部署同类型重复工具。
+1. 远程执行`bash scripts/candidate_design/submit_nanomelt_yield_validation.sh`，同步47条真实NanoMelt结果并按预声明的31条数值、16条有序/删失、来源分层、90%序列簇外和Nb252影响门判定其只能用于弱排序、相容性过滤或不支持使用；不得把关联解释为实验Tm、因果关系或mg/L预测。
 2. 建立AntiFold最小评分路线，在WT和现有亲和力核心上验证结构条件相容性；不启动81位framework采样，也不并行部署同类AbMPNN。
 3. 排除`R45C/R45V`常规组合后设计少量机制互补CDR3亲和力双突；对WT、单突和完整组合统一计算亲和力、NetSolP U/S、Tm、TNP、AntiFold与化学风险，再按Pareto关系分层并形成最终30条及必要对照。TNP只比较完整候选是否相对WT出现developability回退，不提供yield排序。
