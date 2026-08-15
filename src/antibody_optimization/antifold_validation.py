@@ -13,7 +13,6 @@ from collections import Counter
 from pathlib import Path
 from typing import Mapping, Sequence
 
-import gemmi
 import numpy as np
 
 
@@ -110,6 +109,8 @@ def prepare_imgt_structure(
     accepted by the released mapping are renumbered; missing experimental
     residues are not created.  Non-polymer residues are removed.
     """
+
+    import gemmi
 
     structure = gemmi.read_structure(str(source_path))
     if len(structure) != 1:

@@ -3,7 +3,10 @@ from __future__ import annotations
 import csv
 import json
 import math
+import os
 from pathlib import Path
+import subprocess
+import sys
 
 import gemmi
 import pytest
@@ -134,3 +137,28 @@ def test_slurm_enables_nounset_only_outside_conda_activation_hooks():
     second_activate = script.index("conda activate /data/software/env/luly25/ab_optim")
     second_nounset = script.index("\nset -u\n", second_activate)
     assert first_activate < first_nounset < disable_nounset < second_activate < second_nounset
+
+
+def test_analysis_helpers_import_without_gemmi_runtime_dependency():
+    code = """
+import builtins
+real_import = builtins.__import__
+def guarded_import(name, *args, **kwargs):
+    if name == 'gemmi':
+        raise ModuleNotFoundError('blocked test dependency: gemmi')
+    return real_import(name, *args, **kwargs)
+builtins.__import__ = guarded_import
+from antibody_optimization.antifold_validation import build_candidate_evidence
+assert callable(build_candidate_evidence)
+"""
+    environment = os.environ.copy()
+    environment["PYTHONPATH"] = str(ROOT / "src")
+    completed = subprocess.run(
+        [sys.executable, "-c", code],
+        cwd=ROOT,
+        env=environment,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert completed.returncode == 0, completed.stderr

@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-15 19:15:00
+Last updated: 2026-08-15 19:33:36
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -20,7 +20,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - TNP：`/data/software/env/luly25/tnp`，TNP 0.0.1 commit `29dcac72f1380e8538e8870f45a699d3c6156162`、ImmuneBuilder 1.2、ANARCI 2024.05.21、Biopython 1.77、OpenMM 8.5.2、DSSP 4.6.1、Torch 2.7.1+cu126。固定入口为该环境的`bin/TNP`，并设置`PYTHONPATH=/homes/Tianlab/luly25/software/TNP`。ImmuneBuilder安装版`refine.py`的OpenMM `Threads` set-literal错误已按上游正确dict语义修复并由`LTT__Nb294`失败前/成功后smoke验证；V2评分入口会在运行前核对该补丁。Nb252完整128-aa输入建模126 aa并仅裁掉末端`GS`，不改变authoritative母本或`SSGS`冻结规则。
 - AntiFold：独立环境`/data/software/env/luly25/antifold`，AntiFold 0.3.1、Torch 2.2.0+cu121、PyG 2.4.0；模型位于`/homes/Tianlab/luly25/software/AntiFold/models/model.pt`。A100模型加载、官方纳米抗体评分及CDR1采样smoke均通过。0.3.1加载器忽略普通`checkpoint_path`，因此环境内固定模型路径使用符号链接，CUDA评分必须`num_threads=0`；完整版本和模型身份只记录在`antifold_validation_plan_20260815/antifold_environment_contract.json`。
 - Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；TNP V2真实结果提交`1a6e908`已同步，当前`HEAD=origin/main`。
-- 阶段2的本地阶段0、远程WT安全导入、WT评分校准、456候选全量扫描、post-scan分层、50候选×20样本Flex ddG复核及三类yield关联验证均已完成。AntiFold环境与官方smoke已通过，项目最小验证计划/派生结构已生成，但Nb252三个真实视图尚未提交远程评分；亲和力组合与AF3终选复核也尚未运行。
+- 阶段2的本地阶段0、远程WT安全导入、WT评分校准、456候选全量扫描、post-scan分层、50候选×20样本Flex ddG复核及三类yield关联验证均已完成。用户提供的远程日志显示AntiFold三个真实WT视图已评分，但结果文件尚未同步到本地复核；随后分析因项目环境缺少Gemmi而在导入阶段退出，无结果制品。共享模块已改为仅在结构准备时导入Gemmi，现有评分可直接进入分析；亲和力组合与AF3终选复核尚未运行。
 
 ## Frozen Inputs
 
@@ -99,7 +99,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 ## Verification
 
 - 阶段0专项：`3 passed`；覆盖真实128位合同、过期哈希拒绝、CSV BOM/LF、拒绝覆盖、固定时间戳双跑六制品逐字节一致。
-- 阶段0图、亲和力候选空间图、post-scan四面板图、ensemble核心图和稳定性/表达合同图均已人工检查，坐标轴、图例和说明无遮挡。当前全套验收为`187 passed, 1 skipped, 4 subtests passed`；新增5项AntiFold计划、映射、ΔlogP与结果门测试，唯一skip仍是Windows真实symlink权限测试。
+- 阶段0图、亲和力候选空间图、post-scan四面板图、ensemble核心图和稳定性/表达合同图均已人工检查，坐标轴、图例和说明无遮挡。当前全套验收为`189 passed, 1 skipped, 4 subtests passed`；AntiFold测试覆盖计划、映射、ΔlogP、结果门、Conda激活与分析无Gemmi导入，唯一skip仍是Windows真实symlink权限测试。
 - `pip check`、`python -m compileall -q src scripts tests`、`git diff --check` 均通过。
 - NetSolP真实结果含47条样本、15项指标和完整gate；本地从紧凑样本表重算主指标全部10个关键统计及证据等级，与gate逐项一致。600 dpi PNG已人工检查，四个面板、坐标轴、图例和说明无遮挡。
 - TNP V2真实结果含47条身份、43条pass、4条`not_applicable`、6项指标和4种CV模型；本地从紧凑证据表复算全部关联、5000次bootstrap/permutation及CV，最大差异不超过浮点舍入误差。结果PNG已人工检查，四面板、坐标轴、图例和说明无遮挡。
@@ -113,7 +113,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Required Next Steps
 
-1. 远程pull后运行`bash scripts/candidate_design/submit_antifold_validation.sh`；该单GPU作业依次评分实验VHH-only、实验complex-context和AF3 VHH，并在项目环境生成8个核心单突的三视图`ΔlogP`、perplexity、方向一致性、gate和图。该阶段不采样新序列、不设AntiFold淘汰阈值。
+1. 远程pull修复后直接在`/data/software/env/luly25/ab_optim`运行`analyze_antifold_validation.py`，复用既有`results/candidate_design/antifold_validation_20260815/model_scores`，生成8个核心单突的三视图`ΔlogP`、perplexity、方向一致性、gate和图；不要重复GPU评分，也不设AntiFold淘汰阈值。
 2. 同步真实结果并复核后建立统一单突评价表：为已有亲和力候选补齐AntiFold、NetSolP、NanoMelt、TNP和化学风险；同时在通过硬约束的FR及非关键CDR位置提出一批有结构/序列依据的稳定性/可开发性单突，并用PyRosetta接触、表位和亲和力非劣门复核。
 3. 从双向过门的单突模块生成亲和力×亲和力、性质×性质和亲和力×性质双突；先对完整组合运行快速统一评分，再只对入围组合运行20构象Flex ddG，必要时以AF3复核少量终选构象。
 4. 按硬约束加Pareto关系形成最终30条：分别标为亲和力优先、稳定性/可开发性优先和平衡组合，保留必要WT/单突对照及全部原始分项，不使用yield综合分，也不把计算类别写成实验改善结论。
