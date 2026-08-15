@@ -1,0 +1,17 @@
+{
+  "candidate_count": 2318,
+  "candidate_selection_performed": false,
+  "eligible_current_round_all_three_views": true,
+  "eligible_current_round_count": 1962,
+  "evaluation_scope_counts": {
+    "af3_only": 247,
+    "three_views": 2071
+  },
+  "gate_name": "nb252_unified_single_mutant_antifold_landscape",
+  "generated_at": "2026-08-15T20:30:10+08:00",
+  "interpretation": "AntiFold structure-conditioned compatibility only; not affinity, stability, expression, yield, or experimental validation.",
+  "release": "ready_for_unified_property_scoring",
+  "schema_version": 1,
+  "scientific_score_threshold_applied": false,
+  "status": "pass"
+}

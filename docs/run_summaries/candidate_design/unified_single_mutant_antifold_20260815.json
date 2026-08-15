@@ -1,0 +1,35 @@
+{
+  "command_argv": [
+    "/data/software/env/luly25/ab_optim/bin/python",
+    "/homes/Tianlab/luly25/Antibody_optimization/scripts/candidate_design/analyze_unified_single_mutant_antifold.py",
+    "--plan-dir",
+    "docs/result_artifacts/candidate_design/unified_single_mutant_plan_20260815",
+    "--antifold-plan-dir",
+    "docs/result_artifacts/candidate_design/antifold_validation_plan_20260815",
+    "--score-dir",
+    "results/candidate_design/antifold_validation_20260815/model_scores",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/unified_single_mutant_antifold_20260815",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/unified_single_mutant_antifold_20260815.json"
+  ],
+  "counts": {
+    "af3_only": 247,
+    "candidates": 2318,
+    "three_views": 2071
+  },
+  "elapsed_seconds": 2.891363,
+  "generated_at": "2026-08-15T20:30:10+08:00",
+  "model_rerun_performed": false,
+  "outputs": {
+    "evidence": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/unified_single_mutant_antifold_20260815/unified_single_mutant_antifold_evidence.csv",
+    "gate": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/unified_single_mutant_antifold_20260815/unified_single_mutant_antifold_gate.json",
+    "png": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/unified_single_mutant_antifold_20260815/unified_single_mutant_antifold.png",
+    "svg": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/unified_single_mutant_antifold_20260815/unified_single_mutant_antifold.svg"
+  },
+  "python": "3.11.15",
+  "release": "ready_for_unified_property_scoring",
+  "schema_version": 1,
+  "source_model_run": "/homes/Tianlab/luly25/Antibody_optimization/results/candidate_design/antifold_validation_20260815/model_scores/antifold_model_run.json",
+  "status": "pass"
+}
