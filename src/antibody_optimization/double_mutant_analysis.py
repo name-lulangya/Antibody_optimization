@@ -13,6 +13,7 @@ import math
 from collections import Counter
 from typing import Mapping, Sequence
 
+from .double_mutant_contacts import audit_paired_contacts
 from .unified_tnp_review import MAGNITUDE_THRESHOLDS, magnitude_label
 
 EXPECTED = 86
@@ -48,7 +49,7 @@ PYROSETTA_SUMMARY_FIELDS = (
 
 
 class DoubleMutantAnalysisError(ValueError):
-    """Raised when complete double-mutant evidence violates the V2 contract."""
+    """Raised when complete double-mutant evidence violates the V2.1 contract."""
 
 
 def build_joint_evidence(
@@ -57,15 +58,18 @@ def build_joint_evidence(
     nanomelt: Sequence[Mapping[str, object]],
     tnp: Sequence[Mapping[str, object]],
     pyrosetta: Sequence[Mapping[str, object]],
+    paired_rows: Sequence[Mapping[str, object]],
+    wt_controls: Sequence[Mapping[str, object]],
     *,
     structural_thresholds: Mapping[str, object],
     expected_replicates: int = 3,
-) -> tuple[list[dict[str, object]], dict[str, object]]:
+) -> tuple[list[dict[str, object]], list[dict[str, object]], dict[str, object]]:
     """Join complete score sets and assign structure-aware evidence classes.
 
-    Contact retention is not required to equal one. Both experimental-reference
-    and paired-WT retention values are compared with the released calibration
-    minima, while interface C-alpha RMSD is compared with its released maximum.
+    Contact retention is not required to equal one. Paired-WT retention and
+    interface C-alpha RMSD form the structural safety gate. Lower absolute
+    experimental-reference retention is retained as a preparation-sensitivity
+    annotation and does not override the multi-objective evidence class.
     """
 
     thresholds = _validated_structural_thresholds(structural_thresholds)
@@ -74,6 +78,15 @@ def build_joint_evidence(
     melt = _unique(nanomelt, "sample_uid", EXPECTED + 1, "NanoMelt")
     tnp_map = _unique(tnp, "sample_uid", EXPECTED + 1, "TNP")
     rose = _unique(pyrosetta, "candidate_id", EXPECTED, "PyRosetta")
+    contact_rows, contact_summaries, contact_facts = audit_paired_contacts(
+        paired_rows,
+        wt_controls,
+        expected_candidate_count=EXPECTED,
+        expected_replicates=expected_replicates,
+    )
+    contact_map = _unique(
+        contact_summaries, "candidate_id", EXPECTED, "paired contact summaries"
+    )
     expected = {WT_ID, *cand}
     if set(net) != expected or set(melt) != expected or set(tnp_map) != expected:
         raise DoubleMutantAnalysisError(
@@ -94,7 +107,9 @@ def build_joint_evidence(
         m = melt[identifier]
         t = tnp_map[identifier]
         r = rose[identifier]
+        contact = contact_map[identifier]
         _validate_pyrosetta_summary(r, expected_replicates)
+        _validate_contact_summary_against_pyrosetta(r, contact)
         if (
             str(n["sequence_raw"]) != str(source["sequence"])
             or str(m["sequence_raw"]) != str(source["sequence"])
@@ -151,6 +166,8 @@ def build_joint_evidence(
         )
         structural_blockers = _structural_blockers(r, thresholds)
         structural_status = "pass" if not structural_blockers else "blocked"
+        sensitivity_reasons = _experimental_reference_sensitivity(r, thresholds)
+        sensitivity_status = "sensitive" if sensitivity_reasons else "not_sensitive"
         classification = (
             pre_structure_class
             if structural_status == "pass"
@@ -212,6 +229,15 @@ def build_joint_evidence(
                 "pyrosetta_structural_safety_blockers": ";".join(
                     structural_blockers
                 ),
+                "experimental_reference_sensitivity_status": sensitivity_status,
+                "experimental_reference_sensitivity_reasons": ";".join(
+                    sensitivity_reasons
+                ),
+                **{
+                    key: value
+                    for key, value in contact.items()
+                    if key not in {"candidate_id", "mutation_reported_label"}
+                },
                 "joint_evidence_class": classification,
                 "final_candidate_selection_performed": False,
             }
@@ -221,9 +247,15 @@ def build_joint_evidence(
     structural_counts = dict(
         Counter(str(row["pyrosetta_structural_safety_status"]) for row in rows)
     )
+    sensitivity_counts = dict(
+        Counter(
+            str(row["experimental_reference_sensitivity_status"]) for row in rows
+        )
+    )
     blocked = structural_counts.get("blocked", 0)
     gate = {
-        "schema_version": 2,
+        "schema_version": 3,
+        "analysis_version": "2.1",
         "gate_name": "nb252_double_mutant_joint_evidence",
         "status": "pass",
         "release": (
@@ -234,9 +266,13 @@ def build_joint_evidence(
         "candidate_count": len(rows),
         "joint_evidence_class_counts": counts,
         "pyrosetta_structural_safety_status_counts": structural_counts,
+        "experimental_reference_sensitivity_status_counts": sensitivity_counts,
+        "paired_contact_audit": contact_facts,
         "structural_safety_thresholds": thresholds,
         "contact_policy": (
-            "calibration_thresholds_not_exact_contact_set_identity"
+            "paired_wt_retention_and_rmsd_primary_gate;"
+            "experimental_reference_retention_is_sensitivity_only;"
+            "exact_contact_identity_not_required"
         ),
         "magnitude_thresholds": {
             "netsolp_usability": 0.01,
@@ -250,13 +286,14 @@ def build_joint_evidence(
             "experimental panel not selected."
         ),
     }
-    return sorted(
+    sorted_rows = sorted(
         rows,
         key=lambda row: (
             str(row["joint_evidence_class"]),
             str(row["candidate_id"]),
         ),
-    ), gate
+    )
+    return sorted_rows, contact_rows, gate
 
 
 def _evidence_class(
@@ -330,14 +367,6 @@ def _structural_blockers(
     rmsd_max = thresholds["maximum_interface_ca_rmsd_angstrom"]
     checks = (
         (
-            float(row["minimum_vhh_contact_retention"]) < vhh_min,
-            "experimental_vhh_contact_retention_below_calibration_minimum",
-        ),
-        (
-            float(row["minimum_receptor_epitope_retention"]) < receptor_min,
-            "experimental_receptor_epitope_retention_below_calibration_minimum",
-        ),
-        (
             float(row["minimum_candidate_vs_paired_wt_vhh_contact_retention"])
             < vhh_min,
             "paired_wt_vhh_contact_retention_below_calibration_minimum",
@@ -356,6 +385,66 @@ def _structural_blockers(
     )
     blockers.extend(reason for failed, reason in checks if failed)
     return blockers
+
+
+def _experimental_reference_sensitivity(
+    row: Mapping[str, object], thresholds: Mapping[str, float]
+) -> list[str]:
+    reasons: list[str] = []
+    if float(row["minimum_vhh_contact_retention"]) < thresholds[
+        "minimum_vhh_contact_retention"
+    ]:
+        reasons.append(
+            "experimental_vhh_contact_retention_below_calibration_minimum"
+        )
+    if float(row["minimum_receptor_epitope_retention"]) < thresholds[
+        "minimum_receptor_epitope_retention"
+    ]:
+        reasons.append(
+            "experimental_receptor_epitope_retention_below_calibration_minimum"
+        )
+    return reasons
+
+
+def _validate_contact_summary_against_pyrosetta(
+    pyrosetta: Mapping[str, object], contact: Mapping[str, object]
+) -> None:
+    if int(contact["replicate_count"]) != int(pyrosetta["replicate_count"]):
+        raise DoubleMutantAnalysisError("Contact-summary replicate count mismatch")
+    paired_vhh = float(
+        pyrosetta["minimum_candidate_vs_paired_wt_vhh_contact_retention"]
+    )
+    paired_receptor = float(
+        pyrosetta[
+            "minimum_candidate_vs_paired_wt_receptor_epitope_retention"
+        ]
+    )
+    if not math.isclose(
+        paired_vhh,
+        float(contact["minimum_recomputed_paired_wt_vhh_contact_retention"]),
+        rel_tol=0,
+        abs_tol=1e-12,
+    ) or not math.isclose(
+        paired_receptor,
+        float(
+            contact[
+                "minimum_recomputed_paired_wt_receptor_epitope_retention"
+            ]
+        ),
+        rel_tol=0,
+        abs_tol=1e-12,
+    ):
+        raise DoubleMutantAnalysisError("Recomputed paired-retention mismatch")
+    vhh_lost = bool(
+        str(contact["paired_wt_vhh_lost_auth_positions_union"]).strip()
+    )
+    receptor_lost = bool(
+        str(contact["paired_wt_receptor_lost_auth_positions_union"]).strip()
+    )
+    if (paired_vhh < 1.0) != vhh_lost:
+        raise DoubleMutantAnalysisError("VHH paired-contact summary mismatch")
+    if (paired_receptor < 1.0) != receptor_lost:
+        raise DoubleMutantAnalysisError("Receptor paired-contact summary mismatch")
 
 
 def _unique(

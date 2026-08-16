@@ -18,5 +18,5 @@ python scripts/candidate_design/analyze_double_mutant_scan.py \
   --plan-dir docs/result_artifacts/candidate_design/double_mutant_plan_20260816 \
   --score-root results/candidate_design/double_mutant_scan_20260816 \
   --calibration-gate docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_v2_20260811/pyrosetta_scoring_calibration_gate.json \
-  --output-dir docs/result_artifacts/candidate_design/double_mutant_scan_review_v2_20260816 \
-  --run-summary docs/run_summaries/candidate_design/double_mutant_scan_review_v2_20260816.json
+  --output-dir docs/result_artifacts/candidate_design/double_mutant_scan_review_v2_1_20260816 \
+  --run-summary docs/run_summaries/candidate_design/double_mutant_scan_review_v2_1_20260816.json

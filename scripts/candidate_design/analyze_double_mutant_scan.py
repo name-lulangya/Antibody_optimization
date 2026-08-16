@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Join complete double-mutant scans with structure-aware V2 evidence."""
+"""Join complete double-mutant scans with paired-WT-aware V2.1 evidence."""
 
 from __future__ import annotations
 
@@ -43,30 +43,34 @@ def main() -> int:
         or calibration.get("pyrosetta_affinity_scoring_release") != "pass"
     ):
         raise ValueError("PyRosetta calibration gate is not released")
-    rows, gate = build_joint_evidence(
+    rows, contact_rows, gate = build_joint_evidence(
         _csv(plan / "double_mutant_candidates.csv"),
         _csv(scores / "netsolp/netsolp_sample_scores.csv"),
         _csv(scores / "nanomelt/nanomelt_sample_scores.csv"),
         _csv(scores / "tnp/tnp_sample_scores.csv"),
         _csv(scores / "pyrosetta/double_mutant_candidate_summary.csv"),
+        _csv(scores / "pyrosetta/double_mutant_candidate_replicates.csv"),
+        _csv(scores / "pyrosetta/double_mutant_wt_controls.csv"),
         structural_thresholds=calibration["thresholds"],
     )
     gate["structural_safety_threshold_source"] = str(calibration_path)
     gate["selected_pyrosetta_protocol"] = calibration["selected_protocol"]
 
     output.mkdir(parents=True)
-    _write_csv(output / "double_mutant_joint_evidence_v2.csv", rows)
-    _write_json(output / "double_mutant_joint_evidence_gate_v2.json", gate)
+    _write_csv(output / "double_mutant_joint_evidence_v2_1.csv", rows)
+    _write_csv(output / "double_mutant_contact_changes_v2_1.csv", contact_rows)
+    _write_json(output / "double_mutant_joint_evidence_gate_v2_1.json", gate)
     _plot(
         rows,
-        output / "double_mutant_joint_evidence_v2.png",
-        output / "double_mutant_joint_evidence_v2.svg",
+        output / "double_mutant_joint_evidence_v2_1.png",
+        output / "double_mutant_joint_evidence_v2_1.svg",
     )
     summary.parent.mkdir(parents=True, exist_ok=True)
     _write_json(
         summary,
         {
-            "schema_version": 2,
+            "schema_version": 3,
+            "analysis_version": "2.1",
             "status": "pass",
             "generated_at": args.generated_at
             or datetime.now().astimezone().isoformat(timespec="seconds"),
@@ -78,6 +82,10 @@ def main() -> int:
             "pyrosetta_structural_safety_status_counts": gate[
                 "pyrosetta_structural_safety_status_counts"
             ],
+            "experimental_reference_sensitivity_status_counts": gate[
+                "experimental_reference_sensitivity_status_counts"
+            ],
+            "paired_contact_audit": gate["paired_contact_audit"],
             "calibration_gate": str(calibration_path),
             "score_root": str(scores),
             "output_dir": str(output),
@@ -129,6 +137,23 @@ def _plot(rows: list[dict[str, object]], png: Path, svg: Path) -> None:
             color=color,
             alpha=0.8,
         )
+        changed = [
+            row
+            for row in selected
+            if row["paired_contact_change_status"] == "changed"
+        ]
+        if changed:
+            axes[0].scatter(
+                [row["pyrosetta_delta_dG_separated_median"] for row in changed],
+                [
+                    row["pyrosetta_delta_cross_interface_energy_median"]
+                    for row in changed
+                ],
+                s=34,
+                facecolors="none",
+                edgecolors="#111111",
+                linewidths=0.8,
+            )
         axes[1].scatter(
             [row["netsolp_delta_usability_vs_wt"] for row in selected],
             [
@@ -139,6 +164,18 @@ def _plot(rows: list[dict[str, object]], png: Path, svg: Path) -> None:
             color=color,
             alpha=0.8,
         )
+        if changed:
+            axes[1].scatter(
+                [row["netsolp_delta_usability_vs_wt"] for row in changed],
+                [
+                    row["nanomelt_delta_predicted_apparent_tm_c_vs_wt"]
+                    for row in changed
+                ],
+                s=34,
+                facecolors="none",
+                edgecolors="#111111",
+                linewidths=0.8,
+            )
     axes[0].axhline(0, color="#555555", lw=0.7)
     axes[0].axvline(0, color="#555555", lw=0.7)
     axes[0].set(
@@ -170,6 +207,25 @@ def _plot(rows: list[dict[str, object]], png: Path, svg: Path) -> None:
         ha="right",
     )
     axes[2].set_ylabel("Candidate count")
+    sensitivity_count = sum(
+        row["experimental_reference_sensitivity_status"] == "sensitive"
+        for row in rows
+    )
+    paired_change_count = sum(
+        row["paired_contact_change_status"] == "changed" for row in rows
+    )
+    axes[2].text(
+        0.98,
+        0.96,
+        (
+            f"Experimental-reference sensitive: {sensitivity_count}\n"
+            f"Paired-contact change: {paired_change_count}"
+        ),
+        transform=axes[2].transAxes,
+        ha="right",
+        va="top",
+        fontsize=8,
+    )
     for ax in axes:
         ax.spines[["top", "right"]].set_visible(False)
     handles, labels = axes[0].get_legend_handles_labels()
@@ -178,8 +234,8 @@ def _plot(rows: list[dict[str, object]], png: Path, svg: Path) -> None:
         0.5,
         0.01,
         (
-            "Predicted ranking/risk evidence only; structural safety uses released "
-            "calibration thresholds, not exact contact identity."
+            "Predicted evidence only; paired-WT retention and RMSD form the safety "
+            "gate. Black rings mark any paired contact-set change."
         ),
         ha="center",
         fontsize=8,

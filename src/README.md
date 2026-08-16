@@ -333,4 +333,5 @@
 - `scripts/candidate_design/score_double_mutant_properties.py`：按`--tool netsolp|nanomelt|tnp`在各自远程环境中评分WT+86条序列；三条路线均要求87/87覆盖且扫描中不筛选。
 - `scripts/candidate_design/score_double_mutants_pyrosetta.py`：以45个不同位置对共享配对WT，在校准实验复合物协议中评分86条双突×3重复；局部可动集合为既有界面与两个突变位点8 Å邻域的并集。
 - `scripts/candidate_design/submit_double_mutant_scan.sh`及四个`.slurm`：并行提交NetSolP、NanoMelt、TNP和PyRosetta四条无筛选扫描；均使用`batch`、1 GPU、12 CPU，日志写入`logs/double_mutant_scan/`。
-- `antibody_optimization.double_mutant_analysis`与`scripts/candidate_design/analyze_double_mutant_scan.py`：V2仅在四条86候选扫描完整后联接相对WT U/S/预测Tm、TNP flag/PSH、双突PyRosetta能量、实验参考及配对WT接触/表位保持、界面Cα RMSD和化学风险。结构安全门从已释放的PyRosetta校准gate读取阈值，不要求接触集合精确一致；幅度分类继续复用U=0.01、S=0.02、预测Tm=1 °C规则。输出保留结构门前类别、结构阻断原因和非最终联合类别，不自动选出最终30条。
+- `antibody_optimization.double_mutant_contacts`：只读取既有258条突变重复和135条位置对WT记录，按`wt_control_id`、重复和seed复算VHH/NK2R配对保持率及逐重复lost/gained source-auth残基；同时产生86条候选汇总和重复一致性，不读取或修改结构、不重新计算几何接触、不筛选候选。
+- `antibody_optimization.double_mutant_analysis`与`scripts/candidate_design/analyze_double_mutant_scan.py`：V2.1仅在四条86候选扫描完整后联接相对WT U/S/预测Tm、TNP flag/PSH、双突PyRosetta能量、实验参考/配对WT接触证据、界面Cα RMSD和化学风险。结构安全主门使用已释放阈值下的配对WT保持率与RMSD；较低实验参考保持率仅标记准备敏感性，不覆盖多目标类别，也不要求接触集合精确一致。输出schema 3的86行联合表、完整258行接触审计、gate和三面板图，不自动选出最终30条。
