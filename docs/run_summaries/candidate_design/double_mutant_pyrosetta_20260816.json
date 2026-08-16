@@ -1,0 +1,13 @@
+{
+  "candidate_count": 86,
+  "candidate_filtering_applied": false,
+  "elapsed_seconds": 12099.791012,
+  "generated_at": "2026-08-16T13:32:57+00:00",
+  "mutant_evaluation_count": 258,
+  "output_dir": "/homes/Tianlab/luly25/Antibody_optimization/results/candidate_design/double_mutant_scan_20260816/pyrosetta",
+  "position_pair_count": 45,
+  "pyrosetta_version": "┌───────────────────────────────────────────────────────────────────────────────┐\n│                                  PyRosetta-4                                  │\n│               Created in JHU by Sergey Lyskov and PyRosetta Team              │\n│               (C) Copyright Rosetta Commons Member Institutions               │\n│                                                                               │\n│ NOTE: USE OF PyRosetta FOR COMMERCIAL PURPOSES REQUIRES PURCHASE OF A LICENSE │\n│          See LICENSE.PyRosetta.md or email license@uw.edu for details         │\n└───────────────────────────────────────────────────────────────────────────────┘\nPyRosetta-4 2026 [Rosetta PyRosetta4.Release.python310.ubuntu 2026.03+releasequarterly.5e498f1409c68ade56c8ce5842bf79e1b02e8db4 2026-01-13T13:24:11] retrieved from: http://www.pyrosetta.org",
+  "python": "3.10.20",
+  "schema_version": 1,
+  "status": "pass"
+}

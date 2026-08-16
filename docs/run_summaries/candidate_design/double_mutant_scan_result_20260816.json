@@ -1,0 +1,11 @@
+{
+  "candidate_count": 86,
+  "elapsed_seconds": 4.177315,
+  "final_candidate_selection_performed": false,
+  "generated_at": "2026-08-16T13:33:05+00:00",
+  "output_dir": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/double_mutant_scan_result_20260816",
+  "python": "3.11.15",
+  "release": "ready_for_post_scan_scientific_review",
+  "schema_version": 1,
+  "status": "pass"
+}

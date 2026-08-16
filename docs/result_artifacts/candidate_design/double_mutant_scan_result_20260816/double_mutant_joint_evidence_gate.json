@@ -1,0 +1,21 @@
+{
+  "candidate_count": 86,
+  "candidate_filtering_applied_during_scoring": false,
+  "final_candidate_selection_performed": false,
+  "gate_name": "nb252_double_mutant_joint_evidence",
+  "interpretation": "Predicted ranking and risk evidence only; final 30-member experimental panel not selected.",
+  "joint_evidence_class_counts": {
+    "affinity_supported_property_nonadverse": 12,
+    "balanced_supported": 28,
+    "property_supported_affinity_nonadverse": 2,
+    "tradeoff_or_no_clear_joint_support": 44
+  },
+  "magnitude_thresholds": {
+    "nanomelt_predicted_tm_c": 1.0,
+    "netsolp_solubility": 0.02,
+    "netsolp_usability": 0.01
+  },
+  "release": "ready_for_post_scan_scientific_review",
+  "schema_version": 1,
+  "status": "pass"
+}
