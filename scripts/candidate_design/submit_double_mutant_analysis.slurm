@@ -14,4 +14,9 @@ source /data/software/anaconda3/etc/profile.d/conda.sh
 conda activate /data/software/env/luly25/ab_optim
 set -u
 export MPLCONFIGDIR="${TMPDIR:-/tmp}/nb252-double-analysis-${SLURM_JOB_ID}"
-python scripts/candidate_design/analyze_double_mutant_scan.py --plan-dir docs/result_artifacts/candidate_design/double_mutant_plan_20260816 --score-root results/candidate_design/double_mutant_scan_20260816 --output-dir docs/result_artifacts/candidate_design/double_mutant_scan_result_20260816 --run-summary docs/run_summaries/candidate_design/double_mutant_scan_result_20260816.json
+python scripts/candidate_design/analyze_double_mutant_scan.py \
+  --plan-dir docs/result_artifacts/candidate_design/double_mutant_plan_20260816 \
+  --score-root results/candidate_design/double_mutant_scan_20260816 \
+  --calibration-gate docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_v2_20260811/pyrosetta_scoring_calibration_gate.json \
+  --output-dir docs/result_artifacts/candidate_design/double_mutant_scan_review_v2_20260816 \
+  --run-summary docs/run_summaries/candidate_design/double_mutant_scan_review_v2_20260816.json

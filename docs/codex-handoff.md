@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-16 21:48:18
+Last updated: 2026-08-16 22:01:47
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -104,16 +104,16 @@ Timezone: Asia/Shanghai (UTC+08:00)
 6. **统一筛选（已完成，本地实测约1.5秒）**：完整456候选按统一规则分为`18/30/39/82/287`，48条Tier 1/2进入严格复核池；未删除候选、未形成最终实验推荐。
 7. **Flex ddG生产参数计时pilot（已完成）**：4代表候选×2独立样本共8任务全部pass，累计1.666723 job-hours；单任务中位717.980720秒、P90 874.753734秒，backrub占累计任务时间94.7212%，峰值内存975.65–1000.62 MiB。全部WT/突变映射、断点和二硫键检查通过。两重复只验证生产参数、耗时和协议可行性；代表候选存在样本间能量方向翻转，因此不得用pilot分数排名。
 8. **亲和力严格复核与证据核心（已完成）**：50候选×20样本=1000任务全部pass；按双指标18/20方向门选择的8条现在明确称为“亲和力证据核心”，不是组合许可。统一安全门将其中7条保留为`single_mutant_test_only`，`R45C`因新增游离Cys硬阻断；没有亲和力证据核心直接成为`combination_ready`。
-9. **完整双突合同与扫描（已完成）**：86条完整128-aa双突已全部通过NetSolP、NanoMelt、TNP和3重复配对PyRosetta评分；PyRosetta完成258次突变体评估、覆盖45个位置对，实测12099.791012秒。扫描阶段未筛选。联合幅度分级得到`balanced_supported/affinity_supported_property_nonadverse/property_supported_affinity_nonadverse/tradeoff_or_no_clear_joint_support=28/12/2/44`；这只是计算证据分层，尚未形成30条实验面板。AntiFold列仍只是两个固定骨架单点log-probability差的数学加和，未重跑双突或评价上位性。NetSolP双突相对单突加和表现出明显非加和残差（ΔU约`-0.0251`至`0.0170`、ΔS约`-0.0521`至`0.0436`），NanoMelt残差较小（约`-0.21`至`0.13 °C`），因此完整双突性质重算是必要的。
+9. **完整双突合同与扫描（已完成；V2联合分析本地实现完成、远程待运行）**：86条完整128-aa双突已全部通过NetSolP、NanoMelt、TNP和3重复配对PyRosetta评分；PyRosetta完成258次突变体评估、覆盖45个位置对，实测12099.791012秒。扫描阶段未筛选。V1联合幅度分级为`28/12/2/44`，只是计算证据分层。V2已实现联接实验参考及配对WT的VHH接触/NK2R表位保持率、界面Cα RMSD和完整重复信息；结构门直接读取已释放校准阈值，不要求接触集合精确一致。远程V2尚未运行，因此当前还没有结构门后的真实类别计数。AntiFold仍只是两个固定骨架单点分数的数学加和，未评价双突上位性。NetSolP非加和残差支持使用完整双突重算值。
 10. **工具分工（当前选择）**：PyRosetta/Flex ddG提供相对亲和力及接触/表位非劣证据；AntiFold评价候选对既定Nb252结构的条件相容性，并可为允许区域的性质候选提供序列先验。NetSolP U/S只作表达/溶解性辅助相容性信号，TNP只作developability风险工具，NanoMelt只提供相对WT的VHH热稳定性预测；三者已验证不能单独或联合承担yield排序。nanoBERT已退出，不训练现有47条数据的Nb252局部产量排序器，也不部署同类型重复工具投票。AF3只复核少量终选完整组合构象。
 11. **framework与硬约束政策（当前有效）**：FR可以提出稳定性/可开发性候选，但不是无约束全扫描。reported positions 125–128的`SSGS`、Cys22–Cys95实验二硫键和实验缺失坐标的首轮结构不可评估状态继续保持；额外未配对Cys、VHH hallmark、CDR支撑网络、核心疏水包装、实验界面和表位变化均作为明确风险或阻断条件。现有81位合同只提供历史范围，47条序列只提供同框架频率和背景先验，不得据此把某个FR替换称为表达因果突变；所有FR候选必须在完整序列上重新评价亲和力和结构安全。
 
 ## Verification
 
-- 最近一次实现验证为`219 passed, 1 skipped, 4 subtests passed`，唯一skip为Windows真实symlink权限测试；`pip check`、Python编译、Bash/Slurm语法及`git diff --check`通过。双突四个评分任务和联合gate均为pass，86条覆盖完整；结果图已人工检查，数据面板清晰，但分类柱图的两个长标签存在视觉拥挤，后续重绘时应缩短标签。
+- 当前全套为`222 passed, 1 skipped, 4 subtests passed`，唯一skip为Windows真实symlink权限测试；V2专项6项通过。Python编译、V2 Slurm语法和`git diff --check`通过。V2绘图已用完整86行合成结构证据执行验证并修复分类标签拥挤；真实V2图要等远程复用原始摘要后生成。
 
 ## Required Next Steps
 
-1. 在远程仅重跑轻量联合分析，不重跑四个评分任务；把现有PyRosetta候选摘要中的配对WT VHH接触保持、NK2R表位保持和最大界面Cα RMSD同步进Git跟踪的联合CSV/gate。当前跟踪制品只有两项能量，不能仅凭联合`pass`释放终选。
-2. 在统一位置对/可动集合/seed合同下，对少量优先组合补做`WT、single A、single B、double AB`四态PyRosetta分解，区分双突能量加和与上位性；不能把既有不同可动集合的单突分数直接相减。同步缩短联合图分类标签。
-3. 综合接触/表位/构象、双突能量、性质幅度、AntiFold先验、TNP和化学风险形成亲和力驱动、性质驱动和组合驱动三类短名单；仅让综合非劣且具有明确收益的少量组合进入AF3完整构象复核，最终形成30条待实验序列，而不是直接取30条计算高分序列。
+1. 提交并推送V2实现后，远程pull并运行`sbatch scripts/candidate_design/submit_double_mutant_analysis.slurm`。该作业只读取既有`results/candidate_design/double_mutant_scan_20260816/`，输出新的`double_mutant_scan_review_v2_20260816/`和轻量run summary；不重跑四个评分任务，预计数分钟。
+2. pull回V2结果后核验86条结构状态、阻断原因、四项保持率、界面RMSD和新图，再形成亲和力驱动、性质驱动和组合驱动三类科学短名单。
+3. 仅当近邻候选选择或机制解释确实需要时，对少量优先组合在统一位置对/可动集合/seed下补做`WT、single A、single B、double AB`四态PyRosetta分解；不对86条普遍重跑。随后仅让综合非劣且具有明确收益的少量组合进入AF3完整构象复核，最终形成30条待实验序列。
