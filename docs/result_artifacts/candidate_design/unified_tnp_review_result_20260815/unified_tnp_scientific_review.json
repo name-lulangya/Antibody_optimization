@@ -1,0 +1,130 @@
+{
+  "candidate_selection_performed": false,
+  "coverage": {
+    "affinity_flex_ddg_20_sample_pool": 46,
+    "candidate_count": 95,
+    "pass_count_including_wt": 96,
+    "property_pareto_front_1": 49,
+    "wt_control_count": 1
+  },
+  "decision": {
+    "release": "ready_for_multitool_shortlist_with_tnp_as_supporting_risk_only",
+    "status": "pass",
+    "tnp_hard_exclusions_added": 0,
+    "tnp_role": "supporting_developability_risk_evidence_not_yield_or_standalone_rank"
+  },
+  "exploratory_spearman_with_delta_psh": {
+    "affinity_flex_ddg_20_sample_pool": {
+      "experimental_complex_context_delta_log_probability": 0.11797718162195497,
+      "nanomelt_delta_predicted_apparent_tm_c_vs_wt": 0.23727141064319623,
+      "netsolp_delta_solubility_vs_wt": -0.1794017884674684,
+      "netsolp_delta_usability_vs_wt": -0.22947887758248536
+    },
+    "interpretation": "Exploratory only; no clear monotonic agreement and no multiple-testing claim.",
+    "property_pareto_front_1": {
+      "experimental_complex_context_delta_log_probability": 0.0873469387755102,
+      "nanomelt_delta_predicted_apparent_tm_c_vs_wt": 0.10633195585043564,
+      "netsolp_delta_solubility_vs_wt": -0.16285714285714284,
+      "netsolp_delta_usability_vs_wt": -0.11591836734693876
+    }
+  },
+  "flag_results": {
+    "all_other_official_flags": "95_of_95_green_and_unchanged_vs_wt",
+    "flag_improvement_count": 21,
+    "flag_improvement_with_material_U_S_or_Tm_adverse_count": 7,
+    "flag_improvement_with_positive_experimental_complex_antifold_count": 5,
+    "flag_improvement_with_zero_chemical_risk_count": 16,
+    "flag_regression_count": 0,
+    "improvement_mechanism": "all_21_are_PSH_amber_to_green",
+    "new_red_flag_count": 0,
+    "no_flag_change_count": 74,
+    "psh_amber_count": 74,
+    "psh_green_count": 21
+  },
+  "magnitude_class_counts": {
+    "multi_signal_favorable": 13,
+    "no_material_change": 30,
+    "single_signal_favorable": 32,
+    "tradeoff_material_adverse": 20
+  },
+  "metric_delta_vs_current_wt": {
+    "tnp_cdr3_compactness": {
+      "maximum": 0.12768860904166268,
+      "median": -0.00707765454176057,
+      "minimum": -0.20240827220634516
+    },
+    "tnp_cdr3_length": {
+      "maximum": 0.0,
+      "median": 0.0,
+      "minimum": 0.0
+    },
+    "tnp_pnc": {
+      "maximum": 0.245,
+      "median": 0.031299999999999994,
+      "minimum": -0.2273
+    },
+    "tnp_ppc": {
+      "maximum": 0.1726,
+      "median": 0.0,
+      "minimum": 0.0
+    },
+    "tnp_psh": {
+      "maximum": 17.741599999999977,
+      "median": 1.0700999999999965,
+      "minimum": -30.237400000000008
+    },
+    "tnp_total_cdr_length": {
+      "maximum": 0.0,
+      "median": 0.0,
+      "minimum": 0.0
+    }
+  },
+  "multitool_support_intersection": {
+    "definition": "at_least_one_material_U_S_or_Tm_improvement_and_no_material_adverse_and_experimental_complex_AntiFold_positive_and_no_chemical_risk",
+    "affinity_candidate_count": 5,
+    "affinity_candidate_ids": [
+      "Nb252_aff_seq045_R45I",
+      "Nb252_aff_seq045_R45L",
+      "Nb252_aff_seq045_R45V",
+      "Nb252_aff_seq101_D101R",
+      "Nb252_aff_seq108_V108Y"
+    ],
+    "affinity_with_tnp_flag_improvement": [
+      "Nb252_aff_seq108_V108Y"
+    ],
+    "interpretation": "Evidence intersection only; the affinity records are not automatically Flex-ddG core candidates.",
+    "property_candidate_count": 9,
+    "property_candidate_ids": [
+      "Nb252_uni_seq001_Q1D",
+      "Nb252_uni_seq005_Q5V",
+      "Nb252_uni_seq030_F30A",
+      "Nb252_uni_seq030_F30K",
+      "Nb252_uni_seq030_F30P",
+      "Nb252_uni_seq030_F30R",
+      "Nb252_uni_seq030_F30S",
+      "Nb252_uni_seq030_F30T",
+      "Nb252_uni_seq055_S55G"
+    ],
+    "property_with_tnp_flag_improvement": [
+      "Nb252_uni_seq001_Q1D",
+      "Nb252_uni_seq030_F30K"
+    ]
+  },
+  "provenance": {
+    "current_evidence": "docs/result_artifacts/candidate_design/unified_tnp_review_result_20260815/unified_tnp_candidate_evidence.csv",
+    "current_gate": "docs/result_artifacts/candidate_design/unified_tnp_review_result_20260815/unified_tnp_review_gate.json",
+    "prior_wt_evidence": "docs/result_artifacts/candidate_design/tnp_yield_validation_result_v2_20260814/tnp_yield_sample_evidence.csv",
+    "reviewed_at": "2026-08-16T11:21:23+08:00"
+  },
+  "schema_version": 1,
+  "wt_run_sensitivity": {
+    "current_wt_inference_method": "exactly_recovered_as_candidate_metric_minus_recorded_delta_for_all_95_rows",
+    "current_wt_psh": 130.9926,
+    "current_wt_psh_flag": "amber",
+    "prior_wt_psh": 136.6287,
+    "prior_wt_psh_flag": "amber",
+    "psh_difference_current_minus_prior": -5.636100000000013,
+    "interpretation": "The same authoritative Nb252 sequence remained amber but its single-run PSH changed materially. Continuous PSH deltas and near-threshold green/amber transitions are supporting evidence only. If TNP affects a final inclusion decision, rerun WT and that small finalist set with replicate modeling rather than rerunning all 95 candidates."
+  },
+  "yield_prediction_performed": false
+}

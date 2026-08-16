@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-15 22:25:20
+Last updated: 2026-08-16 11:21:23
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -19,9 +19,10 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - NetSolP：`/data/software/env/luly25/netsolp`；官方5.63 GB发行包解压在`/homes/Tianlab/luly25/software/netsolp`。固定从该顶层工作目录调用`predict.py`，使用`MODEL_TYPE=Distilled`、`PREDICTION_TYPE=SU`，以Usability为主指标、Solubility为辅指标；环境快照保存在远程软件目录的`environment.freeze.txt`。官方3序列测试同时完成S/U预测，实测57.812787秒。
 - TNP：`/data/software/env/luly25/tnp`，TNP 0.0.1 commit `29dcac72f1380e8538e8870f45a699d3c6156162`、ImmuneBuilder 1.2、ANARCI 2024.05.21、Biopython 1.77、OpenMM 8.5.2、DSSP 4.6.1、Torch 2.7.1+cu126。固定入口为该环境的`bin/TNP`，并设置`PYTHONPATH=/homes/Tianlab/luly25/software/TNP`。ImmuneBuilder安装版`refine.py`的OpenMM `Threads` set-literal错误已按上游正确dict语义修复并由`LTT__Nb294`失败前/成功后smoke验证；V2评分入口会在运行前核对该补丁。Nb252完整128-aa输入建模126 aa并仅裁掉末端`GS`，不改变authoritative母本或`SSGS`冻结规则。
 - AntiFold：独立环境`/data/software/env/luly25/antifold`，AntiFold 0.3.1、Torch 2.2.0+cu121、PyG 2.4.0；模型位于`/homes/Tianlab/luly25/software/AntiFold/models/model.pt`。A100模型加载、官方纳米抗体评分及CDR1采样smoke均通过。0.3.1加载器忽略普通`checkpoint_path`，因此环境内固定模型路径使用符号链接，CUDA评分必须`num_threads=0`；完整版本和模型身份只记录在`antifold_validation_plan_20260815/antifold_environment_contract.json`。
-- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；统一性质评分远程结果提交`38005f2`已拉取，开始本轮复核时`HEAD=origin/main`。
+- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；统一TNP远程结果提交`6c16666`已拉取，开始本轮复核时`HEAD=origin/main`。
 - 统一单突AntiFold复用已完成且gate为`pass/ready_for_unified_property_scoring`：2318条均有记录，1962条本轮候选三视图全部可评价，247条实验缺失坐标候选仅AF3可评价；模型没有重新运行。1962条中66条三视图均为正、1733条均为负、163条方向不一致。界面432条中30条三视图均正，性质发现1530条中36条三视图均正；结合既有20构象严格亲和力门后仍只有R45V和E105L为兼容性方向一致的亲和力核心，没有新增核心。
 - 统一性质评分已远程完成并复核：NetSolP与NanoMelt均为1963/1963 pass，1962条候选无丢失；432条界面轨道分为Pareto 1/2/background=`65/154/213`，1530条性质发现轨道为`49/111/1370`。全体候选在U、S、预测表观Tm和实验复合物AntiFold四个方向同时为正者仅17条；性质发现轨道仅5条，其中`F30D`新增异构化motif，余4条无当前化学风险标记。Pareto表示轨道内非支配关系，不等于所有性质改善或最终入选；无yield预测、加权总分、TNP、双突或最终候选选择。
+- 统一TNP复核已远程完成并复核：WT+95候选为96/96 pass，49条性质来源和46条亲和力来源身份完整；74条官方flag不变、21条改善、0条恶化、0条新增red。21条改善全部是PSH由WT amber变为green，其他5类flag对全部候选均为green且不变。本次WT PSH为130.9926，既有同序列正式运行WT为136.6287，两次均为amber但相差5.6361；因此单次连续PSH及临界flag变化只作辅助风险证据，不单独排序或入选。release为`ready_for_multitool_shortlist_with_tnp_as_supporting_risk_only`。
 
 ## Frozen Inputs
 
@@ -51,7 +52,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Current Gates
 
-- `unified_tnp_review_plan=pass`：固定96条真实评分输入，包括WT、49条性质发现Pareto 1和46条非新生Cys的Flex ddG 20样本候选；另有4条新生未配对Cys仅作审计。release为`ready_for_remote_single_process_unified_tnp_review`，尚未产生TNP候选结果或执行候选选择。
+- `unified_tnp_candidate_review=pass`：固定96条输入全部通过；没有候选因TNP新增硬风险，TNP只作为多工具短名单中的辅助developability风险证据。49条性质来源中9条同时满足“至少一个U/S/Tm非微小改善、无这些指标的明显恶化、实验complex AntiFold为正、无化学风险”，其中`Q1D/F30K`同时出现PSH flag改善；46条亲和力来源中该交集有5条，仅`V108Y`同时出现PSH flag改善。这些是证据交集而非最终候选选择。
 
 - `unified_single_mutant_property_scoring=pass`：NetSolP/NanoMelt覆盖完整，科学复核release为`ready_for_preliminary_property_pool_definition`。既有8个亲和力核心中7个进入本轮评分，`R45C`因新增未配对Cys继续阻断；只有`R45V`在四个性质方向均为正，其他核心保留亲和力证据但存在至少一个性质或兼容性权衡。该gate只允许定义小型复核池，不允许把Pareto 1或任一预测器当成单独淘汰/入选门。
 
@@ -105,7 +106,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Verification
 
-- 阶段0专项：`3 passed`；统一单突专项`4 passed`，覆盖2318条真实空间、456条既有PyRosetta身份复用、缺失坐标/新Cys状态和三视图AntiFold查表门；统一性质评分专项与既有NetSolP/NanoMelt回归共`16 passed`，并真实渲染结果PNG/SVG；统一TNP专项`4 passed`，覆盖真实96条计划、阈值边界、六指标/flag语义、绘图和单进程Slurm合同。当前全套为`201 passed, 1 skipped, 4 subtests passed`。真实性质结果1962个candidate ID唯一，分轨Pareto逐条重算0处不一致，结果图四面板、坐标轴、图例和说明人工检查通过。
+- 阶段0专项：`3 passed`；统一单突专项`4 passed`，覆盖2318条真实空间、456条既有PyRosetta身份复用、缺失坐标/新Cys状态和三视图AntiFold查表门；统一性质评分专项与既有NetSolP/NanoMelt回归共`16 passed`；统一TNP专项`4 passed`，覆盖真实96条计划、阈值边界、六指标/flag语义、绘图和单进程Slurm合同。当前全套为`201 passed, 1 skipped, 4 subtests passed`。统一TNP真实结果95个candidate ID唯一，96/96通过，gate/summary计数和逐行flag变化复算一致，结果图四面板人工检查通过。
 - 阶段0图、亲和力候选空间图、post-scan四面板图、ensemble核心图、稳定性/表达合同图和统一单突/AntiFold图均已人工检查，坐标轴、图例和说明无遮挡。统一结果2318个candidate ID唯一，三视图`ΔlogP`由WT/突变log-probability重算的最大绝对误差为`3.552713678800501e-15`。唯一skip仍是Windows真实symlink权限测试。
 - `pip check`、`python -m compileall -q src scripts tests`、`git diff --check` 均通过。
 - NetSolP真实结果含47条样本、15项指标和完整gate；本地从紧凑样本表重算主指标全部10个关键统计及证据等级，与gate逐项一致。600 dpi PNG已人工检查，四个面板、坐标轴、图例和说明无遮挡。
@@ -120,6 +121,6 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Required Next Steps
 
-1. 远程pull后运行`bash scripts/candidate_design/submit_unified_tnp_review.sh`。固定单任务顺序评价WT+95条候选，预计约50–60分钟；96/96未全部成功则停止，不静默删样本或复用部分输出。
-2. 同步TNP结果后，按U/Tm主要幅度、S辅助幅度、AntiFold相容性、TNP官方flag、化学风险和亲和力证据进行多工具短名单复核；不计算通用总分，也不把TNP解释为yield。随后只对约20–40条性质来源单突补做PyRosetta亲和力、接触和表位非劣检查。
+1. 基于现有95条证据建立不加权的多工具短名单：U和预测Tm为主要性质轴，S为辅助，AntiFold/化学风险/TNP为约束或支持；保留位点多样性，不把F30的多个替换当作独立多样性，也不把21条PSH flag改善直接升级为优选。
+2. 从性质来源短名单中确定约20–40条，补做PyRosetta亲和力、接触和表位非劣检查。只有当TNP结果会改变少量最终入选决定时，才对WT和相关finalist做成组重复TNP建模；无需重跑全部95条。
 3. 从双向过门的单突模块生成亲和力×亲和力、性质×性质和亲和力×性质三类双突并逐条重新评分，最后按硬约束和Pareto关系形成30条实验序列。
