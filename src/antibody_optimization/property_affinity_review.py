@@ -9,6 +9,7 @@ from PyRosetta scores during the scan.
 from __future__ import annotations
 
 from collections import Counter
+import statistics
 from typing import Mapping, Sequence
 
 
@@ -218,6 +219,130 @@ def build_run_gate(
     }
 
 
+def review_completed_scan(
+    *,
+    summary_rows: Sequence[Mapping[str, str]],
+    paired_rows: Sequence[Mapping[str, str]],
+    wt_rows: Sequence[Mapping[str, str]],
+    pilot_summary_rows: Sequence[Mapping[str, str]],
+) -> tuple[list[dict[str, object]], dict[str, object]]:
+    """Recompute and classify the completed 30-candidate paired scan.
+
+    Classification uses energy direction only: ``directionally_favorable``
+    requires negative medians for both interface-energy signals and at least
+    two of three negative replicates for each signal. The symmetric rule marks
+    ``directionally_adverse``; all other patterns are ``mixed``. These labels
+    are computational evidence categories, not affinity measurements or final
+    candidate selection.
+    """
+
+    if len(summary_rows) != POOL_SIZE or len(paired_rows) != POOL_SIZE * REPLICATES:
+        raise PropertyAffinityReviewError("Completed scan must contain 30 summaries and 90 paired rows")
+    if len(wt_rows) != POSITION_COUNT * REPLICATES:
+        raise PropertyAffinityReviewError("Completed scan must contain 30 position-specific WT rows")
+    summaries = _unique(summary_rows, "candidate_id")
+    wt_by_id = _unique(wt_rows, "wt_control_id")
+    grouped: dict[str, list[Mapping[str, str]]] = {}
+    for row in paired_rows:
+        grouped.setdefault(row["candidate_id"], []).append(row)
+    if set(grouped) != set(summaries):
+        raise PropertyAffinityReviewError("Paired and summary candidate identities differ")
+
+    reviewed: list[dict[str, object]] = []
+    for candidate_id, summary in summaries.items():
+        replicates = sorted(grouped[candidate_id], key=lambda row: int(row["replicate"]))
+        if len(replicates) != REPLICATES or {int(row["replicate"]) for row in replicates} != {1, 2, 3}:
+            raise PropertyAffinityReviewError(f"{candidate_id} does not have three unique replicates")
+        delta_dg: list[float] = []
+        delta_cross: list[float] = []
+        lost_receptor: set[int] = set()
+        for row in replicates:
+            wt = wt_by_id.get(row["wt_control_id"])
+            if wt is None:
+                raise PropertyAffinityReviewError(f"Missing paired WT for {candidate_id}")
+            expected_dg = float(row["mutant_dG_separated"]) - float(wt["dG_separated"])
+            expected_cross = float(row["mutant_cross_interface_energy"]) - float(wt["cross_interface_energy"])
+            if abs(expected_dg - float(row["delta_dG_separated"])) > 1e-9 or abs(expected_cross - float(row["delta_cross_interface_energy"])) > 1e-9:
+                raise PropertyAffinityReviewError(f"Stored paired delta mismatch for {candidate_id}")
+            delta_dg.append(expected_dg)
+            delta_cross.append(expected_cross)
+            wt_contacts = _int_set(wt["receptor_contact_auth_positions"])
+            mutant_contacts = _int_set(row["mutant_receptor_contact_auth_positions"])
+            lost_receptor.update(wt_contacts - mutant_contacts)
+        median_dg = statistics.median(delta_dg)
+        median_cross = statistics.median(delta_cross)
+        if abs(median_dg - float(summary["delta_dG_separated_median"])) > 1e-9 or abs(median_cross - float(summary["delta_cross_interface_energy_median"])) > 1e-9:
+            raise PropertyAffinityReviewError(f"Stored summary median mismatch for {candidate_id}")
+        negative_dg = sum(value < 0 for value in delta_dg)
+        negative_cross = sum(value < 0 for value in delta_cross)
+        both_negative = sum(dg < 0 and cross < 0 for dg, cross in zip(delta_dg, delta_cross, strict=True))
+        if median_dg < 0 and median_cross < 0 and negative_dg >= 2 and negative_cross >= 2:
+            direction = "directionally_favorable"
+        elif median_dg > 0 and median_cross > 0 and negative_dg <= 1 and negative_cross <= 1:
+            direction = "directionally_adverse"
+        else:
+            direction = "mixed"
+        antifold = float(summary["experimental_complex_context_delta_log_probability"])
+        intersection = (
+            "rossetta_favorable_antifold_positive"
+            if direction == "directionally_favorable" and antifold > 0
+            else "rossetta_favorable_antifold_nonpositive"
+            if direction == "directionally_favorable"
+            else "not_rossetta_directionally_favorable"
+        )
+        reviewed.append(
+            {
+                **dict(summary),
+                "short_mutation": f"{summary['wt_residue']}{summary['sequence_index_1based']}{summary['mutant_residue']}",
+                "delta_dg_negative_replicate_count": negative_dg,
+                "delta_cross_negative_replicate_count": negative_cross,
+                "both_energy_negative_same_replicate_count": both_negative,
+                "affinity_direction_class": direction,
+                "all_three_replicates_both_energy_negative": both_negative == REPLICATES,
+                "paired_contact_status": "preserved_all" if not lost_receptor else "one_or_more_receptor_contacts_not_retained",
+                "lost_receptor_auth_positions": ";".join(map(str, sorted(lost_receptor))),
+                "antifold_complex_direction": "positive" if antifold > 0 else "negative" if antifold < 0 else "zero",
+                "multitool_intersection_class": intersection,
+                "scientific_selection_performed": False,
+            }
+        )
+    reviewed.sort(key=lambda row: (int(row["sequence_index_1based"]), str(row["mutant_residue"])))
+
+    pilot = _unique(pilot_summary_rows, "candidate_id")
+    comparison_fields = (
+        "delta_dG_separated_median",
+        "delta_cross_interface_energy_median",
+        "delta_interface_fa_rep_median",
+        "minimum_candidate_vs_paired_wt_vhh_contact_retention",
+        "minimum_candidate_vs_paired_wt_receptor_epitope_retention",
+        "maximum_interface_ca_rmsd",
+    )
+    if set(pilot) != set(PILOT_CANDIDATES):
+        raise PropertyAffinityReviewError("Pilot summary identities differ from the fixed pilot")
+    pilot_full_max_difference = max(
+        abs(float(pilot[candidate_id][field]) - float(summaries[candidate_id][field]))
+        for candidate_id in pilot
+        for field in comparison_fields
+    )
+    counts = Counter(str(row["affinity_direction_class"]) for row in reviewed)
+    intersection_counts = Counter(str(row["multitool_intersection_class"]) for row in reviewed)
+    facts = {
+        "candidate_count": len(reviewed),
+        "paired_row_count": len(paired_rows),
+        "wt_control_count": len(wt_rows),
+        "direction_class_counts": dict(counts),
+        "multitool_intersection_counts": dict(intersection_counts),
+        "all_three_both_energy_negative_count": sum(bool(row["all_three_replicates_both_energy_negative"]) for row in reviewed),
+        "paired_contact_preserved_all_count": sum(row["paired_contact_status"] == "preserved_all" for row in reviewed),
+        "minimum_paired_vhh_contact_retention": min(float(row["minimum_candidate_vs_paired_wt_vhh_contact_retention"]) for row in reviewed),
+        "minimum_paired_receptor_contact_retention": min(float(row["minimum_candidate_vs_paired_wt_receptor_epitope_retention"]) for row in reviewed),
+        "maximum_interface_ca_rmsd_angstrom": max(float(row["maximum_interface_ca_rmsd"]) for row in reviewed),
+        "pilot_full_max_absolute_difference": pilot_full_max_difference,
+        "scientific_selection_performed": False,
+    }
+    return reviewed, facts
+
+
 def _unique(rows: Sequence[Mapping[str, str]], key: str) -> dict[str, Mapping[str, str]]:
     result: dict[str, Mapping[str, str]] = {}
     for row in rows:
@@ -226,6 +351,10 @@ def _unique(rows: Sequence[Mapping[str, str]], key: str) -> dict[str, Mapping[st
             raise PropertyAffinityReviewError(f"Duplicate {key}: {value}")
         result[value] = row
     return result
+
+
+def _int_set(value: object) -> set[int]:
+    return {int(item) for item in str(value).split(";") if item}
 
 
 def _pilot_role(candidate_id: str) -> str:

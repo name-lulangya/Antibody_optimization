@@ -1,0 +1,13 @@
+﻿metric,value
+candidate_count,30
+direction_directionally_adverse,9
+direction_directionally_favorable,9
+direction_mixed,12
+all_three_both_energy_negative_count,1
+rossetta_favorable_antifold_positive_count,3
+paired_contact_preserved_all_count,26
+minimum_paired_receptor_contact_retention,0.972972972972973
+maximum_interface_ca_rmsd_angstrom,0.045762549982031456
+pilot_full_max_absolute_difference,0.0
+pilot_elapsed_seconds,1081.568448
+full_scan_elapsed_seconds,3516.793389

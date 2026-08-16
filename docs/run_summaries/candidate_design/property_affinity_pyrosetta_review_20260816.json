@@ -1,0 +1,20 @@
+{
+  "candidate_count": 30,
+  "direction_class_counts": {
+    "directionally_adverse": 9,
+    "directionally_favorable": 9,
+    "mixed": 12
+  },
+  "generated_at": "2026-08-16T14:50:55+08:00",
+  "outputs": [
+    "docs\\result_artifacts\\candidate_design\\property_affinity_pyrosetta_review_20260816\\property_affinity_scientific_review.csv",
+    "docs\\result_artifacts\\candidate_design\\property_affinity_pyrosetta_review_20260816\\property_affinity_scientific_review_summary.csv",
+    "docs\\result_artifacts\\candidate_design\\property_affinity_pyrosetta_review_20260816\\property_affinity_scientific_review.json",
+    "docs\\result_artifacts\\candidate_design\\property_affinity_pyrosetta_review_20260816\\property_affinity_scientific_review.png",
+    "docs\\result_artifacts\\candidate_design\\property_affinity_pyrosetta_review_20260816\\property_affinity_scientific_review.svg"
+  ],
+  "schema_version": 1,
+  "scientific_selection_performed": false,
+  "script": "scripts\\candidate_design\\analyze_property_affinity_pyrosetta.py",
+  "status": "pass"
+}

@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-16 11:59:30
+Last updated: 2026-08-16 14:52:25
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -82,7 +82,8 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - NanoMelt—BL21 yield验证gate为`pass`，科学证据等级为`no_supported_use`、release为`nanomelt_not_supported_for_yield_use`。43条真实评分中27条为LTT/WCC数值记录、16条为LLJ有序/删失记录；分层Spearman为0.0404，95% bootstrap CI为[-0.4329, 0.5511]，置换p=0.8519，LTT/WCC内部为0.0396/0.2108，LLJ tau-b为0.0110。加入Tm后普通/序列簇外CV Spearman为-0.7481/-0.7469，较provider-only进一步降低0.1070/0.2562；不得用NanoMelt预测或排序yield。NanoMelt仍作为独立VHH热稳定性预测器，只在完整候选上相对WT评价，不把预测Tm称为实验Tm或设为产量代理。Nb252预测表观Tm为65.18 °C，在43条中处于18.6百分位。
 - `finalize_input_baseline.py` 已用真实 structure mapping/interface 重建 canonical 128 位点图和 `stage1_gate.json`。程序 `status=pass` 不代表科学 release gate 自动通过。
 
-- `property_affinity_review_plan=pass/ready_for_property_affinity_pyrosetta_pilot`：已固定30条性质复核候选（10个位点）和6条仅用于协议/耗时验证的pilot；池规则不使用AntiFold或TNP硬淘汰。专用PyRosetta入口以`--run-kind pilot|full_scan`共用实现；完整扫描固定30条×3重复，扫描过程中不筛选。远程计算尚未运行。
+- 性质候选专用PyRosetta的pilot与完整扫描均已完成：pilot 6条×3重复、实测1081.568448秒；完整扫描30条×3重复、10个位点各3个位置特异WT、实测3516.793389秒。30条/90个配对结果均完整且扫描中未筛选，共同6条候选在pilot/full的汇总数值最大绝对差为0。独立复算得到方向一致有利/混合/方向一致不利=`9/12/9`；9条为`Q1D/Q3Y/Q5A/F30A/F30P/F30Q/S62D/K86S/K86T`，其中只有`Q1D`在3/3重复中两项能量同时为负。该方向分类不设REU效应阈值，也不代表实验亲和力或最终入选。
+- 30条中26条在三个配对重复中完整保持既定VHH/NK2R接触；`Q5V`丢失NK2R auth 106，`K86A/K86S/K86T`在部分或全部重复中丢失NK2R auth 37。VHH接触最低保持率为1.0、NK2R为0.972973，最大界面Cα RMSD为0.045763 Å。方向一致有利且实验complex AntiFold `ΔlogP>0`的交集只有`Q1D/F30A/F30P`；这是跨工具方向交集，不是最终实验序列选择。科学review release为`ready_for_property_module_shortlist_review`。
 
 ## Stage-2 Phase 0 Result
 
@@ -108,7 +109,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Verification
 
-- 阶段0专项：`3 passed`；统一单突专项`4 passed`，覆盖2318条真实空间、456条既有PyRosetta身份复用、缺失坐标/新Cys状态和三视图AntiFold查表门；统一性质评分专项与既有NetSolP/NanoMelt回归共`16 passed`；统一TNP专项`4 passed`，覆盖真实96条计划、阈值边界、六指标/flag语义、绘图和单进程Slurm合同。当前全套为`201 passed, 1 skipped, 4 subtests passed`。统一TNP真实结果95个candidate ID唯一，96/96通过，gate/summary计数和逐行flag变化复算一致，结果图四面板人工检查通过。
+- 阶段0专项：`3 passed`；统一单突专项`4 passed`，覆盖2318条真实空间、456条既有PyRosetta身份复用、缺失坐标/新Cys状态和三视图AntiFold查表门；统一性质评分专项与既有NetSolP/NanoMelt回归共`16 passed`；统一TNP专项`4 passed`。性质候选PyRosetta科学review专项为`6 passed`，覆盖真实30条/90配对/30 WT、pilot/full精确一致性、接触差异、方向分类及PNG/SVG渲染。当前全套为`207 passed, 1 skipped, 4 subtests passed`；唯一skip仍为Windows真实symlink权限测试。
 - 阶段0图、亲和力候选空间图、post-scan四面板图、ensemble核心图、稳定性/表达合同图和统一单突/AntiFold图均已人工检查，坐标轴、图例和说明无遮挡。统一结果2318个candidate ID唯一，三视图`ΔlogP`由WT/突变log-probability重算的最大绝对误差为`3.552713678800501e-15`。唯一skip仍是Windows真实symlink权限测试。
 - `pip check`、`python -m compileall -q src scripts tests`、`git diff --check` 均通过。
 - NetSolP真实结果含47条样本、15项指标和完整gate；本地从紧凑样本表重算主指标全部10个关键统计及证据等级，与gate逐项一致。600 dpi PNG已人工检查，四个面板、坐标轴、图例和说明无遮挡。
@@ -123,6 +124,6 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Required Next Steps
 
-1. `property_affinity_review_plan_20260816/`已固定30条性质复核池（10个位点）和6条协议pilot。先在远程运行`bash scripts/candidate_design/submit_property_affinity_pyrosetta.sh pilot`；该pilot只验证新局部协议、结构安全与耗时，不筛选候选。
-2. pilot gate为`pass/ready_for_full_property_affinity_scan`后，运行同一入口的`full_scan`模式完成30条×3重复；每个位点使用“校准界面邻域∪突变8 Å邻域”，该位点WT与突变体共享掩码和seed，跨位点不共享WT。完整扫描中不删候选，结果统一用于亲和力、接触与表位非劣复核。
-3. 再从双向过门的单突模块生成亲和力×亲和力、性质×性质和亲和力×性质三类双突并逐条重新评分，最后按硬约束和Pareto关系形成30条实验序列。
+1. 对9条PyRosetta方向一致有利的性质模块做短名单审阅。优先检查跨工具方向交集`Q1D/F30A/F30P`；`F30Q`的AntiFold变化接近零而PyRosetta跨界面能方向较好，可作次级模块；`Q3Y/Q5A/S62D/K86S/K86T`存在AntiFold负向权衡，且`K86S/K86T`另有NK2R auth 37接触变化，不能自动升级。该步骤应保留U/S/预测Tm/TNP/化学风险全列并明确硬约束与软证据，不使用简单投票。
+2. 将通过审阅的性质模块与既有8个亲和力核心放入统一模块表，排除同位点互斥和已知硬阻断，保留来源类别、表位/接触、结构相容性和性质幅度。先确定可组合模块，不直接把单突分数相加。
+3. 再从双向过门的单突模块生成亲和力×亲和力、性质×性质和亲和力×性质三类双突并逐条重新评分，随后才按硬约束和Pareto关系形成30条实验序列；少量完整组合再用AF3复核构象。

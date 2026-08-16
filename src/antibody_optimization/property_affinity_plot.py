@@ -89,6 +89,133 @@ def render_scoring(rows: Sequence[Mapping[str, object]], png: Path, svg: Path, r
     _normalize_svg(svg)
 
 
+def render_scientific_review(
+    rows: Sequence[Mapping[str, object]], png: Path, svg: Path
+) -> None:
+    """Render the completed scan direction classes and multi-tool intersection."""
+
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from matplotlib.lines import Line2D
+
+    colors = {
+        "directionally_favorable": "#2a9d8f",
+        "mixed": "#8d99ae",
+        "directionally_adverse": "#e76f51",
+    }
+    favorable = [
+        row for row in rows if row["affinity_direction_class"] == "directionally_favorable"
+    ]
+    favorable.sort(
+        key=lambda row: float(row["delta_dG_separated_median"])
+        + float(row["delta_cross_interface_energy_median"])
+    )
+    labels = [
+        str(row["short_mutation"])
+        + ("*" if row["paired_contact_status"] != "preserved_all" else "")
+        for row in favorable
+    ]
+
+    fig = plt.figure(figsize=(14.2, 6.5))
+    grid = fig.add_gridspec(1, 3, width_ratios=(1.2, 0.85, 0.9), wspace=0.42)
+    ax_energy = fig.add_subplot(grid[0, 0])
+    for row in rows:
+        category = str(row["affinity_direction_class"])
+        ax_energy.scatter(
+            float(row["delta_dG_separated_median"]),
+            float(row["delta_cross_interface_energy_median"]),
+            color=colors[category],
+            s=42,
+            alpha=0.9,
+            edgecolor="white",
+            linewidth=0.5,
+        )
+    ax_energy.axhline(0, color="#555555", lw=0.8)
+    ax_energy.axvline(0, color="#555555", lw=0.8)
+    ax_energy.set_xlabel("Median delta dG_separated (mutant - paired WT, REU)")
+    ax_energy.set_ylabel("Median delta cross-interface energy (REU)")
+    ax_energy.set_title("A  Paired PyRosetta direction classes")
+    ax_energy.legend(
+        handles=[
+            Line2D([0], [0], marker="o", linestyle="", color=colors[key], label=label)
+            for key, label in (
+                ("directionally_favorable", "Both favorable: 9"),
+                ("mixed", "Mixed: 12"),
+                ("directionally_adverse", "Both adverse: 9"),
+            )
+        ],
+        loc="upper left",
+        frameon=False,
+        fontsize=8,
+    )
+
+    ax_property = fig.add_subplot(grid[0, 1])
+    property_values = np.array(
+        [
+            [
+                float(row["netsolp_delta_usability_vs_wt"]) / 0.01,
+                float(row["netsolp_delta_solubility_vs_wt"]) / 0.02,
+                float(row["nanomelt_delta_predicted_apparent_tm_c_vs_wt"]) / 1.0,
+            ]
+            for row in favorable
+        ]
+    )
+    image = ax_property.imshow(
+        np.clip(property_values, -3, 3),
+        aspect="auto",
+        cmap="RdBu_r",
+        vmin=-3,
+        vmax=3,
+    )
+    ax_property.set_xticks(range(3), ["delta U / 0.01", "delta S / 0.02", "delta Tm / 1 deg C"])
+    ax_property.tick_params(axis="x", labelrotation=24, labelsize=8)
+    for tick in ax_property.get_xticklabels():
+        tick.set_horizontalalignment("right")
+    ax_property.set_yticks(range(len(labels)), labels, fontsize=8)
+    ax_property.set_title("B  Property signals in 9-candidate set")
+    colorbar = fig.colorbar(image, ax=ax_property, fraction=0.05, pad=0.04)
+    colorbar.set_label("Change / magnitude threshold (clipped +/-3)", fontsize=8)
+
+    ax_antifold = fig.add_subplot(grid[0, 2])
+    antifold = [
+        float(row["experimental_complex_context_delta_log_probability"])
+        for row in favorable
+    ]
+    bar_colors = ["#2a9d8f" if value > 0 else "#f4a261" for value in antifold]
+    y = np.arange(len(labels))
+    ax_antifold.barh(y, antifold, color=bar_colors)
+    ax_antifold.axvline(0, color="#555555", lw=0.8)
+    ax_antifold.set_xlim(min(antifold) - 2.0, max(antifold) + 2.0)
+    ax_antifold.set_yticks(y, labels, fontsize=8)
+    ax_antifold.invert_yaxis()
+    ax_antifold.set_xlabel("AntiFold delta logP, experimental complex")
+    ax_antifold.set_title("C  Structure-conditioned compatibility")
+    for index, value in enumerate(antifold):
+        ax_antifold.text(
+            value + (0.12 if value >= 0 else -0.12),
+            index,
+            f"{value:.2f}",
+            va="center",
+            ha="left" if value >= 0 else "right",
+            fontsize=7,
+        )
+
+    fig.suptitle("Nb252 property-candidate PyRosetta scientific review", fontsize=14)
+    fig.text(
+        0.5,
+        0.012,
+        "* one receptor contact was not retained in at least one replicate. "
+        "All values are computational ranking signals; no experimental affinity or final selection is claimed.",
+        ha="center",
+        fontsize=8,
+    )
+    fig.subplots_adjust(top=0.88, bottom=0.14, left=0.07, right=0.98)
+    fig.savefig(png, dpi=600, bbox_inches="tight")
+    fig.savefig(svg, bbox_inches="tight")
+    plt.close(fig)
+    _normalize_svg(svg)
+
+
 def _normalize_svg(path: Path) -> None:
     """Remove Matplotlib path-data line-end spaces for Git-clean SVG output."""
 

@@ -12,8 +12,9 @@ from antibody_optimization.property_affinity_review import (
     build_review_pool,
     build_run_gate,
     combine_movable_indices,
+    review_completed_scan,
 )
-from antibody_optimization.property_affinity_plot import render_scoring
+from antibody_optimization.property_affinity_plot import render_scientific_review, render_scoring
 
 
 def _csv(path: Path):
@@ -97,5 +98,33 @@ def test_scoring_figure_renders(tmp_path):
     png = tmp_path / "result.png"
     svg = tmp_path / "result.svg"
     render_scoring(rows, png, svg, "pilot")
+    assert png.stat().st_size > 10_000
+    assert "<svg" in svg.read_text(encoding="utf-8")[:500]
+
+
+def test_real_completed_scan_review_is_recomputed_and_classified(tmp_path):
+    full = ROOT / "docs/result_artifacts/candidate_design/property_affinity_pyrosetta_full_scan_20260816"
+    pilot = ROOT / "docs/result_artifacts/candidate_design/property_affinity_pyrosetta_pilot_20260816"
+    rows, facts = review_completed_scan(
+        summary_rows=_csv(full / "property_affinity_candidate_summary.csv"),
+        paired_rows=_csv(full / "property_affinity_candidate_replicates.csv"),
+        wt_rows=_csv(full / "property_affinity_wt_controls.csv"),
+        pilot_summary_rows=_csv(pilot / "property_affinity_candidate_summary.csv"),
+    )
+    assert facts["direction_class_counts"] == {
+        "directionally_favorable": 9,
+        "directionally_adverse": 9,
+        "mixed": 12,
+    }
+    assert facts["pilot_full_max_absolute_difference"] == 0
+    assert facts["all_three_both_energy_negative_count"] == 1
+    assert facts["paired_contact_preserved_all_count"] == 26
+    favorable = {row["short_mutation"] for row in rows if row["affinity_direction_class"] == "directionally_favorable"}
+    assert favorable == {"Q1D", "Q3Y", "Q5A", "F30A", "F30P", "F30Q", "S62D", "K86S", "K86T"}
+    intersections = {row["short_mutation"] for row in rows if row["multitool_intersection_class"] == "rossetta_favorable_antifold_positive"}
+    assert intersections == {"Q1D", "F30A", "F30P"}
+    png = tmp_path / "review.png"
+    svg = tmp_path / "review.svg"
+    render_scientific_review(rows, png, svg)
     assert png.stat().st_size > 10_000
     assert "<svg" in svg.read_text(encoding="utf-8")[:500]

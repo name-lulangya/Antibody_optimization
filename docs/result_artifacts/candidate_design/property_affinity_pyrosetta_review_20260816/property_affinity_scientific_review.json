@@ -1,0 +1,91 @@
+{
+  "classification_rule": {
+    "directionally_adverse": "both median deltas > 0 and each metric is < 0 in at most 1 of 3 replicates",
+    "directionally_favorable": "both median deltas < 0 and each metric is < 0 in at least 2 of 3 replicates",
+    "mixed": "all remaining sign patterns",
+    "threshold_note": "direction-only descriptive classes; no REU effect-size or experimental non-inferiority threshold is claimed"
+  },
+  "decision": {
+    "allowed_use": "review the 9 directionally favorable property modules and their independent AntiFold/property/contact tradeoffs",
+    "candidate_filtering_performed": false,
+    "disallowed_use": "claim measured affinity, convert REU to KD, or treat the 9 candidates as final experimental selections",
+    "scientific_selection_performed": false
+  },
+  "generated_at": "2026-08-16T14:50:55+08:00",
+  "provenance": {
+    "analysis_script": "scripts\\candidate_design\\analyze_property_affinity_pyrosetta.py",
+    "full_result_dir": "docs\\result_artifacts\\candidate_design\\property_affinity_pyrosetta_full_scan_20260816",
+    "pilot_result_dir": "docs\\result_artifacts\\candidate_design\\property_affinity_pyrosetta_pilot_20260816",
+    "score_function": "ref2015",
+    "score_semantics": "mutant_minus_position_specific_paired_WT_Rosetta_ranking_signal",
+    "selected_protocol": "interface_repack_constrained_min"
+  },
+  "release": "ready_for_property_module_shortlist_review",
+  "results": {
+    "all_three_replicates_both_energy_negative_candidates": [
+      "Q1D"
+    ],
+    "contact_change_candidates": [
+      {
+        "lost_receptor_auth_positions": "106",
+        "mutation": "Q5V"
+      },
+      {
+        "lost_receptor_auth_positions": "37",
+        "mutation": "K86A"
+      },
+      {
+        "lost_receptor_auth_positions": "37",
+        "mutation": "K86S"
+      },
+      {
+        "lost_receptor_auth_positions": "37",
+        "mutation": "K86T"
+      }
+    ],
+    "directionally_favorable_candidates": [
+      "Q1D",
+      "Q3Y",
+      "Q5A",
+      "F30A",
+      "F30P",
+      "F30Q",
+      "S62D",
+      "K86S",
+      "K86T"
+    ],
+    "rossetta_favorable_antifold_positive_candidates": [
+      "Q1D",
+      "F30A",
+      "F30P"
+    ]
+  },
+  "runtime": {
+    "full_scan_elapsed_seconds": 3516.793389,
+    "pilot_elapsed_seconds": 1081.568448
+  },
+  "schema_version": 1,
+  "status": "pass",
+  "validation": {
+    "all_three_both_energy_negative_count": 1,
+    "candidate_count": 30,
+    "direction_class_counts": {
+      "directionally_adverse": 9,
+      "directionally_favorable": 9,
+      "mixed": 12
+    },
+    "maximum_interface_ca_rmsd_angstrom": 0.045762549982031456,
+    "minimum_paired_receptor_contact_retention": 0.972972972972973,
+    "minimum_paired_vhh_contact_retention": 1.0,
+    "multitool_intersection_counts": {
+      "not_rossetta_directionally_favorable": 21,
+      "rossetta_favorable_antifold_nonpositive": 6,
+      "rossetta_favorable_antifold_positive": 3
+    },
+    "paired_contact_preserved_all_count": 26,
+    "paired_row_count": 90,
+    "pilot_full_max_absolute_difference": 0.0,
+    "scientific_selection_performed": false,
+    "wt_control_count": 30
+  }
+}
