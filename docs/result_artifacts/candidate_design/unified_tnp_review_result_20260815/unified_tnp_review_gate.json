@@ -1,0 +1,20 @@
+{
+  "candidate_count": 95,
+  "candidate_selection_performed": false,
+  "flag_regression_count": 0,
+  "gate_name": "nb252_unified_tnp_candidate_review",
+  "generated_at": "2026-08-15T15:48:07+00:00",
+  "interpretation": "TNP developability risk relative to WT; not measured expression, yield, affinity, or a standalone selection score.",
+  "new_red_flag_candidate_count": 0,
+  "pass_count": 96,
+  "planned_count": 96,
+  "release": "ready_for_magnitude_aware_multitool_shortlisting",
+  "schema_version": 1,
+  "source_counts": {
+    "affinity_flex_ddg_20_sample_pool": 46,
+    "property_pareto_front_1": 49
+  },
+  "status": "pass",
+  "wt_control_count": 1,
+  "yield_prediction_performed": false
+}

@@ -1,0 +1,24 @@
+{
+  "candidate_count": 95,
+  "candidate_selection_performed": false,
+  "elapsed_seconds": 3.848849,
+  "flag_regression_count": 0,
+  "generated_at": "2026-08-15T15:48:07+00:00",
+  "new_red_flag_candidate_count": 0,
+  "outputs": {
+    "evidence": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/unified_tnp_review_result_20260815/unified_tnp_candidate_evidence.csv",
+    "gate": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/unified_tnp_review_result_20260815/unified_tnp_review_gate.json",
+    "png": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/unified_tnp_review_result_20260815/unified_tnp_review.png",
+    "summary_table": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/unified_tnp_review_result_20260815/unified_tnp_review_summary.csv",
+    "svg": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/unified_tnp_review_result_20260815/unified_tnp_review.svg"
+  },
+  "planned_count": 96,
+  "python": "3.11.15",
+  "schema_version": 1,
+  "source_counts": {
+    "affinity_flex_ddg_20_sample_pool": 46,
+    "property_pareto_front_1": 49
+  },
+  "status": "pass",
+  "yield_prediction_performed": false
+}
