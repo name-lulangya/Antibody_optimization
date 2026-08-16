@@ -1,0 +1,32 @@
+{
+  "candidate_count": 86,
+  "candidate_filtering_applied_during_scoring": false,
+  "contact_policy": "calibration_thresholds_not_exact_contact_set_identity",
+  "final_candidate_selection_performed": false,
+  "gate_name": "nb252_double_mutant_joint_evidence",
+  "interpretation": "Predicted ranking and risk evidence only; final 30-member experimental panel not selected.",
+  "joint_evidence_class_counts": {
+    "balanced_supported": 8,
+    "structural_safety_review_required": 57,
+    "tradeoff_or_no_clear_joint_support": 21
+  },
+  "magnitude_thresholds": {
+    "nanomelt_predicted_tm_c": 1.0,
+    "netsolp_solubility": 0.02,
+    "netsolp_usability": 0.01
+  },
+  "pyrosetta_structural_safety_status_counts": {
+    "blocked": 57,
+    "pass": 29
+  },
+  "release": "ready_for_structure_aware_scientific_review",
+  "schema_version": 2,
+  "selected_pyrosetta_protocol": "interface_repack_constrained_min",
+  "status": "pass",
+  "structural_safety_threshold_source": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_v2_20260811/pyrosetta_scoring_calibration_gate.json",
+  "structural_safety_thresholds": {
+    "maximum_interface_ca_rmsd_angstrom": 0.5,
+    "minimum_receptor_epitope_retention": 0.9,
+    "minimum_vhh_contact_retention": 0.8
+  }
+}
