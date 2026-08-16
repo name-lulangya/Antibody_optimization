@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-16 23:24:34
+Last updated: 2026-08-16 23:48:51
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -19,7 +19,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - NetSolP：`/data/software/env/luly25/netsolp`；官方5.63 GB发行包解压在`/homes/Tianlab/luly25/software/netsolp`。固定从该顶层工作目录调用`predict.py`，使用`MODEL_TYPE=Distilled`、`PREDICTION_TYPE=SU`，以Usability为主指标、Solubility为辅指标；环境快照保存在远程软件目录的`environment.freeze.txt`。官方3序列测试同时完成S/U预测，实测57.812787秒。
 - TNP：`/data/software/env/luly25/tnp`，TNP 0.0.1 commit `29dcac72f1380e8538e8870f45a699d3c6156162`、ImmuneBuilder 1.2、ANARCI 2024.05.21、Biopython 1.77、OpenMM 8.5.2、DSSP 4.6.1、Torch 2.7.1+cu126。固定入口为该环境的`bin/TNP`，并设置`PYTHONPATH=/homes/Tianlab/luly25/software/TNP`。ImmuneBuilder安装版`refine.py`的OpenMM `Threads` set-literal错误已按上游正确dict语义修复并由`LTT__Nb294`失败前/成功后smoke验证；V2评分入口会在运行前核对该补丁。Nb252完整128-aa输入建模126 aa并仅裁掉末端`GS`，不改变authoritative母本或`SSGS`冻结规则。
 - AntiFold：独立环境`/data/software/env/luly25/antifold`，AntiFold 0.3.1、Torch 2.2.0+cu121、PyG 2.4.0；模型位于`/homes/Tianlab/luly25/software/AntiFold/models/model.pt`。A100模型加载、官方纳米抗体评分及CDR1采样smoke均通过。0.3.1加载器忽略普通`checkpoint_path`，因此环境内固定模型路径使用符号链接，CUDA评分必须`num_threads=0`；完整版本和模型身份只记录在`antifold_validation_plan_20260815/antifold_environment_contract.json`。
-- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；定点结构复核运行结果提交`9b43a9c`已拉取，开始本轮复核时`HEAD=origin/main`。
+- Git：`main`，远程 `git@github.com:name-lulangya/Antibody_optimization.git`；V2.1真实结果提交`ba654be`已拉取，开始本轮复核时`HEAD=origin/main`。
 - 统一单突AntiFold复用已完成且gate为`pass/ready_for_unified_property_scoring`：2318条均有记录，1962条本轮候选三视图全部可评价，247条实验缺失坐标候选仅AF3可评价；模型没有重新运行。1962条中66条三视图均为正、1733条均为负、163条方向不一致。界面432条中30条三视图均正，性质发现1530条中36条三视图均正；结合既有20构象严格亲和力门后仍只有R45V和E105L为兼容性方向一致的亲和力核心，没有新增核心。
 - 统一性质评分已远程完成并复核：NetSolP与NanoMelt均为1963/1963 pass，1962条候选无丢失；432条界面轨道分为Pareto 1/2/background=`65/154/213`，1530条性质发现轨道为`49/111/1370`。全体候选在U、S、预测表观Tm和实验复合物AntiFold四个方向同时为正者仅17条；性质发现轨道仅5条，其中`F30D`新增异构化motif，余4条无当前化学风险标记。Pareto表示轨道内非支配关系，不等于所有性质改善或最终入选；无yield预测、加权总分、TNP、双突或最终候选选择。
 - 统一TNP复核已远程完成并复核：WT+95候选为96/96 pass，49条性质来源和46条亲和力来源身份完整；74条官方flag不变、21条改善、0条恶化、0条新增red。21条改善全部是PSH由WT amber变为green，其他5类flag对全部候选均为green且不变。本次WT PSH为130.9926，既有同序列正式运行WT为136.6287，两次均为amber但相差5.6361；因此单次连续PSH及临界flag变化只作辅助风险证据，不单独排序或入选。release为`ready_for_multitool_shortlist_with_tnp_as_supporting_risk_only`。
@@ -104,16 +104,16 @@ Timezone: Asia/Shanghai (UTC+08:00)
 6. **统一筛选（已完成，本地实测约1.5秒）**：完整456候选按统一规则分为`18/30/39/82/287`，48条Tier 1/2进入严格复核池；未删除候选、未形成最终实验推荐。
 7. **Flex ddG生产参数计时pilot（已完成）**：4代表候选×2独立样本共8任务全部pass，累计1.666723 job-hours；单任务中位717.980720秒、P90 874.753734秒，backrub占累计任务时间94.7212%，峰值内存975.65–1000.62 MiB。全部WT/突变映射、断点和二硫键检查通过。两重复只验证生产参数、耗时和协议可行性；代表候选存在样本间能量方向翻转，因此不得用pilot分数排名。
 8. **亲和力严格复核与证据核心（已完成）**：50候选×20样本=1000任务全部pass；按双指标18/20方向门选择的8条现在明确称为“亲和力证据核心”，不是组合许可。统一安全门将其中7条保留为`single_mutant_test_only`，`R45C`因新增游离Cys硬阻断；没有亲和力证据核心直接成为`combination_ready`。
-9. **完整双突合同与扫描（已完成；V2.1本地实现完成、远程待运行）**：86条均完成四工具评分；V2的29/57结构分类已确认受到绝对实验4 Å集合的离散边界影响，不能用于淘汰。V2.1已将配对WT VHH/NK2R保持率与界面RMSD设为主结构门，将较低实验参考保持率保留为独立准备敏感性标记；不调整既有0.8/0.9/0.5校准数值。新接触审计按`wt_control_id+replicate+seed`联接258条突变重复和135条WT，逐行复算保持率及VHH/NK2R lost/gained source-auth集合，并汇总候选级并集和重复一致性；能够发现保持率仍为1的gained-only变化。V1/V2制品不覆盖，真实V2.1计数和具体残基需等远程运行后报告。AntiFold仍只是两个固定骨架单点分数的数学加和，未评价双突上位性。
+9. **完整双突合同与扫描（已完成）**：86条均完成四工具评分；V2.1真实分析用258条突变重复和135条WT逐行复算配对接触，3.698408秒完成并以`pass/ready_for_scientific_shortlist_definition`释放。86条全部通过配对WT VHH/NK2R保持率与界面RMSD主结构门；最低保持率分别为0.958333/0.972973，最大界面Cα RMSD为0.047716 Å。绝对实验4 Å参考敏感/不敏感为57/29，只作准备敏感性标记。证据类为平衡支持/亲和力支持且性质非不利/性质支持且亲和力非不利/权衡或不清晰=`28/12/2/44`，即42条进入科学短名单定义范围。40条存在任一配对接触变化、46条三重复均不变；变化侧为VHH 18条、NK2R 37条（15条两侧均变），但均未跌破主门。42条支持候选中31条接触不变、11条有局部变化，且无新增当前化学liability或TNP flag回退。AntiFold仍只是两个固定骨架单点分数的数学加和，未评价双突上位性。
 10. **工具分工（当前选择）**：PyRosetta/Flex ddG提供相对亲和力及接触/表位非劣证据；AntiFold评价候选对既定Nb252结构的条件相容性，并可为允许区域的性质候选提供序列先验。NetSolP U/S只作表达/溶解性辅助相容性信号，TNP只作developability风险工具，NanoMelt只提供相对WT的VHH热稳定性预测；三者已验证不能单独或联合承担yield排序。nanoBERT已退出，不训练现有47条数据的Nb252局部产量排序器，也不部署同类型重复工具投票。AF3只复核少量终选完整组合构象。
 11. **framework与硬约束政策（当前有效）**：FR可以提出稳定性/可开发性候选，但不是无约束全扫描。reported positions 125–128的`SSGS`、Cys22–Cys95实验二硫键和实验缺失坐标的首轮结构不可评估状态继续保持；额外未配对Cys、VHH hallmark、CDR支撑网络、核心疏水包装、实验界面和表位变化均作为明确风险或阻断条件。现有81位合同只提供历史范围，47条序列只提供同框架频率和背景先验，不得据此把某个FR替换称为表达因果突变；所有FR候选必须在完整序列上重新评价亲和力和结构安全。
 
 ## Verification
 
-- 当前全套为`223 passed, 1 skipped, 4 subtests passed`，唯一skip为Windows真实symlink权限测试；V2.1专项7项通过。Python编译、Slurm Bash语法和`git diff --check`通过。端到端测试已用86候选、258突变重复、135 WT的合成接触集合生成schema 3联合表、完整接触审计、gate、PNG/SVG和run summary；真实V2.1图尚未生成。
+- 当前全套为`223 passed, 1 skipped, 4 subtests passed`，唯一skip为Windows真实symlink权限测试；V2.1专项7项通过。Python编译、Slurm Bash语法和`git diff --check`通过。真实V2.1已生成schema 3的86行联合表、258行接触审计、gate、PNG/SVG和run summary；图已人工检查，三面板、图例、黑色接触变化圈和图注均清晰无遮挡。
 
 ## Required Next Steps
 
-1. 提交并推送V2.1后，远程pull并运行`sbatch scripts/candidate_design/submit_double_mutant_analysis.slurm`。作业只读取既有四工具结果和PyRosetta逐重复/WT表，输出新的`double_mutant_scan_review_v2_1_20260816/`及run summary，预计数秒至数分钟。
-2. pull回V2.1后核验真实结构门、实验参考敏感性、全部258行lost/gained审计及候选级重复一致性，再形成亲和力驱动、性质驱动和组合驱动三类科学短名单。
-3. 仅当近邻候选选择或机制解释确实需要时，对少量优先组合补做统一四态PyRosetta分解；不对86条普遍重跑。随后仅让综合非劣且具有明确收益的少量组合进入AF3完整构象复核，最终形成30条待实验序列。
+1. 从V2.1释放的42条支持双突、保留的安全单突及WT对照中建立亲和力驱动、性质驱动和组合驱动三类非冗余候选池；将11条支持但存在配对接触变化的双突单独标记，不把局部4 Å集合变化自动当作淘汰。
+2. 按证据强度、性质非劣、化学风险、接触变化、位点/机制多样性和三类配额形成30条初选；不得把42条支持类别或31条接触不变候选机械截取为最终名单。
+3. 仅当近邻候选选择或机制解释确实需要时，对少量优先组合补做统一四态PyRosetta分解；不对86条普遍重跑。随后仅让综合非劣且具有明确收益的少量组合进入AF3完整构象复核，再冻结30条待实验序列。
