@@ -1,0 +1,79 @@
+{
+  "active_after_by_track": {
+    "affinity": 8,
+    "property": 6
+  },
+  "active_after_count": 14,
+  "active_before_by_track": {
+    "affinity": 8,
+    "property": 22
+  },
+  "active_before_count": 30,
+  "candidate_count": 80,
+  "combination_generated": false,
+  "contract": {
+    "affinity_candidate_states_changed": false,
+    "combination_generated": false,
+    "historical_candidates_deleted": false,
+    "source_v2_gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\targeted_structure_review_result_20260816\\single_mutant_safety_gate_v2.json",
+    "strong_negative_antifold_uses_existing_v2_flag": true
+  },
+  "decision_counts": {
+    "deprioritize": 16,
+    "do_not_advance": 7,
+    "retain_active": 14,
+    "retain_audit_only": 43
+  },
+  "deprioritized_property_mutations": [
+    "Q3F",
+    "Q3N",
+    "Q3Y",
+    "Q5A",
+    "Q5T",
+    "Q5V",
+    "A23Q",
+    "A23R",
+    "F30K",
+    "F30Q",
+    "F30R",
+    "S62D",
+    "R66A",
+    "K86A",
+    "K86S",
+    "K86T"
+  ],
+  "generated_at": "2026-08-16T17:15:03+08:00",
+  "interpretation": "The shortlist is computational prioritization, not measured affinity, expression, aggregation, or stability.",
+  "primary_deprioritization_reason_counts": {
+    "af3_local_nonadverse_gate_not_met": 3,
+    "paired_affinity_directionally_adverse": 2,
+    "paired_receptor_contact_change": 4,
+    "strong_negative_antifold_and_exposed_hydrophobe": 3,
+    "strong_negative_antifold_complex_signal": 4
+  },
+  "property_deprioritized_count": 16,
+  "release": "ready_for_small_combination_contract",
+  "retained_mutations": [
+    "R45T",
+    "R45V",
+    "D101W",
+    "I103W",
+    "E105F",
+    "E105L",
+    "N107A",
+    "S114M",
+    "Q1D",
+    "A23S",
+    "F30A",
+    "F30S",
+    "F30T",
+    "S55G"
+  ],
+  "role_counts": {
+    "affinity_alternative_review": 1,
+    "combination_module_review": 5,
+    "single_mutant_test": 8
+  },
+  "schema_version": 1,
+  "status": "pass"
+}

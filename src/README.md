@@ -314,3 +314,11 @@
 - `scripts/candidate_design/score_targeted_structure_review_pyrosetta.py`：远程只对9条×3重复运行AF3完整VHH局部WT/突变体repack，保存27行指标和每条replicate-1代表结构；不重复复合物或游离实验VHH评分。
 - `scripts/candidate_design/analyze_targeted_structure_review.py`：在运行gate通过后独立汇总逐重复结构证据并生成80条资格门V2；残余序列/developability风险不会被局部repack自动清除。
 - `scripts/candidate_design/submit_targeted_structure_review.sh`与`.slurm`：单个`batch`作业、1 GPU、12 CPU、1小时上限；日志进入`logs/targeted_structure_review/`，评分后切换项目环境分析。预计15–45分钟，不使用数组、checkpoint或resume。
+
+- `antibody_optimization.single_mutant_shortlist`
+  - 用途：在不改写80条V2证据的前提下缩小活跃单突池；性质方向只降级具有受体接触变化、AF3局部非劣门失败、成对亲和力方向不利，或既有强负向AntiFold/暴露疏水证据的`single_mutant_test_only`候选。
+  - 主要输入/返回：80行V2 review；返回80行审计表、14行活跃短名单、逐条触发原因和机器gate。
+  - 算法假设：强负向AntiFold沿用V2已记录的项目分诊标记，不重新设阈值；已通过V2组合门的性质模块和全部8条活跃亲和力候选保持原状态。
+  - 明确不支持：删除历史候选、重新解释模型分数、预测实验性质、改变亲和力证据等级或生成组合。
+- `antibody_optimization.single_mutant_shortlist_plot`：绘制亲和力/性质活跃池缩减前后数量及16条性质降级候选的首要决策证据，输出600 dpi PNG/SVG并返回精确绘图数据。
+- `scripts/candidate_design/build_single_mutant_shortlist.py`：本地确定性生成14条短名单、80行审计表、gate、run summary、绘图数据和结果图；默认拒绝覆盖，不运行新模型。

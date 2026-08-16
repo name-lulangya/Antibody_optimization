@@ -1,0 +1,34 @@
+{
+  "active_after_count": 14,
+  "active_before_count": 30,
+  "combination_generated": false,
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\build_single_mutant_shortlist.py",
+    "--v2-review",
+    "docs\\result_artifacts\\candidate_design\\targeted_structure_review_result_20260816\\single_mutant_safety_review_v2.csv",
+    "--v2-gate",
+    "docs\\result_artifacts\\candidate_design\\targeted_structure_review_result_20260816\\single_mutant_safety_gate_v2.json",
+    "--output-dir",
+    "docs\\result_artifacts\\candidate_design\\single_mutant_shortlist_20260816",
+    "--run-summary",
+    "docs\\run_summaries\\candidate_design\\single_mutant_shortlist_20260816.json",
+    "--generated-at",
+    "2026-08-16T17:15:03+08:00"
+  ],
+  "elapsed_seconds": 0.700253,
+  "generated_at": "2026-08-16T17:15:03+08:00",
+  "outputs": {
+    "gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\single_mutant_shortlist_20260816\\single_mutant_shortlist_gate.json",
+    "plot_data": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\single_mutant_shortlist_20260816\\single_mutant_shortlist_plot_data.csv",
+    "png": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\single_mutant_shortlist_20260816\\single_mutant_shortlist.png",
+    "review": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\single_mutant_shortlist_20260816\\single_mutant_shortlist_review.csv",
+    "shortlist": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\single_mutant_shortlist_20260816\\single_mutant_shortlist.csv",
+    "summary": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\single_mutant_shortlist_20260816\\single_mutant_shortlist_summary.csv",
+    "svg": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\single_mutant_shortlist_20260816\\single_mutant_shortlist.svg"
+  },
+  "property_deprioritized_count": 16,
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}

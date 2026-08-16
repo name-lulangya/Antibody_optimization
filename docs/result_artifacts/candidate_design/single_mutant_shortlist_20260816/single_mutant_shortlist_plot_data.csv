@@ -1,0 +1,8 @@
+﻿panel,category,before,after,count
+active_by_track,affinity,8,8,
+active_by_track,property,22,6,
+primary_deprioritization_reason,Receptor contact change,,,4
+primary_deprioritization_reason,AF3 local gate failed,,,3
+primary_deprioritization_reason,Affinity direction adverse,,,2
+primary_deprioritization_reason,AntiFold− + exposed hydrophobe,,,3
+primary_deprioritization_reason,Strong negative AntiFold,,,4
