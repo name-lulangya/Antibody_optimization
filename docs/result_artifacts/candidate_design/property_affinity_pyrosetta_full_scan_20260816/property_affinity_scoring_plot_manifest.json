@@ -1,0 +1,15 @@
+{
+  "candidate_filtering_applied_during_scoring": false,
+  "energy_semantics": "mutant_minus_position_specific_paired_WT_Rosetta_REU",
+  "exact_plot_data": "docs/result_artifacts/candidate_design/property_affinity_pyrosetta_full_scan_20260816/property_affinity_candidate_summary.csv",
+  "generated_at": "2026-08-16T05:45:32+00:00",
+  "outputs": [
+    "docs/result_artifacts/candidate_design/property_affinity_pyrosetta_full_scan_20260816/property_affinity_scoring.png",
+    "docs/result_artifacts/candidate_design/property_affinity_pyrosetta_full_scan_20260816/property_affinity_scoring.svg"
+  ],
+  "plot_script": "scripts/candidate_design/render_property_affinity_pyrosetta.py",
+  "run_kind": "full_scan",
+  "schema_version": 1,
+  "uncertainty_semantics": "three_replicates_summarized_by_median; contact_panel_shows_minimum",
+  "upstream_gate": "docs/result_artifacts/candidate_design/property_affinity_pyrosetta_full_scan_20260816/property_affinity_scoring_gate.json"
+}

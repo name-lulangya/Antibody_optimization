@@ -1,0 +1,22 @@
+{
+  "blockers": [],
+  "candidate_count": 6,
+  "candidate_filtering_applied_during_scoring": false,
+  "candidate_status_counts": {
+    "pass": 6
+  },
+  "gate_name": "nb252_property_candidate_pyrosetta_affinity_noninferiority",
+  "generated_at": "2026-08-16T04:27:43+00:00",
+  "mutation_neighborhood_angstrom": 8.0,
+  "paired_row_count": 18,
+  "position_count": 6,
+  "release": "ready_for_full_property_affinity_scan",
+  "replicate_count_per_candidate": 3,
+  "run_kind": "pilot",
+  "schema_version": 1,
+  "score_function": "ref2015",
+  "score_semantics": "mutant_minus_position_specific_paired_WT_Rosetta_ranking_signal",
+  "selected_protocol": "interface_repack_constrained_min",
+  "status": "pass",
+  "wt_control_count": 18
+}
