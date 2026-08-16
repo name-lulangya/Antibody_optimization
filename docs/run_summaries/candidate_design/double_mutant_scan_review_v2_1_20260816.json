@@ -1,0 +1,36 @@
+{
+  "analysis_version": "2.1",
+  "calibration_gate": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_v2_20260811/pyrosetta_scoring_calibration_gate.json",
+  "candidate_count": 86,
+  "elapsed_seconds": 3.698408,
+  "experimental_reference_sensitivity_status_counts": {
+    "not_sensitive": 29,
+    "sensitive": 57
+  },
+  "final_candidate_selection_performed": false,
+  "generated_at": "2026-08-16T23:36:55+08:00",
+  "joint_evidence_class_counts": {
+    "affinity_supported_property_nonadverse": 12,
+    "balanced_supported": 28,
+    "property_supported_affinity_nonadverse": 2,
+    "tradeoff_or_no_clear_joint_support": 44
+  },
+  "output_dir": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/double_mutant_scan_review_v2_1_20260816",
+  "paired_contact_audit": {
+    "candidate_count": 86,
+    "paired_contact_changed_candidate_count": 40,
+    "paired_contact_unchanged_candidate_count": 46,
+    "paired_row_count": 258,
+    "receptor_changed_candidate_count": 37,
+    "vhh_changed_candidate_count": 18,
+    "wt_control_count": 135
+  },
+  "pyrosetta_structural_safety_status_counts": {
+    "pass": 86
+  },
+  "python": "3.11.15",
+  "release": "ready_for_scientific_shortlist_definition",
+  "schema_version": 3,
+  "score_root": "/homes/Tianlab/luly25/Antibody_optimization/results/candidate_design/double_mutant_scan_20260816",
+  "status": "pass"
+}
