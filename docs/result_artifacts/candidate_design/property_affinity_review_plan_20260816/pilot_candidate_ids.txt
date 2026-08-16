@@ -1,0 +1,6 @@
+Nb252_uni_seq001_Q1D
+Nb252_uni_seq005_Q5P
+Nb252_uni_seq023_A23R
+Nb252_uni_seq030_F30K
+Nb252_uni_seq055_S55G
+Nb252_uni_seq075_K75E

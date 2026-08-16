@@ -1,0 +1,33 @@
+{
+  "candidate_count": 30,
+  "candidate_filtering_applied_during_scoring": false,
+  "full_scan_requires_pilot_gate": "pass_ready_for_full_property_affinity_scan",
+  "generated_at": "2026-08-16T11:59:07+08:00",
+  "movable_residue_definition": "calibrated_interface_neighborhood_union_mutation_8A_neighborhood",
+  "mutation_neighborhood_angstrom": 8.0,
+  "outputs": [
+    "docs\\result_artifacts\\candidate_design\\property_affinity_review_plan_20260816\\pilot_candidate_ids.txt",
+    "docs\\result_artifacts\\candidate_design\\property_affinity_review_plan_20260816\\property_affinity_review_candidates.csv",
+    "docs\\result_artifacts\\candidate_design\\property_affinity_review_plan_20260816\\property_affinity_review_contract.json",
+    "docs\\result_artifacts\\candidate_design\\property_affinity_review_plan_20260816\\property_affinity_review_pool.png",
+    "docs\\result_artifacts\\candidate_design\\property_affinity_review_plan_20260816\\property_affinity_review_pool.svg"
+  ],
+  "paired_wt_semantics": "one_WT_per_position_replicate_shared_by_substitutions_at_that_position",
+  "pilot_candidate_count": 6,
+  "pilot_is_protocol_and_runtime_validation_only": true,
+  "position_count": 10,
+  "release": "ready_for_property_affinity_pyrosetta_pilot",
+  "replicates": 3,
+  "run_kinds": [
+    "pilot",
+    "full_scan"
+  ],
+  "runtime_estimate": {
+    "exceeds_five_hours": false,
+    "full_scan": "45-120 minutes",
+    "pilot": "10-25 minutes"
+  },
+  "schema_version": 1,
+  "script": "scripts\\candidate_design\\build_property_affinity_review_plan.py",
+  "status": "pass"
+}

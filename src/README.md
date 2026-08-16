@@ -281,3 +281,16 @@
 - `scripts/candidate_design/score_unified_tnp_candidates.py`：在固定TNP环境中单进程顺序评分96条，运行前只核对一次ImmuneBuilder补丁；逐样本保存官方输出和日志，要求每条模型序列为126 aa且只裁完整输入末端`GS`，96/96成功才通过模型运行门。
 - `scripts/candidate_design/analyze_unified_tnp_review.py`：联接固定计划和96条TNP结果，保留六项原始指标、相对WT差值、官方flag变化及既有U/S/预测Tm、AntiFold和化学风险；输出95条候选证据、摘要、gate和600 dpi PNG/SVG，不预测yield或选择候选。
 - `scripts/candidate_design/submit_unified_tnp_review.sh`与`.slurm`：远程唯一提交路线；单个`batch`作业、1 GPU、12 CPU、2小时上限，96条顺序评分后切换项目环境分析。预计约50–60分钟，不使用数组、checkpoint、resume或既有输出复用；日志写入`logs/unified_tnp_review/`。
+
+- `antibody_optimization.property_affinity_review`
+  - 用途：从已发布的统一性质/TNP证据确定性重建30条性质复核池，合并校准界面邻域与突变位点8 Å局部邻域，并验证pilot或完整扫描的逐位点配对WT合同。
+  - 主要输入/返回：95条统一TNP候选证据、2318条统一单突记录、实验结构映射，以及PyRosetta WT/突变结果；返回固定30条池、6条协议pilot身份、可动残基并集和运行gate。
+  - 算法假设：池规则固定为性质Pareto-1、至少一个U/S/预测Tm非微小有利、三者均无明确不利、无新增化学风险；AntiFold/TNP只保留为证据。每个位点和重复的WT与全部替换使用相同局部掩码和seed。
+  - 明确不支持：用pilot分数删减完整30条、把Rosetta REU解释为实测亲和力、把性质预测解释为实测表达/yield/Tm，或跨位点共享不同局部掩码的WT。
+- `antibody_optimization.property_affinity_plot`
+  - 用途：绘制30条池的U/S/预测Tm幅度及AntiFold/TNP辅助证据，并绘制PyRosetta成对能量与表位接触保持结果。
+  - 主要输入/返回：精确候选池CSV或评分summary；返回600 dpi PNG和SVG。
+  - 明确不支持：隐式筛选、加权总分或实验效应解释。
+- `scripts/candidate_design/build_property_affinity_review_plan.py`：本地生成固定30条池、6条pilot、机器合同、图和run summary。
+- `scripts/candidate_design/score_property_affinity_pyrosetta.py`：同一入口用`--run-kind pilot|full_scan`区分小型pilot与30条×3重复完整扫描；完整模式必须读取通过的pilot gate，扫描中不筛选。
+- `scripts/candidate_design/submit_property_affinity_pyrosetta.sh`与`.slurm`：远程单作业提交路线，日志写入`logs/property_affinity_pyrosetta/`；评分使用PyRosetta环境，绘图切换项目环境。

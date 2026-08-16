@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-16 11:21:23
+Last updated: 2026-08-16 11:59:30
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -82,6 +82,8 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - NanoMelt—BL21 yield验证gate为`pass`，科学证据等级为`no_supported_use`、release为`nanomelt_not_supported_for_yield_use`。43条真实评分中27条为LTT/WCC数值记录、16条为LLJ有序/删失记录；分层Spearman为0.0404，95% bootstrap CI为[-0.4329, 0.5511]，置换p=0.8519，LTT/WCC内部为0.0396/0.2108，LLJ tau-b为0.0110。加入Tm后普通/序列簇外CV Spearman为-0.7481/-0.7469，较provider-only进一步降低0.1070/0.2562；不得用NanoMelt预测或排序yield。NanoMelt仍作为独立VHH热稳定性预测器，只在完整候选上相对WT评价，不把预测Tm称为实验Tm或设为产量代理。Nb252预测表观Tm为65.18 °C，在43条中处于18.6百分位。
 - `finalize_input_baseline.py` 已用真实 structure mapping/interface 重建 canonical 128 位点图和 `stage1_gate.json`。程序 `status=pass` 不代表科学 release gate 自动通过。
 
+- `property_affinity_review_plan=pass/ready_for_property_affinity_pyrosetta_pilot`：已固定30条性质复核候选（10个位点）和6条仅用于协议/耗时验证的pilot；池规则不使用AntiFold或TNP硬淘汰。专用PyRosetta入口以`--run-kind pilot|full_scan`共用实现；完整扫描固定30条×3重复，扫描过程中不筛选。远程计算尚未运行。
+
 ## Stage-2 Phase 0 Result
 
 - 正式制品位于`docs/result_artifacts/candidate_design/stage0_contract_20260810/`，run summary位于`docs/run_summaries/candidate_design/stage0_contract_20260810.json`。
@@ -121,6 +123,6 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Required Next Steps
 
-1. 基于现有95条证据建立不加权的多工具短名单：U和预测Tm为主要性质轴，S为辅助，AntiFold/化学风险/TNP为约束或支持；保留位点多样性，不把F30的多个替换当作独立多样性，也不把21条PSH flag改善直接升级为优选。
-2. 从性质来源短名单中确定约20–40条，补做PyRosetta亲和力、接触和表位非劣检查。只有当TNP结果会改变少量最终入选决定时，才对WT和相关finalist做成组重复TNP建模；无需重跑全部95条。
-3. 从双向过门的单突模块生成亲和力×亲和力、性质×性质和亲和力×性质三类双突并逐条重新评分，最后按硬约束和Pareto关系形成30条实验序列。
+1. `property_affinity_review_plan_20260816/`已固定30条性质复核池（10个位点）和6条协议pilot。先在远程运行`bash scripts/candidate_design/submit_property_affinity_pyrosetta.sh pilot`；该pilot只验证新局部协议、结构安全与耗时，不筛选候选。
+2. pilot gate为`pass/ready_for_full_property_affinity_scan`后，运行同一入口的`full_scan`模式完成30条×3重复；每个位点使用“校准界面邻域∪突变8 Å邻域”，该位点WT与突变体共享掩码和seed，跨位点不共享WT。完整扫描中不删候选，结果统一用于亲和力、接触与表位非劣复核。
+3. 再从双向过门的单突模块生成亲和力×亲和力、性质×性质和亲和力×性质三类双突并逐条重新评分，最后按硬约束和Pareto关系形成30条实验序列。
