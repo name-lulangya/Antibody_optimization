@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "release": "ready_for_targeted_structure_review_not_combination_generation",
+  "generated_at": "2026-08-16T15:31:00+08:00",
+  "facts": {
+    "candidate_count": 80,
+    "track_counts": {
+      "affinity": 50,
+      "property": 30
+    },
+    "qualification_counts": {
+      "not_prioritized": 45,
+      "blocked": 4,
+      "targeted_alternative_review": 1,
+      "single_mutant_test_only": 19,
+      "combination_ready": 1,
+      "blocked_pending_structure": 10
+    },
+    "qualification_counts_by_track": {
+      "affinity": {
+        "not_prioritized": 38,
+        "blocked": 4,
+        "targeted_alternative_review": 1,
+        "single_mutant_test_only": 7
+      },
+      "property": {
+        "combination_ready": 1,
+        "not_prioritized": 7,
+        "single_mutant_test_only": 12,
+        "blocked_pending_structure": 10
+      }
+    },
+    "combination_ready_mutations": [
+      "Q1D"
+    ],
+    "combination_generated": false
+  },
+  "contract": {
+    "antifold_strong_negative_operational_threshold": -3.0,
+    "exposed_hydrophobic_relative_sasa_threshold": 0.25,
+    "targeted_affinity_alternative_support_floor": "13_of_20_for_each_metric_with_both_negative_medians",
+    "threshold_scope": "project-specific conservative triage; not validated universal developability cutoffs",
+    "property_affinity_requirement": "not directionally adverse; improvement is not required",
+    "combination_mutations_generated": false
+  },
+  "provenance": {
+    "prepared_wt_pdb": "docs\\result_artifacts\\structure_preparation\\pyrosetta_scoring_calibration_v2_20260811\\selected_wt_prepared.pdb",
+    "affinity_evidence": "docs\\result_artifacts\\candidate_design\\affinity_ensemble_core_20260813\\affinity_ensemble_evidence.csv",
+    "property_review": "docs\\result_artifacts\\candidate_design\\property_affinity_pyrosetta_review_20260816\\property_affinity_scientific_review.csv",
+    "unified_candidates": "docs\\result_artifacts\\candidate_design\\unified_single_mutant_plan_20260815\\unified_single_mutant_candidates.csv",
+    "property_evidence": "docs\\result_artifacts\\candidate_design\\unified_property_scoring_result_20260815\\unified_single_mutant_property_evidence.csv",
+    "antifold_core_evidence": "docs\\result_artifacts\\candidate_design\\antifold_validation_result_20260815\\antifold_validation_plot_data.csv",
+    "tnp_evidence": "docs\\result_artifacts\\candidate_design\\unified_tnp_review_result_20260815\\unified_tnp_candidate_evidence.csv",
+    "critical_residue_sets": "docs\\result_artifacts\\input_baseline\\reviews\\nb252_critical_residue_sets.json"
+  },
+  "interpretation": "Combination qualification is a computational expert-review state. It is not measured affinity, expression, aggregation, glycosylation, or experimental validation."
+}

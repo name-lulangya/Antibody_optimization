@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "status": "pass",
+  "generated_at": "2026-08-16T15:31:00+08:00",
+  "script": "scripts\\candidate_design\\build_single_mutant_safety_review.py",
+  "candidate_count": 80,
+  "qualification_counts": {
+    "not_prioritized": 45,
+    "blocked": 4,
+    "targeted_alternative_review": 1,
+    "single_mutant_test_only": 19,
+    "combination_ready": 1,
+    "blocked_pending_structure": 10
+  },
+  "combination_generated": false,
+  "output_dir": "docs\\result_artifacts\\candidate_design\\single_mutant_safety_review_20260816"
+}

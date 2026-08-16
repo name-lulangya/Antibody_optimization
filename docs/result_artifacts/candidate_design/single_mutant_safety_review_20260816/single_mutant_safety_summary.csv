@@ -1,0 +1,15 @@
+﻿scope,status,count
+all,blocked,4
+all,blocked_pending_structure,10
+all,combination_ready,1
+all,not_prioritized,45
+all,single_mutant_test_only,19
+all,targeted_alternative_review,1
+affinity,blocked,4
+affinity,not_prioritized,38
+affinity,single_mutant_test_only,7
+affinity,targeted_alternative_review,1
+property,blocked_pending_structure,10
+property,combination_ready,1
+property,not_prioritized,7
+property,single_mutant_test_only,12

@@ -295,3 +295,11 @@
 - `scripts/candidate_design/score_property_affinity_pyrosetta.py`：同一入口用`--run-kind pilot|full_scan`区分小型pilot与30条×3重复完整扫描；完整模式必须读取通过的pilot gate，扫描中不筛选。
 - `scripts/candidate_design/analyze_property_affinity_pyrosetta.py`：本地独立复算已完成pilot/full-scan结果，核对共同候选精确复现性、逐候选配对能量差和接触变化，输出方向分类、紧凑表、机器review、run summary及600 dpi PNG/SVG；不执行最终候选选择。
 - `scripts/candidate_design/submit_property_affinity_pyrosetta.sh`与`.slurm`：远程单作业提交路线，日志写入`logs/property_affinity_pyrosetta/`；评分使用PyRosetta环境，绘图切换项目环境。
+
+- `antibody_optimization.single_mutant_safety`
+  - 用途：把50条Flex ddG亲和力复核候选与30条性质候选统一到结构专家安全门，计算结合态/链C单独状态的溶剂暴露、受体距离、局部疏水窗口、糖基化/Cys/氧化风险及既有多工具证据，并区分目标证据与组合资格。
+  - 主要输入/返回：亲和力ensemble证据、性质PyRosetta review、2318条统一候选、性质/AntiFold/TNP证据、prepared WT PDB和关键残基集合；返回80条逐候选结构风险表、组合资格状态和汇总事实。
+  - 算法假设：AntiFold `delta logP <= -3`、链C单独相对SASA `>=0.25`及13/20亲和力备选支持线仅是本项目保守分诊阈值，不是通用或实验验证的developability界限；性质模块只要求亲和力不呈方向一致恶化，不要求改善。
+  - 明确不支持：把WT几何解释为突变后精确构象、预测BL21产量、生成组合、把`combination_ready`称为实验验证，或用加权总分掩盖硬风险。
+- `antibody_optimization.single_mutant_safety_plot`：从精确80行review表绘制资格计数、游离VHH暴露/AntiFold景观和可行动/待结构复核模块，输出600 dpi PNG/SVG。
+- `scripts/candidate_design/build_single_mutant_safety_review.py`：本地单入口生成统一安全审查CSV、摘要、gate、图和run summary；默认拒绝覆盖，不运行新模型或生成双突。
