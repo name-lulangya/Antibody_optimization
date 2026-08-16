@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-16 15:32:02
+Last updated: 2026-08-16 18:30:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -85,6 +85,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 性质候选专用PyRosetta的pilot与完整扫描均已完成：pilot 6条×3重复、实测1081.568448秒；完整扫描30条×3重复、10个位点各3个位置特异WT、实测3516.793389秒。30条/90个配对结果均完整且扫描中未筛选，共同6条候选在pilot/full的汇总数值最大绝对差为0。独立复算得到方向一致有利/混合/方向一致不利=`9/12/9`；9条为`Q1D/Q3Y/Q5A/F30A/F30P/F30Q/S62D/K86S/K86T`，其中只有`Q1D`在3/3重复中两项能量同时为负。该方向分类不设REU效应阈值，也不代表实验亲和力或最终入选。
 - 30条中26条在三个配对重复中完整保持既定VHH/NK2R接触；`Q5V`丢失NK2R auth 106，`K86A/K86S/K86T`在部分或全部重复中丢失NK2R auth 37。VHH接触最低保持率为1.0、NK2R为0.972973，最大界面Cα RMSD为0.045763 Å。方向一致有利且实验complex AntiFold `ΔlogP>0`的交集只有`Q1D/F30A/F30P`；这是跨工具方向交集，不是最终实验序列选择。科学review release为`ready_for_property_module_shortlist_review`。
 - 统一单突安全门已在50条Flex ddG亲和力候选和30条性质候选上完成，release为`ready_for_targeted_structure_review_not_combination_generation`。80条分为`combination_ready/single_mutant_test_only/targeted_alternative_review/blocked_pending_structure/not_prioritized/blocked=1/19/1/10/45/4`；唯一直接组合就绪为`Q1D`，较温和亲和力备选为`R45T`，现有8条亲和力能量核心中7条为单突测试、`R45C`因新增游离Cys硬阻断。A23/F30的10条候选因邻接实验缺失positions 24–29而暂缓，其中`F30P`另有Pro主链风险。该门使用链C单独SASA和局部结构/序列风险；所有阈值仅是项目保守分诊，不是实验表达、聚集或亲和力界限。
+- 非冗余定点结构复核已实现但远程真实评分尚未运行。30条复核池全部复用既有复合物PyRosetta/Flex ddG证据，不重复计算复合物或游离实验VHH。硬风险前置排除7条：`Y37C/R45C/D98C/E105C`新增未配对Cys及`Q5P/R45P/F30P`无充分收益的新Pro主链约束；状态统一为`do_not_advance`，不能由第二突变自动解除。新计算仅含A23/F30的9条非Pro候选×3重复AF3完整VHH局部repack，共27行；接触集合精确相等已取消为硬门，继续保留既有配对WT接触保持率、NK2R表位保持和界面RMSD。跟踪制品不含完整WT重复接触集合，因此没有虚构新的接触数值阈值。
 
 ## Stage-2 Phase 0 Result
 
@@ -110,7 +111,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Verification
 
-- 阶段0专项：`3 passed`；统一单突专项`4 passed`，覆盖2318条真实空间、456条既有PyRosetta身份复用、缺失坐标/新Cys状态和三视图AntiFold查表门；统一性质评分专项与既有NetSolP/NanoMelt回归共`16 passed`；统一TNP专项`4 passed`。性质候选PyRosetta科学review专项为`6 passed`；统一单突安全门专项为`2 passed`，覆盖真实80条、结构暴露、硬Cys、缺失区、组合资格及PNG/SVG。当前全套为`209 passed, 1 skipped, 4 subtests passed`；唯一skip仍为Windows真实symlink权限测试。
+- 阶段0专项：`3 passed`；统一单突专项`4 passed`；统一性质评分与既有NetSolP/NanoMelt回归共`16 passed`；统一TNP专项`4 passed`；性质候选PyRosetta科学review专项`6 passed`；统一单突安全门专项`2 passed`；非冗余定点结构复核专项`5 passed`，覆盖30条既有证据、7条硬排除、9条AF3任务/27行完整性、残余风险保留、Slurm合同和V2 PNG/SVG。当前全套为`214 passed, 1 skipped, 4 subtests passed`。
 - 阶段0图、亲和力候选空间图、post-scan四面板图、ensemble核心图、稳定性/表达合同图和统一单突/AntiFold图均已人工检查，坐标轴、图例和说明无遮挡。统一结果2318个candidate ID唯一，三视图`ΔlogP`由WT/突变log-probability重算的最大绝对误差为`3.552713678800501e-15`。唯一skip仍是Windows真实symlink权限测试。
 - `pip check`、`python -m compileall -q src scripts tests`、`git diff --check` 均通过。
 - NetSolP真实结果含47条样本、15项指标和完整gate；本地从紧凑样本表重算主指标全部10个关键统计及证据等级，与gate逐项一致。600 dpi PNG已人工检查，四个面板、坐标轴、图例和说明无遮挡。
@@ -125,6 +126,6 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Required Next Steps
 
-1. 对A23/F30的10条`blocked_pending_structure`候选做定点完整环区复核；重点比较`F30A/F30Q/F30P`在AF3完整VHH与实验结构映射中的主链/侧链环境，Pro必须单独检查主链可容许性，不批量补全全部候选。
-2. 对`R45T`以及7条`single_mutant_test_only`亲和力核心做小型突变后局部repack审查，比较游离VHH暴露、空腔/碰撞、氢键/盐桥和既有表位接触；不改变当前`R45C`硬阻断。
-3. 只有新增模块通过定点结构门后才生成三类双突并逐条重算；当前`Q1D`可作为首个组合模块，但不应单独支撑组合设计或为凑30条降低门槛。
+1. 远程pull本轮实现后运行`bash scripts/candidate_design/submit_targeted_structure_review.sh`。单个Slurm作业固定`batch`、1 GPU/12 CPU、1小时；只计算9条非Pro A23/F30候选×3重复AF3完整VHH局部repack。
+2. pull回远程结果后复核27行candidate×replicate、9个代表结构和V2 gate。`F30P`及其他6条硬风险候选不进入任务；AntiFold/疏水/氧化/Gly等残余软风险不因repack自动清除。
+3. 只有V2门完成且至少两个相互兼容模块通过后，才进入亲和力×亲和力、性质×性质和亲和力×性质三类双突生成；不机械相加单突分数，也不为凑30条降低门槛。

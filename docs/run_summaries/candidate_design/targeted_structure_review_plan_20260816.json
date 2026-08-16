@@ -1,0 +1,38 @@
+{
+  "candidate_count": 9,
+  "combination_generated": false,
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\build_targeted_structure_review_plan.py",
+    "--safety-review-dir",
+    "docs/result_artifacts/candidate_design/single_mutant_safety_review_20260816",
+    "--structure-baseline-dir",
+    "docs/result_artifacts/input_baseline/structure_released_20260810",
+    "--af3-cif",
+    "data/structures/cxs_exports/fold_2r_252_nomg_model_0__native.cif",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/targeted_structure_review_plan_20260816",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/targeted_structure_review_plan_20260816.json",
+    "--generated-at",
+    "2026-08-16T18:30:00+08:00"
+  ],
+  "elapsed_seconds": 1.964964,
+  "generated_at": "2026-08-16T18:30:00+08:00",
+  "hard_exclusion_count": 7,
+  "new_model_inference_performed": false,
+  "outputs": {
+    "af3_pdb": "docs/result_artifacts/candidate_design/targeted_structure_review_plan_20260816/af3_nb252_parent_for_pyrosetta.pdb",
+    "candidates": "docs/result_artifacts/candidate_design/targeted_structure_review_plan_20260816/targeted_structure_review_candidates.csv",
+    "contract": "docs/result_artifacts/candidate_design/targeted_structure_review_plan_20260816/targeted_structure_review_contract.json",
+    "evidence": "docs/result_artifacts/candidate_design/targeted_structure_review_plan_20260816/targeted_structure_review_existing_evidence.csv",
+    "exclusions": "docs/result_artifacts/candidate_design/targeted_structure_review_plan_20260816/targeted_structure_review_hard_exclusions.csv",
+    "plot_data": "docs/result_artifacts/candidate_design/targeted_structure_review_plan_20260816/targeted_structure_review_plot_data.csv",
+    "png": "docs/result_artifacts/candidate_design/targeted_structure_review_plan_20260816/targeted_structure_review_plan.png",
+    "svg": "docs/result_artifacts/candidate_design/targeted_structure_review_plan_20260816/targeted_structure_review_plan.svg"
+  },
+  "python": "3.11.15",
+  "review_pool_count": 30,
+  "schema_version": 1,
+  "status": "pass"
+}

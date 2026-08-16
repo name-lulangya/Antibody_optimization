@@ -1,0 +1,58 @@
+{
+  "af3_branch_candidate_count": 9,
+  "candidate_count": 9,
+  "combination_generated": false,
+  "contact_interpretation_contract": {
+    "exact_contact_set_equality_is_hard_gate": false,
+    "existing_continuous_metrics_retained": [
+      "paired-WT VHH contact retention",
+      "paired-WT NK2R epitope retention",
+      "interface C-alpha RMSD",
+      "lost and gained contact annotations when available"
+    ],
+    "new_numeric_threshold_created": false,
+    "reason": "Tracked compact artifacts do not retain complete WT replicate contact sets; no threshold is invented.",
+    "scientific_requirement": "preserve the NK2R epitope and binding conformation while allowing local contact changes within the original epitope"
+  },
+  "generated_at": "2026-08-16T18:30:00+08:00",
+  "hard_exclusion_contract": {
+    "do_not_advance_mutations": [
+      "Q5P",
+      "F30P",
+      "Y37C",
+      "R45C",
+      "R45P",
+      "D98C",
+      "E105C"
+    ],
+    "second_mutation_does_not_clear_intrinsic_hard_risk": true
+  },
+  "hard_exclusion_count": 7,
+  "interpretation": "This plan releases only nine AF3 local reviews after hard-risk exclusion and reuse of prior complex evidence; it does not release combination generation or claim experimental affinity, stability, or expression.",
+  "position_count": 2,
+  "prior_complex_evidence_reused_count": 30,
+  "provenance": {
+    "af3_chain_role": "chain A = predicted Nb252 VHH",
+    "af3_source_mmcif": "data/structures/cxs_exports/fold_2r_252_nomg_model_0__native.cif",
+    "conversion": "Gemmi 0.7.5 coordinate-chain clone to PDB; coordinates unchanged; source 536-aa entity declaration intentionally excluded",
+    "derived_af3_pdb": "docs/result_artifacts/candidate_design/targeted_structure_review_plan_20260816/af3_nb252_parent_for_pyrosetta.pdb",
+    "residue_mapping": "docs/result_artifacts/input_baseline/structure_released_20260810/nb252_sequence_structure_mapping.csv",
+    "unified_safety_review": "docs/result_artifacts/candidate_design/single_mutant_safety_review_20260816/single_mutant_safety_review.csv"
+  },
+  "release": "ready_for_remote_targeted_structure_review",
+  "review_group_counts": {
+    "gap_boundary_nonproline": 9
+  },
+  "review_pool_count": 30,
+  "runtime_contract": {
+    "candidate_filtering_during_scoring": false,
+    "combination_generation": false,
+    "existing_complex_evidence": "reused_without_rerun_for_all_30_review_pool_candidates",
+    "mutation_neighborhood_angstrom": 8.0,
+    "new_computation_context": "AF3_VHH_alone",
+    "replicates": 3,
+    "selected_protocol": "interface_repack_constrained_min"
+  },
+  "schema_version": 2,
+  "status": "pass"
+}

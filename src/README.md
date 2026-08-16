@@ -303,3 +303,14 @@
   - 明确不支持：把WT几何解释为突变后精确构象、预测BL21产量、生成组合、把`combination_ready`称为实验验证，或用加权总分掩盖硬风险。
 - `antibody_optimization.single_mutant_safety_plot`：从精确80行review表绘制资格计数、游离VHH暴露/AntiFold景观和可行动/待结构复核模块，输出600 dpi PNG/SVG。
 - `scripts/candidate_design/build_single_mutant_safety_review.py`：本地单入口生成统一安全审查CSV、摘要、gate、图和run summary；默认拒绝覆盖，不运行新模型或生成双突。
+
+- `antibody_optimization.targeted_structure_review`
+  - 用途：复用30条既有复合物证据，前置排除新增未配对Cys和无充分收益的新Pro风险，并只为9条A23/F30非Pro候选建立AF3完整VHH局部复核合同。
+  - 主要输入/返回：统一安全表、实验/AF3可逆映射、AF3 parent结构和27行PyRosetta逐重复结果；返回30条既有证据表、7条硬排除表、9条运行计划、运行完整性gate和80条V2资格表。
+  - 算法假设：新计算只在AF3 parent突变位点8 Å邻域使用既有受约束局部协议；三重复的总分与局部`fa_rep`中位数均不增加才称局部非劣。接触集合精确相等不是硬门，既有配对WT接触保持、NK2R表位和界面RMSD继续独立保留。
+  - 明确不支持：用局部repack替代已有复合物/Flex ddG证据、清除AntiFold/疏水/氧化/CDR Gly风险、挽救Pro或新增Cys硬排除、生成双突，或把REU解释为实测性质。
+- `antibody_optimization.targeted_structure_review_plot`：绘制V2资格计数及AF3 VHH总分—局部`fa_rep`诊断，输出600 dpi PNG/SVG。
+- `scripts/candidate_design/build_targeted_structure_review_plan.py`：本地冻结30条既有证据、7条硬排除、9条AF3任务、AF3 parent PyRosetta输入PDB、计划图和run summary；不运行新模型。
+- `scripts/candidate_design/score_targeted_structure_review_pyrosetta.py`：远程只对9条×3重复运行AF3完整VHH局部WT/突变体repack，保存27行指标和每条replicate-1代表结构；不重复复合物或游离实验VHH评分。
+- `scripts/candidate_design/analyze_targeted_structure_review.py`：在运行gate通过后独立汇总逐重复结构证据并生成80条资格门V2；残余序列/developability风险不会被局部repack自动清除。
+- `scripts/candidate_design/submit_targeted_structure_review.sh`与`.slurm`：单个`batch`作业、1 GPU、12 CPU、1小时上限；日志进入`logs/targeted_structure_review/`，评分后切换项目环境分析。预计15–45分钟，不使用数组、checkpoint或resume。
