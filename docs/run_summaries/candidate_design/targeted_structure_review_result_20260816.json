@@ -1,0 +1,31 @@
+{
+  "candidate_count": 80,
+  "combination_generated": false,
+  "combination_ready_count": 5,
+  "command_argv": [
+    "/data/software/env/luly25/ab_optim/bin/python",
+    "/homes/Tianlab/luly25/Antibody_optimization/scripts/candidate_design/analyze_targeted_structure_review.py",
+    "--safety-review-dir",
+    "docs/result_artifacts/candidate_design/single_mutant_safety_review_20260816",
+    "--plan-dir",
+    "docs/result_artifacts/candidate_design/targeted_structure_review_plan_20260816",
+    "--runtime-result-dir",
+    "results/candidate_design/targeted_structure_review_runtime_20260816",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/targeted_structure_review_result_20260816",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/targeted_structure_review_result_20260816.json"
+  ],
+  "elapsed_seconds": 1.355985,
+  "generated_at": "2026-08-16T08:56:49+00:00",
+  "outputs": {
+    "gate": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/targeted_structure_review_result_20260816/single_mutant_safety_gate_v2.json",
+    "png": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/targeted_structure_review_result_20260816/targeted_structure_review_v2.png",
+    "review": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/targeted_structure_review_result_20260816/single_mutant_safety_review_v2.csv",
+    "summary": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/targeted_structure_review_result_20260816/single_mutant_safety_summary_v2.csv",
+    "svg": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/targeted_structure_review_result_20260816/targeted_structure_review_v2.svg"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}

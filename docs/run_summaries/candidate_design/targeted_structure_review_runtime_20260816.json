@@ -1,0 +1,29 @@
+{
+  "candidate_count": 9,
+  "candidate_filtering_applied_during_scoring": false,
+  "combination_generated": false,
+  "command_argv": [
+    "/data/software/env/luly25/multi_ligand/bin/python",
+    "/homes/Tianlab/luly25/Antibody_optimization/scripts/candidate_design/score_targeted_structure_review_pyrosetta.py",
+    "--plan-dir",
+    "docs/result_artifacts/candidate_design/targeted_structure_review_plan_20260816",
+    "--calibration-dir",
+    "docs/result_artifacts/structure_preparation/pyrosetta_scoring_calibration_v2_20260811",
+    "--output-dir",
+    "results/candidate_design/targeted_structure_review_runtime_20260816",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/targeted_structure_review_runtime_20260816.json",
+    "--replicates",
+    "3",
+    "--base-seed",
+    "8163000"
+  ],
+  "elapsed_seconds": 20.075577,
+  "generated_at": "2026-08-16T08:56:26+00:00",
+  "output_dir": "/homes/Tianlab/luly25/Antibody_optimization/results/candidate_design/targeted_structure_review_runtime_20260816",
+  "pyrosetta_version": "┌───────────────────────────────────────────────────────────────────────────────┐\n│                                  PyRosetta-4                                  │\n│               Created in JHU by Sergey Lyskov and PyRosetta Team              │\n│               (C) Copyright Rosetta Commons Member Institutions               │\n│                                                                               │\n│ NOTE: USE OF PyRosetta FOR COMMERCIAL PURPOSES REQUIRES PURCHASE OF A LICENSE │\n│          See LICENSE.PyRosetta.md or email license@uw.edu for details         │\n└───────────────────────────────────────────────────────────────────────────────┘\nPyRosetta-4 2026 [Rosetta PyRosetta4.Release.python310.ubuntu 2026.03+releasequarterly.5e498f1409c68ade56c8ce5842bf79e1b02e8db4 2026-01-13T13:24:11] retrieved from: http://www.pyrosetta.org",
+  "python": "3.10.20",
+  "replicate_count": 27,
+  "schema_version": 2,
+  "status": "pass"
+}

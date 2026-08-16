@@ -1,0 +1,41 @@
+{
+  "candidate_count": 80,
+  "combination_generated": false,
+  "combination_ready_mutations": [
+    "Q1D",
+    "A23S",
+    "F30A",
+    "F30S",
+    "F30T"
+  ],
+  "contract": {
+    "combination_generated": false,
+    "contact_requirement": "preserve the NK2R epitope and binding conformation while allowing local contact changes within the original epitope",
+    "exact_contact_set_equality_required": false,
+    "existing_complex_evidence_reused_without_rerun": true,
+    "intrinsic_hard_risks_are_do_not_advance": true,
+    "new_runtime_requirement": "three AF3 VHH replicates with non-increasing median total score and local fa_rep",
+    "nonresolvable_flags_are_not_cleared_by_repack": true
+  },
+  "do_not_advance_mutations": [
+    "Y37C",
+    "R45C",
+    "R45P",
+    "D98C",
+    "E105C",
+    "Q5P",
+    "F30P"
+  ],
+  "generated_at": "2026-08-16T08:56:49+00:00",
+  "interpretation": "V2 qualification is computational triage, not measured affinity, expression, aggregation, or stability. Combination compatibility has not yet been evaluated.",
+  "qualification_counts": {
+    "combination_ready": 5,
+    "do_not_advance": 7,
+    "not_prioritized": 43,
+    "single_mutant_test_only": 24,
+    "targeted_alternative_review": 1
+  },
+  "release": "ready_for_combination_module_review",
+  "schema_version": 2,
+  "status": "pass"
+}
