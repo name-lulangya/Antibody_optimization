@@ -1,0 +1,11 @@
+{
+  "candidate_filtering_applied": false,
+  "elapsed_seconds": 0.340427,
+  "generated_at": "2026-08-16T17:50:00+08:00",
+  "invalid_same_position_pair_count": 5,
+  "output_dir": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\double_mutant_plan_20260816",
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass",
+  "valid_double_count": 86
+}

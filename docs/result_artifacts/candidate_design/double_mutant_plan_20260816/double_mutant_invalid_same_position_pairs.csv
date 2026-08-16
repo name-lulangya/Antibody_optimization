@@ -1,0 +1,6 @@
+﻿mutation_a,mutation_b,sequence_index_1based,exclusion_reason
+F30A,F30S,30,same_position_mutually_exclusive_substitutions
+F30A,F30T,30,same_position_mutually_exclusive_substitutions
+F30S,F30T,30,same_position_mutually_exclusive_substitutions
+R45T,R45V,45,same_position_mutually_exclusive_substitutions
+E105F,E105L,105,same_position_mutually_exclusive_substitutions

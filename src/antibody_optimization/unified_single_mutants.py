@@ -131,7 +131,7 @@ def build_unified_space(
                 else "eligible_current_round"
             )
             mutated = sequence[: index - 1] + mutant + sequence[index:]
-            liabilities = _liability_deltas(sequence, mutated)
+            liabilities = sequence_liability_deltas(sequence, mutated)
             candidates.append({
                 "candidate_id": str(affinity["candidate_id"]) if affinity else f"Nb252_uni_seq{index:03d}_{wt}{index}{mutant}",
                 "parent_sample_uid": parent["sample_uid"],
@@ -270,7 +270,8 @@ def _validate_space(sequence: str, positions: Sequence[Mapping[str, object]], ca
             raise UnifiedSingleMutantError("Missing-coordinate candidate was not deferred")
 
 
-def _liability_deltas(wt: str, mutant: str) -> dict[str, object]:
+def sequence_liability_deltas(wt: str, mutant: str) -> dict[str, object]:
+    """Return simple sequence-liability count changes relative to one parent."""
     patterns = {
         "n_linked_glycosylation_motif": r"N[^P][ST]",
         "deamidation_motif": r"N[GST]",

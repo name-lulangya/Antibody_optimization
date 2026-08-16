@@ -322,3 +322,15 @@
   - 明确不支持：删除历史候选、重新解释模型分数、预测实验性质、改变亲和力证据等级或生成组合。
 - `antibody_optimization.single_mutant_shortlist_plot`：绘制亲和力/性质活跃池缩减前后数量及16条性质降级候选的首要决策证据，输出600 dpi PNG/SVG并返回精确绘图数据。
 - `scripts/candidate_design/build_single_mutant_shortlist.py`：本地确定性生成14条短名单、80行审计表、gate、run summary、绘图数据和结果图；默认拒绝覆盖，不运行新模型。
+
+- `antibody_optimization.double_mutant_design`
+  - 用途：从已释放的14条活跃单突确定性生成完整无序双突空间，排除同一reported位置的互斥替换，并为成对PyRosetta重复结果提供通用汇总合同。
+  - 主要输入/返回：14行短名单、短名单gate及实验序列—结构映射；返回86条完整128-aa双突、5条同位点排除审计、WT+86评分样本和计数事实。
+  - 算法假设：只允许两个不同reported位置各发生一次已释放替换；保留末端`SSGS`和Cys22/Cys95；AntiFold双突列仅为固定骨架单点log-probability差的可加恒等式，不评估结构重排或上位性。
+  - 明确不支持：在扫描前按模型分数删减候选、恢复已降级单突、把AntiFold加和值当成双突重评分，或把任一预测称为实验性质。
+- `antibody_optimization.double_mutant_design_plot`：绘制86条未筛选双突按三类来源的计数，保存精确绘图数据及600 dpi PNG/SVG。
+- `scripts/candidate_design/build_double_mutant_plan.py`：本地生成86条双突、87条工具评分样本、同位点排除审计、gate、run summary和计划图。
+- `scripts/candidate_design/score_double_mutant_properties.py`：按`--tool netsolp|nanomelt|tnp`在各自远程环境中评分WT+86条序列；三条路线均要求87/87覆盖且扫描中不筛选。
+- `scripts/candidate_design/score_double_mutants_pyrosetta.py`：以45个不同位置对共享配对WT，在校准实验复合物协议中评分86条双突×3重复；局部可动集合为既有界面与两个突变位点8 Å邻域的并集。
+- `scripts/candidate_design/submit_double_mutant_scan.sh`及四个`.slurm`：并行提交NetSolP、NanoMelt、TNP和PyRosetta四条无筛选扫描；均使用`batch`、1 GPU、12 CPU，日志写入`logs/double_mutant_scan/`。
+- `antibody_optimization.double_mutant_analysis`与`scripts/candidate_design/analyze_double_mutant_scan.py`：仅在四条86候选扫描完整后联接相对WT U/S/预测Tm、TNP flag/PSH、双突PyRosetta和化学风险，复用既有U=0.01、S=0.02、预测Tm=1 °C幅度规则生成非最终证据分类及三面板图；不自动选出最终30条。
