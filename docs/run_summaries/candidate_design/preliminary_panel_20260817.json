@@ -1,0 +1,42 @@
+{
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\build_preliminary_final_panel.py",
+    "--single-dir",
+    "docs/result_artifacts/candidate_design/single_mutant_shortlist_20260816",
+    "--double-review-dir",
+    "docs/result_artifacts/candidate_design/double_mutant_scan_review_v2_1_20260816",
+    "--affinity-evidence",
+    "docs/result_artifacts/candidate_design/affinity_ensemble_core_20260813/affinity_ensemble_evidence.csv",
+    "--property-evidence",
+    "docs/result_artifacts/candidate_design/property_affinity_pyrosetta_review_20260816/property_affinity_scientific_review.csv",
+    "--stage2-contract",
+    "docs/result_artifacts/candidate_design/stage0_contract_20260810/stage2_design_contract.json",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/preliminary_panel_20260817",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/preliminary_panel_20260817.json",
+    "--generated-at",
+    "2026-08-17T10:23:34+08:00"
+  ],
+  "elapsed_seconds": 0.880324,
+  "final_candidate_selection_performed": false,
+  "generated_at": "2026-08-17T10:23:34+08:00",
+  "outputs": {
+    "audit": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\preliminary_panel_20260817\\preliminary_panel_candidate_audit.csv",
+    "fasta": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\preliminary_panel_20260817\\preliminary_panel_30.fasta",
+    "gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\preliminary_panel_20260817\\preliminary_panel_gate.json",
+    "panel": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\preliminary_panel_20260817\\preliminary_panel_30.csv",
+    "plot_data": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\preliminary_panel_20260817\\preliminary_panel_plot_data.csv",
+    "png": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\preliminary_panel_20260817\\preliminary_panel.png",
+    "reserves": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\preliminary_panel_20260817\\preliminary_panel_reserves_6.csv",
+    "svg": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\preliminary_panel_20260817\\preliminary_panel.svg"
+  },
+  "preliminary_panel_count": 30,
+  "primary_pool_count": 56,
+  "python": "3.11.15",
+  "reserve_count": 6,
+  "reviewed_candidate_count": 100,
+  "schema_version": 1,
+  "status": "pass"
+}

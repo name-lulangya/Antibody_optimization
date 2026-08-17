@@ -1,0 +1,76 @@
+{
+  "active_single_count": 14,
+  "final_candidate_selection_performed": false,
+  "gate_name": "nb252_preliminary_30_sequence_panel",
+  "generated_at": "2026-08-17T10:23:34+08:00",
+  "interpretation": "Computational preliminary panel for targeted review; not measured affinity, expression, solubility, stability, Tm, yield, or final experimental validation.",
+  "preliminary_panel_category_counts": {
+    "affinity_focused_single": 8,
+    "balanced_combination": 16,
+    "property_focused_single": 6
+  },
+  "preliminary_panel_count": 30,
+  "preliminary_panel_selection_performed": true,
+  "primary_pool_count": 56,
+  "release": "ready_for_targeted_finalist_review",
+  "reserve_category_counts": {
+    "affinity_supported_double": 2,
+    "balanced_combination": 2,
+    "property_supported_double": 2
+  },
+  "reserve_count": 6,
+  "reviewed_candidate_count": 100,
+  "schema_version": 1,
+  "selected_double_component_counts": {
+    "A23S": 2,
+    "E105F": 3,
+    "E105L": 5,
+    "F30A": 2,
+    "F30T": 2,
+    "N107A": 3,
+    "Q1D": 4,
+    "R45T": 3,
+    "R45V": 5,
+    "S55G": 3
+  },
+  "selected_double_contact_status_counts": {
+    "changed": 3,
+    "unchanged": 13
+  },
+  "selected_double_count": 16,
+  "selected_double_position_pair_counts": {
+    "1;105": 2,
+    "1;30": 1,
+    "1;45": 1,
+    "23;105": 2,
+    "30;105": 1,
+    "30;45": 2,
+    "45;105": 2,
+    "45;107": 2,
+    "45;55": 1,
+    "55;105": 1,
+    "55;107": 1
+  },
+  "selected_single_count": 14,
+  "selection_contract": {
+    "balanced_double_order": "within_protocol_pareto_then_mutation_diversity",
+    "main_category_quotas": {
+      "affinity_focused_single": 8,
+      "balanced_combination": 16,
+      "property_focused_single": 6
+    },
+    "maximum_selected_double_uses_per_component_mutation": 5,
+    "maximum_selected_double_uses_per_position_pair": 2,
+    "reserve_category_quotas": {
+      "affinity_supported_double": 2,
+      "balanced_combination": 2,
+      "property_supported_double": 2
+    },
+    "single_double_rosetta_magnitudes_compared_directly": false,
+    "weighted_composite_score_used": false,
+    "wild_type_counts_toward_30": false
+  },
+  "status": "pass",
+  "supported_double_count": 42,
+  "tradeoff_or_unclear_double_count": 44
+}

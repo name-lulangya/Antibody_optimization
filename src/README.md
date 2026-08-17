@@ -335,3 +335,10 @@
 - `scripts/candidate_design/submit_double_mutant_scan.sh`及四个`.slurm`：并行提交NetSolP、NanoMelt、TNP和PyRosetta四条无筛选扫描；均使用`batch`、1 GPU、12 CPU，日志写入`logs/double_mutant_scan/`。
 - `antibody_optimization.double_mutant_contacts`：只读取既有258条突变重复和135条位置对WT记录，按`wt_control_id`、重复和seed复算VHH/NK2R配对保持率及逐重复lost/gained source-auth残基；同时产生86条候选汇总和重复一致性，不读取或修改结构、不重新计算几何接触、不筛选候选。
 - `antibody_optimization.double_mutant_analysis`与`scripts/candidate_design/analyze_double_mutant_scan.py`：V2.1仅在四条86候选扫描完整后联接相对WT U/S/预测Tm、TNP flag/PSH、双突PyRosetta能量、实验参考/配对WT接触证据、界面Cα RMSD和化学风险。结构安全主门使用已释放阈值下的配对WT保持率与RMSD；较低实验参考保持率仅标记准备敏感性，不覆盖多目标类别，也不要求接触集合精确一致。输出schema 3的86行联合表、完整258行接触审计、gate和三面板图，不自动选出最终30条。
+- `antibody_optimization.preliminary_panel`
+  - 用途：把14条已释放活跃单突与86条V2.1双突统一成100行终选审计；保留全部14条单突作为组成效应对照，并从28条`balanced_supported`双突中生成16条组合预终选和分层6条替补。
+  - 主要输入/返回：单突短名单及亲和力/性质PyRosetta证据、V2.1双突联合表与gate、阶段2母本/硬约束合同；返回100行审计、30条预终选、6条替补及精确计数。
+  - 算法假设：单突20样本Flex ddG与双突3重复局部协议的绝对REU不跨协议比较；双突只在同一V2.1协议内对`ΔdG`、跨界面能、非微小性质有利数和AntiFold固定骨架加和值作Pareto分层，再用每个组成突变最多5次、每个位置对最多2次的显式多样性约束选择。接触变化是复核标记，不是自动淘汰。
+  - 明确不支持：加权综合分、把微小U/S/Tm差异作为主排序、把AntiFold加和值称为双突上位性、把30条预终选称为最终或实验验证序列。
+- `antibody_optimization.preliminary_panel_plot`：从精确审计/预终选/替补表绘制100→56→30及6替补的证据流、`8/6/16`三类组成和16条双突的配对WT接触状态，输出600 dpi PNG/SVG及精确绘图数据。
+- `scripts/candidate_design/build_preliminary_final_panel.py`：本地确定性生成30条预终选CSV/FASTA、6条替补、100行审计、gate、run summary和结果图；默认拒绝覆盖，不运行模型、不把WT计入30条，也不执行最终序列冻结。

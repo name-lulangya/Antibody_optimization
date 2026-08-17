@@ -1,0 +1,10 @@
+﻿panel,category,count
+evidence_flow,Reviewed,100
+evidence_flow,Primary pool,56
+evidence_flow,Preliminary panel,30
+evidence_flow,Reserves,6
+preliminary_panel_category,affinity_focused_single,8
+preliminary_panel_category,property_focused_single,6
+preliminary_panel_category,balanced_combination,16
+selected_double_contact_status,unchanged,13
+selected_double_contact_status,changed,3
