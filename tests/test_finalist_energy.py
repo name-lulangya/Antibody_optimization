@@ -1,5 +1,8 @@
 import csv
 import json
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
 
 import pytest
@@ -24,6 +27,14 @@ CONTRACT = ROOT / "docs/result_artifacts/candidate_design/stage0_contract_202608
 def _csv(path: Path):
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         return list(csv.DictReader(handle))
+
+
+def _write_csv(path: Path, rows):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0]), lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
 
 
 def _sources(panel, reserves):
@@ -177,3 +188,59 @@ def test_finalist_and_final_panel_plots_render(tmp_path):
     final_svg = tmp_path / "final.svg"
     render_final_candidate_panel(final_rows, final_png, final_svg)
     assert all(path.stat().st_size > 1000 for path in (energy_png, energy_svg, final_png, final_svg))
+
+
+def test_finalist_energy_and_final_panel_cli_install_outputs():
+    panel = _csv(PRELIMINARY / "preliminary_panel_30.csv")
+    reserves = _csv(PRELIMINARY / "preliminary_panel_reserves_6.csv")
+    paired, wt = _sources(panel, reserves)
+    with tempfile.TemporaryDirectory(prefix=".finalist-cli-test-", dir=ROOT) as temp:
+        work = Path(temp)
+        affinity = work / "affinity"
+        properties = work / "properties"
+        doubles = work / "doubles"
+        _write_csv(affinity / "candidate_replicate_metrics.csv", paired["affinity"])
+        _write_csv(affinity / "wt_replicate_metrics.csv", wt["affinity"])
+        _write_csv(properties / "property_affinity_candidate_replicates.csv", paired["property"])
+        _write_csv(properties / "property_affinity_wt_controls.csv", wt["property"])
+        _write_csv(doubles / "double_mutant_candidate_replicates.csv", paired["double"])
+        _write_csv(doubles / "double_mutant_wt_controls.csv", wt["double"])
+        review_output = work / "review"
+        subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "scripts/candidate_design/build_finalist_energy_review.py"),
+                "--preliminary-dir", str(PRELIMINARY),
+                "--affinity-result-dir", str(affinity),
+                "--property-result-dir", str(properties),
+                "--double-pyrosetta-dir", str(doubles),
+                "--output-dir", str(review_output),
+                "--run-summary", str(work / "review_run.json"),
+                "--generated-at", "2026-08-17T00:00:00+08:00",
+            ],
+            cwd=ROOT,
+            check=True,
+        )
+        decisions = _csv(review_output / "finalist_decision_review_template.csv")
+        panel_ids = {row["candidate_id"] for row in panel}
+        for row in decisions:
+            row["review_decision"] = "select" if row["candidate_id"] in panel_ids else "reserve"
+            row["review_rationale"] = "test-only explicit review"
+        _write_csv(review_output / "reviewed.csv", decisions)
+        final_output = work / "final"
+        subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "scripts/candidate_design/finalize_candidate_panel.py"),
+                "--decision-review", str(review_output / "reviewed.csv"),
+                "--preliminary-dir", str(PRELIMINARY),
+                "--stage2-contract", str(CONTRACT),
+                "--output-dir", str(final_output),
+                "--run-summary", str(work / "final_run.json"),
+                "--generated-at", "2026-08-17T00:00:00+08:00",
+            ],
+            cwd=ROOT,
+            check=True,
+        )
+        assert len(_csv(review_output / "finalist_energy_summary.csv")) == 36
+        assert len(_csv(final_output / "final_candidates_30.csv")) == 30

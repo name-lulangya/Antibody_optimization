@@ -125,8 +125,12 @@ def main() -> int:
             },
         )
         replace_staged_files(
-            staged_paths=[*[staged[key] for key in names], staged_run],
-            final_paths=[*[finals[key] for key in names], run_summary],
+            {
+                **{staged[key]: finals[key] for key in names},
+                staged_run: run_summary,
+            },
+            project_root=PROJECT_ROOT,
+            protected_source_paths=validated.source_paths,
         )
     print(json.dumps(gate, indent=2, ensure_ascii=False))
     return 0

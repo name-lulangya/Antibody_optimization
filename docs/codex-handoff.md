@@ -112,7 +112,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## Verification
 
-- 当前全套为`232 passed, 1 skipped, 4 subtests passed`，唯一skip仍为Windows真实symlink权限测试；本轮终审能量/最终冻结专项与预终选相邻测试为`9 passed`。`pip check`、全项目Python编译和`git diff --check`通过；test-only图已人工检查。终审真实制品仍等待远程ignored双突原始表，未伪造本地结果，真实结果图生成后仍需再次人工检查。
+- 当前全套为`232 passed, 1 skipped, 4 subtests passed`，唯一skip仍为Windows真实symlink权限测试。远程首次终审运行暴露事务安装调用关键字错误；能量终审与最终冻结两个入口已改用真实“暂存→最终”事务映射，端到端CLI及相邻事务/预终选测试为`19 passed, 1 skipped`，Python编译和`git diff --check`通过。该故障发生在正式文件安装阶段，不改变科学计算语义；终审真实制品仍需远程重跑生成并人工检查结果图。
 
 ## Required Next Steps
 
