@@ -342,3 +342,17 @@
   - 明确不支持：加权综合分、把微小U/S/Tm差异作为主排序、把AntiFold加和值称为双突上位性、把30条预终选称为最终或实验验证序列。
 - `antibody_optimization.preliminary_panel_plot`：从精确审计/预终选/替补表绘制100→56→30及6替补的证据流、`8/6/16`三类组成和16条双突的配对WT接触状态，输出600 dpi PNG/SVG及精确绘图数据。
 - `scripts/candidate_design/build_preliminary_final_panel.py`：本地确定性生成30条预终选CSV/FASTA、6条替补、100行审计、gate、run summary和结果图；默认拒绝覆盖，不运行模型、不把WT计入30条，也不执行最终序列冻结。
+
+- `antibody_optimization.finalist_energy`
+  - 用途：只复用已完成PyRosetta的突变体和配对WT记录，将每个候选的`ΔdG_separated`严格分解为`Δcomplex total score - Δseparated-state score`，生成30条预终选加6条替补的逐重复、汇总和显式决策模板。
+  - 主要输入/返回：预终选/替补表，亲和力全量单突、性质单突及双突位置对协议的candidate/WT逐重复表；返回108行能量分解、36行汇总、36行待审决策表和覆盖事实。
+  - 算法假设：每项差值只使用记录中的`wt_control_id`、replicate和seed配对；亲和力单突的能量来源辅助分析使用已有3重复全量扫描，20样本Flex ddG仍是主要亲和力证据。分离态是把VHH与NK2R移开并局部repack后的Rosetta代理，不是实测单体稳定性、折叠自由能或Tm。
+  - 明确不支持：跨协议比较绝对REU、把分离态代理称为VHH实验稳定性、自动淘汰候选、补跑PyRosetta/AF3或推断缺失的WT记录。
+- `antibody_optimization.finalist_energy_plot`：从36行精确汇总表绘制复合物—分离态能量来源、两项直接结合信号和能量来源类别，输出600 dpi PNG/SVG；不执行候选选择。
+- `scripts/candidate_design/build_finalist_energy_review.py`与`run_finalist_energy_review.sh`：远程轻量复用入口；在项目`ab_optim`环境读取既有ignored双突PyRosetta原始表和Git跟踪单突/预终选表，生成Git可跟踪终审制品。预计低于1分钟，不请求Slurm、不加载PyRosetta、不运行新模型，并拒绝覆盖既有输出。
+- `antibody_optimization.final_candidate_panel`
+  - 用途：在36条候选均有显式`select/reserve/exclude`和非空理由后，验证并冻结恰好30条最终序列。
+  - 主要输入/返回：人工科学复核后的36行决策表和authoritative 128-aa母本；返回30条最终序列、储备状态、完整审计及类别计数。
+  - 算法假设：逐序列重新核对突变标签、唯一性、Cys22/Cys95、总Cys数和末端`SSGS`；WT作为独立实验对照，不占30条名额。
+  - 明确不支持：自动填写待审决定、无理由选择、根据单一能量或性质指标加权排序，或将计算优先序列称为实验验证优化。
+- `antibody_optimization.final_candidate_panel_plot`与`scripts/candidate_design/finalize_candidate_panel.py`：显式决策通过后生成最终CSV/FASTA、储备/决策审计、阶段门、精确绘图数据、600 dpi PNG/SVG和run summary；任何待审行或非30条选择均阻断。
