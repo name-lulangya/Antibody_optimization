@@ -108,14 +108,14 @@ Timezone: Asia/Shanghai (UTC+08:00)
 10. **工具分工（当前选择）**：PyRosetta/Flex ddG提供相对亲和力及接触/表位非劣证据；AntiFold评价候选对既定Nb252结构的条件相容性，并可为允许区域的性质候选提供序列先验。NetSolP U/S只作表达/溶解性辅助相容性信号，TNP只作developability风险工具，NanoMelt只提供相对WT的VHH热稳定性预测；三者已验证不能单独或联合承担yield排序。nanoBERT已退出，不训练现有47条数据的Nb252局部产量排序器，也不部署同类型重复工具投票。WT的AF3 CDR3相对实验结合态RMSD为6.490853 Å，因此取消批量AF3终选预测；AF3仅在实验缺失区造成无法解决的严重结构疑问时条件触发，且不参与CDR3亲和力排序。
 11. **framework与硬约束政策（当前有效）**：FR可以提出稳定性/可开发性候选，但不是无约束全扫描。reported positions 125–128的`SSGS`、Cys22–Cys95实验二硫键和实验缺失坐标的首轮结构不可评估状态继续保持；额外未配对Cys、VHH hallmark、CDR支撑网络、核心疏水包装、实验界面和表位变化均作为明确风险或阻断条件。现有81位合同只提供历史范围，47条序列只提供同框架频率和背景先验，不得据此把某个FR替换称为表达因果突变；所有FR候选必须在完整序列上重新评价亲和力和结构安全。
 12. **30条预终选（本地已完成）**：统一审计14条活跃单突和86条V2.1双突，共100条；主证据池为14条单突加42条支持双突，共56条。30条预终选固定为8条亲和力单突、6条性质单突和16条`balanced_supported`双突；保留全部单突用于实验拆解组合效应，单/双突不同PyRosetta协议的绝对REU不直接混排。16条双突只在同协议内先作四目标Pareto，再以每个组成突变最多5次、每个位置对最多2次控制多样性；13条接触不变、3条存在已释放安全范围内的局部变化。另保留6条分层替补（平衡/亲和力支持/性质支持双突各2条）。gate为`pass/ready_for_targeted_finalist_review`；这是计算预选，不是最终序列冻结或实验验证。
-13. **终审能量来源合同（代码已完成，等待远程轻量复用）**：不再默认补算位置对匹配单突或运行AF3。新入口将当前36条候选的既有PyRosetta突变体和配对WT按`wt_control_id`、replicate和seed联接，计算`ΔE_complex`、`ΔE_separated`并验证`ΔdG=ΔE_complex-ΔE_separated`；分离态只作Rosetta代理，不称为单体稳定性。亲和力/性质单突所需总分已在Git制品中；双突总分只存在远程ignored目录`results/candidate_design/double_mutant_scan_20260816/pyrosetta/`，因此真实36条终审制品尚未生成。最终冻结入口要求36条均有显式决定和理由且恰好30条`select`，不会自动填写或在缺失双突数据时猜测。
+13. **终审能量来源复核（真实运行已完成）**：`finalist_energy_review_20260817/`以既有PyRosetta突变体和配对WT生成36条候选×3重复，108行能量恒等式误差均为0，gate为`pass/ready_for_explicit_final_30_decision`。类别为复合物与分离态均有利5条、表观结合改善完全由分离态惩罚驱动12条、其余一致分离态谨慎19条；12条强谨慎候选全部在当前30条预终选中。33/36的`ΔdG`中位数<0、35/36的跨界面能中位数<0，但只有18/36的复合物总分中位数<0，且33条`ΔdG<0`中23条主要由分离态惩罚贡献，因此负`ΔdG`或负跨界面能不能单独作为终选依据。6条替补的复合物总分中位数均<0且无强谨慎标记，需与当前预终选共同显式复核。分离态仍只是Rosetta代理，不是实测VHH单体稳定性、折叠自由能、Tm、表达或产量。
 
 ## Verification
 
-- 当前全套为`232 passed, 1 skipped, 4 subtests passed`，唯一skip仍为Windows真实symlink权限测试。远程首次终审运行暴露事务安装调用关键字错误；能量终审与最终冻结两个入口已改用真实“暂存→最终”事务映射，端到端CLI及相邻事务/预终选测试为`19 passed, 1 skipped`，Python编译和`git diff --check`通过。该故障发生在正式文件安装阶段，不改变科学计算语义；终审真实制品仍需远程重跑生成并人工检查结果图。
+- 当前全套为`232 passed, 1 skipped, 4 subtests passed`，唯一skip仍为Windows真实symlink权限测试；事务修复后的端到端CLI及相邻事务/预终选测试为`19 passed, 1 skipped`。真实终审运行耗时2.055765秒并通过36条、108重复、配对WT和能量恒等式门；PNG已人工检查，三面板、坐标定义、图例和分离态解释均清晰。`final_candidate_selection_performed=false`，尚未把计算预选误写成最终提交序列。
 
 ## Required Next Steps
 
-1. 远程pull本轮代码后直接运行`bash scripts/candidate_design/run_finalist_energy_review.sh`；该入口只读取既有双突PyRosetta原始CSV并联接Git跟踪单突制品，预计低于1分钟，不使用Slurm或加载模型。提交并pull回生成的36条能量来源汇总、108行逐重复、决策模板、gate和图。
-2. 从真实文件逐条审阅30条预终选与6条替补，重点识别“表面有利的`ΔdG`主要来自分离态恶化”的候选，并与直接跨界面能、接触/表位、AntiFold、U/S/Tm、TNP和既有专家风险共同判断；不做简单投票或跨协议绝对REU混排。
-3. 在36行决策表中显式填写`select/reserve/exclude`和理由；只有恰好30条`select`时才运行最终冻结入口，生成最终CSV/FASTA、审计、结果图和`ready_for_experimental_submission`门。WT作为额外实验对照。四状态PyRosetta或AF3均只在真实终审仍存在无法取舍的个别问题时条件触发。
+1. 从真实36行决策模板逐条审阅30条预终选与6条替补：优先降级12条“突变复合物不改善、负`ΔdG`完全来自分离态惩罚”的强谨慎候选；对其余候选联合复合物总分、跨界面能、接触/表位、AntiFold、U/S/Tm、TNP和既有专家风险判断，不做简单投票或跨协议绝对REU混排。
+2. 在36行决策表中显式填写`select/reserve/exclude`和理由；只有恰好30条`select`时才运行最终冻结入口，生成最终CSV/FASTA、审计、结果图和`ready_for_experimental_submission`门。WT作为额外实验对照。
+3. 四状态PyRosetta或AF3仅在上述真实终审仍存在无法取舍且会改变30条组成的个别问题时条件触发；当前不启动批量补算。
