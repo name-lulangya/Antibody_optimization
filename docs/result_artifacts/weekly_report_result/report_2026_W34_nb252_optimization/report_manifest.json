@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-17T12:42:54+08:00",
+  "report": "docs/result_artifacts/weekly_report_result/report_2026_W34_nb252_optimization/Nb252_optimization_stage_report_2026_W31_W34.docx",
+  "reporting_period": "2026-W31--W34",
+  "final_candidate_count": 30,
+  "source_figures": [
+    "docs/result_artifacts/input_baseline/summary/input_baseline_qc.png",
+    "docs/result_artifacts/candidate_design/affinity_pyrosetta_full_scan_20260811/affinity_full_scan_qc.png",
+    "docs/result_artifacts/candidate_design/flex_ddg_production_result_20260812/flex_ddg_production_qc.png",
+    "docs/result_artifacts/candidate_design/unified_property_scoring_result_20260815/unified_property_scoring.png",
+    "docs/result_artifacts/candidate_design/double_mutant_scan_review_v2_1_20260816/double_mutant_joint_evidence_v2_1.png",
+    "docs/result_artifacts/candidate_design/finalist_energy_review_20260817/finalist_energy_review.png",
+    "docs/result_artifacts/candidate_design/final_candidate_panel_20260817/final_candidate_panel.png"
+  ],
+  "source_records": [
+    "docs/run_summaries/input_baseline/sequence_numbering.json",
+    "docs/result_artifacts/input_baseline/structure_released_20260810/structure_alignment_summary.json",
+    "docs/result_artifacts/input_baseline/interface_released_20260810/interface_manifest.json",
+    "docs/run_summaries/candidate_design/affinity_pyrosetta_full_scan_20260811.json",
+    "docs/run_summaries/candidate_design/flex_ddg_production_result_20260812.json",
+    "docs/run_summaries/candidate_design/unified_property_scoring_result_20260815.json",
+    "docs/run_summaries/candidate_design/double_mutant_scan_review_v2_1_20260816.json",
+    "docs/result_artifacts/candidate_design/finalist_energy_review_20260817/finalist_energy_review_gate.json",
+    "docs/result_artifacts/candidate_design/final_candidate_panel_20260817/final_candidate_panel_gate.json",
+    "docs/result_artifacts/candidate_design/final_candidate_panel_20260817/final_candidates_30.csv",
+    "docs/result_artifacts/candidate_design/final_candidate_panel_20260817/final_candidates_30.fasta",
+    "docs/history/2026-W31.md; 2026-W32.md; 2026-W33.md; 2026-W34.md"
+  ],
+  "design_preset": "standard_business_brief",
+  "header_template": "editorial_cover",
+  "table_override": "three-line scientific tables required by AGENTS.md"
+}
