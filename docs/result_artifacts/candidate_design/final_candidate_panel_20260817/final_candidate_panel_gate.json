@@ -1,0 +1,21 @@
+{
+  "excluded_count": 3,
+  "final_candidate_count": 30,
+  "final_candidate_selection_performed": true,
+  "final_category_counts": {
+    "affinity_focused_single": 6,
+    "affinity_supported_double": 1,
+    "balanced_combination": 17,
+    "property_focused_single": 6
+  },
+  "final_unique_sequence_count": 30,
+  "gate_name": "nb252_final_30_sequence_panel",
+  "generated_at": "2026-08-17T12:09:53+08:00",
+  "interpretation": "Computationally prioritized for testing; not experimentally validated optimization.",
+  "release": "ready_for_experimental_submission",
+  "reserve_count": 3,
+  "reviewed_candidate_count": 36,
+  "schema_version": 1,
+  "status": "pass",
+  "wild_type_is_separate_experimental_control": true
+}

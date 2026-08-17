@@ -16,13 +16,17 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
-from antibody_optimization.final_candidate_panel import finalize_candidate_panel  # noqa: E402
+from antibody_optimization.final_candidate_panel import (  # noqa: E402
+    apply_explicit_finalist_decisions,
+    finalize_candidate_panel,
+)
 from antibody_optimization.file_transaction import replace_staged_files, validate_file_paths  # noqa: E402
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--decision-review", type=Path, required=True)
+    parser.add_argument("--energy-review-template", type=Path, required=True)
+    parser.add_argument("--explicit-decisions", type=Path, required=True)
     parser.add_argument("--preliminary-dir", type=Path, required=True)
     parser.add_argument("--stage2-contract", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
@@ -35,7 +39,8 @@ def main() -> int:
     args = parse_args()
     started = time.perf_counter()
     generated_at = args.generated_at or datetime.now().astimezone().isoformat(timespec="seconds")
-    review = args.decision_review.expanduser().resolve(strict=True)
+    review_template = args.energy_review_template.expanduser().resolve(strict=True)
+    explicit_decisions = args.explicit_decisions.expanduser().resolve(strict=True)
     preliminary = args.preliminary_dir.expanduser().resolve(strict=True)
     preliminary_sources = [
         preliminary / "preliminary_panel_30.csv",
@@ -58,7 +63,12 @@ def main() -> int:
     run_summary = args.run_summary.expanduser().absolute()
     validated = validate_file_paths(
         project_root=PROJECT_ROOT,
-        source_paths=[review, contract_path, *preliminary_sources],
+        source_paths=[
+            review_template,
+            explicit_decisions,
+            contract_path,
+            *preliminary_sources,
+        ],
         target_paths=[*targets.values(), run_summary],
     )
     targets = dict(zip(targets, validated.target_paths[:-1], strict=True))
@@ -68,8 +78,14 @@ def main() -> int:
         raise FileExistsError("Refusing to overwrite existing outputs:\n" + "\n".join(map(str, existing)))
     contract = json.loads(contract_path.read_text(encoding="utf-8-sig"))
     parent = str(contract["authoritative_parent"]["sequence"])
+    reviewed_rows = apply_explicit_finalist_decisions(
+        _csv(review_template),
+        json.loads(explicit_decisions.read_text(encoding="utf-8-sig")),
+    )
     result = finalize_candidate_panel(
-        _csv(review), parent, [*_csv(preliminary_sources[0]), *_csv(preliminary_sources[1])]
+        reviewed_rows,
+        parent,
+        [*_csv(preliminary_sources[0]), *_csv(preliminary_sources[1])],
     )
     from antibody_optimization.final_candidate_panel_plot import render_final_candidate_panel
 

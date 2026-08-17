@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "reviewer": "Codex computational expert review authorized by the user",
+  "decision_basis": "Integrated review of paired Rosetta energy origin, direct complex and cross-interface signals, contact and epitope preservation, AntiFold compatibility, NetSolP, NanoMelt, TNP, chemical and structural risk, component controls, and mutation diversity; predictions are ranking evidence rather than experimental validation.",
+  "decisions": [
+    {
+      "candidate_id": "Nb252_aff_seq045_R45T",
+      "review_decision": "select",
+      "review_rationale": "Retain as the lower-risk R45 component control for selected combinations; standalone binding signal is separated-state-driven, so it is not treated as an affinity-positive result by itself."
+    },
+    {
+      "candidate_id": "Nb252_aff_seq045_R45V",
+      "review_decision": "select",
+      "review_rationale": "Retain as the required component control for several directly supported R45V combinations; standalone high hydrophobic and contact-change risk remains explicit."
+    },
+    {
+      "candidate_id": "Nb252_aff_seq101_D101W",
+      "review_decision": "exclude",
+      "review_rationale": "Exclude because the mutant complex is unfavorable in all three paired repeats and the apparent binding gain is entirely separated-state-driven, while exposed Trp, oxidation, contact-change, repulsion, and preparation-sensitivity risks are high."
+    },
+    {
+      "candidate_id": "Nb252_aff_seq103_I103W",
+      "review_decision": "exclude",
+      "review_rationale": "Exclude because the mutant complex is unfavorable in all three paired repeats and the apparent binding gain is entirely separated-state-driven, with added Trp oxidation, contact-change, repulsion, preparation-sensitivity, and negative AntiFold evidence."
+    },
+    {
+      "candidate_id": "Nb252_aff_seq105_E105F",
+      "review_decision": "select",
+      "review_rationale": "Select as a strong affinity hypothesis with favorable complex, separated-state, binding, and cross-interface signals in all repeats; high local hydrophobic and contact-change risk requires experimental testing."
+    },
+    {
+      "candidate_id": "Nb252_aff_seq105_E105L",
+      "review_decision": "select",
+      "review_rationale": "Select as the complementary E105 affinity hypothesis with favorable complex, separated-state, binding, and cross-interface signals; retain explicit hydrophobic and local packing risk."
+    },
+    {
+      "candidate_id": "Nb252_aff_seq107_N107A",
+      "review_decision": "select",
+      "review_rationale": "Select as a component control and distinct affinity hypothesis because complex and direct binding signals are favorable, while separated-state, hydrophobization, contact-change, and negative AntiFold cautions remain."
+    },
+    {
+      "candidate_id": "Nb252_aff_seq114_S114M",
+      "review_decision": "select",
+      "review_rationale": "Select as a unique position-114 affinity hypothesis with favorable complex and direct binding signals; high hydrophobic, oxidation, contact-change, and repulsion risks prevent interpreting it as validated improvement."
+    },
+    {
+      "candidate_id": "Nb252_double_A23S__E105F",
+      "review_decision": "select",
+      "review_rationale": "Select because complex, separated-state, binding, and cross-interface energies are all favorable and the combination supplies a property-supported A23S control for the higher-risk E105F hypothesis."
+    },
+    {
+      "candidate_id": "Nb252_double_A23S__E105L",
+      "review_decision": "select",
+      "review_rationale": "Select because both complex and separated-state scores improve with favorable binding and cross-interface signals, providing a complementary A23S plus E105L combination."
+    },
+    {
+      "candidate_id": "Nb252_double_F30A__E105L",
+      "review_decision": "select",
+      "review_rationale": "Select as a balanced property-affinity hypothesis: the complex and cross-interface signals improve, AntiFold is favorable, contacts are unchanged, and both component singles are retained."
+    },
+    {
+      "candidate_id": "Nb252_double_F30A__R45V",
+      "review_decision": "select",
+      "review_rationale": "Select as a deliberately property-led combination with three material property improvements, favorable AntiFold, unchanged contacts, and retained component controls; its binding gain is separated-state-driven and remains low confidence."
+    },
+    {
+      "candidate_id": "Nb252_double_F30T__R45T",
+      "review_decision": "select",
+      "review_rationale": "Select as a property-led and mechanistically distinct combination with two property improvements, favorable AntiFold, unchanged contacts, and both single controls; direct complex support is absent."
+    },
+    {
+      "candidate_id": "Nb252_double_Q1D__E105F",
+      "review_decision": "select",
+      "review_rationale": "Select because the complex and cross-interface signals improve and Q1D provides a low-risk property component; separated-state contribution and negative AntiFold evidence remain cautions."
+    },
+    {
+      "candidate_id": "Nb252_double_Q1D__E105L",
+      "review_decision": "select",
+      "review_rationale": "Select as a property-affinity combination with favorable binding, cross-interface, and AntiFold signals plus retained component controls; inconsistent complex improvement limits confidence."
+    },
+    {
+      "candidate_id": "Nb252_double_Q1D__F30T",
+      "review_decision": "select",
+      "review_rationale": "Select only as a lower-confidence property-combination hypothesis that preserves non-E105 mechanistic diversity and has retained single controls; complex energy is strongly unfavorable and binding evidence is weak."
+    },
+    {
+      "candidate_id": "Nb252_double_Q1D__R45V",
+      "review_decision": "exclude",
+      "review_rationale": "Exclude because the mutant complex is strongly unfavorable and the apparent binding gain is entirely separated-state-driven while carrying the high-risk R45V substitution; A23S;R45V supplies a better directly supported alternative."
+    },
+    {
+      "candidate_id": "Nb252_double_R45T__N107A",
+      "review_decision": "select",
+      "review_rationale": "Select as a distinct two-affinity-component hypothesis with strong binding and cross-interface signals, unchanged contacts, and both single controls; near-neutral complex energy and negative AntiFold evidence require caution."
+    },
+    {
+      "candidate_id": "Nb252_double_R45T__S55G",
+      "review_decision": "select",
+      "review_rationale": "Select as a property-led combination with favorable AntiFold, unchanged contacts, and retained controls; complex energy is unfavorable and the apparent binding gain is separated-state-driven."
+    },
+    {
+      "candidate_id": "Nb252_double_R45V__E105F",
+      "review_decision": "select",
+      "review_rationale": "Select as one of the strongest direct complex and cross-interface combinations with unchanged contacts; both hydrophobic component risks and negative AntiFold evidence remain explicit."
+    },
+    {
+      "candidate_id": "Nb252_double_R45V__E105L",
+      "review_decision": "select",
+      "review_rationale": "Select as the complementary E105L combination with strong complex, binding, cross-interface, and AntiFold support and unchanged contacts, while retaining component hydrophobicity cautions."
+    },
+    {
+      "candidate_id": "Nb252_double_R45V__N107A",
+      "review_decision": "select",
+      "review_rationale": "Select because the complex and direct binding signals improve and two property indicators are favorable; contact review, negative AntiFold, and combined hydrophobization risks remain."
+    },
+    {
+      "candidate_id": "Nb252_double_S55G__E105L",
+      "review_decision": "select",
+      "review_rationale": "Select as a property-compatible E105L combination with strongly favorable AntiFold and unchanged contacts; complex energy does not improve and the binding signal is separated-state-driven."
+    },
+    {
+      "candidate_id": "Nb252_double_S55G__N107A",
+      "review_decision": "select",
+      "review_rationale": "Select as a non-E105 property-combination hypothesis with retained controls and unchanged contacts; complex, AntiFold, and weak cross-interface evidence make it lower priority."
+    },
+    {
+      "candidate_id": "Nb252_uni_seq001_Q1D",
+      "review_decision": "select",
+      "review_rationale": "Retain as a low-risk property single and component control for selected combinations; its standalone apparent binding gain is separated-state-driven and not direct affinity support."
+    },
+    {
+      "candidate_id": "Nb252_uni_seq023_A23S",
+      "review_decision": "select",
+      "review_rationale": "Select as a property single and component control with favorable complex and separated-state scores; binding is neutral and proximity to the experimental coordinate gap remains a structural caution."
+    },
+    {
+      "candidate_id": "Nb252_uni_seq030_F30A",
+      "review_decision": "select",
+      "review_rationale": "Select as a property single with two material improvements and favorable AntiFold plus value as a combination control; standalone complex energy is unfavorable and the site is adjacent to the coordinate gap."
+    },
+    {
+      "candidate_id": "Nb252_uni_seq030_F30S",
+      "review_decision": "select",
+      "review_rationale": "Select as a distinct property single with two material improvements and favorable AntiFold; standalone complex and cross-interface evidence are unfavorable and the site is adjacent to the coordinate gap."
+    },
+    {
+      "candidate_id": "Nb252_uni_seq030_F30T",
+      "review_decision": "select",
+      "review_rationale": "Select as a property single and component control for selected F30T combinations; direct affinity evidence is neutral to unfavorable and the site is adjacent to the coordinate gap."
+    },
+    {
+      "candidate_id": "Nb252_uni_seq055_S55G",
+      "review_decision": "select",
+      "review_rationale": "Select as a property single and component control with favorable AntiFold; binding and complex energies are not favorable and the CDR glycine flexibility change requires experimental evaluation."
+    },
+    {
+      "candidate_id": "Nb252_double_A23S__R45V",
+      "review_decision": "select",
+      "review_rationale": "Promote from reserve because complex and direct binding signals improve, two property indicators are favorable, contacts are unchanged, and it replaces the weaker Q1D;R45V hypothesis without increasing R45V representation."
+    },
+    {
+      "candidate_id": "Nb252_double_F30S__E105L",
+      "review_decision": "reserve",
+      "review_rationale": "Keep as a reserve because complex and AntiFold signals are favorable, but no property change reaches the material threshold and E105L is already represented at the predefined diversity cap."
+    },
+    {
+      "candidate_id": "Nb252_double_F30T__E105F",
+      "review_decision": "select",
+      "review_rationale": "Promote from reserve because complex, binding, and cross-interface energies are directly favorable with unchanged contacts and retained single controls, while adding an underrepresented F30T pairing."
+    },
+    {
+      "candidate_id": "Nb252_double_R45T__E105F",
+      "review_decision": "select",
+      "review_rationale": "Promote from reserve as a strong direct affinity combination with favorable complex and cross-interface energies, unchanged contacts, no material property adverse signal, and retained component controls."
+    },
+    {
+      "candidate_id": "Nb252_double_R45T__E105L",
+      "review_decision": "reserve",
+      "review_rationale": "Keep as a reserve despite strong complex and binding evidence because one material property signal is adverse and adding it would exceed the predefined E105L component-diversity cap."
+    },
+    {
+      "candidate_id": "Nb252_double_S55G__E105F",
+      "review_decision": "reserve",
+      "review_rationale": "Keep as a reserve because complex and cross-interface energies improve, but one material property signal is adverse and E105F is already represented at the predefined diversity cap by stronger complementary combinations."
+    }
+  ]
+}

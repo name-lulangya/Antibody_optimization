@@ -351,8 +351,8 @@
 - `antibody_optimization.finalist_energy_plot`：从36行精确汇总表绘制复合物—分离态能量来源、两项直接结合信号和能量来源类别，输出600 dpi PNG/SVG；不执行候选选择。
 - `scripts/candidate_design/build_finalist_energy_review.py`与`run_finalist_energy_review.sh`：远程轻量复用入口；在项目`ab_optim`环境读取既有ignored双突PyRosetta原始表和Git跟踪单突/预终选表，生成Git可跟踪终审制品。预计低于1分钟，不请求Slurm、不加载PyRosetta、不运行新模型，并拒绝覆盖既有输出。
 - `antibody_optimization.final_candidate_panel`
-  - 用途：在36条候选均有显式`select/reserve/exclude`和非空理由后，验证并冻结恰好30条最终序列。
-  - 主要输入/返回：人工科学复核后的36行决策表和authoritative 128-aa母本；返回30条最终序列、储备状态、完整审计及类别计数。
+  - 用途：将独立36行显式决策合同严格联接到能量终审模板，并在所有候选均有`select/reserve/exclude`和非空理由后验证、冻结恰好30条最终序列。
+  - 主要输入/返回：能量终审模板、包含reviewer/decision basis的显式决策合同、authoritative 128-aa母本和36条预期候选；返回完整已审行、30条最终序列、储备状态、完整审计及类别计数。
   - 算法假设：逐序列重新核对突变标签、唯一性、Cys22/Cys95、总Cys数和末端`SSGS`；WT作为独立实验对照，不占30条名额。
   - 明确不支持：自动填写待审决定、无理由选择、根据单一能量或性质指标加权排序，或将计算优先序列称为实验验证优化。
-- `antibody_optimization.final_candidate_panel_plot`与`scripts/candidate_design/finalize_candidate_panel.py`：显式决策通过后生成最终CSV/FASTA、储备/决策审计、阶段门、精确绘图数据、600 dpi PNG/SVG和run summary；任何待审行或非30条选择均阻断。
+- `antibody_optimization.final_candidate_panel_plot`与`scripts/candidate_design/finalize_candidate_panel.py`：读取原始能量终审模板和独立显式决策JSON，严格联接后生成最终CSV/FASTA、储备/决策审计、阶段门、精确绘图数据、600 dpi PNG/SVG和run summary；身份不全、任何待审行或非30条选择均阻断，不保留旧的手工改写完整模板入口。

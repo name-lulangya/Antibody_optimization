@@ -2,6 +2,8 @@
 
 This module performs identity and decision-contract validation only.  It does
 not rank candidates, infer missing review decisions, or run prediction tools.
+An explicit, independently reviewed decision contract can be joined to the
+energy-review template before the final 30-sequence panel is frozen.
 """
 
 from __future__ import annotations
@@ -17,6 +19,83 @@ class FinalCandidatePanelError(ValueError):
 
 MUTATION_RE = re.compile(r"^([ACDEFGHIKLMNPQRSTVWY])(\d+)([ACDEFGHIKLMNPQRSTVWY])$")
 ALLOWED_DECISIONS = {"select", "reserve", "exclude"}
+
+
+def apply_explicit_finalist_decisions(
+    template_rows: Sequence[Mapping[str, object]],
+    decision_contract: Mapping[str, object],
+) -> list[dict[str, object]]:
+    """Join a complete explicit decision contract to the 36-row review template.
+
+    ``decision_contract`` must contain a ``decisions`` list with one unique row
+    per template candidate.  Each row supplies ``candidate_id``,
+    ``review_decision`` and a non-empty candidate-specific ``review_rationale``.
+    The function does not infer, rank, or fill decisions and requires exactly
+    30 selections.  All other template evidence is retained unchanged.
+    """
+
+    if len(template_rows) != 36:
+        raise FinalCandidatePanelError(
+            f"Expected 36 energy-review template rows, found {len(template_rows)}"
+        )
+    raw_decisions = decision_contract.get("decisions")
+    if not isinstance(raw_decisions, list) or len(raw_decisions) != 36:
+        count = len(raw_decisions) if isinstance(raw_decisions, list) else 0
+        raise FinalCandidatePanelError(
+            f"Expected 36 explicit decision rows, found {count}"
+        )
+    decisions: dict[str, Mapping[str, object]] = {}
+    for row in raw_decisions:
+        if not isinstance(row, Mapping):
+            raise FinalCandidatePanelError("Explicit decision rows must be mappings")
+        identifier = str(row.get("candidate_id", "")).strip()
+        if not identifier or identifier in decisions:
+            raise FinalCandidatePanelError(
+                f"Missing or duplicate explicit candidate_id: {identifier}"
+            )
+        decision = str(row.get("review_decision", "")).strip().lower()
+        rationale = str(row.get("review_rationale", "")).strip()
+        if decision not in ALLOWED_DECISIONS:
+            raise FinalCandidatePanelError(
+                f"Invalid explicit decision for {identifier}: {decision}"
+            )
+        if not rationale:
+            raise FinalCandidatePanelError(
+                f"Missing explicit rationale for {identifier}"
+            )
+        decisions[identifier] = row
+
+    template_ids = {str(row["candidate_id"]) for row in template_rows}
+    if set(decisions) != template_ids:
+        raise FinalCandidatePanelError(
+            "Explicit decision candidate identities do not match the review template"
+        )
+    if sum(
+        str(row["review_decision"]).strip().lower() == "select"
+        for row in decisions.values()
+    ) != 30:
+        raise FinalCandidatePanelError("Explicit decision contract must select exactly 30")
+
+    reviewer = str(decision_contract.get("reviewer", "")).strip()
+    basis = str(decision_contract.get("decision_basis", "")).strip()
+    if not reviewer or not basis:
+        raise FinalCandidatePanelError(
+            "Explicit decision contract requires reviewer and decision_basis"
+        )
+    return [
+        {
+            **dict(row),
+            "review_decision": str(decisions[str(row["candidate_id"])]["review_decision"])
+            .strip()
+            .lower(),
+            "review_rationale": str(
+                decisions[str(row["candidate_id"])]["review_rationale"]
+            ).strip(),
+            "reviewer": reviewer,
+            "decision_basis": basis,
+        }
+        for row in template_rows
+    ]
 
 
 def finalize_candidate_panel(

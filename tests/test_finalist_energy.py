@@ -9,6 +9,7 @@ import pytest
 
 from antibody_optimization.final_candidate_panel import (
     FinalCandidatePanelError,
+    apply_explicit_finalist_decisions,
     finalize_candidate_panel,
 )
 from antibody_optimization.final_candidate_panel_plot import render_final_candidate_panel
@@ -155,6 +156,26 @@ def test_explicit_final_panel_review_freezes_exact_30():
     assert all(row["sequence"].endswith("SSGS") for row in finalized["final_rows"])
 
 
+def test_explicit_decision_contract_joins_without_inference():
+    panel, _, result = _review()
+    panel_ids = {row["candidate_id"] for row in panel}
+    contract = {
+        "reviewer": "test-only reviewer",
+        "decision_basis": "test-only explicit decisions",
+        "decisions": [
+            {
+                "candidate_id": row["candidate_id"],
+                "review_decision": "select" if row["candidate_id"] in panel_ids else "reserve",
+                "review_rationale": "test-only explicit review",
+            }
+            for row in result["decision_rows"]
+        ],
+    }
+    reviewed = apply_explicit_finalist_decisions(result["decision_rows"], contract)
+    assert sum(row["review_decision"] == "select" for row in reviewed) == 30
+    assert {row["reviewer"] for row in reviewed} == {"test-only reviewer"}
+
+
 def test_final_panel_rejects_unreviewed_decision():
     _, _, result = _review()
     parent = json.loads(CONTRACT.read_text(encoding="utf-8"))["authoritative_parent"]["sequence"]
@@ -223,16 +244,27 @@ def test_finalist_energy_and_final_panel_cli_install_outputs():
         )
         decisions = _csv(review_output / "finalist_decision_review_template.csv")
         panel_ids = {row["candidate_id"] for row in panel}
-        for row in decisions:
-            row["review_decision"] = "select" if row["candidate_id"] in panel_ids else "reserve"
-            row["review_rationale"] = "test-only explicit review"
-        _write_csv(review_output / "reviewed.csv", decisions)
+        explicit = {
+            "reviewer": "test-only reviewer",
+            "decision_basis": "test-only explicit decisions",
+            "decisions": [
+                {
+                    "candidate_id": row["candidate_id"],
+                    "review_decision": "select" if row["candidate_id"] in panel_ids else "reserve",
+                    "review_rationale": "test-only explicit review",
+                }
+                for row in decisions
+            ],
+        }
+        explicit_path = review_output / "explicit.json"
+        explicit_path.write_text(json.dumps(explicit), encoding="utf-8")
         final_output = work / "final"
         subprocess.run(
             [
                 sys.executable,
                 str(ROOT / "scripts/candidate_design/finalize_candidate_panel.py"),
-                "--decision-review", str(review_output / "reviewed.csv"),
+                "--energy-review-template", str(review_output / "finalist_decision_review_template.csv"),
+                "--explicit-decisions", str(explicit_path),
                 "--preliminary-dir", str(PRELIMINARY),
                 "--stage2-contract", str(CONTRACT),
                 "--output-dir", str(final_output),

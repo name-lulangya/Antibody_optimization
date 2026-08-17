@@ -1,0 +1,44 @@
+{
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\finalize_candidate_panel.py",
+    "--energy-review-template",
+    "docs/result_artifacts/candidate_design/finalist_energy_review_20260817/finalist_decision_review_template.csv",
+    "--explicit-decisions",
+    "docs/result_artifacts/candidate_design/final_candidate_panel_20260817/finalist_explicit_decisions.json",
+    "--preliminary-dir",
+    "docs/result_artifacts/candidate_design/preliminary_panel_20260817",
+    "--stage2-contract",
+    "docs/result_artifacts/candidate_design/stage0_contract_20260810/stage2_design_contract.json",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/final_candidate_panel_20260817",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/final_candidate_panel_20260817.json"
+  ],
+  "elapsed_seconds": 1.576026,
+  "excluded_count": 3,
+  "final_candidate_count": 30,
+  "final_category_counts": {
+    "affinity_focused_single": 6,
+    "affinity_supported_double": 1,
+    "balanced_combination": 17,
+    "property_focused_single": 6
+  },
+  "final_unique_sequence_count": 30,
+  "generated_at": "2026-08-17T12:09:53+08:00",
+  "outputs": {
+    "audit": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\final_candidate_panel_20260817\\final_candidate_decision_audit.csv",
+    "fasta": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\final_candidate_panel_20260817\\final_candidates_30.fasta",
+    "final": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\final_candidate_panel_20260817\\final_candidates_30.csv",
+    "gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\final_candidate_panel_20260817\\final_candidate_panel_gate.json",
+    "plot_data": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\final_candidate_panel_20260817\\final_candidate_plot_data.csv",
+    "png": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\final_candidate_panel_20260817\\final_candidate_panel.png",
+    "reserves": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\final_candidate_panel_20260817\\final_reserve_status.csv",
+    "svg": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\final_candidate_panel_20260817\\final_candidate_panel.svg"
+  },
+  "python": "3.11.15",
+  "reserve_count": 3,
+  "reviewed_candidate_count": 36,
+  "schema_version": 1,
+  "status": "pass"
+}
