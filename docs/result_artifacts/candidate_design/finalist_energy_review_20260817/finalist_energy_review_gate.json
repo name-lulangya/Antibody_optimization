@@ -1,0 +1,22 @@
+{
+  "absolute_scores_compared_across_protocols": false,
+  "candidate_count": 36,
+  "energy_origin_class_counts": {
+    "apparent_binding_gain_driven_by_separated_destabilization": 12,
+    "complex_and_separated_state_stabilization": 5,
+    "consistent_separated_destabilization_caution": 19
+  },
+  "final_candidate_selection_performed": false,
+  "gate_name": "nb252_finalist_energy_origin_review",
+  "generated_at": "2026-08-17T11:50:09+08:00",
+  "interpretation": "Paired Rosetta ranking-signal decomposition. The separated-state score is not measured monomer stability, folding free energy, Tm, expression, or yield.",
+  "new_af3_calculations_performed": false,
+  "new_pyrosetta_calculations_performed": false,
+  "preliminary_panel_count": 30,
+  "release": "ready_for_explicit_final_30_decision",
+  "replicate_row_count": 108,
+  "reserve_count": 6,
+  "schema_version": 1,
+  "status": "pass",
+  "strong_separated_destabilization_caution_count": 12
+}

@@ -1,0 +1,35 @@
+{
+  "candidate_count": 36,
+  "command_argv": [
+    "/data/software/env/luly25/ab_optim/bin/python",
+    "/homes/Tianlab/luly25/Antibody_optimization/scripts/candidate_design/build_finalist_energy_review.py",
+    "--preliminary-dir",
+    "docs/result_artifacts/candidate_design/preliminary_panel_20260817",
+    "--affinity-result-dir",
+    "docs/result_artifacts/candidate_design/affinity_pyrosetta_full_scan_20260811",
+    "--property-result-dir",
+    "docs/result_artifacts/candidate_design/property_affinity_pyrosetta_full_scan_20260816",
+    "--double-pyrosetta-dir",
+    "results/candidate_design/double_mutant_scan_20260816/pyrosetta",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/finalist_energy_review_20260817",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/finalist_energy_review_20260817.json"
+  ],
+  "double_pyrosetta_source": "/homes/Tianlab/luly25/Antibody_optimization/results/candidate_design/double_mutant_scan_20260816/pyrosetta",
+  "elapsed_seconds": 2.055765,
+  "generated_at": "2026-08-17T11:50:09+08:00",
+  "new_model_calculations_performed": false,
+  "outputs": {
+    "decisions": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/finalist_energy_review_20260817/finalist_decision_review_template.csv",
+    "gate": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/finalist_energy_review_20260817/finalist_energy_review_gate.json",
+    "png": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/finalist_energy_review_20260817/finalist_energy_review.png",
+    "replicates": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/finalist_energy_review_20260817/finalist_energy_replicates.csv",
+    "summary": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/finalist_energy_review_20260817/finalist_energy_summary.csv",
+    "svg": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/finalist_energy_review_20260817/finalist_energy_review.svg"
+  },
+  "python": "3.11.15",
+  "replicate_row_count": 108,
+  "schema_version": 1,
+  "status": "pass"
+}
