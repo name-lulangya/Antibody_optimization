@@ -367,7 +367,7 @@ def write_static_toc(doc):
         ("9", "局限性、风险与实验建议"), ("附录", "最终候选、储备/排除项、工具角色与完整序列"),
     ]
     add_table(doc, ["章节", "内容"], rows, [1200, 8160], 9.5)
-    add_callout(doc, "阅读建议", "建议先阅读执行摘要与图2证据漏斗，再重点查看第5—8节的筛选逻辑、最终面板和实验建议。附录保留候选清单、关键决策和完整序列，不展示项目内部文件路径。")
+    add_callout(doc, "阅读建议", "建议先阅读执行摘要与图2证据漏斗，再重点查看第5—8节的筛选逻辑、最终面板和实验建议；附录列出候选概览、关键决策和完整序列。")
     doc.add_page_break()
 
 
@@ -416,7 +416,7 @@ def build_report():
         ["Flex ddG", f"{flex['candidate_count']}候选 / {flex['task_count']}任务", "完成"],
         ["统一性质单突", f"{properties['counts']['candidates']}候选 + {properties['counts']['wt_controls']} WT", "完成"],
         ["双突联合分析", f"{doubles['candidate_count']}候选", "完成"],
-        ["最终面板", f"{final_gate['final_candidate_count']}候选 + {final_gate['reserve_count']}储备", final_gate['release']],
+        ["最终面板", f"{final_gate['final_candidate_count']}候选 + {final_gate['reserve_count']}储备", "建议进入实验测试"],
     ], [2800, 3700, 2860], 8.8)
 
     add_heading(doc, "2. 科学背景、目标与输入基线", 1)
@@ -443,12 +443,13 @@ def build_report():
     add_callout(doc, "AF3使用原则", "由于WT的AF3 CDR3与实验结合构象偏差较大，AF3未用于常规亲和力排序；它只作为缺失区和独立局部包装敏感性证据。", "caution")
 
     add_heading(doc, "4. 计算优化总体路线", 1)
-    add_figure(doc, workflow, "图2  从输入基线到最终30条序列的证据漏斗", "本报告由各阶段run summary确定性汇总")
+    add_figure(doc, workflow, "图2  从输入基线到最终30条序列的证据漏斗", "基于各阶段计算与审查结果汇总")
     add_body(doc, "路线采用“宽空间计算、统一证据筛选、显式专家终审”。亲和力与性质并非严格按CDR/FR分区：界面和非界面均可提出候选，但每个突变都必须同时接受结构、亲和力、性质和化学风险审查。")
 
     add_heading(doc, "5. PyRosetta协议与亲和力轨道", 1)
     add_heading(doc, "5.1 评分协议校准", 2)
     add_body(doc, "实验结构直接使用ref2015时总分较高，主要源于输入侧链缺原子、局部rotamer与Rosetta统计势不完全匹配以及未优化的界面排斥。项目没有把该绝对分数用于候选结论，而是校准并固定interface_repack_constrained_min协议，以同一prepared WT、相同局部约束和配对WT为参照比较突变体。")
+    add_body(doc, "interface_repack_constrained_min是本项目对局部结构准备流程的命名：先只在界面邻域重新选择侧链rotamer，再对同一邻域的主链和侧链做坐标约束下的有限能量最小化；其余残基及链间刚体位置不动。它用于缓解实验模型中的局部碰撞，同时尽量维持已解析的结合构象，不是全局relax或重新对接。WT与突变体使用相同的可动范围、约束和评分设置，因此比较的是同一实验构象附近的配对相对能量。")
     add_body(doc, "所选协议在8次重复中得到稳定的负dG_separated和跨界面能，并把界面fa_rep相对raw结构显著降低，同时保持很小的界面Cα位移。由于本项目关注同一实验构象附近的相对排序，未切换RosettaMP、未全局relax，也未花费大量计算补全远离已解析界面的缺失主链。")
     add_callout(doc, "能量解释", "Rosetta ΔdG、跨界面能和total score均为模型内排序信号。尤其是负ΔdG可能由分离态被惩罚而产生，不能直接等价于实验亲和力提高。", "risk")
     add_heading(doc, "5.2 456条单突全扫描", 2)
@@ -482,6 +483,13 @@ def build_report():
         ["AntiFold", "结构条件下序列兼容性", "三结构视图一致性", "不单独决定候选"],
         ["PyRosetta", "复合物/分离态相对能量", "亲和力及局部结构风险", "REU不能跨协议直接比较"],
     ], [1450, 2100, 2700, 3110], 8.2)
+    add_body(doc, "本报告后续使用的四项核心性质指标均以候选相对WT的变化解释；对以下四项而言，正向变化表示模型预测更有利，但不等于实验改善。")
+    add_table(doc, ["指标", "简要含义", "本项目中的方向与边界"], [
+        ["NetSolP U", "NetSolP给出的Usability（综合可用性）0–1模型分数", "越高越有利；仅作可开发性相容信号，不等于BL21产量"],
+        ["NetSolP S", "NetSolP给出的Solubility（溶解性）0–1模型分数", "越高表示预测溶解性倾向越好；不等于实测溶解度或回收率"],
+        ["NanoMelt预测Tm", "由VHH序列预测的表观熔解温度，单位为°C", "越高表示预测热稳定性越好；属于计算预测，不是DSF等实验Tm"],
+        ["实验复合物视图AntiFold", "在实验NK2R–Nb252复合物结构背景下，比较突变氨基酸与WT的条件对数概率", "ΔlogP>0表示突变与该固定结构背景更兼容；不是结合自由能、亲和力或表达量"],
+    ], [1900, 3500, 5560], 8.0)
     add_heading(doc, "6.2 性质候选如何从全空间选出", 2)
     add_body(doc, f"性质路线首先在122个可变reported位置枚举19种非WT替换，共{unified_plan['candidate_count']}条。随后一次性应用硬约束：{unified_plan['design_status_counts']['blocked_new_unpaired_cys']}条因新增未配对Cys阻断，{unified_plan['design_status_counts']['deferred_missing_experimental_coordinates']}条因实验结构缺失坐标而推迟，最终{unified_plan['design_status_counts']['eligible_current_round']}条进入统一评分。该评分集包括432条已存在的非Cys界面候选和1530条非界面性质发现候选。")
     property_track = property_review["track_review"]["stability_developability_discovery"]
@@ -518,10 +526,10 @@ def build_report():
     add_figure(doc, FIG / "source_05_double_mutants.png", "图6  86条双突的亲和力—性质联合证据", "double_mutant_scan_review_v2_1_20260816")
 
     add_heading(doc, "8. 终审能量来源与最终30条面板", 1)
-    add_heading(doc, "8.1 从100条审查记录到36条finalist", 2)
+    add_heading(doc, "8.1 从100条审查记录到36条终审候选", 2)
     add_body(doc, f"这里的100条不是新生成的额外序列，而是前一步已经固定的14条活跃单突加86条可实现双突。14条单突全部进入主证据池，因为它们既是独立候选，也是解释组合所必需的组成对照；86条双突中，只有联合证据属于“亲和力与性质共同支持”“亲和力支持且性质非不利”或“性质支持且亲和力非不利”，并同时通过结构安全与硬约束的42条进入主证据池。因而主证据池为14+42={preliminary['primary_pool_count']}条，其余44条权衡或证据不清晰双突仅保留审计。")
     add_body(doc, "42条支持双突分为28条平衡支持、12条亲和力支持且性质非不利、2条性质支持且亲和力非不利。初步面板保留全部14条组成单突，并从28条平衡支持双突中选择16条；选择顺序先比较同一双突协议内的四项目标Pareto层——ΔdG、跨界面能、非微小性质改善项数和AntiFold兼容性——再用突变与位置对多样性打破同层排序。任何组成突变最多进入5条、任何位置对最多进入2条，防止R45或30/45等单一假设垄断面板。")
-    add_body(doc, f"这样形成{preliminary['preliminary_panel_count']}条初步面板（14条单突+16条平衡双突）。同时按三类联合证据各保留2条储备：2条平衡双突、2条亲和力支持双突和2条性质支持双突，共{preliminary['reserve_count']}条。初步30条与6条储备合并为36条finalist；随后仅复用既有三重复PyRosetta原始结果做能量来源分解，没有新增PyRosetta或AF3计算。")
+    add_body(doc, f"这样形成{preliminary['preliminary_panel_count']}条初步面板（14条单突+16条平衡双突）。同时按三类联合证据各保留2条储备：2条平衡双突、2条亲和力支持双突和2条性质支持双突，共{preliminary['reserve_count']}条。初步30条与6条储备合并为36条终审候选；随后复用既有三重复PyRosetta结果进行能量来源分解，没有新增PyRosetta或AF3计算。")
     add_table(doc, ["漏斗阶段", "数量", "组成与去向"], [
         ["统一审查全集", preliminary["reviewed_candidate_count"], "14条活跃单突 + 86条双突"],
         ["主证据池", preliminary["primary_pool_count"], "14条单突 + 42条支持双突；44条权衡/不清晰双突留档"],
@@ -535,8 +543,8 @@ def build_report():
         ["表观结合改善由分离态惩罚驱动", ec["apparent_binding_gain_driven_by_separated_destabilization"], "不得单独声称亲和力提高"],
         ["一致分离态谨慎", ec["consistent_separated_destabilization_caution"], "结合其他证据审查"],
     ], [4550, 1300, 3510], 8.5)
-    add_figure(doc, FIG / "source_06_finalist_energy.png", "图7  36条finalist的配对Rosetta能量来源审计", "finalist_energy_review_20260817")
-    add_heading(doc, "8.2 显式最终冻结", 2)
+    add_figure(doc, FIG / "source_06_finalist_energy.png", "图7  36条终审候选的配对Rosetta能量来源审查", "终审能量来源结果")
+    add_heading(doc, "8.2 最终候选确定", 2)
     add_body(doc, "终审逐条结合直接复合物能量、跨界面能、分离态来源、接触/表位保持、AntiFold、U/S/Tm、TNP、化学风险、组成单突对照价值和面板多样性。最终排除D101W、I103W和Q1D;R45V；保留F30S;E105L、R45T;E105L、S55G;E105F为储备；从原储备提升A23S;R45V、F30T;E105F、R45T;E105F。")
     cat = final_gate["final_category_counts"]
     add_table(doc, ["最终类别", "数量", "实验作用"], [
@@ -546,7 +554,7 @@ def build_report():
         ["亲和力支持双突", cat["affinity_supported_double"], "补充直接亲和力组合假设"],
     ], [3300, 1200, 4860], 8.7)
     add_figure(doc, FIG / "source_07_final_panel.png", "图8  最终30条候选的类别、能量来源与风险构成", "final_candidate_panel_20260817")
-    add_callout(doc, "终审状态", f"gate={final_gate['status']}，release={final_gate['release']}；30条序列唯一，另有3条储备和3条排除项。其解释固定为：{final_gate['interpretation']}", "positive")
+    add_callout(doc, "终审结论", "最终确定30条互不重复的建议测试序列，另保留3条储备并排除3条风险或证据不足的候选。所有候选均为计算优先结果，尚需实验验证。", "positive")
 
     add_heading(doc, "9. 局限性、风险与实验建议", 1)
     add_heading(doc, "9.1 当前局限", 2)
@@ -572,28 +580,53 @@ def build_report():
         "affinity_focused_single": "亲和力单突", "property_focused_single": "性质单突",
         "balanced_combination": "平衡组合", "affinity_supported_double": "亲和力双突",
     }
+    risk_cn = {
+        "low": "低", "medium": "中", "medium_high": "中高", "high": "高",
+        "no_contact_change": "未见接触变化", "contact_review": "需关注局部接触",
+    }
+    energy_cn = {
+        "complex_and_separated_state_stabilization": "复合物与分离态均有利",
+        "apparent_binding_gain_driven_by_separated_destabilization": "表观结合改善主要由分离态惩罚驱动",
+        "consistent_separated_destabilization_caution": "分离态持续不利，需谨慎解释",
+    }
+    category_role = {
+        "affinity_focused_single": "检验单点亲和力假设",
+        "property_focused_single": "检验性质改善及组合组成效应",
+        "balanced_combination": "检验亲和力与性质的联合改善",
+        "affinity_supported_double": "检验双位点亲和力协同",
+    }
     rows = []
     for row in candidates:
-        reason = row["review_rationale"]
-        reason = reason.replace("Select as ", "").replace("Retain as ", "")
-        if len(reason) > 70:
-            reason = reason[:67] + "…"
+        favorable = int(row["property_material_favorable_count"])
+        adverse = int(row["property_material_adverse_count"])
+        contact = "局部接触保持" if row["pyrosetta_contact_change_status"] in {"unchanged", "reviewed_in_single_mutant_source"} else "存在已审查的局部接触变化"
+        reason = f"{energy_cn[row['energy_origin_class']]}；{contact}；性质非微小改善{favorable}项、明显不利{adverse}项；{category_role[row['panel_category']]}。"
         rows.append([
             row["final_panel_order"], row["mutation_set"], category_cn[row["panel_category"]],
-            row["expert_risk_level"], row["energy_origin_class"].replace("_", " "), reason,
+            risk_cn[row["expert_risk_level"]], energy_cn[row["energy_origin_class"]], reason,
         ])
     add_table(doc, ["序号", "突变", "类别", "风险", "能量来源", "入选要点"], rows, [600, 1200, 1300, 800, 2200, 3260], 6.9)
     add_body(doc, "说明：风险等级和能量来源均为计算审查标签，不是实验表型。完整128-aa序列见附录D；WT为面板外独立对照。")
 
     add_heading(doc, "附录B  储备、排除与关键决策", 1)
+    decision_cn = {"reserve": "储备", "exclude": "排除"}
+    external_decision_reason = {
+        "F30S;E105L": "复合物能量和AntiFold方向有利，但性质变化未达到非微小改善标准，且E105L已达到预设多样性上限。",
+        "R45T;E105L": "复合物和结合能量证据较强，但有一项性质指标明显不利，且E105L已达到预设多样性上限。",
+        "S55G;E105F": "复合物及跨界面能量改善，但有一项性质指标明显不利，且E105F已有更强的互补组合。",
+        "D101W": "三次配对重复中突变体复合物均不利，表观结合改善完全由分离态惩罚驱动，并伴随暴露Trp、氧化、接触变化和局部排斥风险。",
+        "I103W": "三次配对重复中突变体复合物均不利，表观结合改善完全由分离态惩罚驱动，并伴随Trp氧化、接触变化、局部排斥和AntiFold负向证据。",
+        "Q1D;R45V": "突变体复合物明显不利，表观结合改善完全由分离态惩罚驱动；A23S;R45V提供了直接证据更好的同位点替代方案。",
+    }
     reserve_rows = []
     for row in reserve_audit:
         decision = row.get("review_decision", row.get("final_status", ""))
         if decision in {"reserve", "exclude"}:
-            reserve_rows.append([row.get("mutation_set", row.get("candidate_id", "")), decision, row.get("review_rationale", row.get("decision_rationale", ""))])
+            mutation = row.get("mutation_set", row.get("candidate_id", ""))
+            reserve_rows.append([mutation, decision_cn[decision], external_decision_reason[mutation]])
     for row in decision_audit:
         if row.get("review_decision") == "exclude":
-            reserve_rows.append([row["mutation_set"], "exclude", row["review_rationale"]])
+            reserve_rows.append([row["mutation_set"], "排除", external_decision_reason[row["mutation_set"]]])
     add_table(doc, ["候选", "决定", "核心理由"], reserve_rows, [2000, 1200, 6160], 8.2)
 
     add_heading(doc, "附录C  软件与证据角色", 1)
@@ -608,13 +641,13 @@ def build_report():
     ], [1900, 4300, 3160], 8.2)
 
     add_heading(doc, "附录D  最终30条完整序列", 1)
-    add_body(doc, "以下序列按最终面板顺序从权威final_candidates_30.csv确定性写入。每条均为128 aa并保留末端SSGS；序列属于计算测试候选，不是实验验证结果。")
+    add_body(doc, "以下序列按最终面板顺序列出。每条均为128 aa并保留末端SSGS；这些序列属于建议实验测试候选，尚未经实验验证。")
     for row in candidates:
         p = doc.add_paragraph()
         p.paragraph_format.space_before = Pt(5)
         p.paragraph_format.space_after = Pt(1)
         p.paragraph_format.keep_with_next = True
-        r = p.add_run(f"{row['final_panel_order']}. {row['mutation_set']}  |  {row['candidate_id']}")
+        r = p.add_run(f"{row['final_panel_order']}. {row['mutation_set']}")
         set_run_font(r, 8.2, True, DARK)
         p = doc.add_paragraph()
         p.paragraph_format.space_after = Pt(3)
