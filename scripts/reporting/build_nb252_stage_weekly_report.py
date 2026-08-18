@@ -30,6 +30,7 @@ GOLD = "B78628"
 RED = "9B2C2C"
 GREEN = "2D6A4F"
 INK = "1D252C"
+BLACK = "000000"
 
 SOURCE_FIGURES = [
     ("input_baseline", ROOT / "docs/result_artifacts/input_baseline/summary/input_baseline_qc.png"),
@@ -55,7 +56,7 @@ def set_run_font(run, size=10.5, bold=False, color=INK, name="Calibri", east="Mi
     run.font.name = name
     run.font.size = Pt(size)
     run.font.bold = bold
-    run.font.color.rgb = RGBColor.from_string(color)
+    run.font.color.rgb = RGBColor.from_string(BLACK)
     run._element.get_or_add_rPr().rFonts.set(qn("w:ascii"), name)
     run._element.get_or_add_rPr().rFonts.set(qn("w:hAnsi"), name)
     run._element.get_or_add_rPr().rFonts.set(qn("w:eastAsia"), east)
@@ -173,8 +174,15 @@ def add_table(doc, headers, rows, widths, font_size=8.4):
 
 
 def add_heading(doc, text, level=1):
-    p = doc.add_paragraph(style=f"Heading {level}")
-    p.add_run(text)
+    size = {1: 16, 2: 13, 3: 12}[level]
+    before = {1: 16, 2: 12, 3: 8}[level]
+    after = {1: 8, 2: 6, 3: 4}[level]
+    p = doc.add_paragraph(style="Normal")
+    p.paragraph_format.space_before = Pt(before)
+    p.paragraph_format.space_after = Pt(after)
+    p.paragraph_format.keep_with_next = True
+    r = p.add_run(text)
+    set_run_font(r, size=size, bold=True)
     return p
 
 
@@ -298,13 +306,14 @@ def configure_document(doc):
     normal = styles["Normal"]
     normal.font.name = "Calibri"
     normal.font.size = Pt(10.5)
+    normal.font.color.rgb = RGBColor.from_string(BLACK)
     normal._element.rPr.rFonts.set(qn("w:eastAsia"), "Microsoft YaHei")
     normal.paragraph_format.space_after = Pt(6)
     normal.paragraph_format.line_spacing = 1.1
     for name, size, color, before, after in (
-        ("Heading 1", 16, BLUE, 16, 8),
-        ("Heading 2", 13, BLUE, 12, 6),
-        ("Heading 3", 12, DARK, 8, 4),
+        ("Heading 1", 16, BLACK, 16, 8),
+        ("Heading 2", 13, BLACK, 12, 6),
+        ("Heading 3", 12, BLACK, 8, 4),
     ):
         style = styles[name]
         style.font.name = "Calibri"
@@ -319,6 +328,7 @@ def configure_document(doc):
         style = styles[name]
         style.font.name = "Calibri"
         style.font.size = Pt(10.5)
+        style.font.color.rgb = RGBColor.from_string(BLACK)
         style._element.rPr.rFonts.set(qn("w:eastAsia"), "Microsoft YaHei")
         style.paragraph_format.left_indent = Inches(0.5)
         style.paragraph_format.first_line_indent = Inches(-0.25)
