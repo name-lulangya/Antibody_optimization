@@ -95,7 +95,7 @@ def analyze_netsolp_associations(
     ]
     numeric = [row for row in combined if row["observation_semantics"] == "individual_approximate"]
     llj = [row for row in combined if str(row["provider_code"]) == "LLJ"]
-    metric_rows = [_metric_row(numeric, llj, feature) for feature in features]
+    metric_rows = [yield_metric_row(numeric, llj, feature) for feature in features]
     primary = next(row for row in metric_rows if row["feature"] == PRIMARY_FEATURE)
     low, high = stratified_bootstrap_ci(numeric, PRIMARY_FEATURE)
     primary["bootstrap_95ci_low"] = low
@@ -226,11 +226,12 @@ def group_cv_spearman(
     return _spearman(predictions, outcomes)[0]
 
 
-def _metric_row(
+def yield_metric_row(
     numeric: Sequence[Mapping[str, object]],
     llj: Sequence[Mapping[str, object]],
     feature: str,
 ) -> dict[str, object]:
+    """Summarize one finite, higher-is-better feature against frozen yield semantics."""
     values = np.asarray([float(row[feature]) for row in numeric])
     outcomes = np.asarray([float(row["numeric_yield_value"]) for row in numeric])
     providers = [str(row["provider_code"]) for row in numeric]

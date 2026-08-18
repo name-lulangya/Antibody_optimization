@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-18 21:55:00
+Last updated: 2026-08-18 23:30:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -13,7 +13,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 冻结天然 VHH 邻域中的高置信保守位点、Cys22/Cys95 和末端 SSGS（reported 125–128）。
 - 候选必须保持完整 128-aa 父序列长度、末端 SSGS、两枚原有 Cys，且不得引入新 Cys。
 - 现行核心预测工具仅为 NetSolP、NanoMelt 和实验复合物视图 AntiFold。新工具必须先在 47 条可比产量数据上验证，证明有独立且可重复的样本外信息后才能纳入筛选。
-- RP3Net 已部署但尚未完成项目验证，因此当前不能用于候选排序。
+- RP3Net 0.0.2 已完成环境和权重身份固定，47条验证计划及连续/离散统计实现已就绪；远程正式评分尚未运行，因此当前不能用于候选排序。
 
 ## 权威输入基线
 
@@ -44,7 +44,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 ## 下一执行路线
 
 1. 以 846 条允许单突为统一输入，分别运行 NetSolP、NanoMelt 和实验复合物视图 AntiFold；未解析坐标导致 AntiFold 不可评价的候选保留明确缺失状态。
-2. 在 47 条产量数据上完成三工具连续关联与离散分类合同；并按同一合同验证 RP3Net，决定是否有资格加入。
+2. 远程运行已冻结的RP3Net 47条验证并按连续关联、逐样本留一和序列簇留一分类证据决定是否纳入；随后用同一离散合同补齐现行三工具验证。
 3. 对 846 条单突进行硬风险审核，包括新增糖基化基序、未配对 Cys、强疏水/电荷斑块、Pro/Gly 结构风险和其他明显表达风险。
 4. 在硬约束通过者中，以经过验证的表达预测证据、天然保守性等级、工具一致性和位置/机制多样性形成 30 条单突面板；WT 作为独立实验对照，不占 30 条名额。
 5. 产量实验完成后才讨论组合；组合资格由真实单突效应决定，而不是当前预测分数。
@@ -54,13 +54,14 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - `structure_and_interface_identity=pass`
 - `natural_vhh_conservation_contract=pass`
 - `expression_single_mutant_constraint_space=pass`：846 条仅表示允许进入预测的单突空间。
-- `predictor_continuous_and_classification_validation=blocked`：需要补齐现行三工具分类合同和 RP3Net 验证。
+- `predictor_continuous_and_classification_validation=blocked`：RP3Net计划已就绪但正式评分未运行，现行三工具分类合同仍待补齐。
 - `new_30_single_mutant_panel_release=blocked`：需要完成全空间预测、风险审核与分层选择。
 - `combination_design_release=blocked`：等待单突实验结果。
 
 ## 本轮验证状态
 
 - 本地 CPU 真实数据运行约 226 秒，无需 Slurm、checkpoint 或 resume。
-- 全套测试 `239 passed, 1 skipped, 4 subtests passed`；`pip check`、Python 编译检查与 `git diff --check` 通过。
+- 全套测试`242 passed, 1 skipped, 4 subtests passed`；`pip check`、Python编译检查、Bash语法检查与`git diff --check`通过。
 - 4,059 条输入、4,057 条合格序列、1,564 条邻域序列、128 个位置和 846 条单突均已回读核对；结果图已人工检查。
+- RP3Net 47条计划已生成，固定checkpoint SHA-256为`443743bd031689aaf17dc6f7c22c5da3d23cf87b38e10341f114b27d651e6d2b`；远程正式分数和结论尚不存在。
 - 本轮尚未提交或推送。

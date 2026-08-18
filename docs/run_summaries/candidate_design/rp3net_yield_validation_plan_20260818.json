@@ -1,0 +1,15 @@
+{
+  "elapsed_seconds": 3.1169,
+  "generated_at": "2026-08-18T23:14:15+08:00",
+  "llj_ordinal_censored_count": 16,
+  "numeric_count": 31,
+  "outputs": {
+    "contract": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\rp3net_yield_validation_plan_20260818\\rp3net_yield_validation_contract.json",
+    "fasta": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\rp3net_yield_validation_plan_20260818\\rp3net_validation_sequences.fasta",
+    "samples": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\rp3net_yield_validation_plan_20260818\\rp3net_validation_samples.csv"
+  },
+  "python": "3.11.15",
+  "sample_count": 47,
+  "schema_version": 1,
+  "status": "pass"
+}

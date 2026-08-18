@@ -1,0 +1,40 @@
+{
+  "checkpoint": {
+    "path": "/homes/Tianlab/luly25/software/RP3Net/checkpoints/rp3net_v0.1_d.ckpt",
+    "sha256": "443743bd031689aaf17dc6f7c22c5da3d23cf87b38e10341f114b27d651e6d2b"
+  },
+  "classification": {
+    "numeric_samples": 31,
+    "outcome": "high_yield_at_or_above_matching_provider_median_fitted_in_outer_training_fold",
+    "outer_schemes": [
+      "leave_one_out",
+      "leave_one_cluster_out"
+    ],
+    "reported_metrics": [
+      "ROC-AUC",
+      "PR-AUC",
+      "MCC",
+      "balanced_accuracy",
+      "sensitivity",
+      "specificity",
+      "threshold_stability"
+    ],
+    "score_threshold": "maximize_training_MCC_then_balanced_accuracy_then_higher_threshold"
+  },
+  "continuous_analysis": "31_LTT_WCC_individual_approximate_plus_16_LLJ_ordinal_censored",
+  "entry_point": "/data/software/env/luly25/rp3net/bin/rp3",
+  "expression_system": "BL21_E_coli",
+  "generated_at": "2026-08-18T23:14:15+08:00",
+  "llj_use": "group_ordinal_or_censored_only_no_individual_point_estimates",
+  "primary_score": "predicted_probability_of_recombinant_small_scale_expression_in_E_coli",
+  "release": "ready_for_remote_rp3net_scoring",
+  "remote_environment": "/data/software/env/luly25/rp3net",
+  "schema_version": 1,
+  "score_direction": "higher_is_better",
+  "software": {
+    "model": "RP3Esm2_650m",
+    "name": "RP3Net",
+    "version": "0.0.2"
+  },
+  "status": "pass"
+}
