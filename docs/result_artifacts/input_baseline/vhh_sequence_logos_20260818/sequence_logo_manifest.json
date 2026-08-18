@@ -1,0 +1,46 @@
+{
+  "counts": {
+    "excluded_count": 2,
+    "exclusion_reason_counts": {
+      "non_heavy_chain_assignment": 1,
+      "numbering_failed": 1
+    },
+    "global_logo_position_count": 264,
+    "included_numbered_heavy_chain_count": 45,
+    "neighbor_logo_position_count": 181,
+    "project_logo_position_count": 135,
+    "source_sequence_count": 47
+  },
+  "excluded_samples": [
+    {
+      "chain_type": "F",
+      "logo_reason": "numbering_failed",
+      "logo_status": "excluded",
+      "numbered_residue_count": 0,
+      "numbering_status": "failed",
+      "sample_uid": "WCC__4-28"
+    },
+    {
+      "chain_type": "L",
+      "logo_reason": "non_heavy_chain_assignment",
+      "logo_status": "excluded",
+      "numbered_residue_count": 105,
+      "numbering_status": "pass",
+      "sample_uid": "WCC__4-11"
+    }
+  ],
+  "generated_at": "2026-08-18T21:52:28+08:00",
+  "imgt_region_definition": {
+    "CDR1": "27-38",
+    "CDR2": "56-65",
+    "CDR3": "105-117",
+    "FR1": "1-26",
+    "FR2": "39-55",
+    "FR3": "66-104",
+    "FR4": "118-128"
+  },
+  "project_logo_scope": "Equal-weight project sequences with frozen numbering_status=pass and chain_type=H. Yield values are not used as weights.",
+  "schema_version": 1,
+  "status": "pass",
+  "upstream_conservation_run": "vhh_conservation_20260818"
+}

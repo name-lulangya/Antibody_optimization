@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-18 19:00:00
+Last updated: 2026-08-18 21:55:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -31,6 +31,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - reported 128 个位置分为 55 个 `hard_conserved`、33 个 `cautious`、33 个 `variable` 和 7 个 `insufficient`。硬保守要求邻域 dominant frequency `>=0.90`、coverage `>=0.80`、有效簇数 `>=50`，且全局/邻域优势残基一致并且全局频率 `>=0.80`。
 - 保守位点与界面、Cys22/Cys95、末端 SSGS 合并后冻结 81 个 reported positions；剩余 47 个位置允许生成 846 条非 Cys 单突。这是待预测的完整约束空间，不是最终 30 条。
 - 权威机器可读合同与结果位于 `docs/result_artifacts/input_baseline/vhh_conservation_20260818/`；下游必须读取合同，不得从本文复制残基列表。
+- 已生成带IMGT FR/CDR标注的全局天然VHH、Nb252邻域及项目表达序列Logo。项目Logo以47条源序列为审核范围，仅纳入45条编号成功的H链序列；编号失败和非H链各1条保持显式排除，且产量不作为频率权重。
 
 ## 当前工具证据
 
@@ -60,6 +61,6 @@ Timezone: Asia/Shanghai (UTC+08:00)
 ## 本轮验证状态
 
 - 本地 CPU 真实数据运行约 226 秒，无需 Slurm、checkpoint 或 resume。
-- 全套测试 `237 passed, 1 skipped, 4 subtests passed`；`pip check`、Python 编译检查与 `git diff --check` 通过。
+- 全套测试 `239 passed, 1 skipped, 4 subtests passed`；`pip check`、Python 编译检查与 `git diff --check` 通过。
 - 4,059 条输入、4,057 条合格序列、1,564 条邻域序列、128 个位置和 846 条单突均已回读核对；结果图已人工检查。
 - 本轮尚未提交或推送。

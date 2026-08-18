@@ -8,10 +8,14 @@
   - 算法假设：邻域使用 framework-only IMGT identity 与 coverage；每个 90% 单连接簇总权重为 1；硬保守分类还要求覆盖、有效簇数和全局/局部优势残基一致。
   - 明确不支持：从天然序列推断 BL21 表达量、把低频残基自动判为有害、替代实验界面合同、生成多突或自动选出最终 30 条。
 - `antibody_optimization.vhh_conservation_plot`
-  - 用途：从精确的加权频率表和 reported-position 约束表绘制全局/邻域 sequence logo 与约束轨道；返回值仅为图形，不改变候选合同。
+  - 用途：从精确的加权频率表和 reported-position 约束表绘制全局/邻域/project sequence logo 与约束轨道；Logo按IMGT定义用背景色和顶部色带显式标注FR1–FR4与CDR1–CDR3，返回值仅为图形，不改变候选合同。
 - `scripts/candidate_design/build_nb252_vhh_conservation.py`
   - 用途：单入口运行真实 ANARCII 审核、去冗余、邻域保守性、约束合并、846 条单突枚举、图形和 gate/run-summary 写出；默认拒绝覆盖。
   - 预计运行：本地 CPU 少于一小时，当前真实运行约 226 秒，不需要 Slurm、checkpoint 或 resume。
+- `scripts/candidate_design/build_project_vhh_sequence_logos.py`
+  - 用途：复用冻结的天然VHH频率表及47条项目序列编号审核，生成带FR/CDR标注的全局、Nb252邻域和项目表达序列Logo，并保存项目频率表、纳入/排除审核和轻量run summary。
+  - 算法假设：项目Logo只纳入`numbering_status=pass`且`chain_type=H`的序列并等权计数；不按产量加权，不强行纳入编号失败或非H链序列。
+  - 明确不支持：重新编号、修复被排除序列、把Logo频率解释为产量效应或据此自动选择突变。
 
 经验证、具有稳定输入输出契约并可跨分析流程复用的 Python 逻辑放在：
 

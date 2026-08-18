@@ -374,6 +374,101 @@ def calculate_conservation(
     return rows
 
 
+def build_project_vhh_records(
+    review_rows: Sequence[Mapping[str, object]],
+    position_rows: Sequence[Mapping[str, object]],
+) -> tuple[list[NumberedVhh], list[dict[str, object]]]:
+    """Build an equally weighted, IMGT-aligned project VHH set.
+
+    A source sequence is included only when the frozen project numbering audit
+    reports ``pass`` and chain type ``H``.  Failed numbering and non-heavy-chain
+    assignments remain explicit audit rows; they are never coerced into the VHH
+    alignment.  Each included sequence receives weight one because this small
+    project dataset is an experimental panel, not the natural-repertoire set
+    governed by the 90% redundancy contract.
+
+    Parameters
+    ----------
+    review_rows:
+        One frozen sequence-level numbering row per project sample.
+    position_rows:
+        Frozen ANARCII/IMGT position rows referring to those sample identifiers.
+
+    Returns
+    -------
+    records, audit_rows:
+        Eligible :class:`NumberedVhh` records and one inclusion/exclusion audit
+        row per input sample.  This function does not infer missing numbering,
+        repair sequences, weight observations by yield, or classify conservation.
+    """
+
+    if not review_rows:
+        raise VhhConservationError("Project sequence review is empty")
+    review_by_id: dict[str, Mapping[str, object]] = {}
+    for row in review_rows:
+        sample_uid = str(row.get("sample_uid", "")).strip()
+        if not sample_uid or sample_uid in review_by_id:
+            raise VhhConservationError("Project review contains blank or duplicate sample_uid")
+        review_by_id[sample_uid] = row
+
+    positions_by_id: dict[str, dict[str, str]] = defaultdict(dict)
+    for row in position_rows:
+        sample_uid = str(row.get("sample_uid", "")).strip()
+        if sample_uid not in review_by_id:
+            raise VhhConservationError(f"Position row has unknown sample_uid: {sample_uid}")
+        if str(row.get("is_gap", "")).lower() == "true":
+            continue
+        label = str(row.get("numbering_position_label", "")).strip()
+        residue = str(row.get("residue_aa", "")).strip().upper()
+        if not label or residue not in AA_ORDER:
+            raise VhhConservationError(f"Invalid numbered residue for {sample_uid}: {label}={residue}")
+        if label in positions_by_id[sample_uid]:
+            raise VhhConservationError(f"Duplicate IMGT label for {sample_uid}: {label}")
+        positions_by_id[sample_uid][label] = residue
+
+    records: list[NumberedVhh] = []
+    audit_rows: list[dict[str, object]] = []
+    for row in review_rows:
+        sample_uid = str(row["sample_uid"])
+        numbering_status = str(row.get("numbering_status", ""))
+        chain_type = str(row.get("chain_type", ""))
+        include = numbering_status == "pass" and chain_type == "H"
+        if numbering_status != "pass":
+            reason = "numbering_failed"
+        elif chain_type != "H":
+            reason = "non_heavy_chain_assignment"
+        else:
+            reason = "eligible_numbered_heavy_chain"
+        positions = positions_by_id.get(sample_uid, {})
+        if include and not positions:
+            raise VhhConservationError(f"Eligible sample has no numbered positions: {sample_uid}")
+        audit_rows.append(
+            {
+                "sample_uid": sample_uid,
+                "numbering_status": numbering_status,
+                "chain_type": chain_type,
+                "logo_status": "included" if include else "excluded",
+                "logo_reason": reason,
+                "numbered_residue_count": len(positions),
+            }
+        )
+        if include:
+            cluster_id = len(records) + 1
+            records.append(
+                NumberedVhh(
+                    seq_id=sample_uid,
+                    sequence=str(row.get("sequence_raw", "")),
+                    positions=positions,
+                    cluster_id=cluster_id,
+                    cluster_size=1,
+                    weight=1.0,
+                )
+            )
+    if not records:
+        raise VhhConservationError("Project review contains no eligible numbered heavy chains")
+    return records, audit_rows
+
+
 def classify_nb252_positions(
     parent_sequence: str,
     reference_rows: Sequence[Mapping[str, object]],

@@ -25,6 +25,16 @@ AA_COLORS = {
     **{aa: "#ff7f0e" for aa in "CP"},
 }
 
+REGION_COLORS = {
+    "FR1": "#d9eaf7",
+    "CDR1": "#fddbc7",
+    "FR2": "#cfe8f3",
+    "CDR2": "#f6c6a8",
+    "FR3": "#bcdff1",
+    "CDR3": "#f4a582",
+    "FR4": "#a6cee3",
+}
+
 
 def render_frequency_logo(
     rows: Sequence[Mapping[str, object]],
@@ -47,6 +57,27 @@ def render_frequency_logo(
     fig, axes = plt.subplots(len(chunks), 1, figsize=(16, 2.5 * len(chunks)), squeeze=False)
     font = FontProperties(family="DejaVu Sans", weight="bold")
     for ax, chunk in zip(axes[:, 0], chunks, strict=True):
+        for start_index, end_index, region in _region_runs(chunk):
+            color = REGION_COLORS.get(region, "#dddddd")
+            ax.axvspan(start_index - 0.5, end_index + 0.5, color=color, alpha=0.22, zorder=-5)
+            ax.fill_between(
+                [start_index - 0.5, end_index + 0.5],
+                [1.025, 1.025],
+                [1.085, 1.085],
+                color=color,
+                clip_on=False,
+                linewidth=0,
+            )
+            ax.text(
+                (start_index + end_index) / 2,
+                1.055,
+                region,
+                ha="center",
+                va="center",
+                fontsize=7,
+                fontweight="bold",
+                clip_on=False,
+            )
         for x, row in enumerate(chunk):
             frequencies = sorted(
                 ((aa, float(row[f"frequency_{aa}"])) for aa in AA_ORDER),
@@ -68,7 +99,7 @@ def render_frequency_logo(
                 )
                 baseline += frequency
         ax.set_xlim(-0.7, len(chunk) - 0.3)
-        ax.set_ylim(0, 1.02)
+        ax.set_ylim(0, 1.10)
         ax.set_ylabel("Weighted frequency")
         ax.set_xticks(range(len(chunk)))
         ax.set_xticklabels([str(row["imgt_position_label"]) for row in chunk], rotation=90, fontsize=7)
@@ -80,6 +111,24 @@ def render_frequency_logo(
     fig.savefig(png_path, dpi=600, bbox_inches="tight")
     fig.savefig(svg_path, bbox_inches="tight")
     plt.close(fig)
+
+
+def _region_runs(rows: Sequence[Mapping[str, object]]) -> list[tuple[int, int, str]]:
+    """Return contiguous zero-based spans of identical IMGT region labels."""
+
+    if not rows:
+        return []
+    runs: list[tuple[int, int, str]] = []
+    start = 0
+    current = str(rows[0].get("region", "unassigned"))
+    for index, row in enumerate(rows[1:], start=1):
+        region = str(row.get("region", "unassigned"))
+        if region != current:
+            runs.append((start, index - 1, current))
+            start = index
+            current = region
+    runs.append((start, len(rows) - 1, current))
+    return runs
 
 
 def render_nb252_constraint_track(

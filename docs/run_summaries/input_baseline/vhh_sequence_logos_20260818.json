@@ -1,0 +1,49 @@
+{
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\build_project_vhh_sequence_logos.py",
+    "--sequence-review",
+    "docs/result_artifacts/input_baseline/sequence/sequence_numbering_review.csv",
+    "--sequence-positions",
+    "docs/result_artifacts/input_baseline/sequence/sequence_numbering_positions.csv",
+    "--global-conservation",
+    "docs/result_artifacts/input_baseline/vhh_conservation_20260818/global_position_conservation.csv",
+    "--neighbor-conservation",
+    "docs/result_artifacts/input_baseline/vhh_conservation_20260818/nb252_neighbor_position_conservation.csv",
+    "--output-dir",
+    "docs/result_artifacts/input_baseline/vhh_sequence_logos_20260818",
+    "--run-summary",
+    "docs/run_summaries/input_baseline/vhh_sequence_logos_20260818.json",
+    "--generated-at",
+    "2026-08-18T21:52:28+08:00"
+  ],
+  "counts": {
+    "excluded_count": 2,
+    "exclusion_reason_counts": {
+      "non_heavy_chain_assignment": 1,
+      "numbering_failed": 1
+    },
+    "global_logo_position_count": 264,
+    "included_numbered_heavy_chain_count": 45,
+    "neighbor_logo_position_count": 181,
+    "project_logo_position_count": 135,
+    "source_sequence_count": 47
+  },
+  "elapsed_seconds": 10.870375,
+  "generated_at": "2026-08-18T21:52:28+08:00",
+  "matplotlib": "3.11.1",
+  "outputs": {
+    "audit": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\vhh_sequence_logos_20260818\\project_sequence_logo_audit.csv",
+    "global_png": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\vhh_sequence_logos_20260818\\global_natural_vhh_sequence_logo_with_regions.png",
+    "global_svg": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\vhh_sequence_logos_20260818\\global_natural_vhh_sequence_logo_with_regions.svg",
+    "manifest": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\vhh_sequence_logos_20260818\\sequence_logo_manifest.json",
+    "neighbor_png": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\vhh_sequence_logos_20260818\\nb252_neighbor_sequence_logo_with_regions.png",
+    "neighbor_svg": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\vhh_sequence_logos_20260818\\nb252_neighbor_sequence_logo_with_regions.svg",
+    "project_frequencies": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\vhh_sequence_logos_20260818\\project_expression_vhh_position_frequencies.csv",
+    "project_png": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\vhh_sequence_logos_20260818\\project_expression_vhh_sequence_logo_with_regions.png",
+    "project_svg": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\input_baseline\\vhh_sequence_logos_20260818\\project_expression_vhh_sequence_logo_with_regions.svg"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}

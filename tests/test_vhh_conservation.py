@@ -6,11 +6,13 @@ from pathlib import Path
 
 from antibody_optimization.vhh_conservation import (
     NumberedVhh,
+    build_project_vhh_records,
     build_expression_constraints,
     classify_nb252_positions,
     cluster_and_weight,
     load_tnp_paper_sequences,
 )
+from antibody_optimization.vhh_conservation_plot import _region_runs
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -107,3 +109,27 @@ def test_hard_conservation_and_all_hard_constraints_block_mutation():
         for row in candidates
     )
     assert len(positions) == 128
+
+
+def test_project_logo_records_exclude_failed_and_non_heavy_sequences():
+    review_rows = [
+        {"sample_uid": "H1", "numbering_status": "pass", "chain_type": "H", "sequence_raw": "AA"},
+        {"sample_uid": "L1", "numbering_status": "pass", "chain_type": "L", "sequence_raw": "CC"},
+        {"sample_uid": "F1", "numbering_status": "failed", "chain_type": "F", "sequence_raw": "DD"},
+    ]
+    position_rows = [
+        {"sample_uid": "H1", "is_gap": "false", "numbering_position_label": "1", "residue_aa": "A"},
+        {"sample_uid": "L1", "is_gap": "false", "numbering_position_label": "1", "residue_aa": "C"},
+    ]
+    records, audit = build_project_vhh_records(review_rows, position_rows)
+    assert [record.seq_id for record in records] == ["H1"]
+    assert [row["logo_status"] for row in audit] == ["included", "excluded", "excluded"]
+    assert [row["logo_reason"] for row in audit[1:]] == [
+        "non_heavy_chain_assignment",
+        "numbering_failed",
+    ]
+
+
+def test_region_runs_preserve_fr_cdr_boundaries():
+    rows = [{"region": region} for region in ["FR1", "FR1", "CDR1", "FR2", "FR2"]]
+    assert _region_runs(rows) == [(0, 1, "FR1"), (2, 2, "CDR1"), (3, 4, "FR2")]
