@@ -220,11 +220,6 @@ def add_caption(doc, text, source):
     r = p.add_run(text)
     set_run_font(r, 8.5, True, DARK)
     p.paragraph_format.space_before = Pt(3)
-    p.paragraph_format.space_after = Pt(1)
-    p = doc.add_paragraph()
-    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    r = p.add_run(f"数据来源：{source}")
-    set_run_font(r, 7.5, False, MUTED)
     p.paragraph_format.space_after = Pt(8)
 
 
@@ -232,7 +227,9 @@ def add_figure(doc, path, caption, source, width=6.25):
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p.paragraph_format.keep_with_next = True
-    p.add_run().add_picture(str(path), width=Inches(width))
+    picture = p.add_run().add_picture(str(path), width=Inches(width))
+    picture._inline.docPr.set("descr", caption)
+    picture._inline.docPr.set("title", caption)
     add_caption(doc, caption, source)
 
 
@@ -256,10 +253,10 @@ def build_workflow_figure():
     stages = [
         ("输入身份基线", "3个结构模型\n47条表达序列"),
         ("亲和力全扫描", "456个单突 × 3重复"),
-        ("多构象复核", "50候选 / 1000任务"),
-        ("统一性质景观", "1962个单突 + WT"),
+        ("多构象复核", "48条严格层 + 2条多样性补充"),
+        ("统一性质景观", "2318枚举 → 1962评分"),
         ("双突联合分析", "86个组合"),
-        ("综合审核", "100 → 56 → 36"),
+        ("综合审核", "14单突 + 86双突\n56主池 → 36终审"),
         ("最终面板", "30候选 + 3储备"),
     ]
     fig, ax = plt.subplots(figsize=(11.2, 4.2))
@@ -352,10 +349,10 @@ def write_cover(doc):
     r = p.add_run("从实验结构基线到30条实验测试候选")
     set_run_font(r, 15, False, BLUE)
     p.paragraph_format.space_after = Pt(42)
-    add_table(doc, ["报告周期", "项目状态", "报告日期"], [["2026-W31—W34", "计算设计闭环完成", "2026-08-17"]], [3000, 3360, 3000], 9.5)
+    add_table(doc, ["报告周期", "项目状态", "报告日期"], [["2026-W31—W34", "计算设计闭环完成", "2026-08-18"]], [3000, 3360, 3000], 9.5)
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    r = p.add_run("内部研究资料｜所有候选均为计算优先级，不代表实验验证")
+    r = p.add_run("项目阶段交流材料｜所有候选均为计算优先级，不代表实验验证")
     set_run_font(r, 9, False, MUTED)
     doc.add_page_break()
 
@@ -367,10 +364,10 @@ def write_static_toc(doc):
         ("3", "结构与界面证据"), ("4", "计算优化总体路线"),
         ("5", "PyRosetta协议与亲和力轨道"), ("6", "表达、稳定性与可开发性工具验证"),
         ("7", "统一单突空间、专家审查与双突组合"), ("8", "终审能量来源与最终30条面板"),
-        ("9", "局限性、风险与实验建议"), ("附录", "最终候选、储备/排除项与证据索引"),
+        ("9", "局限性、风险与实验建议"), ("附录", "最终候选、储备/排除项、工具角色与完整序列"),
     ]
     add_table(doc, ["章节", "内容"], rows, [1200, 8160], 9.5)
-    add_callout(doc, "阅读建议", "课题负责人可重点阅读执行摘要、最终面板和实验建议；计算复现人员可进一步查看工具验证、协议限制及附录中的制品索引。")
+    add_callout(doc, "阅读建议", "建议先阅读执行摘要与图2证据漏斗，再重点查看第5—8节的筛选逻辑、最终面板和实验建议。附录保留候选清单、关键决策和完整序列，不展示项目内部文件路径。")
     doc.add_page_break()
 
 
@@ -387,8 +384,14 @@ def build_report():
     numbering = load_json("docs/run_summaries/input_baseline/sequence_numbering.json")
     alignment = load_json("docs/result_artifacts/input_baseline/structure_released_20260810/structure_alignment_summary.json")
     affinity = load_json("docs/run_summaries/candidate_design/affinity_pyrosetta_full_scan_20260811.json")
+    affinity_tiers = load_json("docs/result_artifacts/candidate_design/affinity_post_scan_filter_20260812/affinity_post_scan_gate.json")
     flex = load_json("docs/run_summaries/candidate_design/flex_ddg_production_result_20260812.json")
+    affinity_core = load_json("docs/result_artifacts/candidate_design/affinity_ensemble_core_20260813/affinity_ensemble_core_gate.json")
+    unified_plan = load_json("docs/result_artifacts/candidate_design/unified_single_mutant_plan_20260815/unified_single_mutant_plan_gate.json")
     properties = load_json("docs/run_summaries/candidate_design/unified_property_scoring_result_20260815.json")
+    property_review = load_json("docs/result_artifacts/candidate_design/unified_property_scoring_result_20260815/unified_property_scoring_scientific_review.json")
+    property_affinity = load_json("docs/result_artifacts/candidate_design/property_affinity_pyrosetta_review_20260816/property_affinity_scientific_review.json")
+    single_shortlist = load_json("docs/result_artifacts/candidate_design/single_mutant_shortlist_20260816/single_mutant_shortlist_gate.json")
     doubles = load_json("docs/run_summaries/candidate_design/double_mutant_scan_review_v2_1_20260816.json")
     preliminary = load_json("docs/run_summaries/candidate_design/preliminary_panel_20260817.json")
     energy_gate = load_json("docs/result_artifacts/candidate_design/finalist_energy_review_20260817/finalist_energy_review_gate.json")
@@ -451,11 +454,25 @@ def build_report():
     add_heading(doc, "5.2 456条单突全扫描", 2)
     add_body(doc, f"界面24个位点形成456条氨基酸替换候选，每条运行3次配对重复，共{affinity['counts']['mutant_evaluation_count']}次突变体评价。扫描阶段不设置提前筛选，456条均完成并通过运行完整性门。")
     add_figure(doc, FIG / "source_02_affinity_scan.png", "图3  456条PyRosetta亲和力单突全扫描质量控制", "affinity_pyrosetta_full_scan_20260811")
+    tier_counts = affinity_tiers["tier_counts"]
+    add_body(doc, "全扫描完成后才统一分层。分层同时考虑两项能量方向、三次重复的一致性、接触保持、局部排斥和界面骨架稳定性，而不是按单一最低分截取。")
+    add_table(doc, ["层级", "数量", "进入该层的主要依据", "后续用途"], [
+        ["Tier 1", tier_counts["tier_1"], "3/3重复中ΔdG与跨界面能均有利；VHH/NK2R接触完全保持；局部fa_rep不升高", "严格复核池"],
+        ["Tier 2", tier_counts["tier_2"], "3/3重复中两项能量均有利且受体表位接触保持，但局部包装或VHH接触仍需复核", "严格复核池"],
+        ["Tier 3", tier_counts["tier_3"], "两项能量中位数均有利，但重复一致性弱于Tier 1/2", "仅作补充来源"],
+        ["Tier 4", tier_counts["tier_4"], "ΔdG与跨界面能方向不一致", "不进入本轮Flex ddG"],
+        ["Tier 5", tier_counts["tier_5"], "两项能量中位数未同时有利", "不进入本轮Flex ddG"],
+    ], [950, 850, 4900, 2660], 7.8)
     add_heading(doc, "5.3 Flex ddG多构象复核", 2)
-    add_body(doc, f"根据全扫描分层和多样性，50条候选进入Flex ddG生产复核，共{flex['task_count']}个任务。Backrub在局部主链邻域采样多个构象，并在同一主链样本上成对比较WT与突变体，从而评估单一prepared结构上的排序是否稳健。")
+    add_body(doc, f"50条复核对象由48条严格复核层候选——全部Tier 1/2（{tier_counts['tier_1']}+{tier_counts['tier_2']}=48条）——和两条位置多样性Tier 3补充候选D33N、Y115F组成。后两条用于避免复核池只覆盖最强能量位点，并不代表它们优于其余Tier 3；其余37条Tier 3本轮不进入高成本复核。")
+    add_body(doc, f"每条候选运行20个独立Backrub样本，共{flex['task_count']}个任务。Backrub在突变位点周围8 Å局部主链邻域采样构象，并在同一主链样本上成对比较WT与突变体，从而检验三重复单一prepared结构上的有利方向能否在构象扰动下保持。")
     add_figure(doc, FIG / "source_03_flex_ddg.png", "图4  50条候选Flex ddG多构象复核", "flex_ddg_production_result_20260812")
+    add_heading(doc, "5.4 从50条Flex ddG候选到亲和力单突", 2)
+    add_body(doc, f"亲和力核心门要求ΔdG和跨界面能各自在至少18/20个样本中为负，且两项中位数均为负。50条中共有{affinity_core['core_module_count']}条通过，分布在{affinity_core['core_position_count']}个位点；这是多构象方向一致性证据，不是实测亲和力。")
+    add_body(doc, "随后进行结构与化学专家审查：新增未配对Cys的R45C被直接移出，较低风险且具补充支持的R45T作为同位点替代假设加入。由此形成8条活跃亲和力单突：R45T、R45V、D101W、I103W、E105F、E105L、N107A和S114M。终审又因D101W和I103W的突变体复合物在三次配对重复中均不利、且同时具有暴露Trp/接触/局部排斥风险而排除，最终保留6条亲和力导向单突。")
 
     add_heading(doc, "6. 表达、稳定性与可开发性工具验证", 1)
+    add_heading(doc, "6.1 工具与真实产量的关系", 2)
     add_body(doc, "项目首先在47条BL21产量序列上验证可用工具与真实产量之间的关系。nanoBERT、NetSolP、TNP和NanoMelt均未提供足够稳健、可迁移的产量排序能力，因此没有训练47样本局部模型，也没有用任一预测器替代实验产量。")
     add_table(doc, ["工具", "评价对象", "项目内用途", "证据限制"], [
         ["nanoBERT", "抗体序列语言合理性", "背景关联验证", "不支持候选产量排序"],
@@ -465,17 +482,32 @@ def build_report():
         ["AntiFold", "结构条件下序列兼容性", "三结构视图一致性", "不单独决定候选"],
         ["PyRosetta", "复合物/分离态相对能量", "亲和力及局部结构风险", "REU不能跨协议直接比较"],
     ], [1450, 2100, 2700, 3110], 8.2)
-    add_body(doc, "统一性质空间最终对1962个候选和1个WT完成NetSolP、NanoMelt及AntiFold等证据联接。原始Pareto层被完整保留，但增加近似中性/非微小有利/明显不利幅度分级，避免极小数值波动驱动候选选择。")
+    add_heading(doc, "6.2 性质候选如何从全空间选出", 2)
+    add_body(doc, f"性质路线首先在122个可变reported位置枚举19种非WT替换，共{unified_plan['candidate_count']}条。随后一次性应用硬约束：{unified_plan['design_status_counts']['blocked_new_unpaired_cys']}条因新增未配对Cys阻断，{unified_plan['design_status_counts']['deferred_missing_experimental_coordinates']}条因实验结构缺失坐标而推迟，最终{unified_plan['design_status_counts']['eligible_current_round']}条进入统一评分。该评分集包括432条已存在的非Cys界面候选和1530条非界面性质发现候选。")
+    property_track = property_review["track_review"]["stability_developability_discovery"]
+    add_body(doc, f"在1530条性质发现候选中，以NetSolP U、NetSolP S、NanoMelt预测Tm和实验复合物视图AntiFold兼容性进行同轨道Pareto分层，得到{property_track['pareto_front_1_count']}条Pareto 1。Pareto 1仅表示没有另一条候选在全部指标上同时更优，并不表示四项指标都改善。")
+    add_table(doc, ["性质筛选阶段", "候选数", "筛选规则或作用"], [
+        ["全序列枚举", unified_plan["candidate_count"], "122个可变位置 × 19种非WT替换"],
+        ["统一可评分集合", unified_plan["design_status_counts"]["eligible_current_round"], "排除新增未配对Cys；缺失坐标候选本轮暂缓"],
+        ["性质发现Pareto 1", property_track["pareto_front_1_count"], "四项性质信号的非支配集合；不直接等于入选"],
+        ["幅度感知复核池", property_affinity["validation"]["candidate_count"], "至少1项U/S/Tm达到非微小改善；无非微小恶化；无新增化学风险"],
+        ["PyRosetta方向有利", property_affinity["validation"]["direction_class_counts"]["directionally_favorable"], "两项能量中位数均有利，且各至少2/3重复有利"],
+        ["最终活跃性质单突", single_shortlist["active_after_by_track"]["property"], "综合亲和力、接触、AntiFold、缺失区局部包装和化学风险"],
+    ], [2500, 1050, 5810], 8.0)
+    add_body(doc, "49条Pareto 1先接受TNP表面风险复核；TNP没有作为加分器或硬排序器。幅度感知门随后选出30条、覆盖10个位点的性质复核池：必须至少有一项U/S/Tm达到预设的非微小改善，同时三项均不得出现非微小恶化，且不得新增糖基化、脱酰胺、异构化或额外M/W等化学风险。AntiFold与TNP保留为独立证据列，不参与这一30条的硬门。")
+    add_body(doc, f"30条再进行3次配对PyRosetta亲和力非劣复核，结果为{property_affinity['validation']['direction_class_counts']['directionally_favorable']}条方向有利、{property_affinity['validation']['direction_class_counts']['mixed']}条混合、{property_affinity['validation']['direction_class_counts']['directionally_adverse']}条方向不利。结合接触保持、暴露疏水/强负AntiFold、实验缺失区邻近位点的AF3局部包装及不可补偿Pro风险，先形成22条活跃性质假设，再剔除16条负向证据更强的候选，保留Q1D、A23S、F30A、F30S、F30T和S55G共6条性质单突。")
+    add_body(doc, "被剔除的16条主要原因可归为：4条受体接触变化、3条AF3局部非劣门未通过、2条配对亲和力方向不利、3条强负AntiFold并伴随暴露疏水风险，以及4条其他强负AntiFold复合物信号。各原因按主阻断项计数，避免同一候选重复统计。")
     add_figure(doc, FIG / "source_04_property_landscape.png", "图5  统一单突性质景观与分层结果", "unified_property_scoring_result_20260815")
 
     add_heading(doc, "7. 统一单突空间、专家审查与双突组合", 1)
     add_heading(doc, "7.1 统一候选合同", 2)
     add_body(doc, "设计合同不再冻结整个框架区，也不把CDR和FR简单划分为亲和力区与性质区。亲和力候选可容许性质指标轻微负向，但阻止明确且一致的恶化；性质候选至少需要一个非微小改善，且不能出现明显的亲和力或结构破坏。")
+    add_body(doc, "经过前述多构象、性质幅度和专家安全门后，活跃单突固定为14条：8条亲和力来源和6条性质来源。它们既是可独立测试的假设，也是解释双突组合效应所需的组成单突对照。")
     add_heading(doc, "7.2 专家化风险审查", 2)
     add_body(doc, "所有核心单突从结构和可开发性角度复核异常二硫键、新生糖基化motif、暴露疏水替换、致密疏水窗口、氧化风险、CDR柔性变化、保守位点、局部fa_rep、接触改变和对结构准备的敏感性。F30P等具有难以弥补的骨架风险突变直接移出候选空间，避免重复计算低价值假设。")
     add_heading(doc, "7.3 86条双突联合分析", 2)
     jc = doubles["joint_evidence_class_counts"]
-    add_body(doc, "双突并非只将一个亲和力突变与一个性质突变组合，而是允许经审核的活跃单突之间形成完整组合，再在统一协议下重新计算和筛选。最终完成86条双突。")
+    add_body(doc, "双突并非只将一个亲和力突变与一个性质突变组合，而是对14条活跃单突进行完整两两组合。理论上14选2为91组；去除同一位置不能同时发生的5组互斥替换（R45的1组、E105的1组、F30的3组）后，得到86条可实现双突，并全部在统一协议下重新评分。")
     add_table(doc, ["联合证据类别", "数量", "含义"], [
         ["亲和力与性质共同支持", jc["balanced_supported"], "优先的平衡候选来源"],
         ["亲和力支持、性质非不利", jc["affinity_supported_property_nonadverse"], "偏亲和力候选"],
@@ -487,7 +519,16 @@ def build_report():
 
     add_heading(doc, "8. 终审能量来源与最终30条面板", 1)
     add_heading(doc, "8.1 从100条审查记录到36条finalist", 2)
-    add_body(doc, f"统一审查覆盖{preliminary['reviewed_candidate_count']}条单/双突，其中{preliminary['primary_pool_count']}条进入主证据池，形成初步{preliminary['preliminary_panel_count']}条和{preliminary['reserve_count']}条储备。随后对36条finalist复用既有三重复PyRosetta原始结果，进行能量来源分解，没有新增PyRosetta或AF3计算。")
+    add_body(doc, f"这里的100条不是新生成的额外序列，而是前一步已经固定的14条活跃单突加86条可实现双突。14条单突全部进入主证据池，因为它们既是独立候选，也是解释组合所必需的组成对照；86条双突中，只有联合证据属于“亲和力与性质共同支持”“亲和力支持且性质非不利”或“性质支持且亲和力非不利”，并同时通过结构安全与硬约束的42条进入主证据池。因而主证据池为14+42={preliminary['primary_pool_count']}条，其余44条权衡或证据不清晰双突仅保留审计。")
+    add_body(doc, "42条支持双突分为28条平衡支持、12条亲和力支持且性质非不利、2条性质支持且亲和力非不利。初步面板保留全部14条组成单突，并从28条平衡支持双突中选择16条；选择顺序先比较同一双突协议内的四项目标Pareto层——ΔdG、跨界面能、非微小性质改善项数和AntiFold兼容性——再用突变与位置对多样性打破同层排序。任何组成突变最多进入5条、任何位置对最多进入2条，防止R45或30/45等单一假设垄断面板。")
+    add_body(doc, f"这样形成{preliminary['preliminary_panel_count']}条初步面板（14条单突+16条平衡双突）。同时按三类联合证据各保留2条储备：2条平衡双突、2条亲和力支持双突和2条性质支持双突，共{preliminary['reserve_count']}条。初步30条与6条储备合并为36条finalist；随后仅复用既有三重复PyRosetta原始结果做能量来源分解，没有新增PyRosetta或AF3计算。")
+    add_table(doc, ["漏斗阶段", "数量", "组成与去向"], [
+        ["统一审查全集", preliminary["reviewed_candidate_count"], "14条活跃单突 + 86条双突"],
+        ["主证据池", preliminary["primary_pool_count"], "14条单突 + 42条支持双突；44条权衡/不清晰双突留档"],
+        ["初步面板", preliminary["preliminary_panel_count"], "全部14条单突 + 16条多样化平衡双突"],
+        ["分层储备", preliminary["reserve_count"], "平衡/亲和力支持/性质支持双突各2条"],
+        ["能量来源终审", energy_gate["candidate_count"], "初步30条 + 6条储备，逐条显式决定"],
+    ], [2300, 950, 6110], 8.2)
     ec = energy_gate["energy_origin_class_counts"]
     add_table(doc, ["能量来源类别", "数量", "终审解释"], [
         ["复合物与分离态均有利", ec["complex_and_separated_state_stabilization"], "相对更直接的双态支持"],
@@ -556,16 +597,15 @@ def build_report():
     add_table(doc, ["候选", "决定", "核心理由"], reserve_rows, [2000, 1200, 6160], 8.2)
 
     add_heading(doc, "附录C  软件与证据角色", 1)
-    add_table(doc, ["环境/工具", "固定信息", "用途"], [
-        ["本地ab_optim", "Python 3.11.15; ANARCII 2.0.8; Gemmi 0.7.5", "编号、结构清单、本地分析与报告"],
-        ["PyRosetta", "2026.03; Rosetta commit 5e498f1…", "配对相对能量与局部结构评价"],
-        ["nanoBERT", "NaturalAntibody/nanoBERT; revision edc8182…", "产量相关性验证"],
-        ["NetSolP", "Distilled; SU", "Solubility/Usability辅助"],
-        ["TNP", "0.0.1; ImmuneBuilder 1.2", "纳米抗体表面风险"],
-        ["NanoMelt", "1.4.0", "预测表观Tm"],
-        ["AntiFold", "0.3.1", "结构条件序列兼容性"],
-        ["AF3", "服务器部署", "预测结构补充与条件性局部复核"],
-    ], [1900, 4100, 3360], 8.2)
+    add_table(doc, ["工具", "在本项目中的作用", "不能据此声称"], [
+        ["PyRosetta / Flex ddG", "同一实验构象附近的配对相对能量、局部构象与重复稳健性", "实验KD、kon、koff或真实自由能"],
+        ["AntiFold", "在既定结构背景下评价序列兼容性", "表达量或热稳定性"],
+        ["NetSolP", "溶解性与usability的辅助方向信号", "BL21实测产量"],
+        ["NanoMelt", "相对WT的预测表观Tm方向", "实测Tm"],
+        ["TNP", "表面疏水/电荷与可开发性风险提示", "产量排序或单独淘汰依据"],
+        ["nanoBERT", "验证语言模型分数与现有产量数据的关系", "候选产量预测"],
+        ["AF3", "补充实验缺失区与条件性局部包装复核", "实验CDR3构象或亲和力排序"],
+    ], [1900, 4300, 3160], 8.2)
 
     add_heading(doc, "附录D  最终30条完整序列", 1)
     add_body(doc, "以下序列按最终面板顺序从权威final_candidates_30.csv确定性写入。每条均为128 aa并保留末端SSGS；序列属于计算测试候选，不是实验验证结果。")
@@ -582,7 +622,6 @@ def build_report():
         r = p.add_run(row["sequence"])
         set_run_font(r, 7.2, False, INK, name="Consolas", east="Microsoft YaHei")
 
-    add_heading(doc, "附录E  权威数据与制品索引", 1)
     sources = [
         "docs/run_summaries/input_baseline/sequence_numbering.json",
         "docs/result_artifacts/input_baseline/structure_released_20260810/structure_alignment_summary.json",
@@ -597,9 +636,6 @@ def build_report():
         "docs/result_artifacts/candidate_design/final_candidate_panel_20260817/final_candidates_30.fasta",
         "docs/history/2026-W31.md; 2026-W32.md; 2026-W33.md; 2026-W34.md",
     ]
-    for source in sources:
-        add_bullet(doc, source)
-    add_body(doc, "报告生成原则：所有数字均从上述机器可读制品或权威项目记录读取；预测、推断与实验观察保持分离。")
 
     doc.core_properties.title = "NK2R纳米抗体Nb252多目标计算优化阶段周报"
     doc.core_properties.subject = "2026-W31—W34项目阶段总结"
@@ -612,6 +648,8 @@ def build_report():
         "generated_at": datetime.now().astimezone().isoformat(timespec="seconds"),
         "report": str(REPORT.relative_to(ROOT)).replace("\\", "/"),
         "reporting_period": "2026-W31--W34",
+        "audience": "collaborator_and_supervisor",
+        "internal_path_index_in_report": False,
         "final_candidate_count": len(candidates),
         "source_figures": [str(path.relative_to(ROOT)).replace("\\", "/") for _, path in SOURCE_FIGURES],
         "source_records": sources,
@@ -622,8 +660,9 @@ def build_report():
     (OUT / "report_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (OUT / "README.md").write_text(
         "# Nb252阶段周报制品\n\n"
-        "本目录保存2026-W31—W34累计阶段周报、报告专用证据漏斗图、精确漏斗数据和复用图。"
-        "周报中的数值来自`report_manifest.json`列出的权威制品。所有候选均为计算优先级，尚未实验验证。\n",
+        "本目录保存面向合作者和导师的2026-W31—W34累计阶段周报、报告专用证据漏斗图、精确漏斗数据和复用图。"
+        "正文解释亲和力、性质及终审候选的逐级筛选过程，不展示项目内部相对路径索引。"
+        "周报中的数值来自`report_manifest.json`列出的权威制品；所有候选均为计算优先级，尚未实验验证。\n",
         encoding="utf-8",
     )
     return REPORT
