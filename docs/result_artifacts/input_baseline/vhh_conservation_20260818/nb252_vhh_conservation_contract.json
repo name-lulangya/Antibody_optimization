@@ -1,0 +1,52 @@
+{
+  "conservation_rule": {
+    "cautious_minimum_neighbor_dominant_frequency": 0.7,
+    "gap_handling": "exclude_from_residue_frequencies_and_report_separate_weighted_coverage",
+    "hard_conserved": {
+      "global_and_neighbor_dominant_must_agree": true,
+      "minimum_global_dominant_frequency": 0.8,
+      "minimum_neighbor_coverage": 0.8,
+      "minimum_neighbor_dominant_frequency": 0.9,
+      "minimum_neighbor_effective_clusters": 50
+    }
+  },
+  "contract_name": "nb252_neighbor_natural_vhh_conservation",
+  "generated_at": "2026-08-18T18:30:00+08:00",
+  "interpretation": "Natural-sequence conservation and mutation-safety evidence only; not BL21 yield or mutation-effect prediction.",
+  "neighbor_rule": {
+    "identity_definition": "exact_matches_over_union_non_gap_framework_IMGT_labels",
+    "identity_positions": "IMGT_framework_only_FR1_FR2_FR3_FR4",
+    "minimum_coverage": 0.8,
+    "minimum_identity": 0.8,
+    "minimum_neighbor_count": 100,
+    "observed_neighbor_cluster_count": 1532,
+    "observed_neighbor_count": 1564
+  },
+  "numbering": {
+    "eligible_definition": "numbering_pass_and_H_and_Nb252_framework_coverage_at_least_0.80",
+    "scheme": "IMGT",
+    "tool": "ANARCII",
+    "version": "2.0.8"
+  },
+  "redundancy_weighting": {
+    "cluster_count": 3784,
+    "clustering": "single_link_connected_components",
+    "identity_definition": "exact_matches_over_union_non_gap_IMGT_labels",
+    "identity_threshold": 0.9,
+    "largest_cluster_size": 84,
+    "sequence_count": 4057,
+    "total_sequence_weight": 3784.0
+  },
+  "reference_dataset": {
+    "expression_labels_present": false,
+    "name": "TNP Natural VHH paper set",
+    "original_biological_source": "Li_et_al_2016_three_Bactrian_camels_via_OAS",
+    "record_count": 4059,
+    "source_sha256": "d87a2e66ce0e46d34547d25df10bf07abc10b06ccf0d9d0c4a304a36a9d0ebe5",
+    "source_table": "data\\reference\\tnp_natural_vhh\\VHH_OAS_all_properties_FINAL.csv",
+    "source_url": "https://raw.githubusercontent.com/oxpig/TNP/a9ba3edc3d967ecf8a2b9b5c2c29bf7495bbc9a0/paper/paper_data/insilico_descriptors/FINAL%20DATASETS/VHH_OAS_all_properties_FINAL.csv",
+    "tnp_commit": "a9ba3edc3d967ecf8a2b9b5c2c29bf7495bbc9a0"
+  },
+  "schema_version": 1,
+  "status": "pass"
+}

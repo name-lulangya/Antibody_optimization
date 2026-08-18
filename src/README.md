@@ -1,5 +1,18 @@
 # 可复用源码索引
 
+## Natural-VHH conservation
+
+- `antibody_optimization.vhh_conservation`
+  - 用途：审核 TNP 论文的 4,059 条天然 VHH、统一 IMGT 映射、90% identity 去冗余、识别 Nb252 framework 邻域、计算加权位点保守性，并合并界面/二硫键/末端约束生成完整允许单突空间。
+  - 输入与返回：接收冻结的 TNP 表、Nb252 父序列、ANARCII 编号结果和机器可读关键残基合同；返回序列审核、聚类权重、邻域归属、全局/邻域频率、reported-position 分类、冻结集合及单突记录。
+  - 算法假设：邻域使用 framework-only IMGT identity 与 coverage；每个 90% 单连接簇总权重为 1；硬保守分类还要求覆盖、有效簇数和全局/局部优势残基一致。
+  - 明确不支持：从天然序列推断 BL21 表达量、把低频残基自动判为有害、替代实验界面合同、生成多突或自动选出最终 30 条。
+- `antibody_optimization.vhh_conservation_plot`
+  - 用途：从精确的加权频率表和 reported-position 约束表绘制全局/邻域 sequence logo 与约束轨道；返回值仅为图形，不改变候选合同。
+- `scripts/candidate_design/build_nb252_vhh_conservation.py`
+  - 用途：单入口运行真实 ANARCII 审核、去冗余、邻域保守性、约束合并、846 条单突枚举、图形和 gate/run-summary 写出；默认拒绝覆盖。
+  - 预计运行：本地 CPU 少于一小时，当前真实运行约 226 秒，不需要 Slurm、checkpoint 或 resume。
+
 经验证、具有稳定输入输出契约并可跨分析流程复用的 Python 逻辑放在：
 
 `src/antibody_optimization/`
