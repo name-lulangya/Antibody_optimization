@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-19 17:25:29
+Last updated: 2026-08-19 19:10:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -14,7 +14,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 候选必须保持完整 128-aa 父序列长度、末端 SSGS、两枚原有 Cys，且不得引入新 Cys。
 - 现行核心预测工具仅为 NetSolP、NanoMelt 和实验复合物视图 AntiFold。新工具必须先在 47 条可比产量数据上验证，证明有独立且可重复的样本外信息后才能纳入筛选。
 - RP3Net 0.0.2 已完成47条正式验证，最终证据等级为`no_supported_use`，不得加入846条候选的生成、筛选或排序。
-- PLM_Sol V1.0已完成Nb252单序列部署smoke：完整128-aa序列与末端SSGS均保留，模型输出为0.922947；该值只证明调用链可运行，不是实测溶解度、产量或正式准入证据。47条正式验证计划已释放，尚待远程运行。
+- PLM_Sol V1.0已完成47条正式验证，最终证据等级为`no_supported_use`，不得加入846条候选的生成、筛选或排序；Nb252单序列smoke分数只证明调用链可运行，不是实测溶解度或产量。
 
 ## 权威输入基线
 
@@ -41,25 +41,24 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - AntiFold：使用实验复合物视图评价结构条件下序列相容性；缺失实验坐标位置不得伪装成可评价位置。
 - TNP 与 nanoBERT 已完成探索性验证，但不在现行精简筛选工具集中。
 - RP3Net：31条数值记录的直接合并Spearman为0.476，但来源内分层Spearman仅0.198且95% bootstrap区间跨0；LLJ有序Kendall为-0.451，与预声明方向相反。嵌套分类ROC-AUC为0.621、PR-AUC为0.620、MCC为0.313，未达到预声明综合门，因此不支持候选使用。
-- PLM_Sol：固定使用ProtT5-XL-U50逐残基嵌入和V1.0分类器。正式验证将要求47/47覆盖，同时报告连续关联、逐样本/90%序列簇留一分类、与NetSolP S/U及RP3Net的重叠，以及在NetSolP S基础上的序列簇外增量；正式结果出来前不得进入候选排序。
+- PLM_Sol：47/47条评分成功。31条数值记录的来源内分层Spearman为0.473，95% bootstrap区间为0.096–0.749，但WCC内部Spearman为-0.096；嵌套分类ROC-AUC为0.638、PR-AUC为0.662、MCC为0.313。PLM_Sol与NetSolP U/S高度重叠，在NetSolP S基础上的序列簇外增量为-0.140，因此gate为`plm_sol_not_supported_for_candidate_use`，不纳入候选使用。固定5 mg结果仍仅供展示。
 - 固定5 mg探索图：31条数值记录显示为高产14条、低产17条；RP3Net、NetSolP U和NetSolP S均展示训练折最大MCC阈值及留出指标。该图仅用于直观展示，不作为工具准入、候选筛选或5 mg阈值有效性的正式证据。
 - 所有工具验证须同时报告连续关联和预注册方向下的离散分类性能；阈值必须在训练折内选择，外层交叉验证报告 ROC-AUC、PR-AUC、MCC、balanced accuracy、sensitivity、specificity 及阈值稳定性。
 
 ## 下一执行路线
 
-1. 远程运行已释放的PLM_Sol 47条正式验证：单个Slurm作业依次生成ProtT5嵌入、运行V1.0分类器并在项目环境完成连续/分类/比较分析；当前固定5 mg图仍只供展示。根据gate决定PLM_Sol是弱排序、兼容性过滤或不支持使用。
-2. 后续若补齐NanoMelt和AntiFold正式分类验证，须另行冻结决策用途和产量阈值；RP3Net不再进入后续候选流程。
-3. 以846条允许单突为统一输入运行最终保留的精简工具；未解析坐标导致AntiFold不可评价的候选保留明确缺失状态。
-4. 对 846 条单突进行硬风险审核，包括新增糖基化基序、未配对 Cys、强疏水/电荷斑块、Pro/Gly 结构风险和其他明显表达风险。
-5. 在硬约束通过者中，以经过验证的表达预测证据、天然保守性等级、工具一致性和位置/机制多样性形成 30 条单突面板；WT 作为独立实验对照，不占 30 条名额。
-6. 产量实验完成后才讨论组合；组合资格由真实单突效应决定，而不是当前预测分数。
+1. 补齐NanoMelt和AntiFold的正式离散分类验证，并冻结各自的决策用途；RP3Net与PLM_Sol均不再进入后续候选流程。
+2. 以846条允许单突为统一输入运行最终保留的NetSolP、NanoMelt和实验复合物视图AntiFold；未解析坐标导致AntiFold不可评价的候选保留明确缺失状态。
+3. 对846条单突进行硬风险审核，包括新增糖基化基序、未配对Cys、强疏水/电荷斑块、Pro/Gly结构风险和其他明显表达风险。
+4. 在硬约束通过者中，以经过验证的表达预测证据、天然保守性等级、工具一致性和位置/机制多样性形成30条单突面板；WT作为独立实验对照，不占30条名额。
+5. 产量实验完成后才讨论组合；组合资格由真实单突效应决定，而不是当前预测分数。
 
 ## 阶段门
 
 - `structure_and_interface_identity=pass`
 - `natural_vhh_conservation_contract=pass`
 - `expression_single_mutant_constraint_space=pass`：846 条仅表示允许进入预测的单突空间。
-- `predictor_continuous_and_classification_validation=blocked`：RP3Net已完成并判为不支持使用；PLM_Sol计划已释放但正式47条运行未完成，现行三工具分类合同仍待补齐。
+- `predictor_continuous_and_classification_validation=blocked`：RP3Net和PLM_Sol均已完成并判为不支持使用；现行三工具中的NanoMelt和AntiFold分类合同仍待补齐。
 - `new_30_single_mutant_panel_release=blocked`：需要完成全空间预测、风险审核与分层选择。
 - `combination_design_release=blocked`：等待单突实验结果。
 
@@ -69,4 +68,4 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - RP3Net正式运行覆盖47/47条序列；连续、分类、逐折预测、结果图和gate均已生成并完成schema及计数核验。
 - 4,059 条输入、4,057 条合格序列、1,564 条邻域序列、128 个位置和 846 条单突均已回读核对；结果图已人工检查。
 - RP3Net gate固定为`rp3net_not_supported_for_candidate_use`；其模型分数不能解释为mg/L或通用表达阈值。
-- PLM_Sol Nb252 smoke已通过；正式计划包含47条完整且唯一序列、31/16表型语义和两环境调用合同，远程正式评分与结果gate尚未生成。
+- PLM_Sol正式运行覆盖47/47条序列；31条数值记录和16条LLJ有序/删失记录语义保持不变，结果图、gate和run summary已回读核对。其固定5 mg展示的序列簇留一ROC-AUC/PR-AUC/MCC为0.761/0.685/0.411，但该展示不参与工具准入。
