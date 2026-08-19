@@ -1,0 +1,22 @@
+{
+  "counts": {
+    "llj_ordinal_censored": 16,
+    "numeric": 31,
+    "samples": 47
+  },
+  "elapsed_seconds": 12.882695,
+  "evidence_level": "no_supported_use",
+  "generated_at": "2026-08-19T09:32:20+08:00",
+  "outputs": {
+    "classification": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/rp3net_yield_validation_result_20260818/rp3net_yield_classification.csv",
+    "gate": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/rp3net_yield_validation_result_20260818/rp3net_yield_validation_gate.json",
+    "metrics": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/rp3net_yield_validation_result_20260818/rp3net_yield_associations.csv",
+    "png": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/rp3net_yield_validation_result_20260818/rp3net_yield_validation.png",
+    "predictions": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/rp3net_yield_validation_result_20260818/rp3net_yield_classification_predictions.csv",
+    "samples": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/rp3net_yield_validation_result_20260818/rp3net_yield_sample_evidence.csv",
+    "svg": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/rp3net_yield_validation_result_20260818/rp3net_yield_validation.svg"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}
