@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-19 22:45:00
+Last updated: 2026-08-19 23:10:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -50,10 +50,9 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## 下一执行路线
 
-1. 远程运行`bash scripts/candidate_design/submit_expression_property_completion_v2.sh`。作业先以WT、Q5V、性质极值及FR/CDR代表组成的12条复核面板验证NetSolP/NanoMelt旧值，并对三个固定WT结构视图各重跑一次AntiFold；只有逐值精度门通过才继续。首次复核中NetSolP和NanoMelt全部通过，AntiFold仅出现最大`6.04e-6`的GPU浮点复现差异；其绝对容差已按实测精度固定为`1e-5`，等待重新运行确认。
-2. 仅补算reported 11、14、24、26–29的126条NetSolP/NanoMelt结果；复用全部847条AntiFold结果。实验缺失位置的实验视图继续为`not_evaluable`，AF3-only值作为预测结构补充证据独立保留。
-3. 合并并审核847行完整原始评分矩阵；只记录绝对值、相对当前WT变化、评价状态和来源，不筛选、不计算Tier或综合分。
-4. 完成用户计划中的后续独立步骤后，再制定风险审核和30条单突选择合同；当前不得提前淘汰候选。
+1. 三工具全空间补全已经完成，不在输入和工具合同不变时重复运行。重复一致性门共183项、0失败；NetSolP和NanoMelt逐值一致，AntiFold最大绝对差为`5.72e-6`并通过固定`1e-5`容差。
+2. 847行完整原始评分矩阵已经释放：721条NetSolP/NanoMelt沿用经重复验证的旧值，126条缺口采用本轮新算值；AntiFold为721条三视图和126条AF3-only证据。实验缺失位置的实验视图保持`not_evaluable`。
+3. 当前矩阵只记录原始值、相对WT变化、评价状态和来源，尚未筛选、排名或生成Tier。先完成用户计划中的后续独立步骤，再制定风险审核和30条单突选择合同。
 
 ## 阶段门
 
@@ -62,7 +61,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - `expression_single_mutant_constraint_space=pass`：847 条仅表示允许进入预测的单突空间。
 - `predictor_continuous_and_classification_validation=pass_with_tool_specific_roles`：NanoMelt正式判为仅稳定性约束；AntiFold因结构覆盖不足正式判为分类不适用、仅实验复合物相容性约束；不得把该门解释为产量预测器已验证。
 - `expression_property_completion_plan_v2=pass`：721条精确复用、126条补算和12条抽样复核计划已冻结。
-- `expression_property_complete_matrix_v2=blocked`：等待远程重复一致性门和126条补算完成。
+- `expression_property_complete_matrix_v2=pass`：847条NetSolP、NanoMelt和AntiFold证据已按视图可评价范围完成并通过完整性审核；该门不代表候选已筛选。
 - `new_30_single_mutant_panel_release=blocked`：需要完成全空间预测、风险审核与分层选择。
 - `combination_design_release=blocked`：等待单突实验结果。
 
@@ -72,7 +71,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - RP3Net正式运行覆盖47/47条序列；连续、分类、逐折预测、结果图和gate均已生成并完成schema及计数核验。
 - 4,059条输入、4,057条合格序列、1,564条邻域序列、128个位置和847条单突均已回读核对；v2相对v1只新增Q5V，未删除或意外开放其他候选。
 - v2下游preflight为pass：847条候选中846条来自常规非Cys扫描、1条为Q5V共识回变，无多突、新Cys、冻结或界面突变。
-- v2性质补全计划为pass：847/847条AntiFold旧证据精确回映；NetSolP/NanoMelt为721条可复用、126条待补算；连接同时核对位置、WT、mutant和完整128-aa序列，不依赖旧candidate ID。
+- v2性质完整矩阵为pass：847条ID和序列均唯一且均为合法128-aa单突；721条复用值与126条新算值来源明确，全部保留末端SSGS，无冻结位点突变或新增Cys。NetSolP、NanoMelt和AF3 AntiFold均覆盖847条；实验单体/复合物AntiFold仅覆盖坐标可评价的721条，其余126条明确为`not_evaluable`。
 - NanoMelt分类制品覆盖27条数值样本并保留4条未评分状态；正式图已人工检查。AntiFold分类不适用合同确认1条匹配结构、46条结构缺失且不生成任何分类指标。
 - RP3Net gate固定为`rp3net_not_supported_for_candidate_use`；其模型分数不能解释为mg/L或通用表达阈值。
 - PLM_Sol正式运行覆盖47/47条序列；31条数值记录和16条LLJ有序/删失记录语义保持不变，结果图、gate和run summary已回读核对。其固定5 mg展示的序列簇留一ROC-AUC/PR-AUC/MCC为0.761/0.685/0.411，但该展示不参与工具准入。
