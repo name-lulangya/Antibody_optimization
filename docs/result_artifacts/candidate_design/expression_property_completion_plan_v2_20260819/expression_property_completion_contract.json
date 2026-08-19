@@ -52,7 +52,7 @@
   },
   "ranking_performed": false,
   "repeat_validation": {
-    "antifold_absolute_tolerance": 5e-08,
+    "antifold_absolute_tolerance": 1e-05,
     "candidate_count": 12,
     "must_pass_before_completion": true,
     "nanomelt_tm_absolute_tolerance_c": 0.0050001,

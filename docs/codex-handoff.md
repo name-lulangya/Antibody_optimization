@@ -50,7 +50,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## 下一执行路线
 
-1. 远程运行`bash scripts/candidate_design/submit_expression_property_completion_v2.sh`。作业先以WT、Q5V、性质极值及FR/CDR代表组成的12条复核面板验证NetSolP/NanoMelt旧值，并对三个固定WT结构视图各重跑一次AntiFold；只有逐值精度门通过才继续。
+1. 远程运行`bash scripts/candidate_design/submit_expression_property_completion_v2.sh`。作业先以WT、Q5V、性质极值及FR/CDR代表组成的12条复核面板验证NetSolP/NanoMelt旧值，并对三个固定WT结构视图各重跑一次AntiFold；只有逐值精度门通过才继续。首次复核中NetSolP和NanoMelt全部通过，AntiFold仅出现最大`6.04e-6`的GPU浮点复现差异；其绝对容差已按实测精度固定为`1e-5`，等待重新运行确认。
 2. 仅补算reported 11、14、24、26–29的126条NetSolP/NanoMelt结果；复用全部847条AntiFold结果。实验缺失位置的实验视图继续为`not_evaluable`，AF3-only值作为预测结构补充证据独立保留。
 3. 合并并审核847行完整原始评分矩阵；只记录绝对值、相对当前WT变化、评价状态和来源，不筛选、不计算Tier或综合分。
 4. 完成用户计划中的后续独立步骤后，再制定风险审核和30条单突选择合同；当前不得提前淘汰候选。

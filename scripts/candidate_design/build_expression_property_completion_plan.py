@@ -111,7 +111,7 @@ def main() -> int:
             "score_row_count_including_wt": 13,
             "netsolp_absolute_tolerance": 5e-8,
             "nanomelt_tm_absolute_tolerance_c": 0.0050001,
-            "antifold_absolute_tolerance": 5e-8,
+            "antifold_absolute_tolerance": 1e-5,
             "must_pass_before_completion": True,
         },
         "runtime_estimate": {

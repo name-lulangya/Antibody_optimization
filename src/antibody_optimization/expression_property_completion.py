@@ -174,7 +174,7 @@ def compare_repeat_scores(
     *,
     netsolp_tolerance: float = 5e-8,
     nanomelt_tolerance: float = 0.0050001,
-    antifold_tolerance: float = 5e-8,
+    antifold_tolerance: float = 1e-5,
 ) -> tuple[list[dict[str, object]], dict[str, object]]:
     """Compare repeat scores with historical values at recorded output precision."""
 

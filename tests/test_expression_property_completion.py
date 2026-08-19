@@ -77,6 +77,19 @@ def test_repeat_comparison_accepts_recorded_precision_and_blocks_a_changed_score
         anti.append(candidate)
     comparisons, gate = compare_repeat_scores(samples, expected, net, melt, anti)
     assert gate["status"] == "pass" and comparisons
+    anti[0]["experimental_vhh_only_mutant_log_probability"] = (
+        float(anti[0]["experimental_vhh_only_mutant_log_probability"]) + 9e-6
+    )
+    _, within_gpu_tolerance = compare_repeat_scores(samples, expected, net, melt, anti)
+    assert within_gpu_tolerance["status"] == "pass"
+    anti[0]["experimental_vhh_only_mutant_log_probability"] = (
+        float(anti[0]["experimental_vhh_only_mutant_log_probability"]) + 2e-6
+    )
+    _, outside_gpu_tolerance = compare_repeat_scores(samples, expected, net, melt, anti)
+    assert outside_gpu_tolerance["status"] == "blocked"
+    anti[0]["experimental_vhh_only_mutant_log_probability"] = expected[1][
+        "experimental_vhh_only_mutant_log_probability"
+    ]
     net[1]["predicted_solubility"] = float(net[1]["predicted_solubility"]) + 0.01
     _, blocked = compare_repeat_scores(samples, expected, net, melt, anti)
     assert blocked["status"] == "blocked" and blocked["failure_count"] == 1
