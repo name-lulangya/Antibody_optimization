@@ -1,0 +1,10 @@
+{
+  "candidate_selection_performed": false,
+  "comparison_count": 183,
+  "failure_count": 109,
+  "gate_name": "nb252_expression_property_legacy_repeat_validation",
+  "generated_at": "2026-08-19T21:42:53+08:00",
+  "release": "legacy_score_reuse_blocked",
+  "schema_version": 1,
+  "status": "blocked"
+}

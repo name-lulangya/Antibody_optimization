@@ -1,0 +1,20 @@
+{
+  "candidate_selection_performed": false,
+  "counts": {
+    "af3_only": 126,
+    "candidates": 847,
+    "new_missing_position_score": 126,
+    "reused_20260815_repeat_validated": 721,
+    "three_views": 721
+  },
+  "elapsed_seconds": 0.238515,
+  "generated_at": "2026-08-19T22:11:43+08:00",
+  "outputs": {
+    "gate": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/expression_property_complete_matrix_v2_20260819/expression_single_mutant_property_matrix_gate.json",
+    "matrix": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/expression_property_complete_matrix_v2_20260819/expression_single_mutant_property_matrix.csv"
+  },
+  "python": "3.11.15",
+  "release": "complete_raw_scores_ready_for_next_declared_stage",
+  "schema_version": 1,
+  "status": "pass"
+}

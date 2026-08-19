@@ -1,0 +1,22 @@
+{
+  "antifold_af3_scored_count": 847,
+  "antifold_experimental_complex_scored_count": 721,
+  "antifold_scope_counts": {
+    "af3_only": 126,
+    "three_views": 721
+  },
+  "candidate_count": 847,
+  "candidate_selection_performed": false,
+  "gate_name": "nb252_expression_property_complete_matrix_v2",
+  "generated_at": "2026-08-19T22:11:43+08:00",
+  "nanomelt_scored_count": 847,
+  "netsolp_scored_count": 847,
+  "property_score_source_counts": {
+    "new_missing_position_score": 126,
+    "reused_20260815_repeat_validated": 721
+  },
+  "ranking_performed": false,
+  "release": "complete_raw_scores_ready_for_next_declared_stage",
+  "schema_version": 1,
+  "status": "pass"
+}

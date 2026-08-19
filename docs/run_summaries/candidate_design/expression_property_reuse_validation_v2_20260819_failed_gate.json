@@ -1,0 +1,16 @@
+{
+  "counts": {
+    "comparisons": 183,
+    "failures": 109
+  },
+  "elapsed_seconds": 0.041904,
+  "generated_at": "2026-08-19T21:42:53+08:00",
+  "outputs": {
+    "comparisons": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/expression_property_reuse_validation_v2_20260819/reuse_validation_comparisons.csv",
+    "gate": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/expression_property_reuse_validation_v2_20260819/reuse_validation_gate.json"
+  },
+  "python": "3.11.15",
+  "release": "legacy_score_reuse_blocked",
+  "schema_version": 1,
+  "status": "blocked"
+}
