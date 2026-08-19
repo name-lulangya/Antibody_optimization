@@ -1,0 +1,25 @@
+﻿candidate_id,reported_sequence_index_1based,mutation_reported_label,change_type,stable_word,stable_word_length,start_reported_1based,end_reported_1based,overlaps_mutation,wt_amino_acid_segment,mutant_amino_acid_segment,wt_degenerate_segment,mutant_degenerate_segment
+Nb252_expr_seq011_L11D,11,Nb252 reported_seq L11D,created,ssahns,6,9,14,True,GGLVQA,GGDVQA,sshhns,ssahns
+Nb252_expr_seq011_L11E,11,Nb252 reported_seq L11E,created,ssahns,6,9,14,True,GGLVQA,GGEVQA,sshhns,ssahns
+Nb252_expr_seq014_A14N,14,Nb252 reported_seq A14N,created,hnnsso,6,12,17,True,VQAGGS,VQNGGS,hnssso,hnnsso
+Nb252_expr_seq014_A14Q,14,Nb252 reported_seq A14Q,created,hnnsso,6,12,17,True,VQAGGS,VQQGGS,hnssso,hnnsso
+Nb252_expr_seq031_G31I,31,Nb252 reported_seq G31I,created,oh@@h,5,27,31,True,TIFFG,TIFFI,oh@@s,oh@@h
+Nb252_expr_seq031_G31L,31,Nb252 reported_seq G31L,created,oh@@h,5,27,31,True,TIFFG,TIFFL,oh@@s,oh@@h
+Nb252_expr_seq031_G31V,31,Nb252 reported_seq G31V,created,oh@@h,5,27,31,True,TIFFG,TIFFV,oh@@s,oh@@h
+Nb252_expr_seq032_Y32D,32,Nb252 reported_seq Y32D,created,saaMs,5,31,35,True,GYDMG,GDDMG,sYaMs,saaMs
+Nb252_expr_seq032_Y32E,32,Nb252 reported_seq Y32E,created,saaMs,5,31,35,True,GYDMG,GEDMG,sYaMs,saaMs
+Nb252_expr_seq049_A49N,49,Nb252 reported_seq A49N,created,ba@hn,5,45,49,True,REFVA,REFVN,ba@hs,ba@hn
+Nb252_expr_seq049_A49N,49,Nb252 reported_seq A49N,created,a@hno,5,46,50,True,EFVAS,EFVNS,a@hso,a@hno
+Nb252_expr_seq049_A49Q,49,Nb252 reported_seq A49Q,created,ba@hn,5,45,49,True,REFVA,REFVQ,ba@hs,ba@hn
+Nb252_expr_seq049_A49Q,49,Nb252 reported_seq A49Q,created,a@hno,5,46,50,True,EFVAS,EFVQS,a@hso,a@hno
+Nb252_expr_seq050_S50M,50,Nb252 reported_seq S50M,created,@hsMh,5,47,51,True,FVASI,FVAMI,@hsoh,@hsMh
+Nb252_expr_seq050_S50Y,50,Nb252 reported_seq S50Y,created,@hsYh,5,47,51,True,FVASI,FVAYI,@hsoh,@hsYh
+Nb252_expr_seq071_R71D,71,Nb252 reported_seq R71D,created,oaansb,6,70,75,True,SRDNAK,SDDNAK,obansb,oaansb
+Nb252_expr_seq071_R71E,71,Nb252 reported_seq R71E,created,oaansb,6,70,75,True,SRDNAK,SEDNAK,obansb,oaansb
+Nb252_expr_seq071_R71Y,71,Nb252 reported_seq R71Y,created,Yansb,5,71,75,True,RDNAK,YDNAK,bansb,Yansb
+Nb252_expr_seq079_Y79K,79,Nb252 reported_seq Y79K,created,bnohb,5,75,79,True,KNTVY,KNTVK,bnohY,bnohb
+Nb252_expr_seq079_Y79R,79,Nb252 reported_seq Y79R,created,bnohb,5,75,79,True,KNTVY,KNTVR,bnohY,bnohb
+Nb252_expr_seq086_K86H,86,Nb252 reported_seq K86H,created,hHPaa,5,85,89,True,LKPED,LHPED,hbPaa,hHPaa
+Nb252_expr_seq086_K86P,86,Nb252 reported_seq K86P,created,hPPaa,5,85,89,True,LKPED,LPPED,hbPaa,hPPaa
+Nb252_expr_seq099_T99F,99,Nb252 reported_seq T99F,created,@haYh,5,99,103,True,TIDYI,FIDYI,ohaYh,@haYh
+Nb252_expr_seq099_T99W,99,Nb252 reported_seq T99W,created,@haYh,5,99,103,True,TIDYI,WIDYI,ohaYh,@haYh

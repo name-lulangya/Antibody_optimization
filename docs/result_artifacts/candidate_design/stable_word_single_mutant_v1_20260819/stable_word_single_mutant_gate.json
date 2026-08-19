@@ -1,0 +1,17 @@
+{
+  "all_occurrence_changes_overlap_mutation": true,
+  "candidate_count": 847,
+  "candidate_selection_performed": false,
+  "gate_name": "nb252_stable_word_single_mutant_features_v1",
+  "generated_at": "2026-08-19T23:30:00+08:00",
+  "occurrence_change_row_count": 24,
+  "ranking_performed": false,
+  "release": "stable_word_features_ready_for_yield_validation_and_later_soft_preference",
+  "same_degenerate_symbol_count": 49,
+  "schema_version": 1,
+  "stable_word_effect_counts": {
+    "gain_only": 22,
+    "unchanged": 825
+  },
+  "status": "pass"
+}

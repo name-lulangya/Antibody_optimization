@@ -1,0 +1,79 @@
+{
+  "alphabet": [
+    "@",
+    "C",
+    "H",
+    "M",
+    "P",
+    "Y",
+    "a",
+    "b",
+    "h",
+    "n",
+    "o",
+    "s"
+  ],
+  "amino_acid_to_symbol": {
+    "A": "s",
+    "C": "C",
+    "D": "a",
+    "E": "a",
+    "F": "@",
+    "G": "s",
+    "H": "H",
+    "I": "h",
+    "K": "b",
+    "L": "h",
+    "M": "M",
+    "N": "n",
+    "P": "P",
+    "Q": "n",
+    "R": "b",
+    "S": "o",
+    "T": "o",
+    "V": "h",
+    "W": "@",
+    "Y": "Y"
+  },
+  "candidate_count": 847,
+  "candidate_selection_performed": false,
+  "case_sensitive": true,
+  "contract_name": "nb252_degenerate_stable_word_evaluation_v1",
+  "generated_at": "2026-08-19T23:30:00+08:00",
+  "match_semantics": {
+    "algorithm": "full_exact_contiguous_substring_scan_after_deterministic_degenerate_encoding",
+    "created": "mutant_occurrences_minus_WT_occurrences",
+    "lost": "WT_occurrences_minus_mutant_occurrences",
+    "nested_and_different_length_words_kept_separate": true,
+    "net_delta": "created_occurrence_count_minus_lost_occurrence_count",
+    "occurrence_key": [
+      "stable_word",
+      "start_reported_1based",
+      "end_reported_1based"
+    ],
+    "overlapping_occurrences_counted": true
+  },
+  "ranking_performed": false,
+  "schema_version": 1,
+  "selection_semantics": {
+    "cannot_override": [
+      "immutable_positions",
+      "new_cysteine_exclusion",
+      "clear_property_regression"
+    ],
+    "causal_stability_or_expression_claim": false,
+    "preference_order": [
+      "gain_only",
+      "net_gain",
+      "unchanged",
+      "balanced_exchange",
+      "net_loss",
+      "loss_only"
+    ],
+    "role": "soft_preference_not_hard_filter"
+  },
+  "source_line_count": 1336,
+  "source_path": "data\\Stable_word_SS_3D_1336 (1).txt",
+  "source_sha256": "6E7942D30FB5E2D254F00034B78C6196CB629FC34977A2E72253E6C03037A2DE",
+  "status": "pass"
+}

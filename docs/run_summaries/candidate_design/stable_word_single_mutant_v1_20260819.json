@@ -1,0 +1,21 @@
+{
+  "candidate_selection_performed": false,
+  "counts": {
+    "candidates": 847,
+    "occurrence_changes": 24,
+    "stable_words": 1336
+  },
+  "elapsed_seconds": 0.187552,
+  "generated_at": "2026-08-19T23:30:00+08:00",
+  "outputs": {
+    "changes": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stable_word_single_mutant_v1_20260819\\stable_word_occurrence_changes.csv",
+    "contract": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stable_word_single_mutant_v1_20260819\\stable_word_evaluation_contract.json",
+    "gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stable_word_single_mutant_v1_20260819\\stable_word_single_mutant_gate.json",
+    "library": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stable_word_single_mutant_v1_20260819\\stable_word_library.csv",
+    "matrix": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stable_word_single_mutant_v1_20260819\\expression_single_mutant_property_stable_word_matrix.csv",
+    "summary": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stable_word_single_mutant_v1_20260819\\stable_word_single_mutant_summary.csv"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}

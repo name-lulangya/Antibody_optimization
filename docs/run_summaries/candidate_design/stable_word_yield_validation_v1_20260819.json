@@ -1,0 +1,21 @@
+{
+  "candidate_selection_performed": false,
+  "counts": {
+    "classification_predictions": 62,
+    "metrics": 4,
+    "samples": 47
+  },
+  "elapsed_seconds": 3.116289,
+  "empirical_yield_evidence_level": "no_supported_use",
+  "generated_at": "2026-08-19T23:31:00+08:00",
+  "outputs": {
+    "classification": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stable_word_yield_validation_v1_20260819\\stable_word_yield_classification.csv",
+    "gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stable_word_yield_validation_v1_20260819\\stable_word_yield_validation_gate.json",
+    "metrics": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stable_word_yield_validation_v1_20260819\\stable_word_yield_associations.csv",
+    "predictions": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stable_word_yield_validation_v1_20260819\\stable_word_yield_classification_predictions.csv",
+    "samples": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\stable_word_yield_validation_v1_20260819\\stable_word_yield_sample_evidence.csv"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}
