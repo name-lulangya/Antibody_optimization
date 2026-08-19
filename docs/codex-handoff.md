@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-18 23:30:00
+Last updated: 2026-08-19 09:30:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -13,7 +13,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 冻结天然 VHH 邻域中的高置信保守位点、Cys22/Cys95 和末端 SSGS（reported 125–128）。
 - 候选必须保持完整 128-aa 父序列长度、末端 SSGS、两枚原有 Cys，且不得引入新 Cys。
 - 现行核心预测工具仅为 NetSolP、NanoMelt 和实验复合物视图 AntiFold。新工具必须先在 47 条可比产量数据上验证，证明有独立且可重复的样本外信息后才能纳入筛选。
-- RP3Net 0.0.2 已完成环境和权重身份固定，47条验证计划及连续/离散统计实现已就绪；远程正式评分尚未运行，因此当前不能用于候选排序。
+- RP3Net 0.0.2 已完成环境和权重身份固定，47条验证计划及连续/离散统计实现已就绪。首次远程启动在模型推理前因评分模块误加载分析端Biopython依赖而终止；该依赖边界已修复，正式评分仍未完成，因此当前不能用于候选排序。
 
 ## 权威输入基线
 
@@ -61,7 +61,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 ## 本轮验证状态
 
 - 本地 CPU 真实数据运行约 226 秒，无需 Slurm、checkpoint 或 resume。
-- 全套测试`242 passed, 1 skipped, 4 subtests passed`；`pip check`、Python编译检查、Bash语法检查与`git diff --check`通过。
+- RP3Net评分模块已验证可在禁用site-packages的隔离Python中导入，不再要求Biopython；修复后的全套测试和静态检查结果记录于当前周历史。
 - 4,059 条输入、4,057 条合格序列、1,564 条邻域序列、128 个位置和 846 条单突均已回读核对；结果图已人工检查。
 - RP3Net 47条计划已生成，固定checkpoint SHA-256为`443743bd031689aaf17dc6f7c22c5da3d23cf87b38e10341f114b27d651e6d2b`；远程正式分数和结论尚不存在。
 - 本轮尚未提交或推送。

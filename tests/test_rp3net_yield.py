@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import csv
+import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -15,6 +17,22 @@ from antibody_optimization.yield_classification import nested_yield_classificati
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_rp3net_scoring_entry_import_does_not_require_analysis_packages() -> None:
+    completed = subprocess.run(
+        [
+            sys.executable,
+            "-S",
+            str(ROOT / "scripts/candidate_design/score_rp3net_sequences.py"),
+            "--help",
+        ],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    assert completed.returncode == 0, completed.stderr
 
 
 def _csv(path: Path) -> list[dict[str, str]]:

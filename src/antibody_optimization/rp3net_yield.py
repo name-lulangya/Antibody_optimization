@@ -4,15 +4,6 @@ from __future__ import annotations
 
 from typing import Mapping, Sequence
 
-from .netsolp_yield import build_netsolp_validation_inputs, yield_metric_row
-from .nanobert_yield import (
-    classify_primary_evidence,
-    sequence_features,
-    stratified_bootstrap_ci,
-    stratified_permutation_p,
-)
-from .yield_classification import nested_yield_classification
-
 
 PRIMARY_FEATURE = "rp3net_expression_probability"
 EXPECTED_SAMPLE_COUNT = 47
@@ -28,6 +19,8 @@ def build_rp3net_validation_inputs(
     position_rows: Sequence[Mapping[str, object]],
 ) -> dict[str, object]:
     """Build the same 47-sample phenotype and 90%-identity cluster plan used by NetSolP."""
+
+    from .netsolp_yield import build_netsolp_validation_inputs
 
     return build_netsolp_validation_inputs(expression_rows, numbering_rows, position_rows)
 
@@ -67,6 +60,15 @@ def analyze_rp3net_associations(
     score_rows: Sequence[Mapping[str, object]],
 ) -> dict[str, object]:
     """Evaluate RP3Net continuously and with leakage-controlled binary validation."""
+
+    from .nanobert_yield import (
+        classify_primary_evidence,
+        sequence_features,
+        stratified_bootstrap_ci,
+        stratified_permutation_p,
+    )
+    from .netsolp_yield import yield_metric_row
+    from .yield_classification import nested_yield_classification
 
     if len(sample_rows) != EXPECTED_SAMPLE_COUNT or len(score_rows) != EXPECTED_SAMPLE_COUNT:
         raise RP3NetYieldError("RP3Net validation requires exactly 47 samples and scores")
