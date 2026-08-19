@@ -1,0 +1,27 @@
+{
+  "counts": {
+    "llj_ordinal_censored": 16,
+    "numeric": 31,
+    "samples": 47
+  },
+  "elapsed_seconds": 13.089885,
+  "evidence_level": "no_supported_use",
+  "generated_at": "2026-08-19T10:18:09+00:00",
+  "outputs": {
+    "classification": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/plm_sol_yield_validation_result_20260819/plm_sol_yield_classification.csv",
+    "comparison": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/plm_sol_yield_validation_result_20260819/plm_sol_predictor_comparison.csv",
+    "fixed_metrics": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/plm_sol_yield_validation_result_20260819/plm_sol_fixed5mg_metrics.csv",
+    "fixed_png": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/plm_sol_yield_validation_result_20260819/plm_sol_fixed5mg_display.png",
+    "fixed_predictions": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/plm_sol_yield_validation_result_20260819/plm_sol_fixed5mg_predictions.csv",
+    "fixed_svg": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/plm_sol_yield_validation_result_20260819/plm_sol_fixed5mg_display.svg",
+    "gate": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/plm_sol_yield_validation_result_20260819/plm_sol_yield_validation_gate.json",
+    "metrics": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/plm_sol_yield_validation_result_20260819/plm_sol_yield_associations.csv",
+    "png": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/plm_sol_yield_validation_result_20260819/plm_sol_yield_validation.png",
+    "predictions": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/plm_sol_yield_validation_result_20260819/plm_sol_yield_classification_predictions.csv",
+    "samples": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/plm_sol_yield_validation_result_20260819/plm_sol_yield_sample_evidence.csv",
+    "svg": "/homes/Tianlab/luly25/Antibody_optimization/docs/result_artifacts/candidate_design/plm_sol_yield_validation_result_20260819/plm_sol_yield_validation.svg"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}

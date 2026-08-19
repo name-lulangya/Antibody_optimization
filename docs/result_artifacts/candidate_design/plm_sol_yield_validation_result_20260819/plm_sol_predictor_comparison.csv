@@ -1,0 +1,6 @@
+﻿comparison,all_47_spearman,numeric_31_spearman,partial_spearman_provider_length_netsolp_s,cluster_cv_spearman,increment_over_netsolp_s
+NetSolP S,0.6399167437557817,0.7153225806451613,,,
+NetSolP U,0.7927844588344126,0.9258064516129034,,,
+RP3Net,0.6759944495837188,0.6467741935483872,,,
+NetSolP S + PLM_Sol incremental model,,,0.22488068304495493,0.3148018652403136,-0.1404500629533707
+NetSolP S baseline model,,,,0.4552519281936843,0.0
