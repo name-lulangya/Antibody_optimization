@@ -47,7 +47,8 @@ def main() -> int:
         stage = Path(temp)
         prefix = stage / "embedding_run"
         config = stage / "embedding.yml"
-        config.write_text(
+        _write_text(
+            config,
             "global:\n"
             f"  sequences_file: {fasta.as_posix()}\n"
             f"  prefix: {prefix.as_posix()}\n\n"
@@ -57,7 +58,6 @@ def main() -> int:
             f"  model_directory: {model.as_posix()}\n"
             "  half_precision_model: true\n"
             "  half_precision: true\n",
-            encoding="utf-8", newline="\n",
         )
         command = [executable, "-o", str(config)]
         completed = subprocess.run(command, check=True, text=True, capture_output=True)
@@ -97,7 +97,12 @@ def _json(path: Path):
 
 
 def _write_json(path: Path, value):
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
+    _write_text(path, json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
+
+
+def _write_text(path: Path, value: str) -> None:
+    with path.open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write(value)
 
 
 if __name__ == "__main__":

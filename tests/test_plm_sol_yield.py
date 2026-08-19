@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import csv
 import math
 from pathlib import Path
@@ -21,6 +22,24 @@ ROOT = Path(__file__).resolve().parents[1]
 RP3_PLAN = ROOT / "docs/result_artifacts/candidate_design/rp3net_yield_validation_plan_20260818"
 NET_RESULTS = ROOT / "docs/result_artifacts/candidate_design/netsolp_yield_validation_result_20260814"
 RP3_RESULTS = ROOT / "docs/result_artifacts/candidate_design/rp3net_yield_validation_result_20260818"
+
+
+def test_plm_sol_tool_scripts_avoid_python311_path_write_text_api() -> None:
+    scripts = (
+        ROOT / "scripts/candidate_design/score_plm_sol_embeddings.py",
+        ROOT / "scripts/candidate_design/score_plm_sol_classifier.py",
+    )
+    for script in scripts:
+        tree = ast.parse(script.read_text(encoding="utf-8"), filename=str(script), feature_version=(3, 8))
+        unsupported = [
+            node.lineno
+            for node in ast.walk(tree)
+            if isinstance(node, ast.Call)
+            and isinstance(node.func, ast.Attribute)
+            and node.func.attr == "write_text"
+            and any(keyword.arg == "newline" for keyword in node.keywords)
+        ]
+        assert unsupported == [], f"Python 3.8-incompatible Path.write_text(newline=...) at {script}:{unsupported}"
 
 
 def test_normalize_plm_sol_scores_maps_hashes_by_exact_sequence() -> None:

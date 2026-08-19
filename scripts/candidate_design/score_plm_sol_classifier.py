@@ -49,7 +49,8 @@ def main() -> int:
     with tempfile.TemporaryDirectory(prefix=".plm-sol-classifier-", dir=output.parent) as temp:
         stage = Path(temp)
         config = stage / "inference.yml"
-        config.write_text(
+        _write_text(
+            config,
             "output_files_name: 'plm_sol_yield_validation'\n"
             "log_iterations: 100\n"
             "batch_size: 47\n"
@@ -58,7 +59,6 @@ def main() -> int:
             f"embeddings: '{h5_path.as_posix()}'\n"
             f"remapping: '{remapping.as_posix()}'\n"
             "key_format: fasta_descriptor\n",
-            encoding="utf-8", newline="\n",
         )
         command = [sys.executable, str(source_root / "inference.py"), "--config", str(config)]
         completed = subprocess.run(command, cwd=stage, check=True, text=True, capture_output=True)
@@ -110,7 +110,12 @@ def _write_csv(path: Path, rows):
 
 
 def _write_json(path: Path, value):
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
+    _write_text(path, json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
+
+
+def _write_text(path: Path, value: str) -> None:
+    with path.open("w", encoding="utf-8", newline="\n") as handle:
+        handle.write(value)
 
 
 if __name__ == "__main__":
