@@ -1,5 +1,20 @@
 # 可复用源码索引
 
+## 现行表达性质决策合同
+
+- `antibody_optimization.vhh_conservation.validate_expression_single_mutant_release`与`scripts/candidate_design/validate_expression_single_mutant_contract_v2.py`
+  - 用途：在表达性质评分阶段边界一次性核对v2合同、128个位点、候选CSV/FASTA、权威亲本和关键残基集合；后续NetSolP、NanoMelt和AntiFold计划引用该通过制品，不逐工具重复验证。
+  - 输入与返回：接收v2表达约束、位点表、847条候选、对应FASTA和关键残基事实；返回候选数、生成规则计数、冻结/界面冲突和亲本身份的机器可读preflight。
+  - 明确不支持：重算保守性、硬编码候选数、改变阈值、生成新突变或替代下游性质评分。
+- `antibody_optimization.nanomelt_yield`、`antibody_optimization.nanomelt_yield_plot`与`scripts/candidate_design/finalize_nanomelt_classification_validation.py`
+  - 用途：复用既有43/47条NanoMelt评分，在27条可评分LTT/WCC数值记录上补齐逐样本和90%序列簇外嵌套分类；产量类别在每个外层训练折内按来源中位数定义，Tm阈值只在训练折内最大化MCC。
+  - 输入与返回：接收冻结47样本及既有逐样本NanoMelt证据；返回分类汇总、54行逐折预测、连续与分类联合gate及四面板图。
+  - 算法假设：NanoMelt是预测apparent Tm，不是实测Tm或产量；未评分4条保持不适用。正式结果不支持BL21产量排序，只保留为预测稳定性相容约束。
+- `antibody_optimization.antifold_validation.build_antifold_yield_applicability_contract`与`scripts/candidate_design/build_antifold_yield_applicability_contract.py`
+  - 用途：冻结AntiFold相对于47条产量数据的适用边界；只有Nb252具有匹配实验复合物，另外46条没有可比结构，且AntiFold输出不是统一表达分数，因此不计算伪AUC/MCC。
+  - 输入与返回：接收47样本、已发布AntiFold计划/结构视图/gate；返回`classification_status=not_applicable`及允许/禁止用途。
+  - 明确不支持：BL21产量排序、跨样本分类、通用ΔlogP阈值或用AF3静默补全实验缺口。
+
 ## PLM_Sol—BL21产量验证
 
 - `antibody_optimization.plm_sol_yield`与`antibody_optimization.plm_sol_yield_plot`

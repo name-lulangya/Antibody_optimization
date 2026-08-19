@@ -700,6 +700,112 @@ def build_expression_constraints(
     return contract, position_contract, candidates
 
 
+def validate_expression_single_mutant_release(
+    contract: Mapping[str, object],
+    position_rows: Sequence[Mapping[str, object]],
+    candidate_rows: Sequence[Mapping[str, object]],
+    fasta_records: Mapping[str, str],
+    critical_facts: Mapping[str, object],
+) -> dict[str, object]:
+    """Validate one released Nb252 single-mutant space for downstream reuse.
+
+    The release itself defines its candidate count.  This preflight verifies
+    identities, mutation rules and the critical-residue exclusions once; it
+    does not recreate the conservation analysis or introduce a new threshold.
+    """
+
+    if contract.get("schema_version") != 2 or contract.get("status") != "pass":
+        raise VhhConservationError("Expression single-mutant contract v2 is not released")
+    if len(position_rows) != 128:
+        raise VhhConservationError("Expression position contract must contain 128 rows")
+    by_index = {int(row["reported_sequence_index_1based"]): row for row in position_rows}
+    if set(by_index) != set(range(1, 129)):
+        raise VhhConservationError("Expression position contract indices are not unique 1-128")
+    if len(candidate_rows) != int(contract.get("candidate_count", -1)):
+        raise VhhConservationError("Candidate count differs from the released contract")
+    ids = [str(row["candidate_id"]) for row in candidate_rows]
+    if len(ids) != len(set(ids)) or set(ids) != set(fasta_records):
+        raise VhhConservationError("Candidate CSV and FASTA identities do not match uniquely")
+
+    parent_sequences: set[str] = set()
+    candidate_indices: set[int] = set()
+    generation_counts: Counter[str] = Counter()
+    for row in candidate_rows:
+        index = int(row["reported_sequence_index_1based"])
+        wt = str(row["wt_residue"])
+        mutant = str(row["mutant_residue"])
+        sequence = str(row["sequence"])
+        if len(sequence) != 128 or sequence[index - 1] != mutant or mutant in {wt, "C"}:
+            raise VhhConservationError(f"Invalid single-mutant identity: {row['candidate_id']}")
+        parent = sequence[: index - 1] + wt + sequence[index:]
+        if sum(left != right for left, right in zip(parent, sequence, strict=True)) != 1:
+            raise VhhConservationError(f"Candidate is not a single substitution: {row['candidate_id']}")
+        if fasta_records[str(row["candidate_id"])] != sequence:
+            raise VhhConservationError(f"Candidate FASTA sequence mismatch: {row['candidate_id']}")
+        position = by_index[index]
+        rule = str(position["allowed_substitution_rule"])
+        if str(row.get("candidate_generation_rule")) != rule:
+            raise VhhConservationError(f"Candidate generation rule mismatch: {row['candidate_id']}")
+        allowed = {value for value in str(position["allowed_mutant_residues"]).split(";") if value}
+        if mutant not in allowed or str(position["hard_frozen"]).lower() == "true":
+            raise VhhConservationError(f"Candidate violates its position contract: {row['candidate_id']}")
+        parent_sequences.add(parent)
+        candidate_indices.add(index)
+        generation_counts[rule] += 1
+    if len(parent_sequences) != 1:
+        raise VhhConservationError("Candidates do not reconstruct one authoritative parent")
+    parent = next(iter(parent_sequences))
+    parent_hash = hashlib.sha256(parent.encode("ascii")).hexdigest()
+    expected_hash = str(contract["authoritative_parent"]["sequence_sha256"])
+    critical_hash = str(critical_facts["authoritative_parent"]["sequence_sha256"])
+    if parent_hash != expected_hash or parent_hash != critical_hash:
+        raise VhhConservationError("Reconstructed parent differs from released identities")
+
+    frozen = set(map(int, contract["hard_frozen_reported_indices_1based"]))
+    interface = set(
+        map(
+            int,
+            critical_facts["reproduced_experimental_interface"][
+                "reported_sequence_indices_1based"
+            ],
+        )
+    )
+    if candidate_indices & frozen or candidate_indices & interface:
+        raise VhhConservationError("Released candidates include a frozen or interface position")
+    consensus_rows = list(contract.get("consensus_reversion_only", []))
+    expected_consensus = {
+        (
+            int(row["reported_sequence_index_1based"]),
+            str(row["wt_residue"]),
+            str(row["allowed_mutant_residue"]),
+        )
+        for row in consensus_rows
+    }
+    observed_consensus = {
+        (int(row["reported_sequence_index_1based"]), str(row["wt_residue"]), str(row["mutant_residue"]))
+        for row in candidate_rows
+        if row.get("candidate_generation_rule") == "natural_consensus_reversion_only"
+    }
+    if observed_consensus != expected_consensus:
+        raise VhhConservationError("Consensus-only candidate set differs from the contract")
+    return {
+        "schema_version": 1,
+        "gate_name": "nb252_expression_single_mutant_contract_preflight",
+        "status": "pass",
+        "candidate_count": len(candidate_rows),
+        "candidate_position_count": len(candidate_indices),
+        "hard_frozen_position_count": len(frozen),
+        "experimental_interface_position_count": len(interface),
+        "candidate_generation_rule_counts": dict(sorted(generation_counts.items())),
+        "consensus_reversion_only": [dict(row) for row in consensus_rows],
+        "authoritative_parent_sequence_sha256": parent_hash,
+        "multiple_mutants_present": False,
+        "new_cysteine_mutations_present": False,
+        "frozen_or_interface_mutations_present": False,
+        "release": "ready_for_expression_property_scoring_plan",
+    }
+
+
 def _numeric_position(label: str) -> int:
     digits = "".join(character for character in label if character.isdigit())
     if not digits:

@@ -14,6 +14,8 @@ def render_nanomelt_yield_figure(
     metric: Mapping[str, object],
     cv_rows: Sequence[Mapping[str, object]],
     leave_one_out_rows: Sequence[Mapping[str, object]],
+    classification_rows: Sequence[Mapping[str, object]],
+    classification_prediction_rows: Sequence[Mapping[str, object]],
     *,
     png_path: Path,
     svg_path: Path,
@@ -24,7 +26,6 @@ def render_nanomelt_yield_figure(
         row for row in sample_rows
         if row["scoring_status"] == "pass" and row["observation_semantics"] == "individual_approximate"
     ]
-    llj = [row for row in sample_rows if row["scoring_status"] == "pass" and row["provider_code"] == "LLJ"]
     colors = {"LTT": "#0072B2", "WCC": "#D55E00"}
     fig, axes = plt.subplots(2, 2, figsize=(10.8, 8.2), constrained_layout=True)
 
@@ -68,45 +69,42 @@ def render_nanomelt_yield_figure(
     axes[0, 1].axvline(0, color="#555555", linewidth=1)
     axes[0, 1].set(xlabel="Spearman ρ", xlim=(-1, 1), title="B  Direction and Nb252 sensitivity")
 
-    rng = np.random.default_rng(252)
-    for level in (1, 2, 3):
-        selected = [row for row in llj if int(row["llj_ordinal_level"]) == level]
-        axes[1, 0].scatter(
-            level + rng.uniform(-0.07, 0.07, len(selected)),
-            [float(row["nanomelt_predicted_apparent_tm_c"]) for row in selected],
-            color="#6A51A3",
-            edgecolor="white",
-            linewidth=0.6,
-            s=42,
+    schemes = ["leave_one_out", "leave_one_cluster_out"]
+    metric_keys = ["roc_auc", "pr_auc_average_precision", "balanced_accuracy", "mcc"]
+    metric_labels = ["ROC-AUC", "PR-AUC", "Balanced acc.", "MCC"]
+    x = np.arange(len(metric_keys))
+    width = 0.36
+    for index, scheme in enumerate(schemes):
+        row = next(item for item in classification_rows if item["outer_scheme"] == scheme)
+        axes[1, 0].bar(
+            x + (index - 0.5) * width,
+            [float(row[key]) for key in metric_keys],
+            width,
+            label=scheme.replace("_", " "),
         )
-    axes[1, 0].set_xticks([1, 2, 3], ["~2", "~10", ">20"])
-    axes[1, 0].set(
-        xlabel="LLJ reported yield group",
-        ylabel="NanoMelt predicted apparent Tm (°C)",
-        title="C  LLJ ordinal/censored context",
-    )
+    axes[1, 0].axhline(0, color="#777777", linewidth=0.8)
+    axes[1, 0].set_xticks(x, metric_labels, rotation=20)
+    axes[1, 0].set_ylim(-1, 1)
+    axes[1, 0].set(title="C  Nested classification", ylabel="Held-out metric")
+    axes[1, 0].legend(frameon=False, fontsize=8)
 
-    model = next(row for row in cv_rows if row["model"] == "provider_plus_nanomelt_tm")
-    increments = [float(model["increment_over_provider"]), float(model["cluster_increment_over_provider"])]
-    axes[1, 1].bar(["LOOCV", "Leave-cluster-out"], increments, color=["#56B4E9", "#E69F00"])
-    axes[1, 1].axhline(0, color="#555555", linewidth=1)
-    loo_values = [float(row["stratified_spearman_rho"]) for row in leave_one_out_rows]
-    axes[1, 1].text(
-        0.02,
-        0.98,
-        (
-            f"Coverage: {int(metric['scored_n'])}/47; "
-            f"{int(metric['not_scored_count'])} NanoMelt-not-scored\n"
-            f"Leave-one-out ρ range: {min(loo_values):.2f} to {max(loo_values):.2f}"
-        ),
-        transform=axes[1, 1].transAxes,
-        va="top",
-        fontsize=9,
+    loo_predictions = [
+        row for row in classification_prediction_rows if row["outer_scheme"] == "leave_one_out"
+    ]
+    thresholds = [float(row["training_score_threshold"]) for row in loo_predictions]
+    axes[1, 1].hist(
+        thresholds,
+        bins=min(10, max(4, len(set(thresholds)))),
+        color="#999999",
+        edgecolor="white",
     )
+    axes[1, 1].axvline(float(np.median(thresholds)), color="#D55E00", linewidth=2, label="Median")
     axes[1, 1].set(
-        ylabel="Spearman increment over provider-only baseline",
-        title="D  Out-of-sample incremental value",
+        xlabel="Training-fold NanoMelt Tm threshold (°C)",
+        ylabel="Held-out samples",
+        title="D  Classification-threshold stability",
     )
+    axes[1, 1].legend(frameon=False)
 
     for axis in axes.flat:
         axis.title.set_fontweight("bold")

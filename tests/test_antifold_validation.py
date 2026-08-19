@@ -15,6 +15,7 @@ from antibody_optimization.antifold_validation import (
     AA_COLUMNS,
     AntiFoldValidationError,
     build_candidate_evidence,
+    build_antifold_yield_applicability_contract,
     build_core_candidate_panel,
     normalize_antifold_rows,
     prepare_imgt_structure,
@@ -32,6 +33,25 @@ def _csv(path: Path):
 
 def _json(path: Path):
     return json.loads(path.read_text(encoding="utf-8-sig"))
+
+
+def test_antifold_yield_classification_is_formally_not_applicable():
+    plan_dir = ROOT / "docs/result_artifacts/candidate_design/antifold_validation_plan_20260815"
+    result_dir = ROOT / "docs/result_artifacts/candidate_design/antifold_validation_result_20260815"
+    contract = build_antifold_yield_applicability_contract(
+        _csv(
+            ROOT
+            / "docs/result_artifacts/candidate_design/nanomelt_yield_validation_plan_20260815/nanomelt_validation_samples.csv"
+        ),
+        _json(plan_dir / "antifold_validation_plan.json"),
+        _csv(plan_dir / "antifold_structure_views.csv"),
+        _json(result_dir / "antifold_validation_gate.json"),
+    )
+    assert contract["classification_status"] == "not_applicable"
+    assert contract["matched_experimental_complex_sample_count"] == 1
+    assert contract["unmatched_yield_sample_count"] == 46
+    assert contract["classification_metrics_reported"] == []
+    assert contract["yield_ranking_supported"] is False
 
 
 def test_real_affinity_core_panel_preserves_risks_and_numbering():

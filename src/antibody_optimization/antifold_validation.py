@@ -25,6 +25,71 @@ class AntiFoldValidationError(ValueError):
     """Raised when an AntiFold validation input or result is inconsistent."""
 
 
+def build_antifold_yield_applicability_contract(
+    yield_samples: Sequence[Mapping[str, object]],
+    antifold_plan: Mapping[str, object],
+    structure_views: Sequence[Mapping[str, object]],
+    antifold_gate: Mapping[str, object],
+) -> dict[str, object]:
+    """Freeze why AntiFold cannot be cross-sample yield-classified here.
+
+    AntiFold remains useful for mutation-level compatibility in the one
+    experimentally observed Nb252 complex.  This function deliberately does
+    not aggregate residue logits into an invented expression score or treat
+    predicted structures as matched experimental complexes.
+    """
+
+    sample_ids = [str(row["sample_uid"]) for row in yield_samples]
+    if len(sample_ids) != 47 or len(set(sample_ids)) != 47:
+        raise AntiFoldValidationError("Yield validation scope must contain 47 unique samples")
+    if antifold_plan.get("status") != "pass" or antifold_gate.get("status") != "pass":
+        raise AntiFoldValidationError("AntiFold plan and validation gate must both pass")
+    parent = antifold_plan.get("authoritative_parent", {})
+    if not isinstance(parent, Mapping) or str(parent.get("sample_uid")) != "LTT__Nb252":
+        raise AntiFoldValidationError("AntiFold plan is not bound to the Nb252 parent")
+    if "LTT__Nb252" not in sample_ids:
+        raise AntiFoldValidationError("Yield validation set does not contain Nb252")
+    experimental_complex = [
+        row
+        for row in structure_views
+        if str(row.get("evidence_scope")) == "experimental_complex_context"
+    ]
+    if len(experimental_complex) != 1 or str(experimental_complex[0].get("antigen_chain")) != "R":
+        raise AntiFoldValidationError("Expected one released experimental Nb252-NK2R complex view")
+    if bool(antifold_gate.get("scientific_score_threshold_applied")):
+        raise AntiFoldValidationError("Historical AntiFold validation unexpectedly applied a threshold")
+    return {
+        "schema_version": 1,
+        "contract_name": "antifold_bl21_yield_classification_applicability",
+        "status": "pass",
+        "yield_sample_count": 47,
+        "matched_experimental_complex_sample_count": 1,
+        "unmatched_yield_sample_count": 46,
+        "comparable_per_sample_scalar_expression_feature_count": 0,
+        "classification_status": "not_applicable",
+        "classification_metrics_reported": [],
+        "reasons": [
+            "only_Nb252_has_a_matched_experimental_NK2R_complex_structure",
+            "the_other_46_yield_samples_lack_comparable_matched_experimental_complexes",
+            "AntiFold_outputs_residue_and_structure_conditioned_sequence_log_probabilities_not_a_validated_expression_scalar",
+            "one_structured_sample_cannot_support_ROC_AUC_PR_AUC_MCC_or_threshold_estimation",
+        ],
+        "allowed_use": (
+            "mutation_level_sequence_compatibility_constraint_in_the_released_"
+            "experimental_Nb252_complex_view_at_coordinate_evaluable_positions"
+        ),
+        "prohibited_uses": [
+            "BL21_yield_ranking",
+            "cross_sample_expression_classification",
+            "universal_AntiFold_delta_log_probability_threshold",
+            "silent_AF3_completion_of_missing_experimental_coordinates",
+        ],
+        "selection_role": "experimental_complex_structure_compatibility_constraint_only",
+        "yield_ranking_supported": False,
+        "release": "antifold_not_applicable_for_yield_classification",
+    }
+
+
 def build_core_candidate_panel(
     core_rows: Sequence[Mapping[str, object]],
     core_gate: Mapping[str, object],

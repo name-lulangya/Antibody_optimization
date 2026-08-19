@@ -25,6 +25,8 @@ NAMES = {
     "metrics": "nanomelt_yield_associations.csv",
     "cv": "nanomelt_yield_cv_comparison.csv",
     "influence": "nanomelt_yield_leave_one_out.csv",
+    "classification": "nanomelt_yield_classification.csv",
+    "classification_predictions": "nanomelt_yield_classification_predictions.csv",
     "gate": "nanomelt_yield_validation_gate.json",
     "png": "nanomelt_yield_validation.png",
     "svg": "nanomelt_yield_validation.svg",
@@ -74,7 +76,7 @@ def main() -> int:
         "no_supported_use": "nanomelt_not_supported_for_yield_use",
     }[result["evidence_level"]]
     gate = {
-        "schema_version": 1,
+        "schema_version": 2,
         "gate_name": "nb252_nanomelt_predicted_tm_bl21_reported_yield_validation",
         "status": "pass",
         "generated_at": generated,
@@ -89,11 +91,18 @@ def main() -> int:
         "primary_feature": "nanomelt_predicted_apparent_tm_c",
         "expected_direction": "higher_predicted_apparent_tm_higher_reported_yield",
         "primary_statistics": result["primary"],
+        "classification": {
+            "label_definition": "high_vs_low_relative_to_matching_provider_median_fitted_inside_each_outer_training_fold",
+            "score_threshold_selection": "maximize_training_MCC_then_balanced_accuracy_then_higher_threshold",
+            "outer_results": result["classification_rows"],
+        },
         "evidence_level": result["evidence_level"],
         "decision_reasons": result["decision_reasons"],
         "high_capacity_model_trained": False,
         "experimental_tm_available": False,
         "nb252_expression_prediction_validated": False,
+        "yield_ranking_supported": False,
+        "selection_role": "predicted_stability_compatibility_constraint_only",
         "selection_scope": "nanomelt_scored_standard_vhh_domains_only",
         "coverage_limitation": "four_input_records_were_not_returned_by_nanomelt_anarci_alignment",
         "release": release,
@@ -106,12 +115,18 @@ def main() -> int:
         _write_csv(staged["metrics"], result["metric_rows"])
         _write_csv(staged["cv"], result["cv_rows"])
         _write_csv(staged["influence"], result["leave_one_out_rows"])
+        _write_csv(staged["classification"], result["classification_rows"])
+        _write_csv(
+            staged["classification_predictions"], result["classification_prediction_rows"]
+        )
         _write_json(staged["gate"], gate)
         render_nanomelt_yield_figure(
             result["sample_rows"],
             result["primary"],
             result["cv_rows"],
             result["leave_one_out_rows"],
+            result["classification_rows"],
+            result["classification_prediction_rows"],
             png_path=staged["png"],
             svg_path=staged["svg"],
         )

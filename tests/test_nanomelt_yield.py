@@ -145,6 +145,9 @@ def test_association_reports_cluster_cv_llj_and_nb252_influence(monkeypatch: pyt
         "provider_plus_nanomelt_tm",
     }
     assert result["evidence_level"] == "weak_ranking_evidence"
+    assert len(result["classification_rows"]) == 2
+    assert len(result["classification_prediction_rows"]) == 54
+    assert all(float(row["roc_auc"]) > 0.9 for row in result["classification_rows"])
 
 
 def test_plot_renders_exact_compact_analysis(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
@@ -164,6 +167,8 @@ def test_plot_renders_exact_compact_analysis(tmp_path: Path, monkeypatch: pytest
         result["primary"],
         result["cv_rows"],
         result["leave_one_out_rows"],
+        result["classification_rows"],
+        result["classification_prediction_rows"],
         png_path=png,
         svg_path=svg,
     )

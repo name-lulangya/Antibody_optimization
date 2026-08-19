@@ -1,0 +1,15 @@
+{
+  "combined_evidence_level": "no_supported_use",
+  "elapsed_seconds": 6.109498,
+  "generated_at": "2026-08-19T20:20:00+08:00",
+  "outputs": {
+    "classification": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\nanomelt_yield_classification_v2_20260819\\nanomelt_yield_classification.csv",
+    "gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\nanomelt_yield_classification_v2_20260819\\nanomelt_yield_classification_gate.json",
+    "png": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\nanomelt_yield_classification_v2_20260819\\nanomelt_yield_classification.png",
+    "predictions": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\nanomelt_yield_classification_v2_20260819\\nanomelt_yield_classification_predictions.csv",
+    "svg": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\nanomelt_yield_classification_v2_20260819\\nanomelt_yield_classification.svg"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}

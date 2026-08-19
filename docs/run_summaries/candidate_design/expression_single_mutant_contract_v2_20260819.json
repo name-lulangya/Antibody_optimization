@@ -1,0 +1,9 @@
+{
+  "candidate_count": 847,
+  "elapsed_seconds": 0.016635,
+  "generated_at": "2026-08-19T20:20:00+08:00",
+  "output": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_contract_v2_20260819\\expression_single_mutant_contract_preflight.json",
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}

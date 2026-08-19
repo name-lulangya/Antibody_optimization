@@ -1,0 +1,28 @@
+{
+  "authoritative_contract_dir": "docs\\result_artifacts\\input_baseline\\vhh_conservation_consensus_v2_20260819",
+  "authoritative_parent_sequence_sha256": "df5b83ddde8a3486383c12afe45e22af6a358f507eab5503d5dbd4430710288d",
+  "candidate_count": 847,
+  "candidate_generation_rule_counts": {
+    "full_non_cys_scan": 846,
+    "natural_consensus_reversion_only": 1
+  },
+  "candidate_position_count": 48,
+  "consensus_reversion_only": [
+    {
+      "allowed_mutant_residue": "V",
+      "reported_sequence_index_1based": 5,
+      "wt_residue": "Q"
+    }
+  ],
+  "experimental_interface_position_count": 24,
+  "frozen_or_interface_mutations_present": false,
+  "gate_name": "nb252_expression_single_mutant_contract_preflight",
+  "generated_at": "2026-08-19T20:20:00+08:00",
+  "hard_frozen_position_count": 80,
+  "multiple_mutants_present": false,
+  "new_cysteine_mutations_present": false,
+  "release": "ready_for_expression_property_scoring_plan",
+  "schema_version": 1,
+  "status": "pass",
+  "validation_scope": "one_stage_boundary_check_reused_by_unchanged_NetSolP_NanoMelt_and_AntiFold_scoring_plans"
+}

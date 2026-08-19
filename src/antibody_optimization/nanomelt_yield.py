@@ -20,6 +20,7 @@ from .netsolp_yield import (
     build_netsolp_validation_inputs,
     group_cv_spearman,
 )
+from .yield_classification import nested_yield_classification
 
 
 PRIMARY_FEATURE = "nanomelt_predicted_apparent_tm_c"
@@ -217,9 +218,21 @@ def analyze_nanomelt_associations(
     primary["leave_one_out_rho_min"] = min(leave_one_out.values())
     primary["leave_one_out_rho_max"] = max(leave_one_out.values())
     primary["without_nb252_stratified_spearman_rho"] = leave_one_out[NB252_UID]
-    level, reasons = _classify_evidence(primary)
+    continuous_level, continuous_reasons = _classify_evidence(primary)
+    classifications = []
+    classification_predictions = []
+    for scheme in ("leave_one_out", "leave_one_cluster_out"):
+        classification = nested_yield_classification(
+            numeric, PRIMARY_FEATURE, outer_scheme=scheme
+        )
+        classifications.append({"outer_scheme": scheme, **classification["summary"]})
+        classification_predictions.extend(classification["prediction_rows"])
+    level, classification_reasons = _combined_evidence(
+        continuous_level, classifications[0], classifications[1]
+    )
+    reasons = continuous_reasons + classification_reasons
     reasons.append("association_scope_is_nanomelt_scored_standard_vhh_domains_only")
-    primary["evidence_level"] = level
+    primary["continuous_evidence_level"] = continuous_level
     cv_rows = [
         {
             "model": "provider_only",
@@ -244,6 +257,8 @@ def analyze_nanomelt_associations(
             {"held_out_sample_uid": uid, "stratified_spearman_rho": rho}
             for uid, rho in leave_one_out.items()
         ],
+        "classification_rows": classifications,
+        "classification_prediction_rows": classification_predictions,
         "primary": primary,
         "evidence_level": level,
         "decision_reasons": reasons,
@@ -320,6 +335,34 @@ def _classify_evidence(metric: Mapping[str, object]) -> tuple[str, list[str]]:
     if float(metric["stratified_spearman_rho"]) > 0 and positive >= 5:
         return "compatibility_filter_only", ["positive_direction_but_full_weak_ranking_gate_not_met"]
     return "no_supported_use", ["predicted_tm_direction_uncertainty_transfer_or_nb252_influence_not_supported"]
+
+
+def _combined_evidence(
+    continuous_level: str,
+    leave_one_out: Mapping[str, object],
+    leave_cluster_out: Mapping[str, object],
+) -> tuple[str, list[str]]:
+    classification_support = (
+        float(leave_one_out["roc_auc"]) >= 0.65
+        and float(leave_one_out["pr_auc_average_precision"])
+        >= float(leave_one_out["prevalence"]) + 0.10
+        and float(leave_one_out["mcc"]) >= 0.25
+        and float(leave_one_out["balanced_accuracy"]) >= 0.60
+        and min(
+            float(leave_one_out["sensitivity"]),
+            float(leave_one_out["specificity"]),
+        )
+        >= 0.50
+    )
+    cluster_support = (
+        float(leave_cluster_out["mcc"]) > 0
+        and float(leave_cluster_out["balanced_accuracy"]) > 0.50
+    )
+    if continuous_level == "weak_ranking_evidence" and classification_support and cluster_support:
+        return "weak_ranking_evidence", ["continuous_and_nested_classification_gates_passed"]
+    if continuous_level != "no_supported_use" and classification_support:
+        return "compatibility_filter_only", ["classification_supported_but_full_gate_not_met"]
+    return "no_supported_use", ["independent_continuous_and_classification_support_not_established"]
 
 
 def _leave_one_out_rhos(rows) -> dict[str, float]:

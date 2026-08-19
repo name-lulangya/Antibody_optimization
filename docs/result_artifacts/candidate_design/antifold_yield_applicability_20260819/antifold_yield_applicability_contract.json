@@ -1,0 +1,28 @@
+{
+  "allowed_use": "mutation_level_sequence_compatibility_constraint_in_the_released_experimental_Nb252_complex_view_at_coordinate_evaluable_positions",
+  "classification_metrics_reported": [],
+  "classification_status": "not_applicable",
+  "comparable_per_sample_scalar_expression_feature_count": 0,
+  "contract_name": "antifold_bl21_yield_classification_applicability",
+  "generated_at": "2026-08-19T20:20:00+08:00",
+  "matched_experimental_complex_sample_count": 1,
+  "prohibited_uses": [
+    "BL21_yield_ranking",
+    "cross_sample_expression_classification",
+    "universal_AntiFold_delta_log_probability_threshold",
+    "silent_AF3_completion_of_missing_experimental_coordinates"
+  ],
+  "reasons": [
+    "only_Nb252_has_a_matched_experimental_NK2R_complex_structure",
+    "the_other_46_yield_samples_lack_comparable_matched_experimental_complexes",
+    "AntiFold_outputs_residue_and_structure_conditioned_sequence_log_probabilities_not_a_validated_expression_scalar",
+    "one_structured_sample_cannot_support_ROC_AUC_PR_AUC_MCC_or_threshold_estimation"
+  ],
+  "release": "antifold_not_applicable_for_yield_classification",
+  "schema_version": 1,
+  "selection_role": "experimental_complex_structure_compatibility_constraint_only",
+  "status": "pass",
+  "unmatched_yield_sample_count": 46,
+  "yield_ranking_supported": false,
+  "yield_sample_count": 47
+}

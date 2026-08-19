@@ -11,6 +11,7 @@ from antibody_optimization.vhh_conservation import (
     classify_nb252_positions,
     cluster_and_weight,
     load_tnp_paper_sequences,
+    validate_expression_single_mutant_release,
 )
 from antibody_optimization.vhh_conservation_plot import _region_runs
 
@@ -175,6 +176,32 @@ def test_highly_conserved_nonconsensus_position_allows_only_consensus_reversion(
             "allowed_mutant_residue": "V",
         }
     ]
+
+
+def test_real_v2_expression_single_mutant_release_preflight_passes():
+    directory = ROOT / "docs/result_artifacts/input_baseline/vhh_conservation_consensus_v2_20260819"
+    contract = json.loads(
+        (directory / "nb252_expression_design_constraints.json").read_text(encoding="utf-8")
+    )
+    candidates = _csv(directory / "nb252_allowed_single_mutants.csv")
+    fasta = {
+        row["candidate_id"]: row["sequence"]
+        for row in candidates
+    }
+    result = validate_expression_single_mutant_release(
+        contract,
+        _csv(directory / "nb252_expression_position_constraints.csv"),
+        candidates,
+        fasta,
+        json.loads(CRITICAL.read_text(encoding="utf-8")),
+    )
+    assert result["status"] == "pass"
+    assert result["candidate_count"] == 847
+    assert result["hard_frozen_position_count"] == 80
+    assert result["candidate_generation_rule_counts"] == {
+        "full_non_cys_scan": 846,
+        "natural_consensus_reversion_only": 1,
+    }
 
 
 def test_project_logo_records_exclude_failed_and_non_heavy_sequences():

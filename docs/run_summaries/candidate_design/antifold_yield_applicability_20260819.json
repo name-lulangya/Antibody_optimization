@@ -1,0 +1,9 @@
+{
+  "classification_status": "not_applicable",
+  "elapsed_seconds": 0.006068,
+  "generated_at": "2026-08-19T20:20:00+08:00",
+  "output": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\antifold_yield_applicability_20260819\\antifold_yield_applicability_contract.json",
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}

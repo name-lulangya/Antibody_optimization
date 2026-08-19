@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-19 20:05:00
+Last updated: 2026-08-19 20:30:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -33,13 +33,14 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 唯一`conserved_nonconsensus`为reported Q5：邻域/全局优势残基均为V，频率分别为0.9980/0.9976，因此不把Q5亲本状态称为天然硬保守，也不开放任意扫描，只允许`Q5V`共识回变。
 - 54个亲本匹配的硬保守位点与界面、Cys22/Cys95、末端SSGS合并后冻结80个reported positions；47个常规可扫描位置产生846条非Cys单突，另加Q5V，共847条。这是待预测的完整约束空间，不是最终30条。
 - 权威机器可读合同与结果位于 `docs/result_artifacts/input_baseline/vhh_conservation_consensus_v2_20260819/`；下游必须读取合同，不得从本文复制残基列表。旧`vhh_conservation_20260818`仅保留为历史v1 provenance。
+- 下游阶段边界preflight已核对847条候选、48个可变位置、80个硬冻结位置、24个界面位置及CSV/FASTA/亲本一致性；后续三个评分入口复用该通过结果，不再重复同一检查。
 - 已生成带IMGT FR/CDR标注的全局天然VHH、Nb252邻域及项目表达序列Logo。项目Logo以47条源序列为审核范围，仅纳入45条编号成功的H链序列；编号失败和非H链各1条保持显式排除，且产量不作为频率权重。
 
 ## 当前工具证据
 
 - NetSolP：保留 S（solubility）与 U（usability）原始连续值；在 47 条产量数据中仅显示有限关联，不能单独决定候选。
-- NanoMelt：预测 apparent melting temperature；与产量关系有限，只作为稳定性约束信号。
-- AntiFold：使用实验复合物视图评价结构条件下序列相容性；缺失实验坐标位置不得伪装成可评价位置。
+- NanoMelt：43/47条可评分，其中27条具有LTT/WCC个体数值产量。嵌套逐样本/序列簇留一结果相同：ROC-AUC 0.571、PR-AUC 0.554、MCC 0.408、balanced accuracy 0.701、sensitivity 0.786、specificity 0.615；连续与分类联合证据仍为`no_supported_use`，不得作为BL21产量排序器，只保留为预测稳定性约束。
+- AntiFold：47条产量序列中只有Nb252具有匹配实验NK2R复合物，另外46条没有可比实验复合物，而且输出是逐位点结构条件概率而不是统一表达分数；正式分类状态为`not_applicable`，不得报告伪AUC/MCC。其唯一现行用途是实验复合物视图中坐标可评价位点的突变相容性约束。
 - TNP 与 nanoBERT 已完成探索性验证，但不在现行精简筛选工具集中。
 - RP3Net：31条数值记录的直接合并Spearman为0.476，但来源内分层Spearman仅0.198且95% bootstrap区间跨0；LLJ有序Kendall为-0.451，与预声明方向相反。嵌套分类ROC-AUC为0.621、PR-AUC为0.620、MCC为0.313，未达到预声明综合门，因此不支持候选使用。
 - PLM_Sol：47/47条评分成功。31条数值记录的来源内分层Spearman为0.473，95% bootstrap区间为0.096–0.749，但WCC内部Spearman为-0.096；嵌套分类ROC-AUC为0.638、PR-AUC为0.662、MCC为0.313。PLM_Sol与NetSolP U/S高度重叠，在NetSolP S基础上的序列簇外增量为-0.140，因此gate为`plm_sol_not_supported_for_candidate_use`，不纳入候选使用。固定5 mg结果仍仅供展示。
@@ -48,10 +49,10 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 ## 下一执行路线
 
-1. 补齐NanoMelt和AntiFold的正式离散分类验证，并冻结各自的决策用途；RP3Net与PLM_Sol均不再进入后续候选流程。
-2. 以847条允许单突为统一输入运行最终保留的NetSolP、NanoMelt和实验复合物视图AntiFold；未解析坐标导致AntiFold不可评价的候选保留明确缺失状态。
+1. 由已通过的v2 preflight建立847条统一评分计划，固定NetSolP、NanoMelt及实验复合物视图AntiFold的输入和缺失值语义。
+2. 运行NetSolP和NanoMelt；AntiFold优先复用已发布实验复合物逐位点logP，实验缺失坐标候选保持`not_evaluable`，不使用AF3静默补全。
 3. 对847条单突进行硬风险审核，包括新增糖基化基序、未配对Cys、强疏水/电荷斑块、Pro/Gly结构风险和其他明显表达风险。
-4. 在硬约束通过者中，以经过验证的表达预测证据、天然保守性等级、工具一致性和位置/机制多样性形成30条单突面板；WT作为独立实验对照，不占30条名额。
+4. 在硬约束通过者中，以NetSolP支持、NanoMelt稳定性约束、AntiFold结构相容性、天然保守性和位置/机制多样性形成30条单突面板；WT作为独立实验对照，不占30条名额。
 5. 产量实验完成后才讨论组合；组合资格由真实单突效应决定，而不是当前预测分数。
 
 ## 阶段门
@@ -59,7 +60,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - `structure_and_interface_identity=pass`
 - `natural_vhh_conservation_contract=pass`
 - `expression_single_mutant_constraint_space=pass`：847 条仅表示允许进入预测的单突空间。
-- `predictor_continuous_and_classification_validation=blocked`：RP3Net和PLM_Sol均已完成并判为不支持使用；现行三工具中的NanoMelt和AntiFold分类合同仍待补齐。
+- `predictor_continuous_and_classification_validation=pass_with_tool_specific_roles`：NanoMelt正式判为仅稳定性约束；AntiFold因结构覆盖不足正式判为分类不适用、仅实验复合物相容性约束；不得把该门解释为产量预测器已验证。
 - `new_30_single_mutant_panel_release=blocked`：需要完成全空间预测、风险审核与分层选择。
 - `combination_design_release=blocked`：等待单突实验结果。
 
@@ -68,5 +69,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 本地 CPU 真实数据运行约 226 秒，无需 Slurm、checkpoint 或 resume。
 - RP3Net正式运行覆盖47/47条序列；连续、分类、逐折预测、结果图和gate均已生成并完成schema及计数核验。
 - 4,059条输入、4,057条合格序列、1,564条邻域序列、128个位置和847条单突均已回读核对；v2相对v1只新增Q5V，未删除或意外开放其他候选。
+- v2下游preflight为pass：847条候选中846条来自常规非Cys扫描、1条为Q5V共识回变，无多突、新Cys、冻结或界面突变。
+- NanoMelt分类制品覆盖27条数值样本并保留4条未评分状态；正式图已人工检查。AntiFold分类不适用合同确认1条匹配结构、46条结构缺失且不生成任何分类指标。
 - RP3Net gate固定为`rp3net_not_supported_for_candidate_use`；其模型分数不能解释为mg/L或通用表达阈值。
 - PLM_Sol正式运行覆盖47/47条序列；31条数值记录和16条LLJ有序/删失记录语义保持不变，结果图、gate和run summary已回读核对。其固定5 mg展示的序列簇留一ROC-AUC/PR-AUC/MCC为0.761/0.685/0.411，但该展示不参与工具准入。
