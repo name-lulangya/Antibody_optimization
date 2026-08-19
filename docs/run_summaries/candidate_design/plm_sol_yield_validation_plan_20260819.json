@@ -1,0 +1,17 @@
+{
+  "counts": {
+    "llj_ordinal_censored": 16,
+    "numeric": 31,
+    "samples": 47
+  },
+  "elapsed_seconds": 0.008625,
+  "generated_at": "2026-08-19T17:25:16+08:00",
+  "outputs": {
+    "contract": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\plm_sol_yield_validation_plan_20260819\\plm_sol_yield_validation_contract.json",
+    "fasta": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\plm_sol_yield_validation_plan_20260819\\plm_sol_validation_sequences.fasta",
+    "samples": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\plm_sol_yield_validation_plan_20260819\\plm_sol_validation_samples.csv"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}

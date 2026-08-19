@@ -1,0 +1,59 @@
+{
+  "classification": {
+    "fixed_5mg": "display_only_not_a_predictor_gate",
+    "outer_schemes": [
+      "leave_one_out",
+      "leave_one_cluster_out"
+    ],
+    "primary_outcome": "matching_provider_outer_training_fold_median",
+    "score_threshold": "maximize_training_MCC_then_balanced_accuracy_then_higher_threshold"
+  },
+  "classifier": {
+    "direction": "higher_is_better",
+    "primary_score": "predict_result",
+    "range": [
+      0,
+      1
+    ]
+  },
+  "comparators": [
+    "NetSolP_S",
+    "NetSolP_U",
+    "RP3Net_historical"
+  ],
+  "embedding": {
+    "per_residue_dimension": 1024,
+    "protocol": "prottrans_t5_xl_u50",
+    "storage_dtype": "float16"
+  },
+  "environments": {
+    "analysis": "/data/software/env/luly25/ab_optim",
+    "classifier": "/data/software/env/luly25/plm_sol",
+    "embedding": "/data/software/env/luly25/plm_sol_embed"
+  },
+  "expression_system": "BL21_E_coli",
+  "generated_at": "2026-08-19T17:25:16+08:00",
+  "release": "ready_for_remote_plm_sol_scoring",
+  "runtime_estimate": "10_to_30_minutes_and_less_than_1_hour",
+  "sample_semantics": {
+    "llj_ordinal_censored": 16,
+    "numeric_individual": 31,
+    "total": 47
+  },
+  "schema_version": 1,
+  "software": {
+    "classifier_checkpoint": "/homes/Tianlab/luly25/software/PLM_Sol/V1.0/Violet969-PLM_Sol-5156de9/model_param/model_param.t7",
+    "embedding_model": "/homes/Tianlab/luly25/software/PLM_Sol_models/prottrans_t5_xl_u50",
+    "name": "PLM_Sol",
+    "release": "V1.0",
+    "source_root": "/homes/Tianlab/luly25/software/PLM_Sol/V1.0/Violet969-PLM_Sol-5156de9"
+  },
+  "status": "pass",
+  "vendor_fixes": [
+    "disable_missing_models_legacy_import",
+    "resolve_train_arguments_yml_from_checkpoint_directory",
+    "call_solver_predict_evaluation_with_dataset_only",
+    "import_torch_pad_sequence",
+    "install_pyaml_21_10_1"
+  ]
+}

@@ -1,5 +1,16 @@
 # 可复用源码索引
 
+## PLM_Sol—BL21产量验证
+
+- `antibody_optimization.plm_sol_yield`与`antibody_optimization.plm_sol_yield_plot`
+  - 用途：把PLM_Sol官方哈希ID输出按完整唯一序列可逆映射回固定47样本，复用既有连续关联和无泄漏分类合同，并与NetSolP S/U及历史RP3Net作预声明比较。
+  - 输入与返回：接收47行权威样本、47行PLM_Sol输出及既有NetSolP/RP3Net样本证据；返回逐样本证据、连续统计、逐样本/序列簇留一分类、固定5 mg展示、同类工具相关和NetSolP S条件下的序列簇外增量。
+  - 算法假设：PLM_Sol分数是其训练标签下的可溶类别分数而非mg/L或实测溶解度；31条LTT/WCC进入数值/分类分析，16条LLJ只进入有序/删失分析；固定5 mg结果明确不进入准入gate。
+  - 明确不支持：把Nb252 smoke分数当作表达成功概率、在47条数据上训练/微调模型、把全样本阈值当作通用阈值，或在正式gate完成前用于846条单突排序。
+- `scripts/candidate_design/build_plm_sol_yield_validation_plan.py`、`score_plm_sol_embeddings.py`、`score_plm_sol_classifier.py`与`analyze_plm_sol_yield_validation.py`
+  - 用途：分别建立固定计划、在ProtT5专属环境生成逐残基嵌入、在分类器专属环境调用已核验V1.0发布包、在项目环境完成统计/比较/绘图/gate；远程唯一入口为`submit_plm_sol_yield_validation.sh`。
+  - 运行合同：单个`batch`作业依次切换三个环境，1 GPU/12 CPU，预计10–30分钟且低于1小时；不使用数组、checkpoint或resume，日志写入`logs/plm_sol_yield_validation/`。
+
 ## RP3Net—BL21产量验证
 
 - `antibody_optimization.yield_classification`
