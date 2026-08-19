@@ -1,0 +1,17 @@
+{
+  "counts": {
+    "high": 14,
+    "low": 17,
+    "numeric_samples": 31
+  },
+  "generated_at": "2026-08-19T12:30:00+08:00",
+  "outputs": {
+    "contract": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\fixed5mg_predictor_classification_20260819\\fixed5mg_classification_contract.json",
+    "metrics": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\fixed5mg_predictor_classification_20260819\\fixed5mg_classification_metrics.csv",
+    "png": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\fixed5mg_predictor_classification_20260819\\fixed5mg_classification.png",
+    "predictions": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\fixed5mg_predictor_classification_20260819\\fixed5mg_classification_predictions.csv",
+    "svg": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\fixed5mg_predictor_classification_20260819\\fixed5mg_classification.svg"
+  },
+  "schema_version": 1,
+  "status": "pass"
+}

@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-19 10:15:00
+Last updated: 2026-08-19 12:00:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -40,11 +40,12 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - AntiFold：使用实验复合物视图评价结构条件下序列相容性；缺失实验坐标位置不得伪装成可评价位置。
 - TNP 与 nanoBERT 已完成探索性验证，但不在现行精简筛选工具集中。
 - RP3Net：31条数值记录的直接合并Spearman为0.476，但来源内分层Spearman仅0.198且95% bootstrap区间跨0；LLJ有序Kendall为-0.451，与预声明方向相反。嵌套分类ROC-AUC为0.621、PR-AUC为0.620、MCC为0.313，未达到预声明综合门，因此不支持候选使用。
+- 固定5 mg探索图：31条数值记录显示为高产14条、低产17条；RP3Net、NetSolP U和NetSolP S均展示训练折最大MCC阈值及留出指标。该图仅用于直观展示，不作为工具准入、候选筛选或5 mg阈值有效性的正式证据。
 - 所有工具验证须同时报告连续关联和预注册方向下的离散分类性能；阈值必须在训练折内选择，外层交叉验证报告 ROC-AUC、PR-AUC、MCC、balanced accuracy、sensitivity、specificity 及阈值稳定性。
 
 ## 下一执行路线
 
-1. 用已实现的无泄漏离散合同补齐NetSolP、NanoMelt和AntiFold在47条数据上的分类验证；RP3Net不再进入后续候选流程。
+1. 后续若补齐NanoMelt和AntiFold正式分类验证，须另行冻结决策用途和产量阈值；当前固定5 mg图仅供展示。RP3Net不再进入后续候选流程。
 2. 以846条允许单突为统一输入运行NetSolP、NanoMelt和实验复合物视图AntiFold；未解析坐标导致AntiFold不可评价的候选保留明确缺失状态。
 3. 对 846 条单突进行硬风险审核，包括新增糖基化基序、未配对 Cys、强疏水/电荷斑块、Pro/Gly 结构风险和其他明显表达风险。
 4. 在硬约束通过者中，以经过验证的表达预测证据、天然保守性等级、工具一致性和位置/机制多样性形成 30 条单突面板；WT 作为独立实验对照，不占 30 条名额。

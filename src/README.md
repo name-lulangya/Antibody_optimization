@@ -3,9 +3,9 @@
 ## RP3Net—BL21产量验证
 
 - `antibody_optimization.yield_classification`
-  - 用途：在小样本reported-yield数据上执行无阈值泄漏的二分类验证，输出ROC-AUC、PR-AUC、MCC、balanced accuracy、sensitivity、specificity及阈值稳定性。
+  - 用途：在小样本reported-yield数据上执行无阈值泄漏的二分类验证，支持来源训练折中位数标签或预先固定的数值产量标签，输出ROC-AUC、PR-AUC、MCC、balanced accuracy、sensitivity、specificity及阈值稳定性。
   - 输入与返回：接收带来源、数值产量、序列簇和单一连续指标的记录；返回逐外层折预测及汇总指标。
-  - 算法假设：高/低产量以对应来源训练折中位数定义，指标方向预声明为越高越好，指标阈值只在训练折内按MCC选择；支持逐样本留一和序列簇留一。
+  - 算法假设：指标方向预声明为越高越好，指标阈值只在训练折内按MCC选择；支持逐样本留一和序列簇留一。固定产量模式把标签阈值与预测器解耦，并另外返回仅供描述的全样本表观阈值。
   - 明确不支持：为LLJ生成个体产量、把训练折阈值当作通用生物学阈值、训练高容量表达模型或自动选择候选。
 - `antibody_optimization.rp3net_yield`与`antibody_optimization.rp3net_yield_plot`
   - 用途：规范化RP3Net官方`id,score`输出，复用47条BL21产量语义完成连续关联、LLJ有序检验、嵌套分类和四面板结果图。
@@ -15,6 +15,10 @@
 - `scripts/candidate_design/build_rp3net_yield_validation_plan.py`、`score_rp3net_sequences.py`与`analyze_rp3net_yield_validation.py`
   - 用途：分别建立冻结计划、在RP3Net专属GPU环境运行官方推理、在项目环境生成统计/图/gate；远程入口为`submit_rp3net_yield_validation.sh`。
   - 预计运行：47条序列单GPU少于一小时，不使用数组、checkpoint或resume。
+- `antibody_optimization.fixed_yield_plot`与`scripts/candidate_design/analyze_fixed5mg_predictor_classification.py`
+  - 用途：联接既有RP3Net与NetSolP正式样本证据，以固定5 mg标签生成RP3Net、NetSolP U和NetSolP S的探索性展示图；该图不参与工具准入或候选筛选。
+  - 输入与返回：接收两份47行正式样本表，只纳入31条个体近似数值记录；返回分类汇总、逐折预测、固定合同、PNG/SVG和run summary。
+  - 明确不支持：将LLJ分组/删失记录伪造为个体标签，或把全样本最大MCC阈值的表观性能当作样本外性能。
 
 ## Natural-VHH conservation
 

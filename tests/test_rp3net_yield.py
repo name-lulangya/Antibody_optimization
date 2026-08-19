@@ -13,7 +13,11 @@ from antibody_optimization.rp3net_yield import (
     build_rp3net_validation_inputs,
     normalize_rp3net_scores,
 )
-from antibody_optimization.yield_classification import nested_yield_classification
+from antibody_optimization.yield_classification import (
+    fixed_yield_apparent_classification,
+    fixed_yield_nested_classification,
+    nested_yield_classification,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -75,6 +79,26 @@ def test_nested_classification_fits_thresholds_without_held_out_sample() -> None
     held = next(row for row in result["prediction_rows"] if row["sample_uid"] == "x0")
     assert held["provider_training_yield_threshold"] == 4.0
     assert 0 <= result["summary"]["roc_auc"] <= 1
+
+
+def test_fixed_yield_classification_keeps_outcome_cutoff_constant() -> None:
+    rows = [
+        {
+            "sample_uid": f"x{index}", "provider_code": "LTT" if index < 6 else "WCC",
+            "numeric_yield_value": float(index + 1), "score": float(index + 1) / 12,
+            "sequence_cluster_90": f"c{index // 2}",
+        }
+        for index in range(12)
+    ]
+    nested = fixed_yield_nested_classification(
+        rows, "score", outer_scheme="leave_one_cluster_out", yield_threshold=7.0,
+    )
+    assert nested["summary"]["positive_count"] == 6
+    assert {row["fixed_yield_threshold"] for row in nested["prediction_rows"]} == {7.0}
+    assert {row["observed_high_yield"] for row in nested["prediction_rows"] if row["numeric_yield_value"] == 7.0} == {1}
+    apparent = fixed_yield_apparent_classification(rows, "score", yield_threshold=7.0)
+    assert apparent["summary"]["threshold_fit_scope"] == "all_numeric_rows_apparent"
+    assert apparent["summary"]["mcc"] == 1.0
 
 
 def test_rp3net_analysis_preserves_llj_semantics_and_reports_both_outer_schemes() -> None:

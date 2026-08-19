@@ -1,0 +1,23 @@
+{
+  "apparent_full_sample_warning": "Threshold fitted and evaluated on the same 31 rows; descriptive only.",
+  "decision_use": "display_only_not_a_predictor_gate_or_candidate_filter",
+  "excluded_semantics": "LLJ_group_level_censored",
+  "generated_at": "2026-08-19T12:30:00+08:00",
+  "high_yield_count": 14,
+  "included_semantics": "individual_approximate",
+  "low_yield_count": 17,
+  "numeric_sample_count": 31,
+  "predictor_direction": "higher_is_better",
+  "predictors": {
+    "predicted_solubility": "NetSolP S",
+    "predicted_usability": "NetSolP U",
+    "rp3net_expression_probability": "RP3Net"
+  },
+  "primary_evaluation": "none_display_only",
+  "schema_version": 1,
+  "score_threshold_rule": "maximize_training_MCC_then_balanced_accuracy_then_higher_threshold",
+  "status": "pass",
+  "yield_label_rule": "numeric_yield_value >= 5",
+  "yield_threshold": 5.0,
+  "yield_unit": "reported_source_value_mg_per_1L"
+}

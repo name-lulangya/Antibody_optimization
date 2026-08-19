@@ -83,6 +83,117 @@ def nested_yield_classification(
     }
 
 
+def fixed_yield_nested_classification(
+    rows: Sequence[Mapping[str, object]],
+    feature: str,
+    *,
+    outer_scheme: str,
+    yield_threshold: float,
+) -> dict[str, object]:
+    """Evaluate a higher-is-better score against one fixed numeric-yield cutoff.
+
+    The yield label is fixed before resampling.  Within each outer fold, only
+    the score cutoff is fitted by maximizing training MCC, with balanced
+    accuracy and then the higher cutoff used as deterministic tie-breakers.
+    """
+
+    values, yields, groups = _fixed_yield_inputs(rows, feature, outer_scheme, yield_threshold)
+    labels = (yields >= yield_threshold).astype(int)
+    predictions: list[dict[str, object]] = []
+    for fold_id, held_group in enumerate(dict.fromkeys(groups.tolist()), 1):
+        held = groups == held_group
+        train = ~held
+        if len(set(labels[train].tolist())) != 2:
+            raise YieldClassificationError("An outer training fold has only one yield class")
+        score_threshold = _best_mcc_threshold(values[train], labels[train])
+        predictions.extend(
+            _fixed_prediction_row(
+                rows[index], feature, values[index], yields[index], labels[index],
+                score_threshold, yield_threshold, outer_scheme, fold_id, str(held_group),
+            )
+            for index in np.flatnonzero(held)
+        )
+    if len(predictions) != len(rows):
+        raise YieldClassificationError("Outer-fold predictions do not cover all numeric rows")
+    summary = _summarize_predictions(predictions)
+    summary.update({"fixed_yield_threshold": float(yield_threshold), "threshold_fit_scope": "outer_training_fold"})
+    return {"summary": summary, "prediction_rows": predictions}
+
+
+def fixed_yield_apparent_classification(
+    rows: Sequence[Mapping[str, object]],
+    feature: str,
+    *,
+    yield_threshold: float,
+) -> dict[str, object]:
+    """Fit and describe one score cutoff on all rows without claiming test performance."""
+
+    values, yields, _ = _fixed_yield_inputs(rows, feature, "leave_one_out", yield_threshold)
+    labels = (yields >= yield_threshold).astype(int)
+    if len(set(labels.tolist())) != 2:
+        raise YieldClassificationError("The fixed yield threshold produces only one class")
+    score_threshold = _best_mcc_threshold(values, labels)
+    predictions = [
+        _fixed_prediction_row(
+            row, feature, value, observed_yield, label, score_threshold,
+            yield_threshold, "apparent_full_sample", 1, "all_numeric_rows",
+        )
+        for row, value, observed_yield, label in zip(rows, values, yields, labels, strict=True)
+    ]
+    summary = _summarize_predictions(predictions)
+    summary.update({"fixed_yield_threshold": float(yield_threshold), "threshold_fit_scope": "all_numeric_rows_apparent"})
+    return {"summary": summary, "prediction_rows": predictions}
+
+
+def _fixed_yield_inputs(
+    rows: Sequence[Mapping[str, object]], feature: str, outer_scheme: str, yield_threshold: float
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    if len(rows) < 8:
+        raise YieldClassificationError("At least eight numeric observations are required")
+    if outer_scheme not in {"leave_one_out", "leave_one_cluster_out"}:
+        raise YieldClassificationError(f"Unsupported outer scheme: {outer_scheme}")
+    if not math.isfinite(yield_threshold):
+        raise YieldClassificationError("The fixed yield threshold must be finite")
+    values = np.asarray([float(row[feature]) for row in rows], dtype=float)
+    yields = np.asarray([float(row["numeric_yield_value"]) for row in rows], dtype=float)
+    if not np.all(np.isfinite(values)) or not np.all(np.isfinite(yields)):
+        raise YieldClassificationError("Classification values must be finite")
+    groups = (
+        np.asarray([str(row["sample_uid"]) for row in rows])
+        if outer_scheme == "leave_one_out"
+        else np.asarray([str(row["sequence_cluster_90"]) for row in rows])
+    )
+    return values, yields, groups
+
+
+def _fixed_prediction_row(
+    row: Mapping[str, object],
+    feature: str,
+    feature_value: float,
+    observed_yield: float,
+    observed_label: int,
+    score_threshold: float,
+    yield_threshold: float,
+    outer_scheme: str,
+    fold_id: int,
+    held_group: str,
+) -> dict[str, object]:
+    return {
+        "outer_scheme": outer_scheme,
+        "fold_id": fold_id,
+        "held_group": held_group,
+        "sample_uid": str(row["sample_uid"]),
+        "provider_code": str(row["provider_code"]),
+        "numeric_yield_value": float(observed_yield),
+        "fixed_yield_threshold": float(yield_threshold),
+        "feature": feature,
+        "feature_value": float(feature_value),
+        "training_score_threshold": float(score_threshold),
+        "observed_high_yield": int(observed_label),
+        "predicted_high_yield": int(feature_value >= score_threshold),
+    }
+
+
 def _provider_medians(yields: np.ndarray, providers: np.ndarray) -> dict[str, float]:
     result = {}
     for provider in sorted(set(providers.tolist())):
