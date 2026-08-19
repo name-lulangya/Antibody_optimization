@@ -200,7 +200,7 @@ def main() -> int:
             )
 
     contract = {
-        "schema_version": 1,
+        "schema_version": 2,
         "contract_name": "nb252_neighbor_natural_vhh_conservation",
         "status": "pass",
         "generated_at": generated,
@@ -236,8 +236,13 @@ def main() -> int:
                 "minimum_neighbor_dominant_frequency": args.local_conserved_frequency,
                 "minimum_global_dominant_frequency": args.global_conserved_frequency,
                 "global_and_neighbor_dominant_must_agree": True,
+                "nb252_parent_residue_must_equal_shared_dominant": True,
                 "minimum_neighbor_coverage": args.minimum_conservation_coverage,
                 "minimum_neighbor_effective_clusters": args.minimum_effective_clusters,
+            },
+            "conserved_nonconsensus": {
+                "definition": "hard_conservation_evidence_passes_but_Nb252_parent_differs_from_shared_dominant",
+                "mutation_policy": "allow_only_parent_to_shared_natural_dominant_reversion",
             },
             "cautious_minimum_neighbor_dominant_frequency": args.cautious_frequency,
         },

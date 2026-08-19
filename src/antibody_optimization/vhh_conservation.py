@@ -505,16 +505,22 @@ def classify_nb252_positions(
             coverage_ok = float(local["coverage"]) >= minimum_coverage
             clusters_ok = int(local["effective_cluster_count"]) >= minimum_effective_clusters
             same_dominant = local["dominant_aa"] == global_row["dominant_aa"]
-            hard = (
+            highly_conserved = (
                 coverage_ok
                 and clusters_ok
                 and float(local["dominant_frequency"]) >= local_dominant_cutoff
                 and same_dominant
                 and float(global_row["dominant_frequency"]) >= global_dominant_cutoff
             )
-            if hard:
+            parent_matches_dominant = (
+                parent_sequence[reported_index - 1] == str(local["dominant_aa"])
+            )
+            if highly_conserved and parent_matches_dominant:
                 classification = "hard_conserved"
-                reason = "local_and_global_high_conservation_agree"
+                reason = "local_global_and_parent_high_conservation_agree"
+            elif highly_conserved:
+                classification = "conserved_nonconsensus"
+                reason = "high_conservation_parent_differs_from_consensus"
             elif not coverage_ok or not clusters_ok:
                 reason = "local_coverage_or_effective_clusters_below_gate"
             elif float(local["dominant_frequency"]) >= cautious_cutoff or not same_dominant:
@@ -586,6 +592,18 @@ def build_expression_constraints(
         for row in position_rows
         if row["conservation_class"] == "hard_conserved"
     }
+    consensus_reversions = {
+        int(row["reported_sequence_index_1based"]): str(row["neighbor_dominant_aa"])
+        for row in position_rows
+        if row["conservation_class"] == "conserved_nonconsensus"
+    }
+    for index, residue in consensus_reversions.items():
+        wt = parent_sequence[index - 1]
+        if residue not in AA_ORDER or residue in {wt, "C"}:
+            raise VhhConservationError(
+                f"Invalid natural-consensus reversion at reported position {index}: "
+                f"{wt}->{residue}"
+            )
     disulfide = {22, 95}
     reasons: dict[int, list[str]] = defaultdict(list)
     for index in sorted(interface):
@@ -606,6 +624,15 @@ def build_expression_constraints(
     for index, wt in enumerate(parent_sequence, start=1):
         conservation = conservation_by_index[index]
         is_frozen = index in frozen
+        if is_frozen:
+            allowed_mutants: list[str] = []
+            substitution_rule = "hard_frozen"
+        elif index in consensus_reversions:
+            allowed_mutants = [consensus_reversions[index]]
+            substitution_rule = "natural_consensus_reversion_only"
+        else:
+            allowed_mutants = [mutant for mutant in AA_ORDER if mutant not in {wt, "C"}]
+            substitution_rule = "full_non_cys_scan"
         position_contract.append(
             {
                 "reported_sequence_index_1based": index,
@@ -615,14 +642,14 @@ def build_expression_constraints(
                 "conservation_class": conservation["conservation_class"],
                 "hard_frozen": is_frozen,
                 "hard_frozen_reasons": ";".join(reasons[index]),
-                "allowed_non_wt_non_cys_substitution_count": 0 if is_frozen else 18,
+                "allowed_substitution_rule": substitution_rule,
+                "allowed_mutant_residues": ";".join(allowed_mutants),
+                "allowed_non_wt_non_cys_substitution_count": len(allowed_mutants),
             }
         )
         if is_frozen:
             continue
-        for mutant in AA_ORDER:
-            if mutant in {wt, "C"}:
-                continue
+        for mutant in allowed_mutants:
             sequence = parent_sequence[: index - 1] + mutant + parent_sequence[index:]
             candidates.append(
                 {
@@ -634,11 +661,12 @@ def build_expression_constraints(
                     "imgt_position_label": conservation["imgt_position_label"],
                     "region": conservation["region"],
                     "conservation_class": conservation["conservation_class"],
+                    "candidate_generation_rule": substitution_rule,
                     "sequence": sequence,
                 }
             )
     contract = {
-        "schema_version": 1,
+        "schema_version": 2,
         "contract_name": "nb252_expression_single_mutant_constraints",
         "status": "pass",
         "authoritative_parent": {
@@ -653,7 +681,19 @@ def build_expression_constraints(
             "coordinate_supported_disulfide_cysteine": sorted(disulfide),
             "terminal_SSGS": sorted(terminal),
         },
-        "candidate_scope": "single_substitutions_only_outside_all_hard_frozen_positions",
+        "consensus_reversion_only": [
+            {
+                "reported_sequence_index_1based": index,
+                "wt_residue": parent_sequence[index - 1],
+                "allowed_mutant_residue": consensus_reversions[index],
+            }
+            for index in sorted(consensus_reversions)
+            if index not in frozen
+        ],
+        "candidate_scope": (
+            "single_substitutions_outside_hard_frozen_positions; "
+            "highly_conserved_nonconsensus_positions_allow_only_the_shared_natural_consensus_reversion"
+        ),
         "new_cysteine_allowed": False,
         "candidate_count": len(candidates),
     }

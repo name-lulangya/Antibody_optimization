@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-19 19:10:00
+Last updated: 2026-08-19 20:05:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -10,11 +10,11 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 - 最终向合作者提供 30 条 Nb252 单突序列；单突实验完成前不设计或交付组合突变。
 - 冻结实验复合物中已复现的 24 个 VHH 界面位点，不再显式优化亲和力，也不在当前路线使用 Rosetta 排序。
-- 冻结天然 VHH 邻域中的高置信保守位点、Cys22/Cys95 和末端 SSGS（reported 125–128）。
+- 冻结天然 VHH 邻域中“Nb252亲本残基等于全局/邻域共同优势残基”的高置信保守位点、Cys22/Cys95 和末端 SSGS（reported 125–128）；对高保守但亲本偏离共识的位置只开放共识回变。
 - 候选必须保持完整 128-aa 父序列长度、末端 SSGS、两枚原有 Cys，且不得引入新 Cys。
 - 现行核心预测工具仅为 NetSolP、NanoMelt 和实验复合物视图 AntiFold。新工具必须先在 47 条可比产量数据上验证，证明有独立且可重复的样本外信息后才能纳入筛选。
-- RP3Net 0.0.2 已完成47条正式验证，最终证据等级为`no_supported_use`，不得加入846条候选的生成、筛选或排序。
-- PLM_Sol V1.0已完成47条正式验证，最终证据等级为`no_supported_use`，不得加入846条候选的生成、筛选或排序；Nb252单序列smoke分数只证明调用链可运行，不是实测溶解度或产量。
+- RP3Net 0.0.2 已完成47条正式验证，最终证据等级为`no_supported_use`，不得加入847条候选的生成、筛选或排序。
+- PLM_Sol V1.0已完成47条正式验证，最终证据等级为`no_supported_use`，不得加入847条候选的生成、筛选或排序；Nb252单序列smoke分数只证明调用链可运行，不是实测溶解度或产量。
 
 ## 权威输入基线
 
@@ -29,9 +29,10 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 采用项目已固定的 ANARCII 2.0.8 / IMGT 编号。4,057 条通过 H 链与 framework coverage 审核，2 条因重复编号失败而排除。
 - 先按完整 IMGT 域 90% identity 单连接聚类，每簇总权重为 1；再以 framework-only IMGT identity `>=0.80` 且 coverage `>=0.80` 定义 Nb252 邻域。
 - 得到 3,784 个去冗余簇；Nb252 邻域含 1,564 条序列、1,532 个有效簇。
-- reported 128 个位置分为 55 个 `hard_conserved`、33 个 `cautious`、33 个 `variable` 和 7 个 `insufficient`。硬保守要求邻域 dominant frequency `>=0.90`、coverage `>=0.80`、有效簇数 `>=50`，且全局/邻域优势残基一致并且全局频率 `>=0.80`。
-- 保守位点与界面、Cys22/Cys95、末端 SSGS 合并后冻结 81 个 reported positions；剩余 47 个位置允许生成 846 条非 Cys 单突。这是待预测的完整约束空间，不是最终 30 条。
-- 权威机器可读合同与结果位于 `docs/result_artifacts/input_baseline/vhh_conservation_20260818/`；下游必须读取合同，不得从本文复制残基列表。
+- v2将reported 128个位置分为54个`hard_conserved`、1个`conserved_nonconsensus`、33个`cautious`、33个`variable`和7个`insufficient_evidence`。硬保守除要求邻域dominant frequency `>=0.90`、coverage `>=0.80`、有效簇数`>=50`、全局/邻域优势残基一致且全局频率`>=0.80`外，还要求Nb252亲本残基等于该共同优势残基。
+- 唯一`conserved_nonconsensus`为reported Q5：邻域/全局优势残基均为V，频率分别为0.9980/0.9976，因此不把Q5亲本状态称为天然硬保守，也不开放任意扫描，只允许`Q5V`共识回变。
+- 54个亲本匹配的硬保守位点与界面、Cys22/Cys95、末端SSGS合并后冻结80个reported positions；47个常规可扫描位置产生846条非Cys单突，另加Q5V，共847条。这是待预测的完整约束空间，不是最终30条。
+- 权威机器可读合同与结果位于 `docs/result_artifacts/input_baseline/vhh_conservation_consensus_v2_20260819/`；下游必须读取合同，不得从本文复制残基列表。旧`vhh_conservation_20260818`仅保留为历史v1 provenance。
 - 已生成带IMGT FR/CDR标注的全局天然VHH、Nb252邻域及项目表达序列Logo。项目Logo以47条源序列为审核范围，仅纳入45条编号成功的H链序列；编号失败和非H链各1条保持显式排除，且产量不作为频率权重。
 
 ## 当前工具证据
@@ -48,8 +49,8 @@ Timezone: Asia/Shanghai (UTC+08:00)
 ## 下一执行路线
 
 1. 补齐NanoMelt和AntiFold的正式离散分类验证，并冻结各自的决策用途；RP3Net与PLM_Sol均不再进入后续候选流程。
-2. 以846条允许单突为统一输入运行最终保留的NetSolP、NanoMelt和实验复合物视图AntiFold；未解析坐标导致AntiFold不可评价的候选保留明确缺失状态。
-3. 对846条单突进行硬风险审核，包括新增糖基化基序、未配对Cys、强疏水/电荷斑块、Pro/Gly结构风险和其他明显表达风险。
+2. 以847条允许单突为统一输入运行最终保留的NetSolP、NanoMelt和实验复合物视图AntiFold；未解析坐标导致AntiFold不可评价的候选保留明确缺失状态。
+3. 对847条单突进行硬风险审核，包括新增糖基化基序、未配对Cys、强疏水/电荷斑块、Pro/Gly结构风险和其他明显表达风险。
 4. 在硬约束通过者中，以经过验证的表达预测证据、天然保守性等级、工具一致性和位置/机制多样性形成30条单突面板；WT作为独立实验对照，不占30条名额。
 5. 产量实验完成后才讨论组合；组合资格由真实单突效应决定，而不是当前预测分数。
 
@@ -57,7 +58,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 - `structure_and_interface_identity=pass`
 - `natural_vhh_conservation_contract=pass`
-- `expression_single_mutant_constraint_space=pass`：846 条仅表示允许进入预测的单突空间。
+- `expression_single_mutant_constraint_space=pass`：847 条仅表示允许进入预测的单突空间。
 - `predictor_continuous_and_classification_validation=blocked`：RP3Net和PLM_Sol均已完成并判为不支持使用；现行三工具中的NanoMelt和AntiFold分类合同仍待补齐。
 - `new_30_single_mutant_panel_release=blocked`：需要完成全空间预测、风险审核与分层选择。
 - `combination_design_release=blocked`：等待单突实验结果。
@@ -66,6 +67,6 @@ Timezone: Asia/Shanghai (UTC+08:00)
 
 - 本地 CPU 真实数据运行约 226 秒，无需 Slurm、checkpoint 或 resume。
 - RP3Net正式运行覆盖47/47条序列；连续、分类、逐折预测、结果图和gate均已生成并完成schema及计数核验。
-- 4,059 条输入、4,057 条合格序列、1,564 条邻域序列、128 个位置和 846 条单突均已回读核对；结果图已人工检查。
+- 4,059条输入、4,057条合格序列、1,564条邻域序列、128个位置和847条单突均已回读核对；v2相对v1只新增Q5V，未删除或意外开放其他候选。
 - RP3Net gate固定为`rp3net_not_supported_for_candidate_use`；其模型分数不能解释为mg/L或通用表达阈值。
 - PLM_Sol正式运行覆盖47/47条序列；31条数值记录和16条LLJ有序/删失记录语义保持不变，结果图、gate和run summary已回读核对。其固定5 mg展示的序列簇留一ROC-AUC/PR-AUC/MCC为0.761/0.685/0.411，但该展示不参与工具准入。

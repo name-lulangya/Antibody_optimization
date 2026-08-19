@@ -6,7 +6,7 @@
   - 用途：把PLM_Sol官方哈希ID输出按完整唯一序列可逆映射回固定47样本，复用既有连续关联和无泄漏分类合同，并与NetSolP S/U及历史RP3Net作预声明比较。
   - 输入与返回：接收47行权威样本、47行PLM_Sol输出及既有NetSolP/RP3Net样本证据；返回逐样本证据、连续统计、逐样本/序列簇留一分类、固定5 mg展示、同类工具相关和NetSolP S条件下的序列簇外增量。
   - 算法假设：PLM_Sol分数是其训练标签下的可溶类别分数而非mg/L或实测溶解度；31条LTT/WCC进入数值/分类分析，16条LLJ只进入有序/删失分析；固定5 mg结果明确不进入准入gate。
-  - 明确不支持：把Nb252 smoke分数当作表达成功概率、在47条数据上训练/微调模型、把全样本阈值当作通用阈值，或在正式gate完成前用于846条单突排序。
+  - 明确不支持：把Nb252 smoke分数当作表达成功概率、在47条数据上训练/微调模型、把全样本阈值当作通用阈值，或在正式gate完成前用于当前保守性合同允许的单突排序。
 - `scripts/candidate_design/build_plm_sol_yield_validation_plan.py`、`score_plm_sol_embeddings.py`、`score_plm_sol_classifier.py`与`analyze_plm_sol_yield_validation.py`
   - 用途：分别建立固定计划、在ProtT5专属环境生成逐残基嵌入、在分类器专属环境调用已核验V1.0发布包、在项目环境完成统计/比较/绘图/gate；远程唯一入口为`submit_plm_sol_yield_validation.sh`。
   - 运行合同：单个`batch`作业依次切换三个环境，1 GPU/12 CPU，预计10–30分钟且低于1小时；不使用数组、checkpoint或resume，日志写入`logs/plm_sol_yield_validation/`。
@@ -22,7 +22,7 @@
   - 用途：规范化RP3Net官方`id,score`输出，复用47条BL21产量语义完成连续关联、LLJ有序检验、嵌套分类和四面板结果图。
   - 输入与返回：接收冻结的47样本计划及47个RP3Net概率；返回样本证据、连续指标、两种外层验证的分类指标/逐折预测及证据等级。
   - 算法假设：RP3Net分数是E. coli小规模重组表达成功概率；31条LTT/WCC进入数值与分类分析，16条LLJ只进入有序/删失分析。
-  - 明确不支持：将分数解释为mg/L、将一次项目验证外推成通用表达阈值，或在验证完成前用于846条候选排序。
+  - 明确不支持：将分数解释为mg/L、将一次项目验证外推成通用表达阈值，或在验证完成前用于当前保守性合同允许的候选排序。
 - `scripts/candidate_design/build_rp3net_yield_validation_plan.py`、`score_rp3net_sequences.py`与`analyze_rp3net_yield_validation.py`
   - 用途：分别建立冻结计划、在RP3Net专属GPU环境运行官方推理、在项目环境生成统计/图/gate；远程入口为`submit_rp3net_yield_validation.sh`。
   - 预计运行：47条序列单GPU少于一小时，不使用数组、checkpoint或resume。
@@ -36,12 +36,12 @@
 - `antibody_optimization.vhh_conservation`
   - 用途：审核 TNP 论文的 4,059 条天然 VHH、统一 IMGT 映射、90% identity 去冗余、识别 Nb252 framework 邻域、计算加权位点保守性，并合并界面/二硫键/末端约束生成完整允许单突空间。
   - 输入与返回：接收冻结的 TNP 表、Nb252 父序列、ANARCII 编号结果和机器可读关键残基合同；返回序列审核、聚类权重、邻域归属、全局/邻域频率、reported-position 分类、冻结集合及单突记录。
-  - 算法假设：邻域使用 framework-only IMGT identity 与 coverage；每个 90% 单连接簇总权重为 1；硬保守分类还要求覆盖、有效簇数和全局/局部优势残基一致。
+  - 算法假设：邻域使用 framework-only IMGT identity 与 coverage；每个 90% 单连接簇总权重为 1；硬保守分类还要求覆盖、有效簇数、全局/局部优势残基一致且Nb252亲本残基等于该优势残基。若保守证据通过但亲本不同，则分类为`conserved_nonconsensus`，只开放唯一的天然共识回变，不开放全氨基酸扫描。
   - 明确不支持：从天然序列推断 BL21 表达量、把低频残基自动判为有害、替代实验界面合同、生成多突或自动选出最终 30 条。
 - `antibody_optimization.vhh_conservation_plot`
   - 用途：从精确的加权频率表和 reported-position 约束表绘制全局/邻域/project sequence logo 与约束轨道；Logo按IMGT定义用背景色和顶部色带显式标注FR1–FR4与CDR1–CDR3，返回值仅为图形，不改变候选合同。
 - `scripts/candidate_design/build_nb252_vhh_conservation.py`
-  - 用途：单入口运行真实 ANARCII 审核、去冗余、邻域保守性、约束合并、846 条单突枚举、图形和 gate/run-summary 写出；默认拒绝覆盖。
+  - 用途：单入口运行真实 ANARCII 审核、去冗余、邻域保守性、约束合并、受合同约束的单突枚举、图形和 gate/run-summary 写出；默认拒绝覆盖。
   - 预计运行：本地 CPU 少于一小时，当前真实运行约 226 秒，不需要 Slurm、checkpoint 或 resume。
 - `scripts/candidate_design/build_project_vhh_sequence_logos.py`
   - 用途：复用冻结的天然VHH频率表及47条项目序列编号审核，生成带FR/CDR标注的全局、Nb252邻域和项目表达序列Logo，并保存项目频率表、纳入/排除审核和轻量run summary。

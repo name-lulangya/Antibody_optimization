@@ -1,0 +1,28 @@
+{
+  "allowed_single_mutant_count": 847,
+  "conservation_class_counts": {
+    "cautious": 33,
+    "conserved_nonconsensus": 1,
+    "hard_conserved": 54,
+    "insufficient_evidence": 7,
+    "variable": 33
+  },
+  "eligible_sequence_count": 4057,
+  "gate_name": "nb252_natural_vhh_conservation_and_expression_single_space",
+  "generated_at": "2026-08-19T19:55:00+08:00",
+  "hard_frozen_position_count": 80,
+  "interface_mutations_present": false,
+  "multiple_mutants_present": false,
+  "neighbor_cluster_count": 1532,
+  "neighbor_sequence_count": 1564,
+  "new_cysteine_mutations_present": false,
+  "numbering_eligibility_counts": {
+    "eligible": 4057,
+    "excluded": 2
+  },
+  "redundancy_cluster_count": 3784,
+  "release": "ready_for_expression_property_scoring_after_tool_validation_contract",
+  "schema_version": 1,
+  "source_record_count": 4059,
+  "status": "pass"
+}

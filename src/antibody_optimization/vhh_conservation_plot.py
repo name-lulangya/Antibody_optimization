@@ -157,20 +157,21 @@ def render_nb252_constraint_track(
         "insufficient_evidence": 0,
         "variable": 1,
         "cautious": 2,
-        "hard_conserved": 3,
+        "conserved_nonconsensus": 3,
+        "hard_conserved": 4,
     }
     matrix = np.array(
         [
             [class_code[str(row["conservation_class"])] for row in ordered],
-            [3 if int(row["reported_sequence_index_1based"]) in interface else 0 for row in ordered],
-            [3 if int(row["reported_sequence_index_1based"]) in missing else 0 for row in ordered],
-            [3 if _bool(row["hard_frozen"]) else 0 for row in ordered],
+            [4 if int(row["reported_sequence_index_1based"]) in interface else 0 for row in ordered],
+            [4 if int(row["reported_sequence_index_1based"]) in missing else 0 for row in ordered],
+            [4 if _bool(row["hard_frozen"]) else 0 for row in ordered],
         ],
         dtype=int,
     )
-    cmap = ListedColormap(["#eeeeee", "#9ecae1", "#fdae6b", "#de2d26"])
+    cmap = ListedColormap(["#eeeeee", "#9ecae1", "#fdae6b", "#756bb1", "#de2d26"])
     fig, ax = plt.subplots(figsize=(16, 3.2))
-    ax.imshow(matrix, aspect="auto", interpolation="nearest", cmap=cmap, vmin=0, vmax=3)
+    ax.imshow(matrix, aspect="auto", interpolation="nearest", cmap=cmap, vmin=0, vmax=4)
     ax.set_yticks(
         range(4),
         ["Conservation class", "Experimental interface", "Missing coordinates", "Final hard freeze"],
@@ -187,11 +188,12 @@ def render_nb252_constraint_track(
             Patch(color="#eeeeee", label="insufficient / absent"),
             Patch(color="#9ecae1", label="variable"),
             Patch(color="#fdae6b", label="cautious"),
+            Patch(color="#756bb1", label="conserved nonconsensus"),
             Patch(color="#de2d26", label="hard / present"),
         ],
         loc="upper center",
         bbox_to_anchor=(0.5, -0.25),
-        ncol=4,
+        ncol=5,
         frameon=False,
     )
     fig.tight_layout()

@@ -1,0 +1,9 @@
+{
+  "downloaded_source_sha256": "d87a2e66ce0e46d34547d25df10bf07abc10b06ccf0d9d0c4a304a36a9d0ebe5",
+  "paper_set_row_count": 4059,
+  "schema_version": 1,
+  "source_selection_note": "The TNP final descriptor table is the reported 4,059-sequence paper set. The repository's raw vhh_oas.fasta has 4,383 unique records and is not the frozen analysis input.",
+  "source_url": "https://raw.githubusercontent.com/oxpig/TNP/a9ba3edc3d967ecf8a2b9b5c2c29bf7495bbc9a0/paper/paper_data/insilico_descriptors/FINAL%20DATASETS/VHH_OAS_all_properties_FINAL.csv",
+  "status": "pass",
+  "tnp_commit": "a9ba3edc3d967ecf8a2b9b5c2c29bf7495bbc9a0"
+}
