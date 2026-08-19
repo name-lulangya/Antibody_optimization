@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-19 09:30:00
+Last updated: 2026-08-19 10:15:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -13,7 +13,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 冻结天然 VHH 邻域中的高置信保守位点、Cys22/Cys95 和末端 SSGS（reported 125–128）。
 - 候选必须保持完整 128-aa 父序列长度、末端 SSGS、两枚原有 Cys，且不得引入新 Cys。
 - 现行核心预测工具仅为 NetSolP、NanoMelt 和实验复合物视图 AntiFold。新工具必须先在 47 条可比产量数据上验证，证明有独立且可重复的样本外信息后才能纳入筛选。
-- RP3Net 0.0.2 已完成环境和权重身份固定，47条验证计划及连续/离散统计实现已就绪。首次远程启动在模型推理前因评分模块误加载分析端Biopython依赖而终止；该依赖边界已修复，正式评分仍未完成，因此当前不能用于候选排序。
+- RP3Net 0.0.2 已完成47条正式验证，最终证据等级为`no_supported_use`，不得加入846条候选的生成、筛选或排序。
 
 ## 权威输入基线
 
@@ -39,12 +39,13 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - NanoMelt：预测 apparent melting temperature；与产量关系有限，只作为稳定性约束信号。
 - AntiFold：使用实验复合物视图评价结构条件下序列相容性；缺失实验坐标位置不得伪装成可评价位置。
 - TNP 与 nanoBERT 已完成探索性验证，但不在现行精简筛选工具集中。
+- RP3Net：31条数值记录的直接合并Spearman为0.476，但来源内分层Spearman仅0.198且95% bootstrap区间跨0；LLJ有序Kendall为-0.451，与预声明方向相反。嵌套分类ROC-AUC为0.621、PR-AUC为0.620、MCC为0.313，未达到预声明综合门，因此不支持候选使用。
 - 所有工具验证须同时报告连续关联和预注册方向下的离散分类性能；阈值必须在训练折内选择，外层交叉验证报告 ROC-AUC、PR-AUC、MCC、balanced accuracy、sensitivity、specificity 及阈值稳定性。
 
 ## 下一执行路线
 
-1. 以 846 条允许单突为统一输入，分别运行 NetSolP、NanoMelt 和实验复合物视图 AntiFold；未解析坐标导致 AntiFold 不可评价的候选保留明确缺失状态。
-2. 远程运行已冻结的RP3Net 47条验证并按连续关联、逐样本留一和序列簇留一分类证据决定是否纳入；随后用同一离散合同补齐现行三工具验证。
+1. 用已实现的无泄漏离散合同补齐NetSolP、NanoMelt和AntiFold在47条数据上的分类验证；RP3Net不再进入后续候选流程。
+2. 以846条允许单突为统一输入运行NetSolP、NanoMelt和实验复合物视图AntiFold；未解析坐标导致AntiFold不可评价的候选保留明确缺失状态。
 3. 对 846 条单突进行硬风险审核，包括新增糖基化基序、未配对 Cys、强疏水/电荷斑块、Pro/Gly 结构风险和其他明显表达风险。
 4. 在硬约束通过者中，以经过验证的表达预测证据、天然保守性等级、工具一致性和位置/机制多样性形成 30 条单突面板；WT 作为独立实验对照，不占 30 条名额。
 5. 产量实验完成后才讨论组合；组合资格由真实单突效应决定，而不是当前预测分数。
@@ -54,14 +55,13 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - `structure_and_interface_identity=pass`
 - `natural_vhh_conservation_contract=pass`
 - `expression_single_mutant_constraint_space=pass`：846 条仅表示允许进入预测的单突空间。
-- `predictor_continuous_and_classification_validation=blocked`：RP3Net计划已就绪但正式评分未运行，现行三工具分类合同仍待补齐。
+- `predictor_continuous_and_classification_validation=blocked`：RP3Net已完成并判为不支持使用；现行三工具分类合同仍待补齐。
 - `new_30_single_mutant_panel_release=blocked`：需要完成全空间预测、风险审核与分层选择。
 - `combination_design_release=blocked`：等待单突实验结果。
 
 ## 本轮验证状态
 
 - 本地 CPU 真实数据运行约 226 秒，无需 Slurm、checkpoint 或 resume。
-- RP3Net评分模块已验证可在禁用site-packages的隔离Python中导入，不再要求Biopython；修复后的全套测试和静态检查结果记录于当前周历史。
+- RP3Net正式运行覆盖47/47条序列；连续、分类、逐折预测、结果图和gate均已生成并完成schema及计数核验。
 - 4,059 条输入、4,057 条合格序列、1,564 条邻域序列、128 个位置和 846 条单突均已回读核对；结果图已人工检查。
-- RP3Net 47条计划已生成，固定checkpoint SHA-256为`443743bd031689aaf17dc6f7c22c5da3d23cf87b38e10341f114b27d651e6d2b`；远程正式分数和结论尚不存在。
-- 本轮尚未提交或推送。
+- RP3Net gate固定为`rp3net_not_supported_for_candidate_use`；其模型分数不能解释为mg/L或通用表达阈值。

@@ -61,7 +61,7 @@ def render_rp3net_yield_figure(
     class_values = [float(loo[key]) for key in ("roc_auc", "pr_auc_average_precision", "balanced_accuracy", "mcc")]
     axes[1, 0].bar(class_labels, class_values, color=["#56B4E9", "#E69F00", "#009E73", "#CC79A7"])
     axes[1, 0].axhline(0.5, color="#777777", linestyle="--", linewidth=1)
-    axes[1, 0].set_ylim(-1, 1)
+    axes[1, 0].set_ylim(0, 1)
     axes[1, 0].tick_params(axis="x", rotation=20)
     axes[1, 0].set(title="C  Nested leave-one-out classification", ylabel="Metric value")
 
