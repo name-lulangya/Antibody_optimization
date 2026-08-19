@@ -2,6 +2,14 @@
 
 ## 现行表达性质决策合同
 
+- `antibody_optimization.expression_property_completion`
+  - 用途：把现行847条v2候选按`reported position + WT + mutant + 完整128-aa序列`精确回映到历史性质/AntiFold证据，生成一次性抽样复核门，并在复核通过后把721条复用结果与126条新结果合并为完整原始评分矩阵。
+  - 输入与返回：接收v2候选/preflight、历史1962条性质证据和2318条AntiFold证据；返回847行复用审计、WT加12条确定性复核面板、WT加126条补算清单、逐指标比较和最终847行矩阵。
+  - 算法假设：旧candidate ID仅作provenance，不能参与连接；AntiFold复核是对三个固定WT结构视图各重跑一次而非逐突变重跑。实验缺失位置保持实验视图`not_evaluable`，AF3-only结果单独保存。模块不计算综合分、Pareto或候选Tier。
+- `scripts/candidate_design/build_expression_property_completion_plan.py`、`score_expression_property_netsolp.py`、`score_expression_property_nanomelt.py`、`validate_expression_property_reuse.py`与`finalize_expression_property_matrix.py`
+  - 用途：分别负责本地计划、两个工具的任意固定子集评分、三工具重复一致性门和最终矩阵合并；不导入其他实验脚本。
+- `scripts/candidate_design/submit_expression_property_completion_v2.sh`与`.slurm`
+  - 用途：单个顺序门控Slurm作业；先复核WT+12条及三个AntiFold视图，只有复核门通过才补算126条NetSolP/NanoMelt并合并847行。使用`batch`、1 GPU、12 CPU、3小时上限，日志写入`logs/expression_property_completion_v2/`，无数组、checkpoint或resume。
 - `antibody_optimization.vhh_conservation.validate_expression_single_mutant_release`与`scripts/candidate_design/validate_expression_single_mutant_contract_v2.py`
   - 用途：在表达性质评分阶段边界一次性核对v2合同、128个位点、候选CSV/FASTA、权威亲本和关键残基集合；后续NetSolP、NanoMelt和AntiFold计划引用该通过制品，不逐工具重复验证。
   - 输入与返回：接收v2表达约束、位点表、847条候选、对应FASTA和关键残基事实；返回候选数、生成规则计数、冻结/界面冲突和亲本身份的机器可读preflight。

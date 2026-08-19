@@ -1,0 +1,19 @@
+{
+  "antifold_reuse_count": 847,
+  "antifold_scope_counts": {
+    "af3_only": 126,
+    "three_views": 721
+  },
+  "candidate_count": 847,
+  "candidate_selection_performed": false,
+  "completion_score_row_count": 127,
+  "gate_name": "nb252_expression_property_completion_plan_v2",
+  "generated_at": "2026-08-19T22:30:00+08:00",
+  "legacy_property_reuse_count": 721,
+  "new_property_score_count": 126,
+  "release": "ready_for_repeat_validation_before_missing_score_completion",
+  "schema_version": 1,
+  "status": "pass",
+  "validation_candidate_count": 12,
+  "validation_score_row_count": 13
+}

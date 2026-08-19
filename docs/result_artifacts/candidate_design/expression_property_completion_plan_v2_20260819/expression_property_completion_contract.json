@@ -1,0 +1,78 @@
+{
+  "antifold": {
+    "environment_contract": "docs\\result_artifacts\\candidate_design\\antifold_validation_plan_20260815\\antifold_environment_contract.json",
+    "repeat_inference_scope": "three_frozen_WT_structure_views_once_not_per_mutant",
+    "reuse_semantics": "position-specific WT/mutant log-probability lookup",
+    "structure_views": "docs\\result_artifacts\\candidate_design\\antifold_validation_plan_20260815\\antifold_structure_views.csv"
+  },
+  "authoritative_parent": {
+    "length": 128,
+    "sample_uid": "LTT__Nb252",
+    "sequence": "QVQLQESGGGLVQAGGSLRLSCAASGTIFFGYDMGWYRQAPGKEREFVASITTGSNTNYADSVKGRFTISRDNAKNTVYLQMNSLKPEDTAVYYCAVDTIDYIIEWNVYYYIFSYWGQGTQVTVSSGS"
+  },
+  "candidate_count": 847,
+  "candidate_selection_performed": false,
+  "contract_name": "nb252_expression_property_completion_v2",
+  "generated_at": "2026-08-19T22:30:00+08:00",
+  "legacy_candidate_id_used_as_join_key": false,
+  "nanomelt": {
+    "entry_point": "/data/software/env/luly25/nanomelt/bin/nanomelt",
+    "environment": "/data/software/env/luly25/nanomelt",
+    "expected_pass_count": 1963,
+    "expected_scored_length_aa": 126,
+    "immune_builder_refine": "/data/software/env/luly25/nanomelt/lib/python3.10/site-packages/ImmuneBuilder/refine.py",
+    "input_length_aa": 128,
+    "required_openmm_platforms": [
+      "Reference",
+      "CPU"
+    ],
+    "required_trimmed_c_terminal": "GS",
+    "semantics": "predicted apparent Tm relative to WT; not experimental Tm or yield",
+    "software": {
+      "anarci_bioconda": "2024.05.21",
+      "immune_builder": "1.2",
+      "nanomelt": "1.4.0",
+      "openmm": "8.5.2",
+      "pdbfixer": "1.12.0",
+      "python": "3.10.20",
+      "torch": "2.7.1+cu126",
+      "transformers": "4.56.1"
+    }
+  },
+  "netsolp": {
+    "environment": "/data/software/env/luly25/netsolp",
+    "model_type": "Distilled",
+    "outputs": [
+      "predicted_usability",
+      "predicted_solubility"
+    ],
+    "prediction_type": "SU",
+    "semantics": "compatibility signals relative to WT; not yield",
+    "working_directory": "/homes/Tianlab/luly25/software/netsolp"
+  },
+  "ranking_performed": false,
+  "repeat_validation": {
+    "antifold_absolute_tolerance": 5e-08,
+    "candidate_count": 12,
+    "must_pass_before_completion": true,
+    "nanomelt_tm_absolute_tolerance_c": 0.0050001,
+    "netsolp_absolute_tolerance": 5e-08,
+    "score_row_count_including_wt": 13
+  },
+  "reuse_join_key": [
+    "reported_sequence_index_1based",
+    "wt_residue",
+    "mutant_residue",
+    "full_128aa_sequence"
+  ],
+  "runtime_estimate": {
+    "likely_over_five_hours": false,
+    "likely_over_one_hour": true,
+    "missing_126_scores": "approximately 15-90 minutes, NetSolP-dominated",
+    "resume_required": false,
+    "slurm_required": true,
+    "validation": "approximately 5-30 minutes"
+  },
+  "schema_version": 1,
+  "status": "pass"
+}

@@ -1,0 +1,27 @@
+{
+  "counts": {
+    "antifold_reused": 847,
+    "candidates": 847,
+    "completion_score_rows": 127,
+    "new_property": 126,
+    "reused_property": 721,
+    "validation_score_rows": 13
+  },
+  "elapsed_seconds": 0.060571,
+  "generated_at": "2026-08-19T22:30:00+08:00",
+  "outputs": {
+    "antifold_targets": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_property_completion_plan_v2_20260819\\reuse_validation_antifold_targets.csv",
+    "audit": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_property_completion_plan_v2_20260819\\reuse_mapping_audit.csv",
+    "completion_fasta": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_property_completion_plan_v2_20260819\\missing_property_sequences.fasta",
+    "completion_samples": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_property_completion_plan_v2_20260819\\missing_property_samples.csv",
+    "contract": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_property_completion_plan_v2_20260819\\expression_property_completion_contract.json",
+    "gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_property_completion_plan_v2_20260819\\expression_property_completion_plan_gate.json",
+    "validation_expected": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_property_completion_plan_v2_20260819\\reuse_validation_expected.csv",
+    "validation_fasta": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_property_completion_plan_v2_20260819\\reuse_validation_sequences.fasta",
+    "validation_samples": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_property_completion_plan_v2_20260819\\reuse_validation_samples.csv"
+  },
+  "python": "3.11.15",
+  "release": "ready_for_repeat_validation_before_missing_score_completion",
+  "schema_version": 1,
+  "status": "pass"
+}
