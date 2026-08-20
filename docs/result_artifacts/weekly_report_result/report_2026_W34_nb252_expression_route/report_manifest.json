@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-20T11:04:37+08:00",
+  "generated_at": "2026-08-20T15:20:43+08:00",
   "reporting_period": "2026-W31--W34",
   "active_route": "BL21_expression_only_single_mutants",
   "trial_count": 30,

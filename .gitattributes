@@ -11,3 +11,6 @@
 *.txt text eol=lf
 *.cxs binary
 *.docx binary
+*.pdf binary
+*.png binary
+*.zip binary
