@@ -87,6 +87,16 @@
 - `scripts/candidate_design/analyze_stable_word_yield_validation.py`
   - 用途：在冻结47条BL21产量记录上验证稳定词描述符的连续关联和嵌套分类性能；保持31条个体数值与16条LLJ有序/删失语义，不执行候选选择。
 
+## Expression single-mutant landscape
+
+- `antibody_optimization.expression_landscape_plot`
+  - 用途：把现行847条单突规范为位置×替换残基的四指标景观，并绘制NetSolP ΔU、NetSolP ΔS、NanoMelt预测ΔTm和实验复合物视图AntiFold Δlog probability四张对齐热图。
+  - 输入与返回：接收稳定词增强后的847行完整性质矩阵；返回精简逐候选绘图数据、48个reported位置、四面板热图和两面板散点图的PNG/SVG。新增稳定词候选以星号标记；散点图以颜色区分FR/CDR，并在AntiFold面板以点形区分实验复合物与AF3补充来源。
+  - 算法假设：热图各面板独立采用以0为中心、覆盖完整实测范围的对称色标；蓝色表示相对WT有利，红色表示不利。AntiFold展示值优先使用721条实验NK2R–Nb252复合物视图结果；126条实验坐标不可评价候选使用独立AF3 VHH-only结果补充，并在逐候选数据、图例和说明中显式保留来源。
+  - 明确不支持：跨指标比较颜色深浅、把AF3补充值解释为实验复合物证据、隐式筛选候选、生成综合分，或把预测变化称为实测表达量/稳定性。
+- `scripts/candidate_design/plot_expression_single_mutant_landscape.py`
+  - 用途：从已释放的稳定词增强矩阵生成精确绘图CSV、四面板热图、两面板散点图、gate和run summary；默认拒绝覆盖，不运行任何预测工具。
+
 实验编排、一次性探索和特定批次参数不应仅为复用形式而机械迁入该包。新增、删除、重命名或实质修改共享工具时，应在同一任务中更新本索引，并记录其用途、输入、返回值、算法假设及明确不支持的范围。
 
 ## 当前工具

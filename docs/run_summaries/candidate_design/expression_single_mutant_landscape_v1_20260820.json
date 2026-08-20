@@ -1,0 +1,24 @@
+{
+  "elapsed_seconds": 3.147029,
+  "facts": {
+    "af3_antifold_fallback_count": 126,
+    "candidate_count": 847,
+    "candidate_selection_performed": false,
+    "experimental_complex_antifold_not_evaluable_count": 126,
+    "experimental_complex_antifold_pass_count": 721,
+    "reported_position_count": 48,
+    "stable_word_gain_candidate_count": 22
+  },
+  "generated_at": "2026-08-20T01:15:00+08:00",
+  "outputs": {
+    "data": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_landscape_v1_20260820\\expression_single_mutant_landscape_plot_data.csv",
+    "gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_landscape_v1_20260820\\expression_single_mutant_landscape_gate.json",
+    "png": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_landscape_v1_20260820\\expression_single_mutant_landscape.png",
+    "scatter_png": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_landscape_v1_20260820\\expression_single_mutant_scatter.png",
+    "scatter_svg": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_landscape_v1_20260820\\expression_single_mutant_scatter.svg",
+    "svg": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_landscape_v1_20260820\\expression_single_mutant_landscape.svg"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}

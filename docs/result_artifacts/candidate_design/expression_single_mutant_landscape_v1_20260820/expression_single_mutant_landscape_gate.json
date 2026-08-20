@@ -1,0 +1,27 @@
+{
+  "af3_antifold_fallback_count": 126,
+  "antifold_missing_policy": "use AF3 VHH-only AntiFold for the 126 candidates with missing experimental coordinates",
+  "candidate_count": 847,
+  "candidate_selection_performed": false,
+  "experimental_complex_antifold_not_evaluable_count": 126,
+  "experimental_complex_antifold_pass_count": 721,
+  "gate_name": "nb252_expression_single_mutant_four_metric_landscape_v1",
+  "generated_at": "2026-08-20T01:15:00+08:00",
+  "panels": [
+    "NetSolP delta U",
+    "NetSolP delta S",
+    "NanoMelt delta predicted Tm",
+    "experimental-complex-preferred AntiFold delta log probability with AF3 fallback"
+  ],
+  "release": "four_metric_landscape_ready_for_visual_review",
+  "reported_position_count": 48,
+  "scatter_panels": [
+    "NetSolP delta U versus delta S",
+    "combined-source AntiFold delta log probability versus NanoMelt delta predicted Tm"
+  ],
+  "schema_version": 1,
+  "stable_word_gain_candidate_count": 22,
+  "stable_word_marker": "star marks gain_only or net_gain",
+  "status": "pass",
+  "upstream_gate": "docs\\result_artifacts\\candidate_design\\stable_word_single_mutant_v1_20260819\\stable_word_single_mutant_gate.json"
+}

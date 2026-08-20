@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-19 23:40:00
+Last updated: 2026-08-20 01:30:00
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -54,7 +54,8 @@ Timezone: Asia/Shanghai (UTC+08:00)
 2. 847行完整原始评分矩阵已经释放：721条NetSolP/NanoMelt沿用经重复验证的旧值，126条缺口采用本轮新算值；AntiFold为721条三视图和126条AF3-only证据。实验缺失位置的实验视图保持`not_evaluable`。
 3. 1,336条简并稳定词已按固定12符号、大小写敏感、允许重叠的精确连续子串合同加入847行矩阵。Nb252 WT没有稳定词命中；22条单突新增24个命中，825条不变，无减少项。该步骤没有筛选、排名或生成Tier。
 4. 47条BL21产量验证不支持“稳定词密度越高、产量越高”：主指标来源分层Spearman为-0.185，95% bootstrap区间为-0.572–0.216，序列簇留一ROC-AUC为0.431、MCC为-0.277，证据等级为`no_supported_use`。稳定词只作为用户指定的可解释软偏好，不能覆盖硬约束、明确性质恶化或AntiFold/NanoMelt的既定用途。
-5. 下一阶段先制定统一的风险审核和30条单突选择合同，再同时读取完整三工具矩阵与稳定词列；不得仅因新增稳定词而自动入选。
+5. 847条单突的四指标全景图已经生成：四张位置×替换残基热图分别展示NetSolP ΔU、NetSolP ΔS、NanoMelt预测ΔTm和AntiFold ΔlogP，并另有ΔU–ΔS及AntiFold–ΔTm两张散点图。AntiFold优先采用721条实验复合物视图结果，126条实验坐标不可评价候选以独立AF3 VHH-only结果补充；来源在逐候选表、图例和散点点形中显式区分。22条稳定词新增候选均用星号标记。
+6. 下一阶段先制定统一的风险审核和30条单突选择合同，再同时读取完整三工具矩阵与稳定词列；不得仅因新增稳定词而自动入选。
 
 ## 阶段门
 
@@ -65,6 +66,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - `expression_property_completion_plan_v2=pass`：721条精确复用、126条补算和12条抽样复核计划已冻结。
 - `expression_property_complete_matrix_v2=pass`：847条NetSolP、NanoMelt和AntiFold证据已按视图可评价范围完成并通过完整性审核；该门不代表候选已筛选。
 - `stable_word_feature_evaluation_v1=pass`：847条单突已完成稳定词新增/减少审计，47条产量验证也已完成；`pass`只表示制品完整，不表示稳定词已被验证为产量预测器。
+- `expression_single_mutant_four_metric_landscape_v1=pass`：847条、48个位置、721条实验复合物AntiFold值和126条AF3补充值均已准确绘图并保留来源；该门不执行候选选择。
 - `new_30_single_mutant_panel_release=blocked`：全空间预测已完成，仍需制定风险审核与分层选择合同并冻结最终30条。
 - `combination_design_release=blocked`：等待单突实验结果。
 
@@ -76,6 +78,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - v2下游preflight为pass：847条候选中846条来自常规非Cys扫描、1条为Q5V共识回变，无多突、新Cys、冻结或界面突变。
 - v2性质完整矩阵为pass：847条ID和序列均唯一且均为合法128-aa单突；721条复用值与126条新算值来源明确，全部保留末端SSGS，无冻结位点突变或新增Cys。NetSolP、NanoMelt和AF3 AntiFold均覆盖847条；实验单体/复合物AntiFold仅覆盖坐标可评价的721条，其余126条明确为`not_evaluable`。
 - 稳定词输入共1,336条且均符合固定12符号合同；847条单突与完整性质矩阵逐ID联接，24条长表变化均覆盖实际突变位点。47条验证保留31条个体数值和16条LLJ有序/删失语义，未训练高容量模型，也未执行候选选择。
+- 四指标景观图的数据表和gate已回读，847条候选、48个位置、22条稳定词新增、721条实验复合物AntiFold值与126条AF3补充值计数一致；热图和散点PNG均已人工检查，位置标签、FR/CDR标记、独立色标、星号及AntiFold来源点形均可辨识。
 - NanoMelt分类制品覆盖27条数值样本并保留4条未评分状态；正式图已人工检查。AntiFold分类不适用合同确认1条匹配结构、46条结构缺失且不生成任何分类指标。
 - RP3Net gate固定为`rp3net_not_supported_for_candidate_use`；其模型分数不能解释为mg/L或通用表达阈值。
 - PLM_Sol正式运行覆盖47/47条序列；31条数值记录和16条LLJ有序/删失记录语义保持不变，结果图、gate和run summary已回读核对。其固定5 mg展示的序列簇留一ROC-AUC/PR-AUC/MCC为0.761/0.685/0.411，但该展示不参与工具准入。
