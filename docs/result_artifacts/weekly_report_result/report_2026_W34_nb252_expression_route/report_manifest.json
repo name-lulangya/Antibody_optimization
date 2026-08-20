@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-20T11:04:37+08:00",
+  "reporting_period": "2026-W31--W34",
+  "active_route": "BL21_expression_only_single_mutants",
+  "trial_count": 30,
+  "reserve_count": 7,
+  "unique_trial_positions": 13,
+  "trial_position_counts": {
+    "1": 5,
+    "5": 1,
+    "23": 1,
+    "27": 4,
+    "29": 2,
+    "30": 9,
+    "32": 1,
+    "44": 2,
+    "55": 1,
+    "86": 1,
+    "87": 1,
+    "97": 1,
+    "99": 1
+  },
+  "final_experimental_panel_released": false,
+  "report_docx": "Nb252_BL21_expression_optimization_stage_report_2026_W31_W34.docx",
+  "guide_docx": "Nb252_predictor_and_selection_guide.docx",
+  "delivery_directory": "delivery",
+  "source_selection_release": "expression_single_mutant_trial_selection_v2_20260820",
+  "excluded_current_route_methods": [
+    "Rosetta",
+    "PyRosetta",
+    "Flex ddG",
+    "affinity ranking",
+    "double mutants"
+  ]
+}
