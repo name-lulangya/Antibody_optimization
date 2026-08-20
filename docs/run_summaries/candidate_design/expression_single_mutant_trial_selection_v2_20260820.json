@@ -1,0 +1,82 @@
+{
+  "blocked_multiple_moderate_adverse_count": 2,
+  "blocked_sequence_risk_count": 2,
+  "candidate_count": 847,
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\select_expression_single_mutant_trial_panel.py",
+    "--matrix",
+    "docs/result_artifacts/candidate_design/stable_word_single_mutant_v1_20260819/expression_single_mutant_property_stable_word_matrix.csv",
+    "--upstream-gate",
+    "docs/result_artifacts/candidate_design/stable_word_single_mutant_v1_20260819/stable_word_single_mutant_gate.json",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/expression_single_mutant_trial_selection_v2_20260820",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/expression_single_mutant_trial_selection_v2_20260820.json",
+    "--generated-at",
+    "2026-08-20T10:40:00+08:00"
+  ],
+  "controlled_tradeoff_count": 10,
+  "elapsed_seconds": 3.5513,
+  "final_experimental_panel_released": false,
+  "generated_at": "2026-08-20T10:40:00+08:00",
+  "magnitude_shortlist_count": 40,
+  "magnitude_shortlist_stable_word_gain_count": 0,
+  "outputs": {
+    "audit": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_trial_selection_v2_20260820\\expression_single_mutant_selection_audit.csv",
+    "contract": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_trial_selection_v2_20260820\\expression_single_mutant_selection_contract.json",
+    "gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_trial_selection_v2_20260820\\expression_single_mutant_selection_gate.json",
+    "panel": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_trial_selection_v2_20260820\\expression_single_mutant_trial30.csv",
+    "panel_fasta": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_trial_selection_v2_20260820\\expression_single_mutant_trial30.fasta",
+    "png": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_trial_selection_v2_20260820\\expression_single_mutant_selection.png",
+    "reserve": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_trial_selection_v2_20260820\\expression_single_mutant_reserve.csv",
+    "reserve_fasta": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_trial_selection_v2_20260820\\expression_single_mutant_reserve.fasta",
+    "shortlist": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_trial_selection_v2_20260820\\expression_single_mutant_magnitude_shortlist.csv",
+    "summary": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_trial_selection_v2_20260820\\expression_single_mutant_selection_summary.csv",
+    "svg": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_trial_selection_v2_20260820\\expression_single_mutant_selection.svg"
+  },
+  "python": "3.11.15",
+  "reserve_count": 7,
+  "schema_version": 1,
+  "status": "pass",
+  "strict_core_count": 26,
+  "trial_panel_antifold_source_counts": {
+    "af3_vhh_only_fallback_for_missing_experimental_coordinates": 6,
+    "experimental_complex_context": 24
+  },
+  "trial_panel_count": 30,
+  "trial_panel_position_counts": {
+    "1": 5,
+    "5": 1,
+    "23": 1,
+    "27": 4,
+    "29": 2,
+    "30": 9,
+    "32": 1,
+    "44": 2,
+    "55": 1,
+    "86": 1,
+    "87": 1,
+    "97": 1,
+    "99": 1
+  },
+  "trial_panel_region_counts": {
+    "CDR1": 16,
+    "CDR2": 1,
+    "CDR3": 2,
+    "FR1": 7,
+    "FR2": 2,
+    "FR3": 2
+  },
+  "trial_panel_selection_performed": true,
+  "trial_panel_stable_word_exploratory_count": 1,
+  "trial_panel_stable_word_gain_count": 1,
+  "trial_panel_tier_counts": {
+    "A_multi_family": 5,
+    "B_single_family_strong": 5,
+    "C_single_family_moderate": 16,
+    "D_controlled_tradeoff": 3,
+    "E_stable_word_exploratory": 1
+  },
+  "trial_panel_unique_position_count": 13
+}

@@ -1,0 +1,55 @@
+{
+  "blocked_multiple_moderate_adverse_count": 2,
+  "blocked_sequence_risk_count": 2,
+  "candidate_count": 847,
+  "controlled_tradeoff_count": 10,
+  "final_experimental_panel_released": false,
+  "generated_at": "2026-08-20T10:40:00+08:00",
+  "interpretation": "Computational trial selection only; predictions are not measured expression, solubility, stability, or experimental structural validation.",
+  "magnitude_shortlist_count": 40,
+  "magnitude_shortlist_stable_word_gain_count": 0,
+  "release": "trial_30_single_mutant_panel_ready_for_user_review",
+  "reserve_count": 7,
+  "schema_version": 1,
+  "status": "pass",
+  "strict_core_count": 26,
+  "trial_panel_antifold_source_counts": {
+    "af3_vhh_only_fallback_for_missing_experimental_coordinates": 6,
+    "experimental_complex_context": 24
+  },
+  "trial_panel_count": 30,
+  "trial_panel_position_counts": {
+    "1": 5,
+    "5": 1,
+    "23": 1,
+    "27": 4,
+    "29": 2,
+    "30": 9,
+    "32": 1,
+    "44": 2,
+    "55": 1,
+    "86": 1,
+    "87": 1,
+    "97": 1,
+    "99": 1
+  },
+  "trial_panel_region_counts": {
+    "CDR1": 16,
+    "CDR2": 1,
+    "CDR3": 2,
+    "FR1": 7,
+    "FR2": 2,
+    "FR3": 2
+  },
+  "trial_panel_selection_performed": true,
+  "trial_panel_stable_word_exploratory_count": 1,
+  "trial_panel_stable_word_gain_count": 1,
+  "trial_panel_tier_counts": {
+    "A_multi_family": 5,
+    "B_single_family_strong": 5,
+    "C_single_family_moderate": 16,
+    "D_controlled_tradeoff": 3,
+    "E_stable_word_exploratory": 1
+  },
+  "trial_panel_unique_position_count": 13
+}

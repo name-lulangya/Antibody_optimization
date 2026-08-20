@@ -97,6 +97,18 @@
 - `scripts/candidate_design/plot_expression_single_mutant_landscape.py`
   - 用途：从已释放的稳定词增强矩阵生成精确绘图CSV、四面板热图、两面板散点图、gate和run summary；默认拒绝覆盖，不运行任何预测工具。
 
+## Expression single-mutant trial-panel selection
+
+- `antibody_optimization.expression_panel_selection`
+  - 用途：把847条表达性质单突的NetSolP ΔU/ΔS、NanoMelt预测ΔTm和AntiFold ΔlogP转换为预声明的中性、微弱、中等、明显档位，并建立40条幅度短名单、严格核心、受控权衡层、30条试选和替补；按用户复核决定以`T99F`替换`T99N`作为唯一稳定词假设探索例外。
+  - 输入与返回：接收稳定词增强完整矩阵及其上游gate；返回847条逐候选审计、短名单、30条试选、替补、亲本序列和精确计数。NetSolP U/S只计为一个工具家族，AntiFold实验复合物与AF3补充来源始终分列保留。
+  - 算法假设：中性和微弱变化的选择等级均为0，不参与常规入围或同档排序；明显恶化阻断，严格核心不含中等恶化，受控权衡层恰含一个中等恶化。先保留全部严格核心，再只在剩余名额内按新位置覆盖和分类证据选择受控权衡候选；稳定词通常仅作最后平局条件。`T99F`是用户指定的单一假设检验例外，必须保持无中等/明显恶化并独立标记，不能解释为预测器支持的性质优化。
+  - 明确不支持：用原始小数差异打破同档、连续加权总分、把U/S当作两个独立投票、把AF3补充值称为实验复合物证据，或把试选30条称为最终实验面板或已验证高表达序列。
+- `antibody_optimization.expression_panel_selection_plot`
+  - 用途：绘制847→40→36→30漏斗、试选/替补位置分布和30条四指标序数热图；金色星号和边框表示`T99F`稳定词探索候选，三角表示AF3 AntiFold补充来源。
+- `scripts/candidate_design/select_expression_single_mutant_trial_panel.py`
+  - 用途：本地生成完整审计CSV、短名单、试选/替补CSV与FASTA、合同、gate、PNG/SVG和run summary；默认拒绝覆盖，不运行任何预测工具。
+
 实验编排、一次性探索和特定批次参数不应仅为复用形式而机械迁入该包。新增、删除、重命名或实质修改共享工具时，应在同一任务中更新本索引，并记录其用途、输入、返回值、算法假设及明确不支持的范围。
 
 ## 当前工具

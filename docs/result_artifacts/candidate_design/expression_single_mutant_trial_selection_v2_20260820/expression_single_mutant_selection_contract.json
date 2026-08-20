@@ -1,0 +1,46 @@
+{
+  "antifold_provenance_policy": "experimental complex preferred; AF3 VHH-only fallback remains explicitly labelled",
+  "candidate_kind": "single_substitution_only",
+  "controlled_tradeoff_rule": "magnitude shortlist, no hard sequence risk, exactly one moderate-adverse metric; used only as an explicitly labelled diversity layer",
+  "final_experimental_panel_released": false,
+  "generated_at": "2026-08-20T10:40:00+08:00",
+  "hard_sequence_risks": [
+    "new_proline_backbone_constraint",
+    "new_dense_local_hydrophobic_window",
+    "new_extreme_local_charge_cluster"
+  ],
+  "magnitude_shortlist_rule": "no strong-adverse metric and at least one moderate-or-strong favorable predictor family",
+  "magnitude_thresholds": {
+    "antifold_log_probability": {
+      "moderate_to_strong_absolute_boundary": 3.0,
+      "negligible_to_weak_absolute_boundary": 0.5,
+      "weak_to_moderate_absolute_boundary": 1.5
+    },
+    "nanomelt_tm_c": {
+      "moderate_to_strong_absolute_boundary": 1.5,
+      "negligible_to_weak_absolute_boundary": 0.5,
+      "weak_to_moderate_absolute_boundary": 1.0
+    },
+    "netsolp_s": {
+      "moderate_to_strong_absolute_boundary": 0.03,
+      "negligible_to_weak_absolute_boundary": 0.01,
+      "weak_to_moderate_absolute_boundary": 0.02
+    },
+    "netsolp_u": {
+      "moderate_to_strong_absolute_boundary": 0.015,
+      "negligible_to_weak_absolute_boundary": 0.005,
+      "weak_to_moderate_absolute_boundary": 0.01
+    }
+  },
+  "metric_direction": "higher_is_better_for_all_four_displayed_changes",
+  "netsolp_u_and_s_independent_family_count": 1,
+  "optimization_target": "BL21 expression yield",
+  "raw_within_band_values_used_for_ranking": false,
+  "schema_version": 1,
+  "selection_order": "retain every strict-core candidate; fill remaining slots from the controlled-tradeoff layer by new-position coverage, categorical tier, strong favorable family count, favorable family count, AntiFold provenance, soft risk count, stable-word tie-break, candidate identifier; then apply the user-reviewed T99N-to-T99F exploratory substitution",
+  "stable_word_exploratory_candidate": "Nb252 reported_seq T99F",
+  "stable_word_exploratory_replaces": "Nb252 reported_seq T99N",
+  "stable_word_role": "last-order tie-break generally; T99F is one explicit hypothesis-testing exception and is not presented as predictor-supported optimization",
+  "strict_core_rule": "magnitude shortlist, no hard sequence risk, no moderate-adverse metric",
+  "weak_and_negligible_selection_grade": 0
+}
