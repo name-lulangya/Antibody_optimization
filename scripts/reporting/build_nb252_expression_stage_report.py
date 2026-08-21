@@ -618,10 +618,6 @@ def _build_report(trial: list[dict[str, str]], reserve: list[dict[str, str]], fi
     _set_run_font(r, size=13, bold=True)
     doc.add_paragraph()
     _add_figure(doc, figures["route"], "图1  Nb252表达优化的约束、评价与单突试选流程。", 6.8)
-    p = doc.add_paragraph()
-    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    r = p.add_run("版本日期：2026-08-20")
-    _set_run_font(r, size=10)
 
     doc.add_page_break()
     doc.add_heading("执行摘要", level=1)
