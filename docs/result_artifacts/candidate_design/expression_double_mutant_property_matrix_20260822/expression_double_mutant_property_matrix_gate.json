@@ -1,0 +1,14 @@
+{
+  "antifold_mixed_view_component_only_count": 60,
+  "antifold_same_view_additive_evaluable_count": 102,
+  "candidate_count": 162,
+  "candidate_selection_performed": false,
+  "final_11_double_mutants_selected": false,
+  "generated_at": "2026-08-22T18:24:41+08:00",
+  "interpretation": "All 162 doubles have complete NetSolP/NanoMelt scores and retained constituent AntiFold evidence. Interaction residuals describe predictor non-additivity, not physical epistasis.",
+  "nanomelt_complete_count": 162,
+  "netsolp_complete_count": 162,
+  "release": "ready_for_magnitude_aware_double_mutant_selection",
+  "schema_version": 1,
+  "status": "pass"
+}

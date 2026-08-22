@@ -1,0 +1,25 @@
+{
+  "candidate_count": 162,
+  "candidate_selection_performed": false,
+  "command_argv": [
+    "/data/software/env/luly25/ab_optim/bin/python",
+    "/homes/Tianlab/luly25/Antibody_optimization/scripts/candidate_design/finalize_expression_double_mutant_matrix.py",
+    "--plan-dir",
+    "docs/result_artifacts/candidate_design/expression_double_mutant_plan_20260822",
+    "--parent19-dir",
+    "docs/result_artifacts/candidate_design/expression_single_mutant_parent19_20260822",
+    "--netsolp-score-dir",
+    "results/candidate_design/expression_double_mutant_scan_20260822/netsolp",
+    "--nanomelt-score-dir",
+    "results/candidate_design/expression_double_mutant_scan_20260822/nanomelt",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/expression_double_mutant_property_matrix_20260822",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/expression_double_mutant_property_matrix_20260822.json"
+  ],
+  "elapsed_seconds": 2.141861,
+  "generated_at": "2026-08-22T18:24:41+08:00",
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass"
+}
