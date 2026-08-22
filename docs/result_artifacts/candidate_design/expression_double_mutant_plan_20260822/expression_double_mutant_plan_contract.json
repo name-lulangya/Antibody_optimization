@@ -1,0 +1,21 @@
+{
+  "active_remote_predictors": [
+    "NetSolP Distilled SU",
+    "NanoMelt predicted apparent Tm"
+  ],
+  "antifold_policy": "reuse each constituent position's frozen structure-conditioned evidence; add deltas only when both positions use the same structural view; never interpret the sum as double-mutant epistasis",
+  "candidate_count": 162,
+  "candidate_selection_performed": false,
+  "enumeration_rule": "all unordered pairs at distinct reported-sequence positions",
+  "expected_remote_runtime": "under_5_hours",
+  "final_11_double_mutants_selected": false,
+  "generated_at": "2026-08-22T18:00:00+08:00",
+  "optimization_target": "BL21 expression yield",
+  "parent_release": "19 explicitly approved single mutants",
+  "same_position_alternatives": "mutually_exclusive",
+  "schema_version": 1,
+  "score_sample_count_including_wt": 163,
+  "sequence_risk_policy": "recompute on each complete double sequence",
+  "slurm_route": "one_batch_job_one_gpu_12_cpus_sequential_netsolp_then_nanomelt",
+  "stable_word_policy": "recompute exact overlapping degenerate-word occurrences on each complete double sequence"
+}

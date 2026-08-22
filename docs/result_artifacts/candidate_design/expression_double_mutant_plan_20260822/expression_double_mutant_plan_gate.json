@@ -1,0 +1,17 @@
+{
+  "antifold_same_view_additive_evaluable_count": 102,
+  "candidate_filtering_applied": false,
+  "generated_at": "2026-08-22T18:00:00+08:00",
+  "hard_sequence_risk_count": 0,
+  "interpretation": "Complete unfiltered 162-double space; no final 11 selection has been performed.",
+  "invalid_same_position_pair_count": 9,
+  "parent_position_count": 13,
+  "parent_single_mutant_count": 19,
+  "release": "ready_for_netsolp_nanomelt_double_scoring",
+  "schema_version": 1,
+  "score_sample_count_including_wt": 163,
+  "stable_word_gain_candidate_count": 19,
+  "status": "pass",
+  "theoretical_all_pair_count": 171,
+  "valid_double_mutant_count": 162
+}

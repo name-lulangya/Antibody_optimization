@@ -445,6 +445,16 @@
 - `scripts/candidate_design/score_double_mutant_properties.py`：按`--tool netsolp|nanomelt|tnp`在各自远程环境中评分WT+86条序列；三条路线均要求87/87覆盖且扫描中不筛选。
 - `scripts/candidate_design/score_double_mutants_pyrosetta.py`：以45个不同位置对共享配对WT，在校准实验复合物协议中评分86条双突×3重复；局部可动集合为既有界面与两个突变位点8 Å邻域的并集。
 - `scripts/candidate_design/submit_double_mutant_scan.sh`及四个`.slurm`：并行提交NetSolP、NanoMelt、TNP和PyRosetta四条无筛选扫描；均使用`batch`、1 GPU、12 CPU，日志写入`logs/double_mutant_scan/`。
+
+- `antibody_optimization.expression_double_mutants`
+  - 用途：实现现行表达量路线的19条已批准父单突到完整162条不同位置双突的确定性枚举，并在完整双突序列上重算序列风险和简并稳定词变化；联接NetSolP/NanoMelt远程结果时计算相对WT变化、既定幅度档和相对两个组成单突的预测器非加和残差。
+  - 主要输入/返回：19条父单突及release gate、1,336条稳定词、WT+162条NetSolP/NanoMelt规范分数；返回162条唯一128-aa双突、9条同位点互斥审计、163条共同评分样本、稳定词长表及完整性质矩阵。
+  - 算法假设：只组合不同reported位置；AntiFold沿用两个组成位置各自的冻结WT骨架证据，只有两者来自同一结构视图时才记录可加log-probability差，且该值不代表双突重评分或上位性；NetSolP/NanoMelt interaction residual只描述预测器输出的非加和性，不解释为物理相互作用。
+  - 明确不支持：引入19条父集之外的替换、组合同位点替换、生成三突、运行Rosetta/TNP/AF3批量预测、跨实验/AF3视图相加AntiFold值，或在162条评分完成前选择最终11条。
+- `scripts/candidate_design/build_expression_double_mutant_plan.py`：本地生成162条未筛选双突、9条互斥审计、WT+162共同CSV/FASTA、完整序列风险/稳定词证据、合同、gate和run summary；读取旧30条与19条制品但不修改。
+- `scripts/candidate_design/score_expression_double_mutant_properties.py`：以`--tool netsolp|nanomelt`在对应固定远程环境评分同一163条样本，要求163/163覆盖，不包含TNP或候选筛选分支。
+- `scripts/candidate_design/finalize_expression_double_mutant_matrix.py`：在项目环境严格联接两工具结果和组成位点AntiFold证据，输出162行完整矩阵、幅度档计数、概览图及release gate；不选最终11条。
+- `scripts/candidate_design/run_expression_double_mutant_scan.sh`与`submit_expression_double_mutant_scan.slurm`：现行远程单作业顺序路线；`batch`、1 GPU、12 CPU、2小时上限，日志写入`logs/expression_double_mutant_scan/`。预计低于5小时，不使用数组、checkpoint或resume；已有结果目录时拒绝覆盖。
 - `antibody_optimization.double_mutant_contacts`：只读取既有258条突变重复和135条位置对WT记录，按`wt_control_id`、重复和seed复算VHH/NK2R配对保持率及逐重复lost/gained source-auth残基；同时产生86条候选汇总和重复一致性，不读取或修改结构、不重新计算几何接触、不筛选候选。
 - `antibody_optimization.double_mutant_analysis`与`scripts/candidate_design/analyze_double_mutant_scan.py`：V2.1仅在四条86候选扫描完整后联接相对WT U/S/预测Tm、TNP flag/PSH、双突PyRosetta能量、实验参考/配对WT接触证据、界面Cα RMSD和化学风险。结构安全主门使用已释放阈值下的配对WT保持率与RMSD；较低实验参考保持率仅标记准备敏感性，不覆盖多目标类别，也不要求接触集合精确一致。输出schema 3的86行联合表、完整258行接触审计、gate和三面板图，不自动选出最终30条。
 - `antibody_optimization.preliminary_panel`

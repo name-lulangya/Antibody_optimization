@@ -127,6 +127,57 @@ def stable_word_sequence_features(
     }
 
 
+def compare_stable_word_occurrences(
+    parent_sequence: str,
+    mutant_sequence: str,
+    stable_words: Sequence[str],
+) -> dict[str, object]:
+    """Compare exact degenerate-word occurrences for any same-length mutant.
+
+    Occurrences are keyed by word and coordinates, so overlapping matches are
+    retained.  This generic comparison is suitable for single or multiple
+    substitutions; it deliberately does not infer that two single-mutant word
+    effects add when the combined sequence can create a new joint window.
+    """
+
+    if len(parent_sequence) != len(mutant_sequence):
+        raise StableWordError("Parent and mutant sequences must have the same length")
+    parent = stable_word_occurrences(parent_sequence, stable_words)
+    mutant = stable_word_occurrences(mutant_sequence, stable_words)
+    parent_by_key = {_occurrence_key(row): row for row in parent}
+    mutant_by_key = {_occurrence_key(row): row for row in mutant}
+    if len(parent_by_key) != len(parent) or len(mutant_by_key) != len(mutant):
+        raise StableWordError("Stable-word occurrences are not uniquely keyed")
+    created_keys = sorted(set(mutant_by_key) - set(parent_by_key), key=_key_order)
+    lost_keys = sorted(set(parent_by_key) - set(mutant_by_key), key=_key_order)
+    created = [dict(mutant_by_key[key]) for key in created_keys]
+    lost = [dict(parent_by_key[key]) for key in lost_keys]
+    created_count, lost_count = len(created), len(lost)
+    if len(mutant) - len(parent) != created_count - lost_count:
+        raise StableWordError("Stable-word count reconciliation failed")
+    return {
+        "wt_stable_word_occurrence_count": len(parent),
+        "mutant_stable_word_occurrence_count": len(mutant),
+        "created_stable_word_occurrence_count": created_count,
+        "lost_stable_word_occurrence_count": lost_count,
+        "net_stable_word_occurrence_delta": created_count - lost_count,
+        "created_unique_stable_word_count": len({row["stable_word"] for row in created}),
+        "lost_unique_stable_word_count": len({row["stable_word"] for row in lost}),
+        "longest_created_stable_word_length": max(
+            (int(row["stable_word_length"]) for row in created), default=""
+        ),
+        "longest_lost_stable_word_length": max(
+            (int(row["stable_word_length"]) for row in lost), default=""
+        ),
+        "stable_word_created": bool(created_count),
+        "stable_word_lost": bool(lost_count),
+        "stable_word_effect": classify_stable_word_effect(created_count, lost_count),
+        "stable_word_selection_role": "soft_preference_not_hard_filter",
+        "created_occurrences": created,
+        "lost_occurrences": lost,
+    }
+
+
 def evaluate_single_mutants(
     parent_sequence: str,
     candidate_rows: Sequence[Mapping[str, object]],

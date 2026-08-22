@@ -1,0 +1,31 @@
+{
+  "antifold_same_view_additive_evaluable_count": 102,
+  "candidate_filtering_applied": false,
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\build_expression_double_mutant_plan.py",
+    "--parent19-dir",
+    "docs/result_artifacts/candidate_design/expression_single_mutant_parent19_20260822",
+    "--stable-word-library",
+    "docs/result_artifacts/candidate_design/stable_word_single_mutant_v1_20260819/stable_word_library.csv",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/expression_double_mutant_plan_20260822",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/expression_double_mutant_plan_20260822.json",
+    "--generated-at",
+    "2026-08-22T18:00:00+08:00"
+  ],
+  "elapsed_seconds": 0.130372,
+  "generated_at": "2026-08-22T18:00:00+08:00",
+  "hard_sequence_risk_count": 0,
+  "invalid_same_position_pair_count": 9,
+  "parent_position_count": 13,
+  "parent_single_mutant_count": 19,
+  "python": "3.11.15",
+  "schema_version": 1,
+  "score_sample_count_including_wt": 163,
+  "stable_word_gain_candidate_count": 19,
+  "status": "pass",
+  "theoretical_all_pair_count": 171,
+  "valid_double_mutant_count": 162
+}
