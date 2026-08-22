@@ -1,0 +1,42 @@
+{
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\select_expression_single_mutant_parent19.py",
+    "--trial30",
+    "docs/result_artifacts/candidate_design/expression_single_mutant_trial_selection_v2_20260820/expression_single_mutant_trial30.csv",
+    "--output-dir",
+    "docs/result_artifacts/candidate_design/expression_single_mutant_parent19_20260822",
+    "--run-summary",
+    "docs/run_summaries/candidate_design/expression_single_mutant_parent19_20260822.json",
+    "--generated-at",
+    "2026-08-22T15:00:00+08:00"
+  ],
+  "double_mutant_enumeration_performed": false,
+  "elapsed_seconds": 0.01376,
+  "existing_trial30_artifacts_modified": false,
+  "focal_position_retained_counts": {
+    "1": 3,
+    "27": 3,
+    "30": 3
+  },
+  "generated_at": "2026-08-22T15:00:00+08:00",
+  "invalid_same_position_pair_count": 9,
+  "nonfocal_position_count": 10,
+  "nonfocal_retained_per_position": 1,
+  "outputs": {
+    "audit": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_parent19_20260822\\expression_single_mutant_parent19_audit.csv",
+    "contract": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_parent19_20260822\\expression_single_mutant_parent19_contract.json",
+    "fasta": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_parent19_20260822\\expression_single_mutant_parent19.fasta",
+    "gate": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_parent19_20260822\\expression_single_mutant_parent19_gate.json",
+    "panel": "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\docs\\result_artifacts\\candidate_design\\expression_single_mutant_parent19_20260822\\expression_single_mutant_parent19.csv"
+  },
+  "planned_valid_double_mutant_count": 162,
+  "python": "3.11.15",
+  "schema_version": 1,
+  "selected_parent_single_mutant_count": 19,
+  "selected_position_count": 13,
+  "source_position_count": 13,
+  "source_trial_single_mutant_count": 30,
+  "status": "pass",
+  "theoretical_all_pair_count": 171
+}
