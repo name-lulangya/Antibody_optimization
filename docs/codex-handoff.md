@@ -1,6 +1,6 @@
 # Codex 项目交接
 
-Last updated: 2026-08-22 20:30:00
+Last updated: 2026-08-23 11:39:54
 
 Timezone: Asia/Shanghai (UTC+08:00)
 
@@ -83,6 +83,7 @@ Timezone: Asia/Shanghai (UTC+08:00)
 - 162条双突计划与最终矩阵已回读：候选ID和序列均唯一，每条恰好改变两个不同reported位置，保留末端SSGS和原有Cys且不新增Cys；NetSolP/NanoMelt均162/162通过，NanoMelt全部评分126-aa域并裁末端GS。完整矩阵由远程提交`9061849`同步，结果图已人工检查，三面板分别为ΔU、ΔS和ΔTm分布，黑线为相对WT零变化。
 - 本地 CPU 真实数据运行约 226 秒，无需 Slurm、checkpoint 或 resume。
 - 最终19+11终选本地运行低于1分钟；新增专项测试`4 passed`，全套验证`279 passed, 1 skipped, 4 subtests passed`。最终图已人工检查，162→84→11漏斗、11条家族支持和位置使用情况均可辨识。
+- 当前正式阶段报告和唯一PPT已更新为19条父单突加11条双突路线；报告、演示稿及最终30条CSV/FASTA集中位于`docs/result_artifacts/weekly_report_result/report_2026_W34_nb252_expression_route/`，旧30条单突试选报告不再作为当前展示版本。
 - RP3Net正式运行覆盖47/47条序列；连续、分类、逐折预测、结果图和gate均已生成并完成schema及计数核验。
 - 4,059条输入、4,057条合格序列、1,564条邻域序列、128个位置和847条单突均已回读核对；v2相对v1只新增Q5V，未删除或意外开放其他候选。
 - v2下游preflight为pass：847条候选中846条来自常规非Cys扫描、1条为Q5V共识回变，无多突、新Cys、冻结或界面突变。

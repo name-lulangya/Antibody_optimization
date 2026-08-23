@@ -1,12 +1,5 @@
-# Nb252 BL21表达优化阶段交付包
+# Nb252 BL21表达量优化交付包
 
-本目录面向导师和合作者，包含Nb252表达优化阶段报告、指标说明、30条计算试选和7条候补。
+本目录包含阶段报告、最终30条候选CSV/FASTA、19条父单突证据表和11条双突证据表。
 
-- `Nb252_BL21_expression_optimization_stage_report_2026_W31_W34.docx/pdf`：完整阶段报告。
-- `Nb252_predictor_and_selection_guide.docx/pdf`：一页指标与筛选说明。
-- `Nb252_trial30_single_mutants.fasta/csv`：30条计算试选；尚未等同于最终实验释放。
-- `Nb252_reserve7_single_mutants.fasta/csv`：7条候补。
-
-`trial_selection_order`表示分层展示顺序，不是同一层内部的精确效力排名。
-
-所有候选均为128-aa单突并保留末端SSGS。预测值不是实测表达量、溶解度或Tm。
+最终候选由19条单突和11条双突组成；WT应作为独立实验对照。所有序列均为128 aa并保留末端SSGS。预测值用于实验优先级与风险控制，不是实测表达量、溶解度或Tm。
