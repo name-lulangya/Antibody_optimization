@@ -455,6 +455,9 @@
 - `scripts/candidate_design/score_expression_double_mutant_properties.py`：以`--tool netsolp|nanomelt`在对应固定远程环境评分同一163条样本，要求163/163覆盖，不包含TNP或候选筛选分支。
 - `scripts/candidate_design/finalize_expression_double_mutant_matrix.py`：在项目环境严格联接两工具结果和组成位点AntiFold证据，输出162行完整矩阵、幅度档计数、概览图及release gate；不选最终11条。
 - `scripts/candidate_design/run_expression_double_mutant_scan.sh`与`submit_expression_double_mutant_scan.slurm`：现行远程单作业顺序路线；`batch`、1 GPU、12 CPU、2小时上限，日志写入`logs/expression_double_mutant_scan/`。预计低于5小时，不使用数组、checkpoint或resume；已有结果目录时拒绝覆盖。
+- `antibody_optimization.expression_final_panel`：从冻结的162行双突矩阵按幅度档、硬风险和三项多样性上限执行词典序整数优化；NetSolP U/S合为一个家族，NanoMelt和组成位点最差AntiFold档各为一个家族。返回162行审计、11条双突、分层替补、19+11最终面板和求解目标记录；原始小数不参与同档排序，也不运行任何预测器。
+- `antibody_optimization.expression_final_panel_plot`：从终选审计与11条双突精确绘制162→84→11漏斗、三家族分类证据和reported位置使用情况；不重新筛选候选。
+- `scripts/candidate_design/select_expression_final_panel.py`：本地一次性终选入口；严格联接完整双突矩阵、19条父单突及机器约束，输出CSV/FASTA、选择合同、gate、PNG/SVG和run summary。预计低于1小时，不需要Slurm、checkpoint或resume，且拒绝覆盖既有结果。
 - `antibody_optimization.double_mutant_contacts`：只读取既有258条突变重复和135条位置对WT记录，按`wt_control_id`、重复和seed复算VHH/NK2R配对保持率及逐重复lost/gained source-auth残基；同时产生86条候选汇总和重复一致性，不读取或修改结构、不重新计算几何接触、不筛选候选。
 - `antibody_optimization.double_mutant_analysis`与`scripts/candidate_design/analyze_double_mutant_scan.py`：V2.1仅在四条86候选扫描完整后联接相对WT U/S/预测Tm、TNP flag/PSH、双突PyRosetta能量、实验参考/配对WT接触证据、界面Cα RMSD和化学风险。结构安全主门使用已释放阈值下的配对WT保持率与RMSD；较低实验参考保持率仅标记准备敏感性，不覆盖多目标类别，也不要求接触集合精确一致。输出schema 3的86行联合表、完整258行接触审计、gate和三面板图，不自动选出最终30条。
 - `antibody_optimization.preliminary_panel`

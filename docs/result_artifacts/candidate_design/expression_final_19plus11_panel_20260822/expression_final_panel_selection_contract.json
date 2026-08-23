@@ -1,0 +1,80 @@
+{
+  "active_predictors_rerun": false,
+  "af3_batch_prediction_used": false,
+  "diversity_constraints": {
+    "maximum_selected_per_reported_position_pair": 1,
+    "maximum_uses_per_exact_component_mutation": 2,
+    "maximum_uses_per_reported_position": 3
+  },
+  "eligible_double_definition": {
+    "hard_sequence_risk_count": 0,
+    "moderate_or_strong_adverse_property_bands_allowed": false,
+    "required_moderate_or_strong_favorable_predictor_family_count_minimum": 1,
+    "stable_word_gain_can_rescue_adverse_property_band": false
+  },
+  "evidence_layers": {
+    "A_three_families": 3,
+    "B_two_families": 2,
+    "C_one_family": 1
+  },
+  "generated_at": "2026-08-22T20:30:00+08:00",
+  "interpretation": "The selected sequences are computationally prioritized expression candidates. Categorical magnitude bands, not within-band decimals, drive selection.",
+  "optimization_target": "BL21 expression yield",
+  "optimizer": {
+    "deterministic_final_tiebreak": "alphabetical_candidate_id_rank_sum",
+    "deterministic_final_tiebreak_value": 474,
+    "objectives_in_order": [
+      {
+        "direction": "maximize",
+        "objective": "maximize_A_three_family_count",
+        "optimum": 3
+      },
+      {
+        "direction": "maximize",
+        "objective": "maximize_B_two_family_count",
+        "optimum": 4
+      },
+      {
+        "direction": "maximize",
+        "objective": "maximize_strong_favorable_family_count",
+        "optimum": 8
+      },
+      {
+        "direction": "minimize",
+        "objective": "minimize_soft_sequence_risk_count",
+        "optimum": 0
+      },
+      {
+        "direction": "minimize",
+        "objective": "minimize_adverse_interaction_residual_count",
+        "optimum": 2
+      },
+      {
+        "direction": "maximize",
+        "objective": "maximize_stable_word_gain_count",
+        "optimum": 0
+      },
+      {
+        "direction": "maximize",
+        "objective": "maximize_unique_component_mutations",
+        "optimum": 13
+      },
+      {
+        "direction": "maximize",
+        "objective": "maximize_unique_reported_positions",
+        "optimum": 10
+      }
+    ],
+    "selection_semantics": "lexicographic_categorical_objectives",
+    "solver": "scipy.optimize.milp",
+    "within_band_continuous_values_used_for_selection": false
+  },
+  "predictor_families": {
+    "AntiFold": "worse categorical grade of the two constituent mutations; no double-structure rerun",
+    "NanoMelt": "predicted apparent Tm categorical grade",
+    "NetSolP": "maximum categorical grade of U and S"
+  },
+  "rosetta_used": false,
+  "schema_version": 1,
+  "source_double_candidate_count": 162
+}

@@ -1,0 +1,26 @@
+{
+  "diversity_constraint_validation": "pass",
+  "double_candidate_count": 162,
+  "eligible_double_count": 84,
+  "final_candidate_count": 30,
+  "final_double_count": 11,
+  "final_single_count": 19,
+  "generated_at": "2026-08-22T20:30:00+08:00",
+  "hard_constraint_validation": "pass",
+  "interpretation": "The panel contains 19 frozen approved singles and 11 doubles selected from the complete scored 162-row space. It is recommended for experimental testing, not reported as experimentally validated.",
+  "predictor_rerun_performed": false,
+  "primary_reserve_count": 12,
+  "release": "final_19_single_plus_11_double_panel_released_for_experimental_testing",
+  "reserve_count": 73,
+  "schema_version": 1,
+  "selected_double_count": 11,
+  "selected_evidence_layer_counts": {
+    "A_three_families": 3,
+    "B_two_families": 4,
+    "C_one_family": 4
+  },
+  "selected_stable_word_gain_count": 0,
+  "selected_unique_component_mutation_count": 13,
+  "selected_unique_reported_position_count": 10,
+  "status": "pass"
+}
