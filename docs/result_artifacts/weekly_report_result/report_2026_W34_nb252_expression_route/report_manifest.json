@@ -4,9 +4,35 @@
   "final_candidate_count": 30,
   "single_mutant_count": 19,
   "double_mutant_count": 11,
+  "single_mutant_screen_counts": {
+    "allowed": 847,
+    "magnitude_shortlist": 40,
+    "risk_reviewed": 36,
+    "selected_parent": 19
+  },
   "eligible_double_count": 84,
   "source_double_candidate_count": 162,
-  "report_docx": "Nb252_BL21_expression_optimization_stage_report_2026_W31_W34.docx",
+  "double_evidence_layer_counts": {
+    "total": {
+      "A_three_families": 5,
+      "B_two_families": 48,
+      "C_one_family": 80,
+      "ineligible": 29
+    },
+    "eligible": {
+      "A_three_families": 5,
+      "B_two_families": 39,
+      "C_one_family": 40,
+      "ineligible": 0
+    },
+    "selected": {
+      "A_three_families": 3,
+      "B_two_families": 4,
+      "C_one_family": 4,
+      "ineligible": 0
+    }
+  },
+  "report_docx": "Nb252_BL21_expression_optimization_project_report.docx",
   "presentation_pptx": "Nb252_BL21_expression_optimization_presentation.pptx",
   "delivery_directory": "delivery"
 }
