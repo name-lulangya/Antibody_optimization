@@ -1,0 +1,47 @@
+{
+  "antifold_role": "negative_veto_only_no_positive_selection_credit",
+  "antifold_veto_rule": {
+    "amino_acid_state_count": 20,
+    "delta_log_probability_maximum": -3.0,
+    "rule": "delta_log_probability <= -3 and mutant rank among worst four of 20",
+    "within_position_rank_direction": "1_is_worst",
+    "within_position_rank_maximum": 4
+  },
+  "deliverable": "30 single substitutions only",
+  "generated_at": "2026-08-25T12:00:00+08:00",
+  "historical_19_plus_11_panel_used_for_ranking": false,
+  "magnitude_thresholds": {
+    "nanomelt_tm_c": {
+      "moderate_to_strong_absolute_boundary": 1.5,
+      "negligible_to_weak_absolute_boundary": 0.5,
+      "weak_to_moderate_absolute_boundary": 1.0
+    },
+    "netsolp_s": {
+      "moderate_to_strong_absolute_boundary": 0.03,
+      "negligible_to_weak_absolute_boundary": 0.01,
+      "weak_to_moderate_absolute_boundary": 0.02
+    },
+    "netsolp_u": {
+      "moderate_to_strong_absolute_boundary": 0.015,
+      "negligible_to_weak_absolute_boundary": 0.005,
+      "weak_to_moderate_absolute_boundary": 0.01
+    }
+  },
+  "netsolp_u_and_s_counted_separately": true,
+  "optimization_target": "BL21 expression yield",
+  "positive_selection_metrics": [
+    "NetSolP U",
+    "NetSolP S",
+    "NanoMelt predicted Tm"
+  ],
+  "qualification_layers": {
+    "A_multi_metric": "at least two moderate/strong favorable metrics; no moderate/strong adverse metric",
+    "B_single_metric_strong": "one strong favorable metric; other metrics weak/negligible",
+    "C_single_metric_moderate": "one moderate favorable metric; other metrics weak/negligible",
+    "D_controlled_tradeoff": "at least two moderate/strong favorable metrics and exactly one moderate adverse metric"
+  },
+  "raw_within_band_values_used_for_ranking": false,
+  "schema_version": 3,
+  "selection_order": "maximum three candidates per position; cover first, second, then third candidate per position; within each round use A>B>C>D, strong-positive count, positive count, fewer moderate adverse metrics, fewer soft sequence risks, stable-word gain, then candidate identifier",
+  "stable_word_role": "last-order categorical tie-break only"
+}

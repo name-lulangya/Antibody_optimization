@@ -108,6 +108,15 @@
   - 用途：绘制847→40→36→30漏斗、试选/替补位置分布和30条四指标序数热图；金色星号和边框表示`T99F`稳定词探索候选，三角表示AF3 AntiFold补充来源。
 - `scripts/candidate_design/select_expression_single_mutant_trial_panel.py`
   - 用途：本地生成完整审计CSV、短名单、试选/替补CSV与FASTA、合同、gate、PNG/SVG和run summary；默认拒绝覆盖，不运行任何预测工具。
+- `antibody_optimization.expression_panel_selection_v3`
+  - 用途：执行现行V3的30条表达导向单突选择；NetSolP U、NetSolP S和NanoMelt预测Tm分别作为三个正向指标，AntiFold仅执行负向联合否决，不因改善而增加优先级。
+  - 输入与返回：接收847行稳定词增强性质矩阵、上游gate和覆盖每个位点19种替换的完整AntiFold证据；返回847行审计、61行合格池、30条最终单突、31条替补、亲本序列及精确计数。AntiFold位置排名以WT加19种替换构成完整20状态，包含仅用于排名而禁止作为候选的新Cys状态。
+  - 算法假设：AntiFold仅在`ΔlogP<=-3`且突变残基为位置内最差4/20时否决；U/S/Tm沿用预声明幅度档，至少一个指标须中等或明显改善，明显性质恶化阻断。按位置第1至第3轮覆盖、每位置最多3条，轮内使用分类层级和风险词典序；档内原始小数不排序，稳定词只作末位平局条件。
+  - 明确不支持：把AntiFold改善作为正向证据、把U/S合并为一个指标、连续加权总分、弱变化单独驱动入选、生成双突/多突，或把计算候选称为实验验证的高表达序列。
+- `antibody_optimization.expression_panel_selection_v3_plot`
+  - 用途：绘制847→696→61→30漏斗、合格池与最终面板的位置覆盖，以及最终30条的U/S/Tm三指标序数热图；AntiFold仅在图注中说明否决角色和AF3来源。
+- `scripts/candidate_design/select_expression_single_mutant_panel_v3.py`
+  - 用途：本地一次性生成V3审计、合格池、最终30条与替补CSV/FASTA、合同、gate、600 dpi PNG/SVG和run summary；默认拒绝覆盖，不重新运行任何预测工具。
 - `antibody_optimization.expression_parent_panel`
   - 用途：在不改写现有30条单突试选的前提下，按显式导师/用户决策把它确定性缩减为下一阶段双突枚举所用的19条单突父集。
   - 输入与返回：接收冻结30行试选、按顺序给出的19个紧凑突变代码及逐条理由；返回19行父集、30行保留/淘汰审计和未来组合数。强制F30/Q1/T27各保留3条、其余10个位点各1条，并验证171个无序对中9个同位点互斥对，得到162条合法未来双突。

@@ -1,0 +1,9 @@
+﻿stage,count
+all_constrained_single_mutants,847
+antifold_combined_veto,151
+v3_qualified,61
+qualified_A_multi_metric,8
+qualified_B_single_metric_strong,11
+qualified_C_single_metric_moderate,42
+selected_final30_single,30
+qualified_reserve,31
