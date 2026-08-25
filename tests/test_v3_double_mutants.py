@@ -123,11 +123,18 @@ def test_real_v3_double_stable_words_and_sequence_risks_are_recomputed():
         "N76G;K75E"
     ]
     assert all(row["hard_sequence_risk_count"] == 0 for row in rows)
-    assert Counter(row["soft_sequence_risk_count"] for row in rows) == {0: 78, 1: 23, 2: 1}
+    assert Counter(row["soft_sequence_risk_count"] for row in rows) == {
+        0: 77,
+        1: 24,
+        2: 1,
+    }
     flags = Counter()
     for row in rows:
         flags.update(value for value in row["soft_sequence_risk_flags"].split("|") if value)
-    assert flags == {"more_M_or_W": 13, "new_deamidation_motif": 12}
+    assert flags == {"more_M_or_W": 13, "new_deamidation_motif": 13}
+    compensated = next(row for row in rows if row["mutation_set"] == "N76G;F30N")
+    assert compensated["deamidation_motif_delta"] == 0
+    assert compensated["soft_sequence_risk_flags"] == "new_deamidation_motif"
 
 
 def test_antifold_is_constituent_only_and_never_added():

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "status": "pass_with_one_annotation_erratum",
+  "reviewed_at": "2026-08-25T19:03:05+08:00",
+  "source_commit": "aac1bf8c34dd0452d9e937e86bdcfa0b834462e5",
+  "source_matrix": {
+    "path": "docs/result_artifacts/candidate_design/v3_double_mutant_property_matrix_20260825/v3_double_mutant_property_matrix102.csv",
+    "sha256": "58ca0f59a01fc6067b2092083b1ce8d87c23491aa848355e733ec178e206aedc",
+    "row_count": 102
+  },
+  "plot_source": {
+    "path": "docs/result_artifacts/candidate_design/v3_double_mutant_property_matrix_20260825/v3_double_mutant_property_plot_data.csv",
+    "sha256": "e5bef126b19a17c023005926f2502dc60bb9d7d08459b2b56d3ce70f908b105c",
+    "row_count": 306
+  },
+  "verification": {
+    "score_and_identity_contract": "pass",
+    "netsolp_coverage": "103_of_103_pass_from_source_manifest",
+    "nanomelt_coverage": "103_of_103_pass_from_source_manifest",
+    "raw_remote_score_files_present_locally": false,
+    "raw_remote_score_identity": "bound_by_sha256_in_source_manifest",
+    "candidate_selection_performed": false
+  },
+  "annotation_errata": [
+    {
+      "double_candidate_id": "Nb252_v3_double_N76G__F30N",
+      "mutation_set": "N76G;F30N",
+      "field": "soft_sequence_risk_flags",
+      "source_value": "",
+      "corrected_value": "new_deamidation_motif",
+      "source_soft_sequence_risk_count": 0,
+      "corrected_soft_sequence_risk_count": 1,
+      "deamidation_motif_net_count_delta": 0,
+      "wt_deamidation_motif_starts_reported_1based": [56, 76, 83],
+      "double_deamidation_motif_starts_reported_1based": [30, 56, 83],
+      "created_motif_starts_reported_1based": [30],
+      "lost_motif_starts_reported_1based": [76],
+      "reason": "F30N creates an NG motif at reported position 30 while N76G removes an NT motif at position 76; the net count is zero but the newly created occurrence remains a soft liability.",
+      "prediction_values_changed": false,
+      "downstream_policy": "Treat this double as carrying the F30N deamidation soft risk during expert review and final selection."
+    }
+  ],
+  "visual_review": {
+    "source_plot_numerical_content": "pass",
+    "source_plot_report_ready": false,
+    "issue": "Panel D long review-class labels overlap.",
+    "code_fix": "Use concise explicit display labels; scientific values and classes are unchanged.",
+    "replacement_plot_generated_in_this_review": true,
+    "replacement_plot_visual_check": "pass",
+    "renderer": "antibody_optimization.v3_double_mutant_result_plot.render_v3_double_mutant_results",
+    "python": "3.11.15",
+    "matplotlib": "3.11.1",
+    "outputs": {
+      "png": {
+        "path": "docs/result_artifacts/candidate_design/v3_double_mutant_post_sync_review_20260825/v3_double_mutant_property_overview_readable.png",
+        "sha256": "a959ea830716d056ee3fb56ada853f1b05de9ae327ea953e3424d0cbeb2c2bbb"
+      },
+      "svg": {
+        "path": "docs/result_artifacts/candidate_design/v3_double_mutant_post_sync_review_20260825/v3_double_mutant_property_overview_readable.svg",
+        "sha256": "ee6724f70000dd06f4c6f9f2aff417546c08f91c0594b9c9502d19e68594e2b9"
+      }
+    }
+  },
+  "gate": {
+    "v3_double_complete_property_matrix": "pass",
+    "ready_for_expert_review": true,
+    "final_15_double_mutant_selection": "not_performed",
+    "final_30_panel_release": "not_performed"
+  }
+}

@@ -271,7 +271,14 @@ def _validate_space(sequence: str, positions: Sequence[Mapping[str, object]], ca
 
 
 def sequence_liability_deltas(wt: str, mutant: str) -> dict[str, object]:
-    """Return simple sequence-liability count changes relative to one parent."""
+    """Return sequence-liability count changes and occurrence-aware new flags.
+
+    Count deltas remain ``after - before``.  A ``new_*`` flag is emitted when
+    the mutant creates at least one motif occurrence at a new start position,
+    even when another occurrence is removed and the net count is zero.  This
+    distinction matters for multiple mutants and prevents one substitution
+    from masking a liability introduced by another substitution.
+    """
     patterns = {
         "n_linked_glycosylation_motif": r"N[^P][ST]",
         "deamidation_motif": r"N[GST]",
@@ -280,11 +287,15 @@ def sequence_liability_deltas(wt: str, mutant: str) -> dict[str, object]:
     values: dict[str, object] = {}
     flags: list[str] = []
     for name, pattern in patterns.items():
-        before = len(re.findall(f"(?=({pattern}))", wt))
-        after = len(re.findall(f"(?=({pattern}))", mutant))
-        delta = after - before
+        before_positions = {
+            match.start() for match in re.finditer(f"(?=({pattern}))", wt)
+        }
+        after_positions = {
+            match.start() for match in re.finditer(f"(?=({pattern}))", mutant)
+        }
+        delta = len(after_positions) - len(before_positions)
         values[f"{name}_delta"] = delta
-        if delta > 0:
+        if after_positions - before_positions:
             flags.append(f"new_{name}")
     oxidation_delta = sum(mutant.count(aa) - wt.count(aa) for aa in "MW")
     values["oxidation_susceptible_residue_delta"] = oxidation_delta

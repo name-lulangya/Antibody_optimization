@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections import Counter
+from pathlib import Path
 from typing import Mapping, Sequence
 
 
@@ -102,6 +103,7 @@ def render_v3_double_mutant_results(plot_rows, png_path, svg_path) -> None:
         "moderate_favorable": "#6baed6",
         "strong_favorable": "#08306b",
     }
+    band_labels = {value: value.replace("_", " ") for value in band_order}
     figure, axes = plt.subplots(2, 2, figsize=(11.4, 8.0))
 
     axis = axes[0, 0]
@@ -114,7 +116,13 @@ def render_v3_double_mutant_results(plot_rows, png_path, svg_path) -> None:
             )
             for metric in metric_order
         ]
-        axis.bar(metric_order, values, bottom=bottoms, color=colors[band], label=band)
+        axis.bar(
+            metric_order,
+            values,
+            bottom=bottoms,
+            color=colors[band],
+            label=band_labels[band],
+        )
         bottoms += np.asarray(values)
     axis.set_ylabel("Double mutants")
     axis.set_title("A  Frozen magnitude bands", loc="left")
@@ -185,13 +193,36 @@ def render_v3_double_mutant_results(plot_rows, png_path, svg_path) -> None:
         )
         for row in candidate_rows
     )
-    property_classes = sorted({key[0] for key in table})
+    property_classes = [
+        value
+        for value in (
+            "strong_adverse_property_requires_review",
+            "property_supported_with_moderate_adverse_tradeoff",
+            "property_supported_no_moderate_or_strong_adverse",
+            "no_moderate_or_strong_positive_metric",
+        )
+        if any(key[0] == value for key in table)
+    ]
+    display_labels = {
+        "strong_adverse_property_requires_review": "Strong adverse\nproperty",
+        "property_supported_with_moderate_adverse_tradeoff": (
+            "Supported with\nmoderate trade-off"
+        ),
+        "property_supported_no_moderate_or_strong_adverse": (
+            "Supported; no\nmoderate/strong adverse"
+        ),
+        "no_moderate_or_strong_positive_metric": "No moderate/strong\npositive",
+    }
     routine = [table[(value, "routine_context_recorded")] for value in property_classes]
     detailed = [table[(value, "detailed_review_triggered")] for value in property_classes]
     y = np.arange(len(property_classes))
     axis.barh(y, routine, color="#8bb8d3", label="routine structure context")
     axis.barh(y, detailed, left=routine, color="#efaa62", label="detailed-review trigger")
-    axis.set_yticks(y, [value.replace("_", "\n") for value in property_classes], fontsize=7.5)
+    axis.set_yticks(
+        y,
+        [display_labels[value] for value in property_classes],
+        fontsize=7.5,
+    )
     axis.set_xlabel("Double mutants")
     axis.set_title("D  Post-score review strata", loc="left")
     axis.legend(frameon=False, fontsize=8)
@@ -204,6 +235,13 @@ def render_v3_double_mutant_results(plot_rows, png_path, svg_path) -> None:
     figure.savefig(png_path, dpi=600, bbox_inches="tight")
     figure.savefig(svg_path, bbox_inches="tight")
     plt.close(figure)
+    svg_output = Path(svg_path)
+    svg_text = svg_output.read_text(encoding="utf-8")
+    svg_output.write_text(
+        "\n".join(line.rstrip() for line in svg_text.splitlines()) + "\n",
+        encoding="utf-8",
+        newline="\n",
+    )
 
 
 __all__ = ["build_v3_double_result_plot_rows", "render_v3_double_mutant_results"]
