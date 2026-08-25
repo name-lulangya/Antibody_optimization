@@ -158,6 +158,11 @@
 - `scripts/candidate_design/select_v3_double_mutant_panel.py`
   - 用途：现行V3本地终选唯一入口；默认读取已释放上游制品，一次性写出102行审计、15条双突、最终30条CSV/FASTA、精确绘图数据、PNG/SVG、单一权威manifest和轻量run summary，默认拒绝隐式覆盖且不运行任何预测器。
   - 终选制品：`docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/`是当前15+15候选身份、顺序、理由、合同和gate的唯一权威来源；旧报告、PPT或V1/V2结果不得替代该目录。
+- `scripts/reporting/audit_v3_release.py`
+  - 用途：为V3报告建立只读的报告就绪性审计证据；从实体CSV、FASTA、JSON、结构映射和Git状态独立回接847→30→31→15→102→15→最终30，并核对突变重建、硬约束、manifest哈希、工具适用边界和报告版本状态。
+  - 输入与返回：接收项目根、审计起始提交、生成时间和一个不存在的输出路径；返回机器可读JSON，包含18项完整性检查、阶段计数、最终面板风险、预测器证据边界、溯源缺口和报告同步状态。正式人工审计报告与证据位于`docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/`；后续V3项目报告、PPT和交付材料也统一写入该目录。
+  - 算法假设：当前15＋15 manifest是唯一最终候选权威；历史V1/V2及上游30单突保持只读。自动检查支持但不替代人工科学、结构、风险和图表语义审查。
+  - 明确不支持：修改结果、修复历史制品、重新运行预测器、把预测称为实验结果、证明结合保持，或用旧V2报告/PPT生成V3交付。
 - `scripts/candidate_design/build_v3_double_mutant_plan.py`
   - 用途：本地一次性读取15条权威父单突并释放102条完整双突、3条互斥审计、103条共同评分CSV/FASTA、风险/稳定词/结构初筛、机器合同与manifest、600 dpi PNG/SVG和轻量run summary。默认拒绝覆盖；本地实测低于1分钟，不运行预测器。
 - `scripts/candidate_design/score_v3_double_mutant_properties.py`

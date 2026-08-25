@@ -1,0 +1,406 @@
+{
+  "schema_version": 1,
+  "audit_name": "nb252_v3_report_readiness_audit_evidence",
+  "generated_at": "2026-08-25T21:10:00+08:00",
+  "status": "pass_with_material_caveats",
+  "audit_scope": {
+    "repository": ".",
+    "scope_start_commit": "862394d78d229618d13048229457f9be1ed2f759",
+    "audited_commit": "e44c2ae87f215510ae15729c4dac6553656fc645",
+    "origin_main_commit": "e44c2ae87f215510ae15729c4dac6553656fc645",
+    "active_contract": "V3_15_single_plus_15_double",
+    "historical_v1_v2_used_for_active_selection": false
+  },
+  "source_identity": {
+    "natural_vhh_source_records": 4059,
+    "natural_vhh_eligible_sequences": 4057,
+    "natural_vhh_redundancy_clusters": 3784,
+    "natural_vhh_neighbor_sequences": 1564,
+    "natural_vhh_neighbor_clusters": 1532,
+    "authoritative_parent_sha256": "df5b83ddde8a3486383c12afe45e22af6a358f507eab5503d5dbd4430710288d",
+    "authoritative_parent_length": 128
+  },
+  "stage_counts": {
+    "allowed_single_mutants": 847,
+    "upstream_single_shortlist": 30,
+    "parent_expert_review_pool": 31,
+    "selected_parent_singles": 15,
+    "selected_parent_reported_positions": 12,
+    "theoretical_parent_pairs": 105,
+    "invalid_same_position_pairs": 3,
+    "valid_double_mutants": 102,
+    "selected_double_mutants": 15,
+    "final_panel_sequences": 30
+  },
+  "final_panel_risk_and_evidence": {
+    "selected_parent_structural_assessment_by_confidence": {
+      "reasonable|medium": 4,
+      "reasonable_with_caution|low": 3,
+      "reasonable_with_caution|medium": 6,
+      "structurally_concerning|medium": 2
+    },
+    "selected_parent_solubility_expectation": {
+      "favorable": 6,
+      "neutral_or_uncertain": 7,
+      "unfavorable": 2
+    },
+    "selected_parent_thermal_expectation": {
+      "neutral_or_uncertain": 13,
+      "unfavorable": 2
+    },
+    "selected_parent_missing_experimental_coordinates": [
+      "Nb252 reported_seq L11Y",
+      "Nb252 reported_seq F29Q",
+      "Nb252 reported_seq L11M"
+    ],
+    "selected_parent_within_4A_interface_shell": [
+      "Nb252 reported_seq T99F"
+    ],
+    "selected_double_structure_source": {
+      "experimental_complex_vhh": 11,
+      "af3_vhh_only_due_missing_experimental_coordinate": 4
+    },
+    "selected_double_soft_sequence_risks": {
+      "": 13,
+      "new_deamidation_motif": 1,
+      "more_M_or_W": 1
+    },
+    "selected_double_pair_spatial_class": {
+      "spatially_separated_ca_at_least_10A": 15
+    },
+    "double_sidechain_modeling_performed": false,
+    "selected_t99f_double_count": 0,
+    "final_constructs_using_AF3_only_position_evidence": 7,
+    "final_constructs_with_recorded_soft_sequence_liability": 4,
+    "final_constructs_with_reported_position_30_mutation": 6,
+    "selected_parents_with_antifold_delta_logp_le_minus3_but_gate_pass": [
+      {
+        "mutation": "L11Y",
+        "delta_logp": -11.5449127,
+        "rank_worst_first": 5,
+        "veto_status": "pass"
+      },
+      {
+        "mutation": "K86S",
+        "delta_logp": -5.289510010000001,
+        "rank_worst_first": 14,
+        "veto_status": "pass"
+      },
+      {
+        "mutation": "A23R",
+        "delta_logp": -3.80579424,
+        "rank_worst_first": 12,
+        "veto_status": "pass"
+      },
+      {
+        "mutation": "K75A",
+        "delta_logp": -4.77889156,
+        "rank_worst_first": 12,
+        "veto_status": "pass"
+      },
+      {
+        "mutation": "K43A",
+        "delta_logp": -9.223459720000001,
+        "rank_worst_first": 10,
+        "veto_status": "pass"
+      },
+      {
+        "mutation": "N76G",
+        "delta_logp": -9.0768581,
+        "rank_worst_first": 7,
+        "veto_status": "pass"
+      },
+      {
+        "mutation": "K75E",
+        "delta_logp": -3.40521144,
+        "rank_worst_first": 16,
+        "veto_status": "pass"
+      },
+      {
+        "mutation": "L11M",
+        "delta_logp": -7.42361915,
+        "rank_worst_first": 16,
+        "veto_status": "pass"
+      }
+    ],
+    "final_constructs_with_at_least_one_such_antifold_component": 20
+  },
+  "predictor_validity_and_dependence": {
+    "netsolp_yield_evidence_level": "compatibility_filter_only",
+    "netsolp_nb252_expression_prediction_validated": false,
+    "nanomelt_yield_evidence_level": "no_supported_use",
+    "nanomelt_nb252_expression_prediction_validated": false,
+    "antifold_yield_classification_status": "not_applicable",
+    "antifold_yield_ranking_supported": false,
+    "netsolp_u_s_single847_pearson": 0.28129392166666484,
+    "netsolp_u_s_single847_spearman": 0.26927428840872736,
+    "netsolp_u_s_double102_pearson": 0.3181554139318481,
+    "netsolp_u_s_double102_spearman": 0.30077862155147556,
+    "interpretation": "U and S are separate NetSolP outputs, not independent models."
+  },
+  "machine_readable_semantic_conflicts": {
+    "upstream30_gate_still_claims_final_experimental_release": true,
+    "upstream30_release_string": "v3_final_30_single_mutants_ready_for_experimental_testing",
+    "current_final_authority": "docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/v3_final_panel_manifest.json",
+    "old_critical_interface_mutation_semantics": "cautious_not_forbidden",
+    "current_constraint_freezes_all_24_interface_positions": true
+  },
+  "provenance": {
+    "manifest_hash_bindings_checked": 47,
+    "manifest_hash_mismatch_count": 0,
+    "missing_remote_raw_bindings": [
+      {
+        "manifest": "docs/result_artifacts/candidate_design/v3_double_mutant_property_matrix_20260825/v3_double_mutant_property_matrix_manifest.json",
+        "section": "inputs",
+        "binding": "nanomelt_run",
+        "path": "results/candidate_design/v3_double_mutant_scan_20260825/nanomelt/nanomelt_model_run.json",
+        "expected_sha256": "50b2312214804751df8931cb5a007b1fb989a8753faf55d5bbc4b5d1d630512b",
+        "reason": "referenced_file_not_present_in_local_checkout"
+      },
+      {
+        "manifest": "docs/result_artifacts/candidate_design/v3_double_mutant_property_matrix_20260825/v3_double_mutant_property_matrix_manifest.json",
+        "section": "inputs",
+        "binding": "nanomelt_scores",
+        "path": "results/candidate_design/v3_double_mutant_scan_20260825/nanomelt/nanomelt_sample_scores.csv",
+        "expected_sha256": "7b48fdb68476de733ea81306034c54eaa600bd47727c26df053e077f9eb82a8d",
+        "reason": "referenced_file_not_present_in_local_checkout"
+      },
+      {
+        "manifest": "docs/result_artifacts/candidate_design/v3_double_mutant_property_matrix_20260825/v3_double_mutant_property_matrix_manifest.json",
+        "section": "inputs",
+        "binding": "netsolp_run",
+        "path": "results/candidate_design/v3_double_mutant_scan_20260825/netsolp/netsolp_model_run.json",
+        "expected_sha256": "d64420ad1df11081df996865770df65d05357a4ff4a4d00dcd268160d4b413b3",
+        "reason": "referenced_file_not_present_in_local_checkout"
+      },
+      {
+        "manifest": "docs/result_artifacts/candidate_design/v3_double_mutant_property_matrix_20260825/v3_double_mutant_property_matrix_manifest.json",
+        "section": "inputs",
+        "binding": "netsolp_scores",
+        "path": "results/candidate_design/v3_double_mutant_scan_20260825/netsolp/netsolp_sample_scores.csv",
+        "expected_sha256": "2e71bacafd954e4d39d1759f82b821cabf6fc9d719a022651377737f30b2389c",
+        "reason": "referenced_file_not_present_in_local_checkout"
+      }
+    ],
+    "unexpected_missing_bindings": [],
+    "gate_statuses": {
+      "conservation": "pass",
+      "parent_selection": "pass",
+      "double_plan": "pass",
+      "double_property_matrix": "pass",
+      "double_expert_review": "pass",
+      "final_double_selection": "pass",
+      "final_panel_release": "pass",
+      "report_and_presentation_sync": "not_performed"
+    }
+  },
+  "report_readiness": {
+    "existing_report_is_historical_v2": true,
+    "historical_v2_materials_status": "expected_read_only_provenance_not_a_defect_or_blocker",
+    "existing_report_active_route": "BL21_expression_19_single_plus_11_double",
+    "existing_report_single_mutant_count": 19,
+    "existing_report_double_mutant_count": 11,
+    "existing_report_source_double_candidate_count": 162,
+    "existing_delivery_contains_v2_parent19_and_selected11_files": true,
+    "existing_report_builder_points_to_historical_v2_inputs": true,
+    "v3_report_and_presentation_sync": "not_performed",
+    "v3_report_generation_status": "not_started",
+    "v3_report_directory": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report",
+    "v3_audit_report": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/Nb252_V3_audit_report.md",
+    "v3_audit_evidence": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/Nb252_V3_audit_evidence.json",
+    "new_v3_report_drafting_allowed": true,
+    "new_v3_report_finalization_allowed": false,
+    "v3_report_finalization_status": "pending_generation_identity_check_and_render_QA",
+    "required_action": "generate_new_V3_report_in_shared_V3_report_directory_from_final_manifest"
+  },
+  "machine_checks": [
+    {
+      "name": "authoritative_parent_reconstructed_uniquely",
+      "status": "pass",
+      "evidence": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selection_audit.csv",
+      "details": {
+        "reconstructed_parent_count": 1,
+        "length": 128,
+        "sha256": "df5b83ddde8a3486383c12afe45e22af6a358f507eab5503d5dbd4430710288d",
+        "expected_sha256": "df5b83ddde8a3486383c12afe45e22af6a358f507eab5503d5dbd4430710288d"
+      }
+    },
+    {
+      "name": "allowed_847_single_mutant_space_identity_and_constraints",
+      "status": "pass",
+      "evidence": "docs/result_artifacts/input_baseline/vhh_conservation_consensus_v2_20260819/nb252_allowed_single_mutants.csv",
+      "details": {
+        "rows": 847,
+        "unique_ids": 847,
+        "unique_sequences": 847,
+        "invalid_ids": []
+      }
+    },
+    {
+      "name": "allowed_space_excludes_frozen_and_interface_positions",
+      "status": "pass",
+      "evidence": "docs/result_artifacts/input_baseline/vhh_conservation_consensus_v2_20260819/nb252_expression_design_constraints.json",
+      "details": {
+        "frozen_position_count": 80,
+        "interface_position_count": 24
+      }
+    },
+    {
+      "name": "conserved_nonconsensus_q5_is_consensus_reversion_only",
+      "status": "pass",
+      "evidence": "docs/result_artifacts/input_baseline/vhh_conservation_consensus_v2_20260819/nb252_expression_position_constraints.csv",
+      "details": {
+        "q5_allowed_mutations": [
+          "Nb252 reported_seq Q5V"
+        ]
+      }
+    },
+    {
+      "name": "full_847_property_and_v3_audit_identity_join",
+      "status": "pass",
+      "evidence": "docs/result_artifacts/candidate_design/expression_single_mutant_selection_v3_20260825/expression_single_mutant_v3_audit.csv",
+      "details": {
+        "property_rows": 847,
+        "v3_audit_rows": 847
+      }
+    },
+    {
+      "name": "expert_review_pool_is_immutable30_plus_t99f",
+      "status": "pass",
+      "evidence": "docs/result_artifacts/candidate_design/v3_parent_single_expert_review_20260825/v3_parent_single_expert_review.csv",
+      "details": {
+        "upstream_shortlist_count": 30,
+        "expert_review_count": 31
+      }
+    },
+    {
+      "name": "parent15_identity_and_fasta_match",
+      "status": "pass",
+      "evidence": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selected15.csv",
+      "details": {
+        "selected_parent_count": 15,
+        "unique_reported_positions": 12
+      }
+    },
+    {
+      "name": "complete_double_space_is_15_choose_2_minus_same_position_pairs",
+      "status": "pass",
+      "evidence": "docs/result_artifacts/candidate_design/v3_double_mutant_plan_20260825/v3_double_mutant_candidates102.csv",
+      "details": {
+        "theoretical_pairs": 105,
+        "invalid_same_position_pairs": 3,
+        "expected_valid_pairs": 102,
+        "observed_valid_pairs": 102,
+        "invalid_sequence_ids": []
+      }
+    },
+    {
+      "name": "double_matrix_and_final_audit_identity_join",
+      "status": "pass",
+      "evidence": "docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/v3_double_mutant_final_selection_audit102.csv",
+      "details": {
+        "matrix_rows": 102,
+        "final_audit_rows": 102
+      }
+    },
+    {
+      "name": "selected15_double_identity_join",
+      "status": "pass",
+      "evidence": "docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/v3_double_mutant_selected15.csv",
+      "details": {
+        "selected_double_count": 15
+      }
+    },
+    {
+      "name": "final30_csv_fasta_and_sequence_contract",
+      "status": "pass",
+      "evidence": "docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/v3_final_panel30.csv",
+      "details": {
+        "final_count": 30,
+        "single_count": 15,
+        "double_count": 15,
+        "invalid_ids": [],
+        "frozen_overlap": [],
+        "interface_overlap": []
+      }
+    },
+    {
+      "name": "sequence_structure_mapping_covers_both_models_without_identity_mismatch",
+      "status": "pass",
+      "evidence": "docs/result_artifacts/input_baseline/structure_released_20260810/nb252_sequence_structure_mapping.csv",
+      "details": {
+        "experimental_rows": 128,
+        "af3_rows": 128,
+        "experimental_missing": 13,
+        "experimental_terminal_flank": 2,
+        "af3_observed": 126
+      }
+    },
+    {
+      "name": "selected_double_predictor_band_and_antifold_contract",
+      "status": "pass",
+      "evidence": "docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/v3_double_mutant_final_selection_audit102.csv",
+      "details": {
+        "selected_with_three_positive": 6,
+        "selected_with_two_positive": 9,
+        "selected_soft_risk_flags": {
+          "": 13,
+          "new_deamidation_motif": 1,
+          "more_M_or_W": 1
+        },
+        "selected_structure_sources": {
+          "experimental_complex_vhh": 11,
+          "af3_vhh_only_due_missing_experimental_coordinate": 4
+        }
+      }
+    },
+    {
+      "name": "nanomelt_double_matrix_uses_declared_126aa_scope",
+      "status": "pass",
+      "evidence": "docs/result_artifacts/candidate_design/v3_double_mutant_property_matrix_20260825/v3_double_mutant_property_matrix102.csv",
+      "details": {
+        "candidate_rows": 102
+      }
+    },
+    {
+      "name": "t99f_double_candidates_follow_generic_rules",
+      "status": "pass",
+      "evidence": "docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/v3_double_mutant_final_selection_audit102.csv",
+      "details": {}
+    },
+    {
+      "name": "n76g_f30n_deamidation_erratum_is_applied_as_overlay",
+      "status": "pass",
+      "evidence": "docs/result_artifacts/candidate_design/v3_double_mutant_post_sync_review_20260825/v3_double_mutant_post_sync_review.json",
+      "details": {
+        "corrected_rows": [
+          "Nb252_v3_double_N76G__F30N"
+        ]
+      }
+    },
+    {
+      "name": "available_manifest_hash_bindings_match",
+      "status": "pass",
+      "evidence": "four active V3 stage manifests",
+      "details": {
+        "checked_binding_count": 47,
+        "mismatch_count": 0
+      }
+    },
+    {
+      "name": "no_unexpected_missing_manifest_bound_files",
+      "status": "pass",
+      "evidence": "four active V3 stage manifests",
+      "details": {
+        "expected_missing_remote_raw_count": 4,
+        "unexpected_missing": []
+      }
+    }
+  ],
+  "machine_check_summary": {
+    "total": 18,
+    "passed": 18,
+    "failed": 0,
+    "failed_names": []
+  }
+}
