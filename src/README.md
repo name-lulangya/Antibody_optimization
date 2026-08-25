@@ -147,6 +147,17 @@
   - 用途：从V3计划逐候选表生成精确绘图数据，展示105→102枚举、15条父单突的合法配对矩阵、实验/AF3结构初筛来源和后续详细审查触发计数；不改变候选、风险或评分合同。
 - `antibody_optimization.v3_double_mutant_result_plot`
   - 用途：在两工具103/103覆盖后，从102行完整性质矩阵绘制NetSolP ΔU、NetSolP ΔS、NanoMelt预测ΔTm及模型非加和诊断；只展示实算结果和预声明幅度档，不执行最终15条选择。
+- `antibody_optimization.v3_double_mutant_selection`
+  - 用途：读取102行完整性质矩阵、15条权威父单突及其专家审计，并叠加不改写源矩阵的责任基序勘误；为全部102条生成共同字段的双突专家审查，显式冻结15条双突并组装15单突加15双突的V3最终面板。
+  - 输入与返回：接收双突矩阵、父单突CSV/31行审计和post-sync勘误JSON；返回102行审计、15行双突、30行面板、复核/选择事实与机器选择策略。58条`enhanced`与44条`standard`只表示解释深度；所有双突使用相同资格和选择规则，`T99F`没有双突专属触发、配额或例外。
+  - 算法假设：U/S/Tm冻结幅度档而非档内小数驱动选择；AntiFold只保留组成单突的负向否决证据，不相加或生成双突分数。专家综合仅基于WT位点几何、父单突审查、完整双突序列风险和性质档，未执行双突侧链建模，也不把预测称为实验结果。
+  - 明确不支持：读取V1/V2终选、修改上游矩阵/父单突、按复核深度或稳定词直接筛选、重新运行预测器、生成父集外双突或三突。
+- `antibody_optimization.v3_double_mutant_selection_plot`
+  - 用途：从102行终选审计和15条双突生成确定性绘图数据与三面板总览，分别展示审查深度/处置、入选U/S/Tm幅度档和父单突使用覆盖。
+  - 算法假设：展示顺序明确不是效力排名；复核深度不是漏斗，标记只说明AF3-only、软风险或稳定词证据，不改变选择。
+- `scripts/candidate_design/select_v3_double_mutant_panel.py`
+  - 用途：现行V3本地终选唯一入口；默认读取已释放上游制品，一次性写出102行审计、15条双突、最终30条CSV/FASTA、精确绘图数据、PNG/SVG、单一权威manifest和轻量run summary，默认拒绝隐式覆盖且不运行任何预测器。
+  - 终选制品：`docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/`是当前15+15候选身份、顺序、理由、合同和gate的唯一权威来源；旧报告、PPT或V1/V2结果不得替代该目录。
 - `scripts/candidate_design/build_v3_double_mutant_plan.py`
   - 用途：本地一次性读取15条权威父单突并释放102条完整双突、3条互斥审计、103条共同评分CSV/FASTA、风险/稳定词/结构初筛、机器合同与manifest、600 dpi PNG/SVG和轻量run summary。默认拒绝覆盖；本地实测低于1分钟，不运行预测器。
 - `scripts/candidate_design/score_v3_double_mutant_properties.py`

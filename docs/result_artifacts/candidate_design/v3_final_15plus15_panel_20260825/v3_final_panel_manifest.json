@@ -1,0 +1,192 @@
+{
+  "facts": {
+    "adverse_review_trigger_count": 7,
+    "enhanced_expert_review_count": 58,
+    "final_double_count": 15,
+    "final_panel_candidate_count": 30,
+    "final_single_count": 15,
+    "local_geometry_review_trigger_count": 12,
+    "maximum_exact_parent_usage": 3,
+    "maximum_reported_position_usage": 4,
+    "multi_metric_review_trigger_count": 42,
+    "selected_af3_only_pair_count": 4,
+    "selected_double_mutant_count": 15,
+    "selected_local_pair_count": 0,
+    "selected_parent_component_count": 13,
+    "selected_reported_position_count": 10,
+    "selected_soft_risk_pair_count": 2,
+    "selected_t99f_pair_count": 0,
+    "selected_three_metric_positive_count": 6,
+    "selected_two_metric_positive_count": 9,
+    "selected_unique_position_pair_count": 15,
+    "source_double_candidate_count": 102,
+    "stable_word_specific_selection_rule_applied": false,
+    "standard_common_review_trigger_count": 44,
+    "standard_expert_review_count": 44,
+    "t99f_double_count": 14,
+    "t99f_enhanced_review_count": 2,
+    "t99f_specific_selection_rule_applied": false,
+    "t99f_standard_review_count": 12
+  },
+  "gate": {
+    "final_15_double_mutant_selection": "pass",
+    "final_30_panel_release": "pass",
+    "report_and_presentation_sync": "not_performed",
+    "v3_double_expert_review": "pass"
+  },
+  "generated_at": "2026-08-25T19:40:30+08:00",
+  "inputs": {
+    "double_property_matrix": {
+      "path": "docs/result_artifacts/candidate_design/v3_double_mutant_property_matrix_20260825/v3_double_mutant_property_matrix102.csv",
+      "sha256": "58ca0f59a01fc6067b2092083b1ce8d87c23491aa848355e733ec178e206aedc"
+    },
+    "double_property_matrix_manifest": {
+      "path": "docs/result_artifacts/candidate_design/v3_double_mutant_property_matrix_20260825/v3_double_mutant_property_matrix_manifest.json",
+      "sha256": "3931436fde298d7836a75a4d56652fc6ebf7320efbdde36442611b7d67c30ab6"
+    },
+    "parent_selected15": {
+      "path": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selected15.csv",
+      "sha256": "db9475d5ea08e6e87d78538e181350e0368eb70407a57de58e7a49ce643735d5"
+    },
+    "parent_selection_audit31": {
+      "path": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selection_audit.csv",
+      "sha256": "fc30c408242b49e7b19d1453e19ae964c96a99c9347cee5de70a229fb1422b57"
+    },
+    "parent_selection_manifest": {
+      "path": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selection_manifest.json",
+      "sha256": "a01ad9250ce7eeb0e7ffa7ed9b37bf1c9daab6b00ffc93ec1b7bdb12dfae208a"
+    },
+    "post_sync_annotation_review": {
+      "path": "docs/result_artifacts/candidate_design/v3_double_mutant_post_sync_review_20260825/v3_double_mutant_post_sync_review.json",
+      "sha256": "9ae0db780686f3a71ae8794fa595401945d9a28c9e67537d214f0c563d396daf"
+    }
+  },
+  "optimization_target": "Nb252 BL21 expression yield",
+  "outputs": {
+    "audit": {
+      "path": "docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/v3_double_mutant_final_selection_audit102.csv",
+      "sha256": "db479b211c52ebc5d9bf93f2c9918fa422c30e989df109a4c32449835011c58d"
+    },
+    "fasta": {
+      "path": "docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/v3_final_panel30.fasta",
+      "sha256": "a4b9169bfc27faac1a1c7413d49c830b1d10882dee8e4dd4a0e7441ad391010d"
+    },
+    "final_panel": {
+      "path": "docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/v3_final_panel30.csv",
+      "sha256": "30ab53022a2c17f063bec0eba61f6096f724adac9e7856718a962965d4da2175"
+    },
+    "plot_data": {
+      "path": "docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/v3_final_panel_plot_data.csv",
+      "sha256": "b8460f17eee4ef0a364ca06d504da60e779703e1d7f914c22a3149bc39848d19"
+    },
+    "png": {
+      "path": "docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/v3_final_panel_overview.png",
+      "sha256": "0f4bc679265f123aaa51c5a22b0e95d42a68e8c8a747d2502baac20cad760cb0"
+    },
+    "selected": {
+      "path": "docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/v3_double_mutant_selected15.csv",
+      "sha256": "efb61dba0e356da1f5d0327fefe199f499d645f6ae49e579347bdc2c050dffa2"
+    },
+    "svg": {
+      "path": "docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/v3_final_panel_overview.svg",
+      "sha256": "0f37de97300fa2a720c4be250b0db18e9e35154b119f797fe31ccd5fb7aa54a4"
+    }
+  },
+  "review_depth_contract": {
+    "enhanced_definition": "at least two moderate/strong favorable metrics with no moderate/strong adverse, or any moderate/strong adverse, or a non-separated WT site pair",
+    "interpretation": "review detail only; not eligibility, rank, or elimination",
+    "standard_definition": "all remaining candidates"
+  },
+  "run_summary": "docs/run_summaries/candidate_design/v3_final_15plus15_panel_20260825/run_summary.json",
+  "runtime_contract": {
+    "checkpoint_or_resume": false,
+    "command_argv": [
+      "D:\\miniconda\\envs\\ab_optim\\python.exe",
+      "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\select_v3_double_mutant_panel.py",
+      "--overwrite"
+    ],
+    "elapsed_seconds": 2.112708,
+    "exceeds_five_hours": false,
+    "exceeds_one_hour": false,
+    "execution": "local_cpu",
+    "expected_runtime": "under_one_minute",
+    "python": "3.11.15",
+    "slurm_required": false
+  },
+  "schema_version": 1,
+  "scientific_scope": "Complete a common expert review of all 102 valid V3 doubles, use enhanced versus standard only as review depth, explicitly select 15 doubles, and release the final 15-single plus 15-double panel.",
+  "selected_double_ids_in_display_order_not_efficacy_rank": [
+    "Nb252_v3_double_F30S__Q5V",
+    "Nb252_v3_double_S55G__K43A",
+    "Nb252_v3_double_K86S__Q5V",
+    "Nb252_v3_double_L11Y__K86S",
+    "Nb252_v3_double_S55G__F30N",
+    "Nb252_v3_double_N76G__L11M",
+    "Nb252_v3_double_F30S__K75E",
+    "Nb252_v3_double_K86S__K43A",
+    "Nb252_v3_double_A23R__S55G",
+    "Nb252_v3_double_K43A__N76G",
+    "Nb252_v3_double_K75E__Q1D",
+    "Nb252_v3_double_L11Y__K75A",
+    "Nb252_v3_double_Q5V__N76G",
+    "Nb252_v3_double_L11Y__Q1D",
+    "Nb252_v3_double_F30S__Q1D"
+  ],
+  "selected_double_mutation_sets_in_display_order_not_efficacy_rank": [
+    "F30S;Q5V",
+    "S55G;K43A",
+    "K86S;Q5V",
+    "L11Y;K86S",
+    "S55G;F30N",
+    "N76G;L11M",
+    "F30S;K75E",
+    "K86S;K43A",
+    "A23R;S55G",
+    "K43A;N76G",
+    "K75E;Q1D",
+    "L11Y;K75A",
+    "Q5V;N76G",
+    "L11Y;Q1D",
+    "F30S;Q1D"
+  ],
+  "selection_policy": {
+    "antifold_role": "constituent_negative_veto_only_no_double_score_no_positive_rank",
+    "double_sidechain_modeling_performed": false,
+    "expert_hard_exclusion_role": "only_high_confidence_concrete_physical_risk; none newly asserted from unmodeled double side chains",
+    "magnitude_bands_drive_selection": true,
+    "mutation_specific_quota_or_exception": false,
+    "portfolio_constraints": {
+      "maximum_af3_only_pairs": 4,
+      "maximum_exact_parent_usage": 3,
+      "maximum_local_pairs": 1,
+      "maximum_reported_position_usage": 4,
+      "maximum_soft_risk_pairs": 2,
+      "maximum_unordered_position_pair_usage": 1,
+      "minimum_parent_component_coverage": 10,
+      "minimum_reported_position_coverage": 9
+    },
+    "positive_metrics": [
+      "NetSolP U",
+      "NetSolP S",
+      "NanoMelt predicted Tm"
+    ],
+    "predictors_rerun": false,
+    "review_depth_role": "documentation_depth_only_not_eligibility_or_rank",
+    "stable_word_role": "uniform_soft_evidence_only_not_a_selection_requirement",
+    "within_band_raw_decimals_used_as_rank": false
+  },
+  "status": "pass",
+  "verification": {
+    "all_102_doubles_share_common_review_fields": true,
+    "antifold_is_constituent_negative_veto_only": true,
+    "double_sidechain_modeling_performed": false,
+    "final_sequences_are_unique_128aa_and_preserve_terminal_ssgs": true,
+    "post_sync_deamidation_erratum_applied_as_overlay": true,
+    "review_depth_does_not_control_selection": true,
+    "selected_doubles_have_no_moderate_or_strong_adverse_band": true,
+    "selected_doubles_have_two_or_three_positive_bands": true,
+    "source_matrix_and_parent_artifacts_modified": false,
+    "t99f_has_no_mutation_specific_rule": true
+  },
+  "workflow": "v3_double_mutant_final_selection"
+}
