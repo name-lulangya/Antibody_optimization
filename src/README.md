@@ -117,6 +117,15 @@
   - 用途：绘制847→696→61→30漏斗、合格池与最终面板的位置覆盖，以及最终30条的U/S/Tm三指标序数热图；AntiFold仅在图注中说明否决角色和AF3来源。
 - `scripts/candidate_design/select_expression_single_mutant_panel_v3.py`
   - 用途：本地一次性生成V3审计、合格池、最终30条与替补CSV/FASTA、合同、gate、600 dpi PNG/SVG和run summary；默认拒绝覆盖，不重新运行任何预测工具。
+- `antibody_optimization.vhh_expert_review`与`antibody_optimization.vhh_expert_review_assessments`
+  - 用途：为V3上游30条单突短名单生成不参与排序的结构/VHH专家审查。实验NK2R–Nb252复合物有坐标时为主证据；实验缺失位置仅用独立AF3 VHH上下文并固定低置信度。
+  - 输入与返回：接收30条短名单、reported↔结构映射、实验/AF3坐标、FR对齐变换和冻结界面集合；返回WT相对SASA、主链几何、局部邻居、受体/界面壳层距离、模型敏感性、突变化学变化，以及逐候选结构、溶解度和热稳定性专家判断。
+  - 算法假设：相对SASA采用Shrake–Rupley和Tien最大ASA；暴露档仅为描述性环境标签。专家判断是待实验检验的机制假设，不是预测器分数、能量计算或父单突选择。
+- `scripts/candidate_design/render_v3_parent_single_structure_review_chimerax.py`
+  - 用途：在ChimeraX 1.12空白会话中为30条候选分别从原始来源坐标重新打开模型、执行单点Dunbrack `swapaa`并保存局部PNG；实验缺失位置用AF3，缺口边界和CDR3另存AF3敏感性视图。
+  - 明确不支持：保存突变结构、松弛主链、提取定量clash、计算能量或选择候选；每张图仅代表固定主链上的一个一阶rotamer视图。
+- `scripts/candidate_design/build_v3_parent_single_expert_review.py`
+  - 用途：联接上游U/S/Tm/AntiFold/稳定词证据、结构环境、逐候选专家判断和真实ChimeraX视图，生成30行UTF-8-BOM评价CSV及manifest。入口固定保持`parent_single_selection=not_performed`，默认拒绝覆盖。
 - `antibody_optimization.expression_parent_panel`
   - 用途：在不改写现有30条单突试选的前提下，按显式导师/用户决策把它确定性缩减为下一阶段双突枚举所用的19条单突父集。
   - 输入与返回：接收冻结30行试选、按顺序给出的19个紧凑突变代码及逐条理由；返回19行父集、30行保留/淘汰审计和未来组合数。强制F30/Q1/T27各保留3条、其余10个位点各1条，并验证171个无序对中9个同位点互斥对，得到162条合法未来双突。

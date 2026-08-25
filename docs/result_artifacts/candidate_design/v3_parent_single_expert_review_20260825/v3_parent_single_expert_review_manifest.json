@@ -1,0 +1,156 @@
+{
+  "counts": {
+    "af3_only_candidate_rows": 4,
+    "candidate_rows": 30,
+    "experimental_primary_candidate_rows": 26,
+    "near_interface_shell": {
+      "borderline_4_to_4p5A_from_hard_interface_residue": 1,
+      "not_evaluable_experimental_coordinates_missing": 4,
+      "outside_4p5A_hard_interface_shell": 18,
+      "within_4A_of_hard_interface_residue": 7
+    },
+    "solubility_expectation": {
+      "favorable": 6,
+      "neutral_or_uncertain": 17,
+      "unfavorable": 7
+    },
+    "structural_assessment": {
+      "indeterminate": 1,
+      "reasonable": 7,
+      "reasonable_with_caution": 13,
+      "structurally_concerning": 9
+    },
+    "thermal_stability_expectation": {
+      "neutral_or_uncertain": 21,
+      "unfavorable": 9
+    },
+    "unique_positions": 23,
+    "visual_manifest_rows": 61
+  },
+  "evidence_hierarchy": {
+    "modeled_fallback": "AF3 VHH-only context only for missing experimental positions",
+    "not_used": [
+      "historical Rosetta or affinity scores",
+      "NK2R-NKA ligand complex",
+      "unverified AF3 B_iso_or_equiv-to-pLDDT interpretation"
+    ],
+    "primary": "released experimental NK2R-Nb252 complex when coordinates exist",
+    "sensitivity": "AF3 exposure/backbone comparison for observed positions"
+  },
+  "expert_rule_scope": [
+    "buried charge, large buried size increase, cavity formation, and beta-strand Gly/Pro risk",
+    "surface hydrophobe or charge-patch changes",
+    "disulfide-neighborhood and intramolecular-contact disruption",
+    "Gly turn compatibility, Met oxidation, Asn deamidation, and N-terminal construct context",
+    "VHH framework/CDR packing and model-source uncertainty"
+  ],
+  "gate": {
+    "af3_only_rows_explicitly_labeled_and_low_confidence": true,
+    "all_30_have_chimerax_single_rotamer_views": true,
+    "all_30_have_structure_source_and_expert_judgement": true,
+    "expert_review": "pass",
+    "parent_single_selection": "not_performed"
+  },
+  "generated_at": "2026-08-25T12:30:00+08:00",
+  "inputs": [
+    "docs/result_artifacts/candidate_design/expression_single_mutant_selection_v3_20260825/expression_single_mutant_v3_final30.csv",
+    "docs/result_artifacts/input_baseline/structure_released_20260810/nb252_sequence_structure_mapping.csv",
+    "data/structures/cxs_exports/NK2R-252__native.cif",
+    "data/structures/cxs_exports/fold_2r_252_nomg_model_0__native.cif",
+    "docs/result_artifacts/input_baseline/structure_released_20260810/structure_alignment_summary.json",
+    "docs/result_artifacts/input_baseline/interface_released_20260810/interface_manifest.json",
+    "docs/result_artifacts/candidate_design/v3_parent_single_expert_review_20260825/structure_views/structure_review_views.csv"
+  ],
+  "output": {
+    "path": "docs/result_artifacts/candidate_design/v3_parent_single_expert_review_20260825/v3_parent_single_expert_review.csv",
+    "sha256": "e2013bf95c91dd3894a1139ea657883756a7d44a09bc93694c1aa7b989e9e427"
+  },
+  "parent_single_selection_status": "not_performed",
+  "references": [
+    {
+      "scope": "ChimeraX single-residue rotamer visualization",
+      "url": "https://www.rbvi.ucsf.edu/chimerax/docs/user/commands/swapaa.html"
+    },
+    {
+      "scope": "relative solvent accessibility normalization",
+      "url": "https://doi.org/10.1371/journal.pone.0080635"
+    },
+    {
+      "scope": "VHH framework/CDR3 intramolecular interactions and thermal stability",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36153698/"
+    },
+    {
+      "scope": "VHH framework-2 solubility and stability tradeoffs",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15913651/"
+    }
+  ],
+  "runtime_contract": {
+    "checkpoint_or_resume": false,
+    "elapsed_seconds_for_table_build": 2.013873,
+    "execution": "local_cpu_plus_local_chimerax_1_12_rendering",
+    "expected_runtime": "under_one_hour",
+    "slurm_required": false
+  },
+  "schema_version": 1,
+  "scientific_scope": "Non-ranking expert review of the active V3 30-single shortlist; hypotheses for later parent selection and experimental testing.",
+  "selection_performed": false,
+  "software": {
+    "biopython": "1.87",
+    "chimerax": "1.12",
+    "numpy": "2.4.6",
+    "python": "3.11.15"
+  },
+  "status": "pass",
+  "structure_methods": {
+    "af3_alignment": "released framework-C-alpha Kabsch transform; no outlier rejection",
+    "backbone": "phi/psi heuristic only; not DSSP",
+    "descriptive_exposure_bins": {
+      "buried": "RSA <= 0.10",
+      "exposed": "RSA >= 0.25",
+      "partially_buried": "0.10 < RSA < 0.25",
+      "scope": "project-descriptive bins, not predictor or release thresholds"
+    },
+    "interface_shell": "WT sidechain heavy atom to any frozen interface-residue heavy atom; <=4.0 A near, >4.0 to <=4.5 A borderline",
+    "mutant_visualization": "ChimeraX 1.12 swapaa single-residue Dunbrack rotamer, criteria c-h-p; first-order sidechain view only, no backbone relaxation or energy calculation",
+    "neighbors": "WT sidechain heavy atom to VHH polymer heavy atom minimum distance <4.5 A",
+    "receptor_distance": "WT sidechain heavy atom to receptor polymer heavy atom minimum distance",
+    "relative_sasa_normalization": "Tien et al. 2013 theoretical maximum ASA; DOI 10.1371/journal.pone.0080635",
+    "sasa": "Biopython ShrakeRupley, 200 sphere points, isolated-chain residue SASA"
+  },
+  "upstream_shortlist_identity": {
+    "candidate_count": 30,
+    "candidate_ids": [
+      "Nb252_expr_seq011_L11Y",
+      "Nb252_expr_seq030_F30S",
+      "Nb252_expr_seq086_K86S",
+      "Nb252_expr_seq023_A23R",
+      "Nb252_expr_seq005_Q5V",
+      "Nb252_expr_seq049_A49F",
+      "Nb252_expr_seq055_S55G",
+      "Nb252_expr_seq075_K75A",
+      "Nb252_expr_seq001_Q1A",
+      "Nb252_expr_seq028_I28Y",
+      "Nb252_expr_seq029_F29Q",
+      "Nb252_expr_seq032_Y32L",
+      "Nb252_expr_seq040_A40G",
+      "Nb252_expr_seq043_K43A",
+      "Nb252_expr_seq050_S50F",
+      "Nb252_expr_seq060_A60D",
+      "Nb252_expr_seq069_I69V",
+      "Nb252_expr_seq071_R71G",
+      "Nb252_expr_seq076_N76G",
+      "Nb252_expr_seq079_Y79T",
+      "Nb252_expr_seq083_N83A",
+      "Nb252_expr_seq096_A96R",
+      "Nb252_expr_seq099_T99N",
+      "Nb252_expr_seq030_F30N",
+      "Nb252_expr_seq086_K86A",
+      "Nb252_expr_seq075_K75E",
+      "Nb252_expr_seq011_L11M",
+      "Nb252_expr_seq049_A49M",
+      "Nb252_expr_seq001_Q1D",
+      "Nb252_expr_seq023_A23Q"
+    ]
+  },
+  "workflow": "v3_parent_single_structure_and_vhh_expert_review"
+}
