@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Render mutation-aware ChimeraX views for the active V3 30-single shortlist.
+"""Render mutation-aware ChimeraX views for the active V3 parent-review pool.
 
 Run this script in a blank UCSF ChimeraX 1.12 session with ``runscript`` (the
 intended batch route is ``--offscreen``).  The output contains:
 
 * the two source-aware position overviews used by the earlier review route;
 * one wild-type local overview for each of the 23 unique reported positions;
-* one independently opened and mutated primary-source view for each of the 30
-  candidates; and
+* one independently opened and mutated primary-source view for each review
+  candidate; and
 * additional AF3 sensitivity views for reported positions 23 and 30 (the two
   experimental gap boundaries) and positions 96 and 99 (CDR3).
 
@@ -30,10 +30,20 @@ import tempfile
 from pathlib import Path
 
 
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "src"))
+
+from antibody_optimization.v3_expert_review_pool import (  # noqa: E402
+    V3_REVIEW_POOL_COUNT,
+    V3_SUPPLEMENTAL_T99F_ID,
+    build_v3_review_candidate_pool,
+)
+
+
 EXPERIMENTAL_MODEL = "NK2R-252.pdb"
 AF3_MODEL = "fold_2r_252_nomg_model_0.cif"
 
-EXPECTED_CANDIDATE_COUNT = 30
+EXPECTED_CANDIDATE_COUNT = V3_REVIEW_POOL_COUNT
 EXPECTED_UNIQUE_POSITION_COUNT = 23
 
 # These are sensitivity views, not replacement evidence for the experimental
@@ -58,7 +68,8 @@ AA_THREE_LETTER = dict(
 )
 
 VIEW_MANIFEST_FIELDS = """
-view_id view_kind candidate_id selection_order_v3 mutation_reported_label
+view_id view_kind candidate_id review_pool_order review_pool_role
+selection_order_v3_upstream mutation_reported_label
 reported_sequence_index_1based wt_residue mutant_residue imgt_position_label region
 source_model_name source_model_role source_coordinate_path structure_evidence_scope
 sensitivity_reason auth_asym_id auth_seq_id insertion_code coordinate_status
@@ -71,10 +82,16 @@ molecular_structure_saved candidate_selection_performed chimerax_target_version
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--candidate-csv", type=Path, required=True)
+    parser.add_argument("--supplemental-candidate-csv", type=Path, required=True)
+    parser.add_argument(
+        "--supplemental-candidate-id",
+        default=V3_SUPPLEMENTAL_T99F_ID,
+    )
     parser.add_argument("--mapping-csv", type=Path, required=True)
     parser.add_argument("--experimental-cif", type=Path, required=True)
     parser.add_argument("--af3-cif", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--overwrite", action="store_true")
     return parser.parse_args(argv)
 
 
@@ -85,6 +102,10 @@ def main(session, argv: list[str]) -> int:
 
     args = parse_args(argv)
     candidate_path = _require_file(args.candidate_csv, "candidate CSV")
+    supplemental_candidate_path = _require_file(
+        args.supplemental_candidate_csv,
+        "supplemental candidate CSV",
+    )
     mapping_path = _require_file(args.mapping_csv, "sequence/structure mapping CSV")
     source_paths = {
         EXPERIMENTAL_MODEL: _require_file(
@@ -93,11 +114,25 @@ def main(session, argv: list[str]) -> int:
         AF3_MODEL: _require_file(args.af3_cif, "AF3 VHH mmCIF"),
     }
     output = args.output_dir.resolve()
-    if output.exists():
+    if args.overwrite:
+        project_root = ROOT.resolve()
+        try:
+            output.relative_to(project_root)
+        except ValueError as error:
+            raise ValueError(
+                "--overwrite is restricted to an output directory inside the project"
+            ) from error
+        if output == project_root:
+            raise ValueError("Refusing to overwrite the project root")
+    if output.exists() and not args.overwrite:
         raise FileExistsError(f"Output directory already exists: {output}")
     output.parent.mkdir(parents=True, exist_ok=True)
 
-    candidates = _csv(candidate_path)
+    candidates = build_v3_review_candidate_pool(
+        _csv(candidate_path),
+        _csv(supplemental_candidate_path),
+        supplemental_candidate_ids=(args.supplemental_candidate_id,),
+    )
     mappings = _mapping(_csv(mapping_path))
     plan = build_review_plan(candidates, mappings)
 
@@ -164,6 +199,8 @@ def main(session, argv: list[str]) -> int:
             )
 
         _write_csv(stage / "structure_review_views.csv", manifest_rows)
+        if output.exists():
+            shutil.rmtree(output)
         stage.replace(output)
     except Exception:
         shutil.rmtree(stage, ignore_errors=True)
@@ -208,7 +245,9 @@ def build_review_plan(
                 "view_id": f"site_overview_reported_pos_{position:03d}",
                 "view_kind": "wild_type_site_overview",
                 "candidate_id": "",
-                "selection_order_v3": "",
+                "review_pool_order": "",
+                "review_pool_role": "",
+                "selection_order_v3_upstream": "",
                 "mutation_reported_label": "",
                 "reported_sequence_index_1based": position,
                 "wt_residue": representative["wt_residue"],
@@ -300,7 +339,7 @@ def _candidate_view(
     view_kind: str,
     sensitivity_reason: str,
 ) -> dict[str, object]:
-    order = int(row["selection_order_v3"])
+    order = int(row["review_pool_order"])
     position = int(row["reported_sequence_index_1based"])
     mutation_token = f"{row['wt_residue']}{position}{row['mutant_residue']}"
     suffix = "primary" if view_kind == "candidate_primary" else "af3_sensitivity"
@@ -309,7 +348,9 @@ def _candidate_view(
         "view_id": view_id,
         "view_kind": view_kind,
         "candidate_id": row["candidate_id"],
-        "selection_order_v3": order,
+        "review_pool_order": order,
+        "review_pool_role": row["review_pool_role"],
+        "selection_order_v3_upstream": row["selection_order_v3"],
         "mutation_reported_label": row["mutation_reported_label"],
         "reported_sequence_index_1based": position,
         "wt_residue": row["wt_residue"],
@@ -378,7 +419,9 @@ def _grouped_overview_plan(
                 "view_id": view_id,
                 "view_kind": view_kind,
                 "candidate_id": "",
-                "selection_order_v3": "",
+                "review_pool_order": "",
+                "review_pool_role": "",
+                "selection_order_v3_upstream": "",
                 "mutation_reported_label": "",
                 "reported_sequence_index_1based": ";".join(
                     str(position) for position in positions
@@ -642,11 +685,11 @@ def _validate_mapping_wt(
 def _validate_candidates(candidates: list[dict[str, str]]) -> list[dict[str, str]]:
     if len(candidates) != EXPECTED_CANDIDATE_COUNT:
         raise ValueError(
-            f"Expected exactly {EXPECTED_CANDIDATE_COUNT} V3 shortlist rows; "
+            f"Expected exactly {EXPECTED_CANDIDATE_COUNT} V3 review-pool rows; "
             f"found {len(candidates)}"
         )
     required = set(
-        "candidate_id selection_order_v3 mutation_reported_label "
+        "candidate_id review_pool_order review_pool_role mutation_reported_label "
         "reported_sequence_index_1based wt_residue mutant_residue "
         "imgt_position_label region".split()
     )
@@ -664,7 +707,7 @@ def _validate_candidates(candidates: list[dict[str, str]]) -> list[dict[str, str
             raise ValueError(f"Nonunique/empty candidate ID: {candidate_id!r}")
         seen_ids.add(candidate_id)
         position = int(row["reported_sequence_index_1based"])
-        order = int(row["selection_order_v3"])
+        order = int(row["review_pool_order"])
         orders.append(order)
         wt = row["wt_residue"].strip().upper()
         mutant = row["mutant_residue"].strip().upper()
@@ -683,10 +726,10 @@ def _validate_candidates(candidates: list[dict[str, str]]) -> list[dict[str, str
     expected_orders = list(range(1, EXPECTED_CANDIDATE_COUNT + 1))
     if sorted(orders) != expected_orders:
         raise ValueError(
-            "selection_order_v3 must contain each integer from 1 through "
+            "review_pool_order must contain each integer from 1 through "
             f"{EXPECTED_CANDIDATE_COUNT} exactly once"
         )
-    return sorted(candidates, key=lambda row: int(row["selection_order_v3"]))
+    return sorted(candidates, key=lambda row: int(row["review_pool_order"]))
 
 
 def _validate_same_position_metadata(rows: list[dict[str, str]]) -> None:
@@ -809,8 +852,12 @@ def _csv(path: Path) -> list[dict[str, str]]:
 
 
 def _write_csv(path: Path, rows: list[dict[str, object]]) -> None:
-    with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=VIEW_MANIFEST_FIELDS)
+    with path.open("w", encoding="utf-8-sig", newline="") as handle:
+        writer = csv.DictWriter(
+            handle,
+            fieldnames=VIEW_MANIFEST_FIELDS,
+            lineterminator="\n",
+        )
         writer.writeheader()
         writer.writerows(rows)
 

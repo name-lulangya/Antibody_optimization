@@ -18,6 +18,13 @@ from antibody_optimization.vhh_expert_review_assessments import (  # noqa: E402
     get_all_v3_expert_assessments,
     validate_v3_expert_assessments,
 )
+from antibody_optimization.v3_expert_review_pool import (  # noqa: E402
+    V3_BASE_SHORTLIST_COUNT,
+    V3_REVIEW_POOL_COUNT,
+    V3_SUPPLEMENTAL_T99F_ID,
+    V3ExpertReviewPoolError,
+    build_v3_review_candidate_pool,
+)
 
 
 SHORTLIST = (
@@ -25,6 +32,12 @@ SHORTLIST = (
     / "docs/result_artifacts/candidate_design"
     / "expression_single_mutant_selection_v3_20260825"
     / "expression_single_mutant_v3_final30.csv"
+)
+AUDIT = (
+    ROOT
+    / "docs/result_artifacts/candidate_design"
+    / "expression_single_mutant_selection_v3_20260825"
+    / "expression_single_mutant_v3_audit.csv"
 )
 MAPPING = (
     ROOT
@@ -52,7 +65,10 @@ def _csv(path: Path) -> list[dict[str, str]]:
 
 
 def _real_inputs():
-    candidates = _csv(SHORTLIST)
+    candidates = build_v3_review_candidate_pool(
+        _csv(SHORTLIST),
+        _csv(AUDIT),
+    )
     positions = sorted(
         {int(row["reported_sequence_index_1based"]) for row in candidates}
     )
@@ -105,16 +121,16 @@ def real_review():
     return candidates, contexts, rows
 
 
-def test_real_review_has_30_candidates_23_positions_and_source_coverage(real_review):
+def test_real_review_has_31_candidates_23_positions_and_source_coverage(real_review):
     candidates, contexts, rows = real_review
 
-    assert len(candidates) == len(rows) == 30
+    assert len(candidates) == len(rows) == V3_REVIEW_POOL_COUNT
     assert len(contexts) == 23
-    assert len({row["candidate_id"] for row in rows}) == 30
+    assert len({row["candidate_id"] for row in rows}) == V3_REVIEW_POOL_COUNT
     assert len({int(row["reported_sequence_index_1based"]) for row in rows}) == 23
 
     sources = [row["primary_structure_source"] for row in rows]
-    assert sources.count("experimental_complex") == 26
+    assert sources.count("experimental_complex") == 27
     assert sources.count("af3_only_due_missing_experimental_coordinates") == 4
 
     af3_only = {
@@ -136,6 +152,17 @@ def test_real_review_has_30_candidates_23_positions_and_source_coverage(real_rev
         and row["expert_confidence"] == "low"
         for row in rows
         if row["candidate_id"] in af3_only
+    )
+
+    assert [row["review_pool_order"] for row in candidates] == list(
+        range(1, V3_REVIEW_POOL_COUNT + 1)
+    )
+    assert {
+        row["review_pool_role"] for row in candidates[:V3_BASE_SHORTLIST_COUNT]
+    } == {"immutable_v3_upstream_shortlist"}
+    assert candidates[-1]["candidate_id"] == V3_SUPPLEMENTAL_T99F_ID
+    assert candidates[-1]["review_pool_role"] == (
+        "user_added_stable_word_exploratory"
     )
 
 
@@ -178,6 +205,83 @@ def test_review_does_not_select_parents_or_change_upstream_evidence(real_review)
             "soft_sequence_risk_flags_v3"
         ]
         assert row["stable_word_effect"] == source["stable_word_effect"]
+
+
+def test_t99f_preserves_supplemental_provenance_and_exact_evidence(real_review):
+    candidates, contexts, rows = real_review
+    source = next(
+        row for row in candidates if row["candidate_id"] == V3_SUPPLEMENTAL_T99F_ID
+    )
+    review = next(
+        row for row in rows if row["candidate_id"] == V3_SUPPLEMENTAL_T99F_ID
+    )
+
+    assert source["review_pool_order"] == V3_REVIEW_POOL_COUNT
+    assert source["review_pool_role"] == "user_added_stable_word_exploratory"
+    assert source["selection_eligibility_v3"] == (
+        "no_moderate_or_strong_positive_metric"
+    )
+    assert source["selection_tier_v3"] == "not_eligible"
+    assert source["selection_status_v3"] == "not_selected"
+    assert source["selection_order_v3"] == ""
+    assert source["sequence_sha256"] == (
+        "645969f0f9dd6e9d4f2d6fa69055446382bd18c5020cf80e19c62dbdde4ee20f"
+    )
+    assert len(source["sequence"]) == 128
+    assert source["sequence"][98] == "F"
+    assert source["sequence"].endswith("SSGS")
+
+    assert source["stable_word_effect"] == "gain_only"
+    assert source["stable_word_selection_role"] == "soft_preference_not_hard_filter"
+    assert source["created_stable_word_occurrence_count"] == "1"
+    assert source["lost_stable_word_occurrence_count"] == "0"
+    assert source["net_stable_word_occurrence_delta"] == "1"
+    assert source["positive_metric_count_v3"] == "0"
+    assert source["netsolp_u_magnitude_band_v3"] == "negligible"
+    assert source["netsolp_s_magnitude_band_v3"] == "weak_adverse"
+    assert source["nanomelt_tm_magnitude_band_v3"] == "weak_adverse"
+    assert float(source["netsolp_delta_usability_vs_current_wt"]) == pytest.approx(
+        -0.00029751
+    )
+    assert float(source["netsolp_delta_solubility_vs_current_wt"]) == pytest.approx(
+        -0.0113903
+    )
+    assert float(
+        source["nanomelt_delta_predicted_apparent_tm_c_vs_current_wt"]
+    ) == pytest.approx(-0.5)
+    assert float(source["antifold_selection_delta_log_probability"]) == pytest.approx(
+        -1.33453358
+    )
+    assert source["antifold_veto_status"] == "pass"
+
+    assert review["review_pool_order_not_expert_rank"] == V3_REVIEW_POOL_COUNT
+    assert review["review_pool_role"] == "user_added_stable_word_exploratory"
+    assert review["selection_order_v3_upstream"] == ""
+    assert review["selection_tier_v3_upstream"] == "not_eligible"
+    assert review["stable_word_effect"] == "gain_only"
+    assert review["same_position_candidate_count"] == 2
+    assert review["primary_structure_source"] == "experimental_complex"
+    assert review["primary_exposure_class"] == "partially_buried"
+    assert review["primary_relative_sasa"] == pytest.approx(0.19213)
+    assert review["primary_intra_vhh_neighbor_count_4p5a"] == 7
+    assert review["experimental_minimum_receptor_distance_a"] == pytest.approx(6.1567)
+    assert review["experimental_af3_backbone_class_agreement"] == "different_class"
+    assert review["sidechain_volume_delta_a3"] == pytest.approx(42.0)
+    assert review["kyte_doolittle_delta"] == pytest.approx(3.5)
+    assert review["aromatic_class_change"] == "no_to_yes"
+    assert review["hydrophobic_class_change"] == "no_to_yes"
+
+    same_position = {
+        row["candidate_id"]: row["same_position_candidate_count"]
+        for row in rows
+        if int(row["reported_sequence_index_1based"]) == 99
+    }
+    assert same_position == {
+        "Nb252_expr_seq099_T99N": 2,
+        V3_SUPPLEMENTAL_T99F_ID: 2,
+    }
+
+    assert contexts[99]["experimental_coordinate_status"] == "observed"
 
 
 def test_real_parent_structures_recover_decision_relevant_environments(real_review):
@@ -236,8 +340,28 @@ def test_review_rejects_candidate_sequence_identity_mismatch(real_review):
         )
 
 
+def test_review_pool_rejects_missing_supplemental_candidate():
+    audit_without_t99f = [
+        row for row in _csv(AUDIT) if row["candidate_id"] != V3_SUPPLEMENTAL_T99F_ID
+    ]
+
+    with pytest.raises(
+        V3ExpertReviewPoolError,
+        match="Supplemental source lacks requested candidates",
+    ):
+        build_v3_review_candidate_pool(_csv(SHORTLIST), audit_without_t99f)
+
+
+def test_review_pool_rejects_mutation_of_immutable_shortlist_cardinality():
+    with pytest.raises(
+        V3ExpertReviewPoolError,
+        match="Expected 30 immutable V3 shortlist rows",
+    ):
+        build_v3_review_candidate_pool(_csv(SHORTLIST)[:-1], _csv(AUDIT))
+
+
 def test_curated_assessments_cover_all_candidates_and_visual_observations():
-    candidates = _csv(SHORTLIST)
+    candidates = build_v3_review_candidate_pool(_csv(SHORTLIST), _csv(AUDIT))
     identifiers = [row["candidate_id"] for row in candidates]
     validate_v3_expert_assessments(identifiers)
     assessments = get_all_v3_expert_assessments()
@@ -251,30 +375,30 @@ def test_curated_assessments_cover_all_candidates_and_visual_observations():
     assert all("rank" not in assessment for assessment in assessments.values())
 
 
-def test_render_plan_and_released_visual_artifacts_cover_all_30_candidates():
+def test_render_plan_and_released_visual_artifacts_cover_all_31_candidates():
     spec = importlib.util.spec_from_file_location("v3_expert_review_render", RENDER_SCRIPT)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(module)
-    candidates = _csv(SHORTLIST)
+    candidates = build_v3_review_candidate_pool(_csv(SHORTLIST), _csv(AUDIT))
     mappings = module._mapping(_csv(MAPPING))
     plan = module.build_review_plan(candidates, mappings)
 
     assert len(plan["site_views"]) == 23
-    assert plan["primary_candidate_view_count"] == 30
-    assert plan["af3_sensitivity_view_count"] == 6
+    assert plan["primary_candidate_view_count"] == 31
+    assert plan["af3_sensitivity_view_count"] == 7
     primary_plan = [
         row for row in plan["candidate_views"] if row["view_kind"] == "candidate_primary"
     ]
-    assert sum(row["source_model_name"] == module.EXPERIMENTAL_MODEL for row in primary_plan) == 26
+    assert sum(row["source_model_name"] == module.EXPERIMENTAL_MODEL for row in primary_plan) == 27
     assert sum(row["source_model_name"] == module.AF3_MODEL for row in primary_plan) == 4
-    assert len({row["view_id"] for row in plan["candidate_views"]}) == 36
-    assert len({row["image_path"] for row in plan["candidate_views"]}) == 36
+    assert len({row["view_id"] for row in plan["candidate_views"]}) == 38
+    assert len({row["image_path"] for row in plan["candidate_views"]}) == 38
 
     visual_rows = _csv(VISUAL_MANIFEST)
-    assert len(visual_rows) == 61
+    assert len(visual_rows) == 63
     primary_rows = [row for row in visual_rows if row["view_kind"] == "candidate_primary"]
-    assert len(primary_rows) == 30
+    assert len(primary_rows) == 31
     assert {row["candidate_id"] for row in primary_rows} == {
         row["candidate_id"] for row in candidates
     }
@@ -284,11 +408,23 @@ def test_render_plan_and_released_visual_artifacts_cover_all_30_candidates():
         assert row["molecular_structure_saved"] == "False"
         assert row["candidate_selection_performed"] == "False"
 
+    t99f_visuals = [
+        row for row in visual_rows if row["candidate_id"] == V3_SUPPLEMENTAL_T99F_ID
+    ]
+    assert {row["view_kind"] for row in t99f_visuals} == {
+        "candidate_primary",
+        "candidate_af3_sensitivity",
+    }
+    assert {row["review_pool_role"] for row in t99f_visuals} == {
+        "user_added_stable_word_exploratory"
+    }
+    assert {row["selection_order_v3_upstream"] for row in t99f_visuals} == {""}
+
 
 def test_released_expert_review_is_non_ranking_and_fully_visualized():
     rows = _csv(REVIEW_CSV)
 
-    assert len(rows) == 30
+    assert len(rows) == 31
     assert {row["parent_single_selection_status"] for row in rows} == {
         "not_performed"
     }
@@ -298,9 +434,19 @@ def test_released_expert_review_is_non_ranking_and_fully_visualized():
     assert all(row["chimerax_single_rotamer_observation_cn"].strip() for row in rows)
     assert sum(
         row["primary_structure_source"] == "experimental_complex" for row in rows
-    ) == 26
+    ) == 27
     assert sum(
         row["primary_structure_source"]
         == "af3_only_due_missing_experimental_coordinates"
         for row in rows
     ) == 4
+    t99f = next(row for row in rows if row["candidate_id"] == V3_SUPPLEMENTAL_T99F_ID)
+    assert t99f["review_pool_role"] == "user_added_stable_word_exploratory"
+    assert t99f["selection_order_v3_upstream"] == ""
+    assert t99f["selection_tier_v3_upstream"] == "not_eligible"
+    assert t99f["stable_word_effect"] == "gain_only"
+    assert t99f["same_position_candidate_count"] == "2"
+    assert t99f["expert_structural_assessment"] == "structurally_concerning"
+    assert t99f["expert_solubility_expectation"] == "unfavorable"
+    assert t99f["expert_thermal_stability_expectation"] == "unfavorable"
+    assert t99f["expert_confidence"] == "medium"

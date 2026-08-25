@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the non-ranking structure/VHH expert review of the V3 30-single shortlist.
+"""Build the non-ranking structure/VHH expert review of the V3 review pool.
 
 The workflow is local and expected to finish within one hour.  It reuses the
 released structures, mapping, interface contract, V3 predictor evidence, and
@@ -30,7 +30,11 @@ from antibody_optimization.file_transaction import (  # noqa: E402
     validate_file_paths,
 )
 from antibody_optimization.vhh_expert_review import (  # noqa: E402
+    V3_BASE_SHORTLIST_COUNT,
+    V3_REVIEW_POOL_COUNT,
+    V3_SUPPLEMENTAL_T99F_ID,
     build_expert_review_rows,
+    build_v3_review_candidate_pool,
     derive_position_contexts,
 )
 from antibody_optimization.vhh_expert_review_assessments import (  # noqa: E402
@@ -66,6 +70,20 @@ def parse_args() -> argparse.Namespace:
             / "docs/result_artifacts/input_baseline/structure_released_20260810"
             / "nb252_sequence_structure_mapping.csv"
         ),
+    )
+    parser.add_argument(
+        "--supplemental-candidate-csv",
+        type=Path,
+        default=(
+            ROOT
+            / "docs/result_artifacts/candidate_design"
+            / "expression_single_mutant_selection_v3_20260825"
+            / "expression_single_mutant_v3_audit.csv"
+        ),
+    )
+    parser.add_argument(
+        "--supplemental-candidate-id",
+        default=V3_SUPPLEMENTAL_T99F_ID,
     )
     parser.add_argument(
         "--experimental-cif",
@@ -105,6 +123,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_RESULT_DIR)
     parser.add_argument("--generated-at", default="")
+    parser.add_argument("--overwrite", action="store_true")
     return parser.parse_args()
 
 
@@ -112,12 +131,18 @@ def main() -> int:
     started = time.perf_counter()
     args = parse_args()
     generated_at = args.generated_at or datetime.now().astimezone().isoformat(timespec="seconds")
-    candidates = _csv(args.candidate_csv)
+    candidates = build_v3_review_candidate_pool(
+        _csv(args.candidate_csv),
+        _csv(args.supplemental_candidate_csv),
+        supplemental_candidate_ids=(args.supplemental_candidate_id,),
+    )
     mappings = _csv(args.mapping_csv)
     alignment = _json(args.alignment_summary)
     interface = _json(args.interface_manifest)
-    if len(candidates) != 30 or len({row["candidate_id"] for row in candidates}) != 30:
-        raise ValueError("The active V3 upstream shortlist must contain 30 unique candidates")
+    if len(candidates) != V3_REVIEW_POOL_COUNT or len(
+        {row["candidate_id"] for row in candidates}
+    ) != V3_REVIEW_POOL_COUNT:
+        raise ValueError("The active V3 expert-review pool must contain 31 unique candidates")
     candidate_ids = [row["candidate_id"] for row in candidates]
     validate_v3_expert_assessments(candidate_ids)
     interface_positions = [
@@ -127,7 +152,7 @@ def main() -> int:
     candidate_positions = [int(row["reported_sequence_index_1based"]) for row in candidates]
     overlap = sorted(set(candidate_positions) & set(interface_positions))
     if overlap:
-        raise ValueError(f"V3 shortlist unexpectedly mutates frozen interface positions: {overlap}")
+        raise ValueError(f"V3 review pool unexpectedly mutates frozen interface positions: {overlap}")
 
     visual_view_ids, visual_rows, visual_files = _visual_view_ids(
         args.visual_manifest,
@@ -154,10 +179,11 @@ def main() -> int:
     review_csv = output_dir / "v3_parent_single_expert_review.csv"
     manifest_json = output_dir / "v3_parent_single_expert_review_manifest.json"
     for target in (review_csv, manifest_json):
-        if target.exists():
+        if target.exists() and not args.overwrite:
             raise FileExistsError(f"Refusing to overwrite existing review artifact: {target}")
     main_sources = (
         args.candidate_csv,
+        args.supplemental_candidate_csv,
         args.mapping_csv,
         args.experimental_cif,
         args.af3_cif,
@@ -201,18 +227,18 @@ def main() -> int:
             project_root=ROOT,
             protected_source_paths=validated.source_paths,
         )
-    print(f"Wrote 30 non-ranking expert reviews to {review_csv}")
+    print(f"Wrote {len(review_rows)} non-ranking expert reviews to {review_csv}")
     print("Parent-single selection performed: no")
     return 0
 
 
 def _validate_review(review_rows, candidates, contexts) -> None:
-    if len(review_rows) != 30 or len(contexts) != 23:
-        raise ValueError("Expert review must contain 30 candidates across 23 positions")
+    if len(review_rows) != V3_REVIEW_POOL_COUNT or len(contexts) != 23:
+        raise ValueError("Expert review must contain 31 candidates across 23 positions")
     if {row["parent_single_selection_status"] for row in review_rows} != {"not_performed"}:
         raise ValueError("Expert review must not perform parent-single selection")
     if Counter(row["primary_structure_source"] for row in review_rows) != {
-        "experimental_complex": 26,
+        "experimental_complex": 27,
         "af3_only_due_missing_experimental_coordinates": 4,
     }:
         raise ValueError("Unexpected experimental/AF3-only review coverage")
@@ -292,13 +318,14 @@ def _manifest(
     thermal_counts = Counter(row["expert_thermal_stability_expectation"] for row in review_rows)
     near_interface = Counter(row["near_interface_shell_status"] for row in review_rows)
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "status": "pass",
         "generated_at": generated_at,
         "workflow": "v3_parent_single_structure_and_vhh_expert_review",
         "scientific_scope": (
-            "Non-ranking expert review of the active V3 30-single shortlist; "
-            "hypotheses for later parent selection and experimental testing."
+            "Non-ranking expert review of the immutable V3 30-single shortlist plus "
+            "the user-added T99F stable-word exploratory candidate; hypotheses for "
+            "later parent selection and experimental testing."
         ),
         "selection_performed": False,
         "parent_single_selection_status": "not_performed",
@@ -393,8 +420,13 @@ def _manifest(
             "chimerax": "1.12",
         },
         "inputs": [_relative(path) for path in source_paths if path.is_file()],
-        "upstream_shortlist_identity": {
+        "review_pool_identity": {
             "candidate_count": len(candidates),
+            "immutable_upstream_shortlist_count": V3_BASE_SHORTLIST_COUNT,
+            "user_added_supplemental_count": len(candidates) - V3_BASE_SHORTLIST_COUNT,
+            "candidate_role_counts": dict(
+                sorted(Counter(row["review_pool_role"] for row in candidates).items())
+            ),
             "candidate_ids": [row["candidate_id"] for row in candidates],
         },
         "output": {
@@ -403,8 +435,8 @@ def _manifest(
         },
         "gate": {
             "expert_review": "pass",
-            "all_30_have_structure_source_and_expert_judgement": True,
-            "all_30_have_chimerax_single_rotamer_views": True,
+            "all_31_have_structure_source_and_expert_judgement": True,
+            "all_31_have_chimerax_single_rotamer_views": True,
             "af3_only_rows_explicitly_labeled_and_low_confidence": True,
             "parent_single_selection": "not_performed",
         },

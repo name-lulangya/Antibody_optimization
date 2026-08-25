@@ -1,4 +1,4 @@
-"""Structure-aware expert review helpers for the active V3 Nb252 shortlist.
+"""Structure-aware expert review helpers for the active V3 Nb252 review pool.
 
 The module derives descriptive residue environments from the released
 experimental NK2R--Nb252 complex and the independently predicted AF3 VHH.
@@ -17,6 +17,13 @@ from typing import Mapping, Sequence
 
 import numpy as np
 from Bio.PDB import MMCIFParser, PPBuilder, ShrakeRupley
+
+from .v3_expert_review_pool import (
+    V3_BASE_SHORTLIST_COUNT,
+    V3_REVIEW_POOL_COUNT,
+    V3_SUPPLEMENTAL_T99F_ID,
+    build_v3_review_candidate_pool,
+)
 
 
 MAX_ASA = {
@@ -52,7 +59,7 @@ BACKBONE_ATOMS = frozenset({"N", "CA", "C", "O", "OXT"})
 
 
 class VHHExpertReviewError(ValueError):
-    """Raised when shortlist, mapping, or structure identities disagree."""
+    """Raised when review-pool, mapping, or structure identities disagree."""
 
 
 def derive_position_contexts(
@@ -238,8 +245,10 @@ def build_expert_review_rows(
 ) -> list[dict[str, object]]:
     """Join unchanged V3 evidence, structural facts, and curated judgements."""
 
-    if len(candidate_rows) != 30 or len({str(row["candidate_id"]) for row in candidate_rows}) != 30:
-        raise VHHExpertReviewError("Expected exactly 30 unique V3 shortlist candidates")
+    if not candidate_rows or len(
+        {str(row["candidate_id"]) for row in candidate_rows}
+    ) != len(candidate_rows):
+        raise VHHExpertReviewError("Expert-review candidate identities are not unique")
     identifiers = {str(row["candidate_id"]) for row in candidate_rows}
     if identifiers != set(assessments):
         missing = sorted(identifiers - set(assessments))
@@ -250,7 +259,17 @@ def build_expert_review_rows(
     for row in candidate_rows:
         position_counts[int(row["reported_sequence_index_1based"])] += 1
     output: list[dict[str, object]] = []
-    for source in sorted(candidate_rows, key=lambda row: int(row["selection_order_v3"])):
+    try:
+        review_orders = [int(row["review_pool_order"]) for row in candidate_rows]
+    except (KeyError, TypeError, ValueError) as error:
+        raise VHHExpertReviewError(
+            "Expert-review candidates lack valid review_pool_order values"
+        ) from error
+    if sorted(review_orders) != list(range(1, len(candidate_rows) + 1)):
+        raise VHHExpertReviewError(
+            "review_pool_order must contain every integer from 1 through the pool size"
+        )
+    for source in sorted(candidate_rows, key=lambda row: int(row["review_pool_order"])):
         identifier = str(source["candidate_id"])
         position = int(source["reported_sequence_index_1based"])
         wt = str(source["wt_residue"])
@@ -282,7 +301,9 @@ def build_expert_review_rows(
             key: value for key, value in assessment.items() if key != "mutation"
         }
         row = {
-            "upstream_shortlist_row_order_not_expert_rank": int(source["selection_order_v3"]),
+            "review_pool_order_not_expert_rank": int(source["review_pool_order"]),
+            "review_pool_role": source["review_pool_role"],
+            "selection_order_v3_upstream": source["selection_order_v3"],
             "candidate_id": identifier,
             "mutation_reported_label": source["mutation_reported_label"],
             "reported_sequence_index_1based": position,

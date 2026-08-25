@@ -11,6 +11,8 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 
+from .v3_expert_review_pool import V3_REVIEW_POOL_COUNT
+
 
 REQUIRED_EXPERT_FIELDS = frozenset(
     {
@@ -492,6 +494,19 @@ V3_EXPERT_ASSESSMENTS: dict[str, dict[str, object]] = {
         uncertainty_cn="静态WT结构不包含Gln rotamer和局部松弛；局部二级结构存在模型敏感性。",
         flags=("experimental_coordinates", "adjacent_cys22", "gap_boundary", "polar_sidechain_introduced", "volume_increase", "model_sensitive"),
     ),
+    "Nb252_expr_seq099_T99F": _assessment(
+        mutation="T99F",
+        structural_facts_cn="实验结构和AF3均在reported 99具有坐标；该CDR3位点部分埋藏且不是直接界面残基，但距冻结界面残基I112约2.4埃。实验与AF3的局部主链及Thr极性接触伙伴不同。",
+        vhh_expert_inference_cn="Thr到Phe使侧链体积增加约42立方埃、疏水性显著升高并移除羟基。芳环或可参与局部芳香包装，但在邻居密集、构象敏感的CDR3中更直接的风险是过度包装、极性网络丢失和外露疏水斑增加。",
+        structural="structure_sensitive_high_concern",
+        solubility="likely_adverse",
+        thermal="possibly_adverse",
+        confidence="medium",
+        concern="partly_buried_aromatic_overpacking_and_polar_network_loss_in_model_sensitive_cdr3",
+        rationale_cn="实验复合物与AF3均显示该位点只有有限空间，且WT Thr羟基具有距离相容的局部极性接触；稳定词新增仅是软偏好，不能抵消体积、疏水性和局部网络三项同向风险。",
+        uncertainty_cn="只检查了未松弛固定骨架上的单个Dunbrack rotamer；实验与AF3的CDR3构象不一致，因此不声称该突变必然失稳，也不据此执行选择或淘汰。",
+        flags=("experimental_coordinates", "cdr3", "partially_buried", "large_volume_increase", "aromatic_introduced", "hydrophobicity_increase", "polar_network_loss_risk", "near_interface_shell", "model_sensitive", "stable_word_gain"),
+    ),
 }
 
 
@@ -530,6 +545,7 @@ V3_CHIMERAX_VISUAL_OBSERVATIONS: dict[str, str] = {
     "Nb252_expr_seq049_A49M": "实验视图中Met被置入深埋核心并占据有限空间，呈现过度包装警示；固定骨架视图未显示支持空腔填充的明确余量。",
     "Nb252_expr_seq001_Q1D": "实验视图中Asp位于开放N端且无明显局部空间障碍；真实构建体N端加工仍不由结构图决定。",
     "Nb252_expr_seq023_A23Q": "实验视图中Gln可向外伸展且未见明显穿插，但仍邻近Cys22和缺失片段边界；AF3敏感性视图显示局部模型依赖。",
+    "Nb252_expr_seq099_T99F": "实验复合物视图中Phe芳环进入邻居密集的CDR3局部空间，呈现过度包装警示；AF3敏感性视图中的骨架与朝向不同，但同样未提供开放空间或保留WT极性网络的证据。",
 }
 
 if set(V3_CHIMERAX_VISUAL_OBSERVATIONS) != set(V3_EXPERT_ASSESSMENTS):
@@ -543,8 +559,11 @@ for _candidate_id, _observation in V3_CHIMERAX_VISUAL_OBSERVATIONS.items():
 def validate_v3_expert_assessments(expected_candidate_ids: Iterable[str] | None = None) -> None:
     """Validate identity and field completeness without performing selection."""
 
-    if len(V3_EXPERT_ASSESSMENTS) != 30:
-        raise ValueError(f"Expected 30 expert assessments, found {len(V3_EXPERT_ASSESSMENTS)}")
+    if len(V3_EXPERT_ASSESSMENTS) != V3_REVIEW_POOL_COUNT:
+        raise ValueError(
+            f"Expected {V3_REVIEW_POOL_COUNT} expert assessments, "
+            f"found {len(V3_EXPERT_ASSESSMENTS)}"
+        )
     if expected_candidate_ids is not None:
         expected = {str(value) for value in expected_candidate_ids}
         observed = set(V3_EXPERT_ASSESSMENTS)
