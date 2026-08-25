@@ -195,6 +195,49 @@ def test_antifold_language_is_exclusion_only_and_never_positive_credit(built_v3_
     assert "不表示正向支持" in text
 
 
+def test_collaborator_facing_terms_and_table_structure_are_explicit(built_v3_report):
+    document = built_v3_report["document"]
+    text = _all_text(document)
+
+    assert "“硬约束”指禁止改变24个实验直接界面位点" in text
+    assert "“序列硬风险”指新增Pro造成主链构象约束" in text
+    assert "7-aa窗口出现至少6个疏水残基" in text
+    assert "净侧链电荷绝对值达到至少5" in text
+    assert "“父单突”是指获准作为双突组成部分的单突" in text
+    assert "稳定词是用简并氨基酸符号表示" in text
+
+    excluded = _table_with_header(document, "排除突变", "主要物理风险", "专家排除依据")
+    assert [row.cells[0].text.strip() for row in excluded.rows[1:]] == [
+        "A49F",
+        "A49M",
+        "S50F",
+        "R71G",
+        "A96R",
+    ]
+
+    parents = _table_with_header(document, "序", "单突", "区域")
+    doubles = _table_with_header(document, "序", "双突", "区域")
+    assert len(parents.rows) == 16
+    assert len(doubles.rows) == 16
+    assert parents.rows[0].cells[6].text.strip() == "结构证据/判断"
+    assert doubles.rows[0].cells[6].text.strip() == "结构证据/风险"
+
+    forbidden_terms = (
+        "实验验证建议",
+        "结构/责任",
+        "化学责任",
+        "序列责任",
+        "新增脱酰胺责任",
+        "实验QC",
+        "功能QC",
+        "7.1 展示顺序",
+        "7.2 展示顺序",
+        "9.1 展示顺序",
+        "9.2 展示顺序",
+    )
+    assert not [term for term in forbidden_terms if term in text]
+
+
 def test_every_report_table_is_strict_unshaded_three_line_table(built_v3_report):
     document = built_v3_report["document"]
     assert len(document.tables) >= 10

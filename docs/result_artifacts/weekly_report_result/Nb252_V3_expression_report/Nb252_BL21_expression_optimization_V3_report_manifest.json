@@ -5,7 +5,7 @@
   "historical_template_sha256": "dc9aafc06dff300d0153f2e85188bc5605baa6c8c55b83ec47e761b0da5677a0",
   "document": {
     "output_docx": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/Nb252_BL21_expression_optimization_V3_project_report.docx",
-    "sha256": "88cc793ba2b19fe1d60d5c0625b4563904efcf1acd9898e03e7b5fbb0296d6d0",
+    "sha256": "cbf5168b6f424835ede2f920beb8fac5aa6cb59cd1fefed58fe6c737f2826ce6",
     "candidate_count": 30,
     "single_count": 15,
     "double_count": 15,
@@ -53,25 +53,39 @@
     "audit_evidence": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/Nb252_V3_audit_evidence.json"
   },
   "figures": {
-    "v3_double15_property_heatmap": {
-      "path": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_double15_property_heatmap.png",
-      "sha256": "b6eff924c404019b7b727d14c04de05dd1d5854831470e86efdd56ace10ece03"
+    "single_selection_flow": {
+      "png": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_single_selection_flow.png",
+      "png_sha256": "fe6b89747ba3eba329b7e470b8c58169dd0941cfdd34d9224ae2816c48bb4c25",
+      "svg": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_single_selection_flow.svg",
+      "svg_sha256": "09b222a4469d2db9bb1add6d50ec8a570d2bcb718a17a55a5989045200ca85bc"
     },
-    "v3_double_selection_flow": {
-      "path": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_double_selection_flow.png",
-      "sha256": "e2481b2994b068970adc8fd68331d1e26a3d84603d3091216bbd61e74d333a3b"
+    "parent15_property_heatmap": {
+      "png": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_parent15_property_heatmap.png",
+      "png_sha256": "2e133922f822d2445f063d5e11be582460e8827cbc709fcef1c05cc4a9ec157c",
+      "svg": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_parent15_property_heatmap.svg",
+      "svg_sha256": "081a26e89655001ebd9acbe6c6f71725f81121d8c62e7eaabef4f629417dd858"
     },
-    "v3_parent15_property_heatmap": {
-      "path": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_parent15_property_heatmap.png",
-      "sha256": "2e133922f822d2445f063d5e11be582460e8827cbc709fcef1c05cc4a9ec157c"
+    "double_selection_flow": {
+      "png": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_double_selection_flow.png",
+      "png_sha256": "e2481b2994b068970adc8fd68331d1e26a3d84603d3091216bbd61e74d333a3b",
+      "svg": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_double_selection_flow.svg",
+      "svg_sha256": "5618c0778802665de562a7e244b2d7afa2044f4ccf699ba7760524e3d75596f7"
     },
-    "v3_single_selection_flow": {
-      "path": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_single_selection_flow.png",
-      "sha256": "fe6b89747ba3eba329b7e470b8c58169dd0941cfdd34d9224ae2816c48bb4c25"
+    "double15_property_heatmap": {
+      "png": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_double15_property_heatmap.png",
+      "png_sha256": "b6eff924c404019b7b727d14c04de05dd1d5854831470e86efdd56ace10ece03",
+      "svg": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_double15_property_heatmap.svg",
+      "svg_sha256": "164108465608892c5eb04cfc587dcd75abc6f28cac7a342049029e38671107a6"
     },
-    "v3_tool_validation_summary": {
-      "path": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_tool_validation_summary.png",
-      "sha256": "dbb3d1466f3d6b72b6e5564f22d325d5a00512f6575b91594ffdad3e614146d5"
+    "tool_validation_summary": {
+      "png": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_tool_validation_summary.png",
+      "png_sha256": "dbb3d1466f3d6b72b6e5564f22d325d5a00512f6575b91594ffdad3e614146d5",
+      "svg": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_tool_validation_summary.svg",
+      "svg_sha256": "f5406cbc5858f76a0c27babc410f89356510690c710a3df0ab9e2ffe2e77531e"
+    },
+    "source_data_csv": {
+      "path": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_report_figure_source_data.csv",
+      "sha256": "8922d1e3378eae4bc7c5bf82637ce8d67d0cfb124f1b2c441b73364debe08758"
     }
   },
   "scope": {
@@ -82,6 +96,6 @@
   },
   "pdf": {
     "path": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/Nb252_BL21_expression_optimization_V3_project_report.pdf",
-    "sha256": "e8675f52190ca06396589cabaec49337a3ea1a9314167f1de2171e7955adddfd"
+    "sha256": "a49d3535f3a35ab2d1cf71fb57c7de32bf0fa9edb848853922d2d4aabb0f062f"
   }
 }

@@ -162,8 +162,9 @@ def _new_section(doc: Document, title: str, *, page_break_before: bool = True) -
     heading.paragraph_format.page_break_before = page_break_before
 
 
-def _heading(doc: Document, title: str) -> None:
-    doc.add_heading(title, level=2)
+def _heading(doc: Document, title: str, *, page_break_before: bool = False) -> None:
+    heading = doc.add_heading(title, level=2)
+    heading.paragraph_format.page_break_before = page_break_before
 
 
 def _repeat_header(row) -> None:
@@ -322,7 +323,7 @@ def _soft_risk(value: str) -> str:
         return "新增NG脱酰胺基序"
     if value == "more_M_or_W":
         return "增加Met氧化敏感性"
-    return "未记录潜在化学责任"
+    return "未记录额外化学风险"
 
 
 def _parent_note(row: Mapping[str, Any]) -> str:
@@ -400,7 +401,7 @@ def _add_executive_summary(doc: Document, data: Mapping[str, Any]) -> None:
     _bullet(doc, "候选生成首先冻结实验复合物定义的24个直接界面位点、天然保守位点、Cys22/Cys95及末端125–128位；Q5只允许Q5V天然共识回变。")
     _bullet(doc, "在847条允许单突中，NetSolP U、NetSolP S与NanoMelt预测Tm按预设幅度档分别评价；档内微小小数差异不用于排序。")
     _bullet(doc, "AntiFold仅用于风险排除：它不提议、不奖励、也不排序候选。单突仅在ΔlogP≤−3且处于该位点20种状态最差4名时排除；双突不计算AntiFold分数。")
-    _bullet(doc, "最终选定15条父单突；完整枚举105个理论配对并去除3个同位点无效组合后，对102条双突全部重算U/S/Tm，再选定15条双突。")
+    _bullet(doc, "最终选定15条用于构建双突的组成单突（下文简称“父单突”）；完整枚举105个理论配对并去除3个同位点无效组合后，对102条双突全部重算U/S/Tm，再选定15条双突。")
     _bullet(doc, "最终30条均为计算优先实验假设。直接界面未突变并不等同于结合保持已被证明，仍需通过表达、可溶性、单体状态与结合/功能实验验证。")
     _heading(doc, "内容概览")
     _table(
@@ -411,7 +412,7 @@ def _add_executive_summary(doc: Document, data: Mapping[str, Any]) -> None:
             ["4–5", "预测工具为何保留、幅度档如何使用"],
             ["6–7", "847条单突如何收缩为15条父单突"],
             ["8–9", "102条双突如何完整评价并选出15条"],
-            ["10–12", "最终面板、风险边界与实验验证建议"],
+            ["10–11", "最终面板与风险边界"],
             ["附录", "指标定义、完整序列与证据符号"],
         ],
         [1, 3],
@@ -449,7 +450,7 @@ def _add_parent_and_constraints(doc: Document, data: Mapping[str, Any]) -> None:
         [
             ["实验直接界面", "24个位置全部禁止突变", "不是能量热点定义，也不证明非界面突变必然保留结合"],
             ["天然保守性", "母本等于天然优势残基时冻结", "非共识高保守位置只开放共识回变"],
-            ["二硫键", "C22/C95禁止突变且禁止新增Cys", "不替代折叠与二硫键实验质控"],
+            ["二硫键", "C22/C95禁止突变且禁止新增Cys", "不替代折叠与二硫键的实验检查"],
             ["末端构建", "125–128位SSGS保持不变", "NanoMelt评分域为前126 aa，见方法说明"],
         ],
         [1.1, 1.5, 2.3],
@@ -503,8 +504,8 @@ def _add_tools(doc: Document, data: Mapping[str, Any], figures: Mapping[str, Pat
 def _add_magnitude(doc: Document, data: Mapping[str, Any]) -> None:
     _new_section(doc, "5. 847条允许单突与幅度分档")
     landscape = data["single_landscape"]
-    _paragraph(doc, f"硬约束后形成{landscape['allowed_candidate_count']}条允许单突，覆盖{landscape['reported_position_count']}个reported位置。该空间由47个常规开放位点的非WT、非Cys替换，加上Q5V这一条受限共识回变构成。所有847条均完成NetSolP U/S、NanoMelt Tm、AntiFold风险门与序列责任检查。")
-    _paragraph(doc, f"AntiFold双条件风险门排除{landscape['antifold_veto_count']}条，{landscape['antifold_veto_pass_count']}条未触发；性质资格层共有{landscape['qualified_count']}条。AntiFold的151条排除只代表结构相容性风险门，不改变U/S/Tm的性质幅度定义。")
+    _paragraph(doc, f"硬约束后形成{landscape['allowed_candidate_count']}条允许单突，覆盖{landscape['reported_position_count']}个reported位置。该空间由47个常规开放位点的非WT、非Cys替换，加上Q5V这一条受限共识回变构成。所有847条均完成NetSolP U/S、NanoMelt Tm、AntiFold风险门与序列风险检查。")
+    _paragraph(doc, f"AntiFold双条件风险门排除{landscape['antifold_veto_count']}条，{landscape['antifold_veto_pass_count']}条未触发；其中{landscape['qualified_count']}条符合预设的U/S/Tm性质条件。AntiFold的151条排除只代表结构相容性风险门，不改变U/S/Tm的性质幅度定义。")
     thresholds = data["magnitude_thresholds"]
     _table(
         doc,
@@ -547,8 +548,22 @@ def _parent_rows(rows: Sequence[Mapping[str, Any]]) -> list[list[str]]:
 def _add_parent_selection(doc: Document, data: Mapping[str, Any], figures: Mapping[str, Path]) -> None:
     _new_section(doc, "6. 从847条单突到15条父单突")
     facts = data["parent_selection"]["facts"]
-    _paragraph(doc, "单突选择先要求不触发硬约束、序列硬风险与AntiFold双条件排除，再以U/S/Tm的中等或显著改善为主要正向证据。61条性质合格候选经位置与替换多样性抽取形成30条代表性短名单；另加入T99F作为稳定词假设探索项，形成31条专家审查池。")
+    _paragraph(doc, "这里的“硬约束”指禁止改变24个实验直接界面位点、天然保守冻结位点、Cys22/Cys95和末端125–128位SSGS，同时禁止新增Cys；“序列硬风险”指新增Pro造成主链构象约束、突变所在7-aa窗口出现至少6个疏水残基且比WT增加，或任一7-aa窗口的净侧链电荷绝对值达到至少5且比WT增加。单突只有在不触发这些规则和AntiFold双条件排除后，才以U/S/Tm的中等或显著改善作为主要正向证据。")
+    _paragraph(doc, "61条性质合格候选经位置与替换多样性抽取形成30条代表性短名单；另加入T99F作为“稳定词”探索项，形成31条专家审查池。稳定词是用简并氨基酸符号表示、被假设可能与稳定性有关的短序列模式，在本项目中仅作为探索性软证据。")
     _paragraph(doc, f"专家审查仅在有高置信度、具体且不可由其他证据合理抵消的物理风险时执行硬排除，共排除{facts['high_confidence_expert_risk_exclusion_count']}条；其余担忧作为降级或实验注释。最终15条覆盖{facts['selected_unique_position_count']}个位点，其中9条至少有一项显著有利指标，5条以多指标中等证据或机制互补入选，T99F为唯一探索例外。")
+    _table(
+        doc,
+        ["排除突变", "主要物理风险", "专家排除依据"],
+        [
+            ["A49F", "埋藏核心过度包装", "小体积Ala替换为大芳香侧链，实验结构支持高置信空间拥挤风险。"],
+            ["A49M", "埋藏核心过度包装与氧化", "埋藏Ala替换为较大Met，兼有空间拥挤和新增氧化敏感性。"],
+            ["S50F", "局部过度包装", "部分埋藏且靠近受体的Ser替换为大芳香侧链，局部碰撞与疏水暴露风险同向。"],
+            ["R71G", "极性网络与构象稳定性损失", "去除内部Arg极性接触，并在非典型转角位置引入Gly柔性。"],
+            ["A96R", "埋藏电荷与二硫键邻近", "深埋Ala替换为大体积带电Arg，且邻近Cys95，包装与折叠风险明确。"],
+        ],
+        [0.8, 1.45, 3.1],
+        size=8.2,
+    )
     _paragraph(doc, "T99F没有U/S/Tm中等或显著改善，不应与性质支持候选混称；它因新增稳定词假设被保留为探索对照，且已明确记录部分埋藏、界面邻近及S/Tm轻度不利等风险。")
     _figure(
         doc,
@@ -559,19 +574,16 @@ def _add_parent_selection(doc: Document, data: Mapping[str, Any], figures: Mappi
     _figure(
         doc,
         Path(figures["parent15_property_heatmap"]),
-        "图5  15条父单突的U/S/Tm幅度档。颜色表示预设幅度类别；AF3补充、潜在化学责任与T99F探索属性仅作注释。",
+        "图5  15条父单突的U/S/Tm幅度档。颜色表示预设幅度类别；AF3补充、潜在化学风险与T99F探索属性仅作注释。",
         width_cm=16.4,
     )
 
     _new_section(doc, "7. 15条父单突的性质与专家复核")
-    _paragraph(doc, "下表按固定展示顺序列出15条父单突；顺序用于交付与追溯，不是1–15的精确效力排名。结构意见同时考虑暴露程度、局部包装、主链构象、极性/电荷变化、二硫键邻近和潜在化学责任。溶解度与热稳定性判断是结合结构机制与预测方向形成的专家假设，不是实测结果。")
+    _paragraph(doc, "“父单突”是指获准作为双突组成部分的单突。下表按固定展示顺序列出15条父单突；顺序用于交付与追溯，不是1–15的精确效力排名。结构意见同时考虑暴露程度、局部包装、主链构象、极性/电荷变化、二硫键邻近和潜在化学风险。溶解度与热稳定性判断是结合结构机制与预测方向形成的专家假设，不是实测结果。")
     rows = _parent_rows(data["parent_selected15"])
     headers = ["序", "单突", "区域", "ΔU", "ΔS", "ΔTm", "结构证据/判断", "入选依据与风险"]
     weights = [0.38, 0.62, 0.56, 0.82, 0.82, 0.92, 1.45, 2.55]
-    _heading(doc, "7.1 展示顺序1–8")
-    _table(doc, headers, rows[:8], weights, size=7.15)
-    _heading(doc, "7.2 展示顺序9–15")
-    _table(doc, headers, rows[8:], weights, size=7.15)
+    _table(doc, headers, rows, weights, size=7.15)
     _paragraph(doc, "表中“实验复合物”指该reported位点具有实验坐标并以复合物环境为主要证据；“AF3补充上下文”表示实验坐标缺失，只能独立参考AF3单体预测，不能写作实验结构结论。")
 
 
@@ -614,14 +626,11 @@ def _add_double_selection(doc: Document, data: Mapping[str, Any], figures: Mappi
         "图7  15条入选双突的U/S/Tm幅度档。6条为三指标中等/显著有利，9条为两指标中等/显著有利；展示顺序不是效力排名。",
         width_cm=16.4,
     )
-    _paragraph(doc, "双突入选综合考虑性质幅度档、组成单突专家意见、完整序列化学责任、WT位点空间关系和组合多样性。该过程是显式人工复核后的实验面板选择，不声称由唯一优化函数得到全局最优。")
+    _paragraph(doc, "双突入选综合考虑性质幅度档、组成单突专家意见、完整序列潜在化学风险、WT位点空间关系和组合多样性。该过程是显式人工复核后的实验面板选择，不声称由唯一优化函数得到全局最优。")
     rows = _double_rows(data["selected_doubles15"])
-    headers = ["序", "双突", "区域", "ΔU", "ΔS", "ΔTm", "结构/责任", "入选依据"]
+    headers = ["序", "双突", "区域", "ΔU", "ΔS", "ΔTm", "结构证据/风险", "入选依据"]
     weights = [0.38, 1.05, 0.86, 0.78, 0.78, 0.9, 1.42, 2.33]
-    _heading(doc, "9.1 展示顺序1–8")
-    _table(doc, headers, rows[:8], weights, size=7.05)
-    _heading(doc, "9.2 展示顺序9–15")
-    _table(doc, headers, rows[8:], weights, size=7.05)
+    _table(doc, headers, rows, weights, size=7.05)
 
 
 def _add_final_panel(doc: Document, data: Mapping[str, Any]) -> None:
@@ -663,44 +672,24 @@ def _add_risks(doc: Document, data: Mapping[str, Any]) -> None:
         [
             ["稳定词探索例外", "T99F", "只有稳定词新增假设；S/Tm轻度不利且有中等结构担忧。作为探索对照，不代表性质预测支持。"],
             ["二硫键邻近", "A23R；A23R+S55G", "A23靠近Cys22，大体积带电Arg可能影响局部包装；当前为中等置信担忧。"],
-            ["新增脱酰胺责任", "F30N；S55G+F30N", "新增reported 30的NG基序；需在表达、储存和纯化条件下监测。"],
-            ["氧化敏感性", "L11M；N76G+L11M", "增加一个Met氧化敏感残基；应配合氧化状态与单体质量质控。"],
+            ["新增脱酰胺风险", "F30N；S55G+F30N", "新增reported 30的NG基序，可能增加脱酰胺敏感性。"],
+            ["氧化敏感性", "L11M；N76G+L11M", "增加一个Met氧化敏感残基，可能提高储存或处理过程中的氧化风险。"],
             ["实验坐标缺失", "L11Y、F29Q、L11M及4条含L11双突", "共7/30个构建依赖AF3补充位置上下文；不能等同于实验复合物证据。"],
             ["CDR1缺口边界", "F30S、F30N及4条含F30双突", "共6/30属于同一F30机制家族；实验结构邻近未解析片段，不能视为6份独立结构证据。"],
             ["AntiFold门边界", "8/15个父单突", "ΔlogP≤−3但未落入位置内最差4名，因此未触发双条件排除；“通过”不等于AntiFold推荐。"],
             ["双突结构建模", "全部15条双突", "没有双侧链重建、骨架松弛或双突AntiFold；WT位点远距只降低直接局部耦联担忧。"],
-            ["结合保持", "全部30条", "24个直接界面位点未突变，但非界面/CDR构象变化仍可能间接影响结合；需实验QC。"],
+            ["结合保持", "全部30条", "24个直接界面位点未突变，但非界面/CDR构象变化仍可能间接影响结合；当前尚未验证结合保持。"],
         ],
         [1.2, 1.45, 3.45],
         size=8.25,
     )
-    _heading(doc, "预测与审计边界")
+    _heading(doc, "预测与审计边界", page_break_before=True)
     _bullet(doc, "NetSolP、NanoMelt和AntiFold输出均为预测，不是Nb252突变体的实测表达量、溶解度、Tm或结构。")
     _bullet(doc, "U与S是NetSolP的两个分别保留输出，不应解释为两个统计独立模型。")
     _bullet(doc, "NanoMelt对WT与候选一致评价前126-aa编号域，并裁去末端GS；最终设计序列仍为完整128 aa。")
     _bullet(doc, "双突预测器输出的非加和残差不等于物理上位性，也未用于最终选择。")
-    _bullet(doc, "仓库中的派生双突矩阵与身份哈希已通过审计，但远程原始紧凑评分表未随本地仓库归档，当前本地无法从最原始103行输出独立重建联接。")
+    _bullet(doc, "用于本报告的双突结果矩阵已经过候选身份与序列一致性检查；但远程运行的最原始103行紧凑评分表未随本地报告材料归档，因此无法仅凭当前本地材料从原始输出重新构建该矩阵。")
     _paragraph(doc, "独立审计未发现序列错配、突变重建错误、冻结位点违规或最终CSV/FASTA不一致；总判定为可继续实验准备，但需保留上述科学与溯源限制。详细审计与本报告置于同一V3报告目录。")
-
-
-def _add_experiment_plan(doc: Document) -> None:
-    _new_section(doc, "12. 实验验证建议", page_break_before=False)
-    _paragraph(doc, "建议以WT与30条候选为同批对照体系，保持载体、信号肽、标签、菌株、培养基、诱导条件、采样时间和纯化流程一致。若实验容量有限，可按单突/双突分批，但每批均保留WT和跨批桥接对照。")
-    _table(
-        doc,
-        ["层级", "建议读出", "目的"],
-        [
-            ["主要终点", "纯化后产量（mg/L），至少3个独立生物重复", "直接回答BL21表达产量是否改善"],
-            ["过程读出", "总表达、可溶比例、纯化回收率", "区分转录/表达、可溶化和纯化损失"],
-            ["质量读出", "SEC单体比例、聚集/降解、完整质量", "识别高产但质量不合格的构建"],
-            ["风险定向", "F30N脱酰胺、L11M氧化、T99F/A23R结构敏感性", "验证本报告记录的候选级风险"],
-            ["功能保持", "对表达较好的构建进行结合或功能QC", "确认冻结直接界面之外的间接构象效应"],
-            ["双突比较", "双突同时与WT和两条组成单突比较", "判断组合收益及是否出现非加和实验效应"],
-        ],
-        [1.0, 2.1, 2.35],
-        size=8.7,
-    )
-    _paragraph(doc, "实验开始前应预先确定成功标准、排除标准、异常值处理和重复策略；本报告不代替实验阈值的预注册。第一轮结果应完整保留正向、中性和负向构建，用于检验当前计算幅度档与专家规则是否适配Nb252。")
 
 
 def _add_appendix(doc: Document, data: Mapping[str, Any]) -> None:
@@ -782,7 +771,6 @@ def build_v3_report_document(
     _add_double_selection(doc, data, report_figures)
     _add_final_panel(doc, data)
     _add_risks(doc, data)
-    _add_experiment_plan(doc)
     _add_appendix(doc, data)
     output_docx.parent.mkdir(parents=True, exist_ok=True)
     doc.save(str(output_docx))
