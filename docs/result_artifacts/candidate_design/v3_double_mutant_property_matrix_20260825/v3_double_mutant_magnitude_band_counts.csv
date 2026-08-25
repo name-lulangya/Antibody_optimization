@@ -1,0 +1,18 @@
+﻿metric,magnitude_band,candidate_count
+NetSolP U,moderate_adverse,6
+NetSolP U,moderate_favorable,15
+NetSolP U,negligible,41
+NetSolP U,strong_adverse,1
+NetSolP U,strong_favorable,9
+NetSolP U,weak_adverse,8
+NetSolP U,weak_favorable,22
+NetSolP S,moderate_favorable,23
+NetSolP S,negligible,30
+NetSolP S,strong_favorable,23
+NetSolP S,weak_adverse,2
+NetSolP S,weak_favorable,24
+NanoMelt predicted Tm,moderate_favorable,18
+NanoMelt predicted Tm,negligible,14
+NanoMelt predicted Tm,strong_favorable,53
+NanoMelt predicted Tm,weak_adverse,11
+NanoMelt predicted Tm,weak_favorable,6

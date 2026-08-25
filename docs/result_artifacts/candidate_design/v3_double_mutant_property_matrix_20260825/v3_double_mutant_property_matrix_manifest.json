@@ -1,0 +1,147 @@
+{
+  "facts": {
+    "candidate_count": 102,
+    "candidate_selection_performed": false,
+    "detailed_expert_review_required_count": 102,
+    "hard_sequence_risk_candidate_count": 0,
+    "moderate_or_strong_positive_candidate_count": 91,
+    "property_review_class_counts": {
+      "no_moderate_or_strong_positive_metric": 11,
+      "property_supported_no_moderate_or_strong_adverse": 84,
+      "property_supported_with_moderate_adverse_tradeoff": 6,
+      "strong_adverse_property_requires_review": 1
+    },
+    "stable_word_gain_candidate_count": 15,
+    "strong_adverse_candidate_count": 1
+  },
+  "gate": {
+    "candidate_count": 102,
+    "candidate_prefiltering_applied": false,
+    "final_15_double_mutant_selection": "not_performed",
+    "final_30_panel_release": "not_performed",
+    "nanomelt_coverage": "103_of_103_pass",
+    "netsolp_coverage": "103_of_103_pass",
+    "release": "ready_for_expert_review_and_explicit_final15_double_selection",
+    "v3_double_complete_property_matrix": "pass"
+  },
+  "generated_at": "2026-08-25T09:45:12+00:00",
+  "inputs": {
+    "candidate_plan": {
+      "path": "docs/result_artifacts/candidate_design/v3_double_mutant_plan_20260825/v3_double_mutant_candidates102.csv",
+      "sha256": "7c063884ba30c984e3de6766e316d426893f5642c1c01db5e98d66c1bcecd5a2"
+    },
+    "nanomelt_run": {
+      "path": "results/candidate_design/v3_double_mutant_scan_20260825/nanomelt/nanomelt_model_run.json",
+      "sha256": "50b2312214804751df8931cb5a007b1fb989a8753faf55d5bbc4b5d1d630512b"
+    },
+    "nanomelt_scores": {
+      "path": "results/candidate_design/v3_double_mutant_scan_20260825/nanomelt/nanomelt_sample_scores.csv",
+      "sha256": "7b48fdb68476de733ea81306034c54eaa600bd47727c26df053e077f9eb82a8d"
+    },
+    "netsolp_run": {
+      "path": "results/candidate_design/v3_double_mutant_scan_20260825/netsolp/netsolp_model_run.json",
+      "sha256": "d64420ad1df11081df996865770df65d05357a4ff4a4d00dcd268160d4b413b3"
+    },
+    "netsolp_scores": {
+      "path": "results/candidate_design/v3_double_mutant_scan_20260825/netsolp/netsolp_sample_scores.csv",
+      "sha256": "2e71bacafd954e4d39d1759f82b821cabf6fc9d719a022651377737f30b2389c"
+    },
+    "plan_manifest": {
+      "path": "docs/result_artifacts/candidate_design/v3_double_mutant_plan_20260825/v3_double_mutant_plan_manifest.json",
+      "sha256": "63e1989a4a95515dc9dee037c9061ed9ba1c6c377ec35027f984036796a4c955"
+    }
+  },
+  "metric_contract": {
+    "antifold": "two constituent pass records only; no addition and no double-mutant AntiFold score",
+    "magnitude_thresholds": {
+      "nanomelt_tm_c": [
+        0.5,
+        1.0,
+        1.5
+      ],
+      "netsolp_s": [
+        0.01,
+        0.02,
+        0.03
+      ],
+      "netsolp_u": [
+        0.005,
+        0.01,
+        0.015
+      ]
+    },
+    "model_nonadditivity": "double delta minus the two parent-single deltas; diagnostic of predictor output only, not physical epistasis",
+    "positive_metrics": [
+      "NetSolP U",
+      "NetSolP S",
+      "NanoMelt predicted apparent Tm"
+    ],
+    "within_band_decimal_ranking_performed": false
+  },
+  "optimization_target": "Nb252 BL21 expression yield",
+  "outputs": {
+    "bands": {
+      "path": "docs/result_artifacts/candidate_design/v3_double_mutant_property_matrix_20260825/v3_double_mutant_magnitude_band_counts.csv",
+      "sha256": "16d313f4c38db38fd4d3aecd09700a50ec397c5b6a2fa1b9002a5798634fda82"
+    },
+    "matrix": {
+      "path": "docs/result_artifacts/candidate_design/v3_double_mutant_property_matrix_20260825/v3_double_mutant_property_matrix102.csv",
+      "sha256": "58ca0f59a01fc6067b2092083b1ce8d87c23491aa848355e733ec178e206aedc"
+    },
+    "nonadditivity": {
+      "path": "docs/result_artifacts/candidate_design/v3_double_mutant_property_matrix_20260825/v3_double_mutant_model_nonadditivity_summary.csv",
+      "sha256": "c369ae92e3a444b4a0cbccc1f2925f5a055a1ffa0a5cfc1e24fa4ff1798f0abb"
+    },
+    "plot_data": {
+      "path": "docs/result_artifacts/candidate_design/v3_double_mutant_property_matrix_20260825/v3_double_mutant_property_plot_data.csv",
+      "sha256": "e5bef126b19a17c023005926f2502dc60bb9d7d08459b2b56d3ce70f908b105c"
+    },
+    "png": {
+      "path": "docs/result_artifacts/candidate_design/v3_double_mutant_property_matrix_20260825/v3_double_mutant_property_overview.png",
+      "sha256": "0a49aff088bcd7d4686ed3280286041f5cb2522a3a2516335b38d45cce41174b"
+    },
+    "review": {
+      "path": "docs/result_artifacts/candidate_design/v3_double_mutant_property_matrix_20260825/v3_double_mutant_review_priority.csv",
+      "sha256": "fd408ec1ef9d319817a6c361065a0f55b1f7eac8131144ebd4e7a30ec3b40029"
+    },
+    "svg": {
+      "path": "docs/result_artifacts/candidate_design/v3_double_mutant_property_matrix_20260825/v3_double_mutant_property_overview.svg",
+      "sha256": "aba369c54b19bd25fc46a896e0492000ea0361947f691349a1e7ded71a5348ed"
+    }
+  },
+  "run_summary": "docs/run_summaries/candidate_design/v3_double_mutant_property_matrix_20260825/run_summary.json",
+  "runtime_contract": {
+    "checkpoint_or_resume": false,
+    "command_argv": [
+      "/data/software/env/luly25/ab_optim/bin/python",
+      "/homes/Tianlab/luly25/Antibody_optimization/scripts/candidate_design/finalize_v3_double_mutant_matrix.py",
+      "--plan-dir",
+      "docs/result_artifacts/candidate_design/v3_double_mutant_plan_20260825",
+      "--netsolp-score-dir",
+      "results/candidate_design/v3_double_mutant_scan_20260825/netsolp",
+      "--nanomelt-score-dir",
+      "results/candidate_design/v3_double_mutant_scan_20260825/nanomelt",
+      "--output-dir",
+      "docs/result_artifacts/candidate_design/v3_double_mutant_property_matrix_20260825",
+      "--run-summary",
+      "docs/run_summaries/candidate_design/v3_double_mutant_property_matrix_20260825/run_summary.json"
+    ],
+    "elapsed_seconds": 5.409827,
+    "execution": "project_environment_after_sequential_remote_scoring",
+    "expected_runtime": "under_five_minutes_after_tool_scores_exist",
+    "python": "3.11.15"
+  },
+  "schema_version": 1,
+  "scientific_scope": "Join complete NetSolP and NanoMelt predictions for all 102 released doubles, retain constituent AntiFold evidence and pre-score structure/risk annotations, and perform no final selection.",
+  "status": "pass",
+  "verification": {
+    "all_antifold_evidence_is_constituent_only": true,
+    "all_nanomelt_rows_score_126aa_and_trim_terminal_gs": true,
+    "both_tools_use_identical_103_id_sequence_table": true,
+    "candidate_selection_performed": false,
+    "complete_double_candidate_rows": 102,
+    "model_nonadditivity_not_labeled_physical_epistasis": true,
+    "plot_rows": 306
+  },
+  "workflow": "v3_double_mutant_complete_property_matrix"
+}
