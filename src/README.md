@@ -129,6 +129,15 @@
   - 明确不支持：保存突变结构、松弛主链、提取定量clash、计算能量或选择候选；每张图仅代表固定主链上的一个一阶rotamer视图。
 - `scripts/candidate_design/build_v3_parent_single_expert_review.py`
   - 用途：联接上游U/S/Tm/AntiFold/稳定词证据、结构环境、逐候选专家判断和真实ChimeraX视图，生成31行UTF-8-BOM评价CSV及manifest。原始30条与补充`T99F`的角色及上游状态分列保留，入口固定保持`parent_single_selection=not_performed`；默认拒绝覆盖，只有显式`--overwrite`才更新同一审查制品。
+- `antibody_optimization.v3_parent_single_selection`
+  - 用途：在不改写31条专家审查或30条上游短名单的前提下，固化用户批准的15条V3父单突，并为31条候选保存可供后续报告直接读取的详细选择/淘汰理由。
+  - 输入与返回：接收31行专家审查和完整847行V3审计，返回31行决策审计、15行父单突、同位点互斥组及未来双突空间计数。强改善档优先；只有实验结构支持、高置信度且`structurally_concerning`的具体物理风险触发专家硬排；`T99F`保留上游不合格/未选事实，以下游用户指定稳定词探索例外入选。
+  - 明确不支持：重新计算或连续加权预测值、修改上游资格、把展示顺序称为效力排名、枚举/评分/选择双突，或把计算候选称为实验验证结果。
+- `scripts/candidate_design/select_v3_parent_single_panel.py`
+  - 用途：本地一次性写出31行详细决策CSV、15条父单突CSV/FASTA、紧凑绘图数据、600 dpi PNG/SVG、阶段manifest和轻量run summary；默认拒绝覆盖。流程低于1分钟，不运行预测器或结构工具，也不生成双突。
+- `antibody_optimization.v3_parent_single_selection_plot`
+  - 用途：从31行权威决策审计生成紧凑绘图表，并绘制31条处置构成、15条位置覆盖及U/S/Tm冻结幅度档热图。
+  - 算法假设：展示顺序不是效力排名；弱不利、中性和弱有利统一显示为0，避免微小变化驱动视觉；`T99F`和AF3-only证据分别用星号与三角标记。该模块只作结果展示，不改变任何选择、硬排或双突合同。
 - `antibody_optimization.expression_parent_panel`
   - 用途：在不改写现有30条单突试选的前提下，按显式导师/用户决策把它确定性缩减为下一阶段双突枚举所用的19条单突父集。
   - 输入与返回：接收冻结30行试选、按顺序给出的19个紧凑突变代码及逐条理由；返回19行父集、30行保留/淘汰审计和未来组合数。强制F30/Q1/T27各保留3条、其余10个位点各1条，并验证171个无序对中9个同位点互斥对，得到162条合法未来双突。

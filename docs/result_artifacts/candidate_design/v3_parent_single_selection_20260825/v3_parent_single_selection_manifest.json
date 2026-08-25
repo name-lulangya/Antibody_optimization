@@ -1,0 +1,151 @@
+{
+  "facts": {
+    "competitive_not_selected_count": 11,
+    "double_mutant_enumeration_performed": false,
+    "high_confidence_expert_risk_exclusion_count": 5,
+    "invalid_same_position_pair_count": 3,
+    "not_selected_candidate_count": 16,
+    "review_candidate_count": 31,
+    "selected_parent_single_count": 15,
+    "selected_same_position_groups": {
+      "11": 2,
+      "30": 2,
+      "75": 2
+    },
+    "selected_unique_position_count": 12,
+    "selected_user_directed_exploration_count": 1,
+    "selected_with_strong_favorable_metric_count": 9,
+    "theoretical_unordered_pair_count": 105,
+    "valid_unordered_double_mutant_count": 102
+  },
+  "gate": {
+    "detailed_decision_audit_count": 31,
+    "double_mutant_enumeration": "not_performed",
+    "final_15_double_mutant_selection": "not_performed",
+    "selected_parent_count": 15,
+    "v3_parent_single_selection": "pass",
+    "valid_double_mutant_space_ready_for_generation": true
+  },
+  "generated_at": "2026-08-25T15:55:38+08:00",
+  "high_confidence_expert_risk_exclusion_ids": [
+    "Nb252_expr_seq049_A49F",
+    "Nb252_expr_seq049_A49M",
+    "Nb252_expr_seq050_S50F",
+    "Nb252_expr_seq071_R71G",
+    "Nb252_expr_seq096_A96R"
+  ],
+  "inputs": {
+    "complete_v3_audit": {
+      "path": "docs/result_artifacts/candidate_design/expression_single_mutant_selection_v3_20260825/expression_single_mutant_v3_audit.csv",
+      "sha256": "26a82361f5f852bac2be49e3b13ac4aa8fde266e647868d09f1cf1c38e7c22ce"
+    },
+    "expert_review": {
+      "path": "docs/result_artifacts/candidate_design/v3_parent_single_expert_review_20260825/v3_parent_single_expert_review.csv",
+      "sha256": "b4bf3ec4e6b77cf8f1061a7c848262ce668ff4a4153efc0ad9f77f0164671063"
+    },
+    "upstream_files_modified": false
+  },
+  "optimization_target": "Nb252 BL21 expression yield",
+  "outputs": {
+    "audit": {
+      "path": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selection_audit.csv",
+      "sha256": "fc30c408242b49e7b19d1453e19ae964c96a99c9347cee5de70a229fb1422b57"
+    },
+    "fasta": {
+      "path": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selected15.fasta",
+      "sha256": "89b6365f88527c300f9a63ca91520390264d456923c3524d03245fd933e7f861"
+    },
+    "plot_data": {
+      "path": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selection_plot_data.csv",
+      "sha256": "21a8d40fa3b59de512d5f7d182f971eab1899cca034bc4c952487454131fdcb3"
+    },
+    "png": {
+      "path": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selection_overview.png",
+      "sha256": "750b8169b47124b637e9257eb0dc4aeae15acabc2a13637658349458bbe0b6d7"
+    },
+    "selected": {
+      "path": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selected15.csv",
+      "sha256": "db9475d5ea08e6e87d78538e181350e0368eb70407a57de58e7a49ce643735d5"
+    },
+    "svg": {
+      "path": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selection_overview.svg",
+      "sha256": "f6381e2a26e11218ff24a2f642839bf47ac4bbe98d0cab2591e728ff0e511c71"
+    }
+  },
+  "run_summary": "docs/run_summaries/candidate_design/v3_parent_single_selection_20260825/run_summary.json",
+  "runtime_contract": {
+    "checkpoint_or_resume": false,
+    "command_argv": [
+      "D:\\miniconda\\envs\\ab_optim\\python.exe",
+      "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\select_v3_parent_single_panel.py",
+      "--generated-at",
+      "2026-08-25T15:55:38+08:00",
+      "--overwrite"
+    ],
+    "elapsed_seconds": 2.50204,
+    "execution": "local_cpu",
+    "expected_runtime": "under_one_minute",
+    "python": "3.11.15",
+    "slurm_required": false
+  },
+  "schema_version": 1,
+  "scientific_scope": "Freeze the user-approved 15 parent single mutants from the released 31-candidate expert-review pool and preserve a detailed decision for all selected and non-selected candidates.",
+  "selected_mutations_in_display_order_not_efficacy_rank": [
+    "L11Y",
+    "F30S",
+    "K86S",
+    "A23R",
+    "Q5V",
+    "S55G",
+    "K75A",
+    "F29Q",
+    "K43A",
+    "N76G",
+    "F30N",
+    "K75E",
+    "L11M",
+    "Q1D",
+    "T99F"
+  ],
+  "selected_parent_ids_in_display_order_not_efficacy_rank": [
+    "Nb252_expr_seq011_L11Y",
+    "Nb252_expr_seq030_F30S",
+    "Nb252_expr_seq086_K86S",
+    "Nb252_expr_seq023_A23R",
+    "Nb252_expr_seq005_Q5V",
+    "Nb252_expr_seq055_S55G",
+    "Nb252_expr_seq075_K75A",
+    "Nb252_expr_seq029_F29Q",
+    "Nb252_expr_seq043_K43A",
+    "Nb252_expr_seq076_N76G",
+    "Nb252_expr_seq030_F30N",
+    "Nb252_expr_seq075_K75E",
+    "Nb252_expr_seq011_L11M",
+    "Nb252_expr_seq001_Q1D",
+    "Nb252_expr_seq099_T99F"
+  ],
+  "selection_policy": {
+    "antifold_role": "negative veto only; all 31 reviewed candidates passed",
+    "expert_hard_exclusion_rule": "Hard exclusion requires structurally_concerning plus high expert confidence and a concrete physical risk documented in the review.",
+    "positive_metrics": [
+      "NetSolP U magnitude band",
+      "NetSolP S magnitude band",
+      "NanoMelt predicted Tm magnitude band"
+    ],
+    "same_position_rule": "Alternatives may both be parent singles but their mutual pair is invalid",
+    "stable_word_role": "soft hypothesis only; T99F is one user-directed exploratory exception",
+    "strong_improvement_priority": "Select every reviewed candidate with at least one strong-favorable property band unless it has a high-confidence concrete expert risk.",
+    "within_band_raw_decimals_used_as_global_rank": false
+  },
+  "status": "pass",
+  "user_directed_exploration_id": "Nb252_expr_seq099_T99F",
+  "verification": {
+    "decision_rows": 31,
+    "parent_ssgs_and_two_cysteines_preserved": true,
+    "plot_source_rows": 31,
+    "selected_rows": 15,
+    "selected_sequences_are_unique_128aa_single_mutants": true,
+    "upstream_expert_review_and_v3_audit_are_read_only": true
+  },
+  "workflow": "v3_parent_single_selection"
+}

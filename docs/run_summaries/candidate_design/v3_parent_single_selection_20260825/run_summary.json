@@ -1,0 +1,84 @@
+{
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\select_v3_parent_single_panel.py",
+    "--generated-at",
+    "2026-08-25T15:55:38+08:00",
+    "--overwrite"
+  ],
+  "elapsed_seconds": 2.50204,
+  "facts": {
+    "competitive_not_selected_count": 11,
+    "double_mutant_enumeration_performed": false,
+    "high_confidence_expert_risk_exclusion_count": 5,
+    "invalid_same_position_pair_count": 3,
+    "not_selected_candidate_count": 16,
+    "review_candidate_count": 31,
+    "selected_parent_single_count": 15,
+    "selected_same_position_groups": {
+      "11": 2,
+      "30": 2,
+      "75": 2
+    },
+    "selected_unique_position_count": 12,
+    "selected_user_directed_exploration_count": 1,
+    "selected_with_strong_favorable_metric_count": 9,
+    "theoretical_unordered_pair_count": 105,
+    "valid_unordered_double_mutant_count": 102
+  },
+  "gate": {
+    "detailed_decision_audit_count": 31,
+    "double_mutant_enumeration": "not_performed",
+    "final_15_double_mutant_selection": "not_performed",
+    "selected_parent_count": 15,
+    "v3_parent_single_selection": "pass",
+    "valid_double_mutant_space_ready_for_generation": true
+  },
+  "generated_at": "2026-08-25T15:55:38+08:00",
+  "inputs": {
+    "complete_v3_audit": {
+      "path": "docs/result_artifacts/candidate_design/expression_single_mutant_selection_v3_20260825/expression_single_mutant_v3_audit.csv",
+      "sha256": "26a82361f5f852bac2be49e3b13ac4aa8fde266e647868d09f1cf1c38e7c22ce"
+    },
+    "expert_review": {
+      "path": "docs/result_artifacts/candidate_design/v3_parent_single_expert_review_20260825/v3_parent_single_expert_review.csv",
+      "sha256": "b4bf3ec4e6b77cf8f1061a7c848262ce668ff4a4153efc0ad9f77f0164671063"
+    },
+    "upstream_files_modified": false
+  },
+  "outputs": {
+    "audit": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selection_audit.csv",
+    "fasta": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selected15.fasta",
+    "manifest": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selection_manifest.json",
+    "plot_data": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selection_plot_data.csv",
+    "png": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selection_overview.png",
+    "run_summary": "docs/run_summaries/candidate_design/v3_parent_single_selection_20260825/run_summary.json",
+    "selected": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selected15.csv",
+    "svg": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selection_overview.svg"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "selection_policy": {
+    "antifold_role": "negative veto only; all 31 reviewed candidates passed",
+    "expert_hard_exclusion_rule": "Hard exclusion requires structurally_concerning plus high expert confidence and a concrete physical risk documented in the review.",
+    "positive_metrics": [
+      "NetSolP U magnitude band",
+      "NetSolP S magnitude band",
+      "NanoMelt predicted Tm magnitude band"
+    ],
+    "same_position_rule": "Alternatives may both be parent singles but their mutual pair is invalid",
+    "stable_word_role": "soft hypothesis only; T99F is one user-directed exploratory exception",
+    "strong_improvement_priority": "Select every reviewed candidate with at least one strong-favorable property band unless it has a high-confidence concrete expert risk.",
+    "within_band_raw_decimals_used_as_global_rank": false
+  },
+  "status": "pass",
+  "verification": {
+    "decision_rows": 31,
+    "parent_ssgs_and_two_cysteines_preserved": true,
+    "plot_source_rows": 31,
+    "selected_rows": 15,
+    "selected_sequences_are_unique_128aa_single_mutants": true,
+    "upstream_expert_review_and_v3_audit_are_read_only": true
+  },
+  "workflow": "v3_parent_single_selection"
+}
