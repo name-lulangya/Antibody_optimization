@@ -1,0 +1,20 @@
+{
+  "active_remote_predictors": [
+    "NetSolP Distilled SU on complete 128-aa constructs",
+    "NanoMelt predicted apparent Tm with observed 126-aa scored domain and terminal GS trimming"
+  ],
+  "antifold_policy": "retain each constituent single-position source/delta/rank/veto; require both vetoes to pass; do not add values and do not claim a double-mutant AntiFold score",
+  "candidate_selection_performed": false,
+  "checkpoint_or_resume": false,
+  "enumeration": "all unordered pairs of released parents",
+  "expected_remote_runtime": "approximately_10_to_30_minutes_under_2_hours",
+  "generated_at": "2026-08-25T18:30:00+08:00",
+  "parent_release": "v3_parent_single_selection_20260825 selected15",
+  "property_prefilter_before_complete_scoring": false,
+  "remote_route": "one non-array batch Slurm job, one GPU, 12 CPUs, sequential NetSolP then NanoMelt then project-environment analysis",
+  "same_position_alternatives": "mutually_exclusive_and_not_generated",
+  "schema_version": 1,
+  "sequence_risk_policy": "recompute on each complete double sequence",
+  "stable_word_policy": "recompute exact overlapping degenerate-word occurrences on each complete double sequence; soft hypothesis only",
+  "structure_triage_policy": "WT-site geometry only; experimental coordinates primary when both sites are observed, otherwise AF3 distances are separately labeled prediction-only; no mutant effect is inferred"
+}

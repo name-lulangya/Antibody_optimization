@@ -1,0 +1,16 @@
+﻿double_candidate_id,mutation_set,change_type,stable_word,stable_word_length,start_reported_1based,end_reported_1based,amino_acid_segment,degenerate_segment
+Nb252_v3_double_L11Y__T99F,L11Y;T99F,created,@haYh,5,99,103,FIDYI,@haYh
+Nb252_v3_double_F30S__T99F,F30S;T99F,created,@haYh,5,99,103,FIDYI,@haYh
+Nb252_v3_double_K86S__T99F,K86S;T99F,created,@haYh,5,99,103,FIDYI,@haYh
+Nb252_v3_double_A23R__T99F,A23R;T99F,created,@haYh,5,99,103,FIDYI,@haYh
+Nb252_v3_double_Q5V__T99F,Q5V;T99F,created,@haYh,5,99,103,FIDYI,@haYh
+Nb252_v3_double_S55G__T99F,S55G;T99F,created,@haYh,5,99,103,FIDYI,@haYh
+Nb252_v3_double_K75A__T99F,K75A;T99F,created,@haYh,5,99,103,FIDYI,@haYh
+Nb252_v3_double_F29Q__T99F,F29Q;T99F,created,@haYh,5,99,103,FIDYI,@haYh
+Nb252_v3_double_K43A__T99F,K43A;T99F,created,@haYh,5,99,103,FIDYI,@haYh
+Nb252_v3_double_N76G__K75E,N76G;K75E,created,asohYh,6,75,80,EGTVYL,asohYh
+Nb252_v3_double_N76G__T99F,N76G;T99F,created,@haYh,5,99,103,FIDYI,@haYh
+Nb252_v3_double_F30N__T99F,F30N;T99F,created,@haYh,5,99,103,FIDYI,@haYh
+Nb252_v3_double_K75E__T99F,K75E;T99F,created,@haYh,5,99,103,FIDYI,@haYh
+Nb252_v3_double_L11M__T99F,L11M;T99F,created,@haYh,5,99,103,FIDYI,@haYh
+Nb252_v3_double_Q1D__T99F,Q1D;T99F,created,@haYh,5,99,103,FIDYI,@haYh

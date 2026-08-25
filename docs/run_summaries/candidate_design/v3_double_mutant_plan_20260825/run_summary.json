@@ -1,0 +1,121 @@
+{
+  "command_argv": [
+    "D:\\miniconda\\envs\\ab_optim\\python.exe",
+    "C:\\Users\\16217\\Desktop\\Codex Projects\\Antibody_optimization\\scripts\\candidate_design\\build_v3_double_mutant_plan.py",
+    "--generated-at",
+    "2026-08-25T18:30:00+08:00",
+    "--overwrite"
+  ],
+  "elapsed_seconds": 4.224278,
+  "facts": {
+    "candidate_prefiltering_applied": false,
+    "detailed_structure_review_trigger_count": 53,
+    "hard_sequence_risk_candidate_count": 0,
+    "invalid_same_position_pair_count": 3,
+    "parent_single_count": 15,
+    "parent_unique_position_count": 12,
+    "score_sample_count_including_wt": 103,
+    "stable_word_gain_candidate_count": 15,
+    "stable_word_loss_candidate_count": 0,
+    "structure_distance_source_counts": {
+      "af3_vhh_only_due_missing_experimental_coordinate": 38,
+      "experimental_complex_vhh": 64
+    },
+    "t99f_containing_valid_double_count": 14,
+    "theoretical_unordered_pair_count": 105,
+    "valid_double_mutant_count": 102
+  },
+  "gate": {
+    "candidate_prefiltering_applied": false,
+    "complete_double_sequences_released": 102,
+    "final_15_double_mutant_selection": "not_performed",
+    "release": "ready_for_complete_netsolp_nanomelt_scoring",
+    "remote_property_scoring": "not_started",
+    "shared_score_samples_released": 103,
+    "v3_double_mutant_plan": "pass"
+  },
+  "generated_at": "2026-08-25T18:30:00+08:00",
+  "inputs": {
+    "af3_vhh": {
+      "path": "data/structures/cxs_exports/fold_2r_252_nomg_model_0__native.cif",
+      "sha256": "1aa69f736ad6c2f0ac3a367569b4237dbc9097eab5bcd7d9d3fe550a4d4a2ace"
+    },
+    "experimental_complex": {
+      "path": "data/structures/cxs_exports/NK2R-252__native.cif",
+      "sha256": "5c54f7fcf56c96f60b2dc7e80a9e009a790874c5c871f16d58c832560fde4322"
+    },
+    "parent_decision_audit": {
+      "path": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selection_audit.csv",
+      "sha256": "fc30c408242b49e7b19d1453e19ae964c96a99c9347cee5de70a229fb1422b57"
+    },
+    "parent_selected15": {
+      "path": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selected15.csv",
+      "sha256": "db9475d5ea08e6e87d78538e181350e0368eb70407a57de58e7a49ce643735d5"
+    },
+    "parent_selection_manifest": {
+      "path": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selection_manifest.json",
+      "sha256": "a01ad9250ce7eeb0e7ffa7ed9b37bf1c9daab6b00ffc93ec1b7bdb12dfae208a"
+    },
+    "sequence_structure_mapping": {
+      "path": "docs/result_artifacts/input_baseline/structure_released_20260810/nb252_sequence_structure_mapping.csv",
+      "sha256": "74e3975d1e10383d1f8904aba67487605b2c240bca5cca11093df2d50f21dce9"
+    },
+    "stable_word_library": {
+      "path": "data/Stable_word_SS_3D_1336 (1).txt",
+      "sha256": "6e7942d30fb5e2d254f00034b78c6196cb629fc34977a2e72253e6c03037a2de",
+      "word_count": 1336
+    },
+    "upstream_files_modified": false
+  },
+  "outputs": {
+    "candidates": "docs/result_artifacts/candidate_design/v3_double_mutant_plan_20260825/v3_double_mutant_candidates102.csv",
+    "contract": "docs/result_artifacts/candidate_design/v3_double_mutant_plan_20260825/v3_double_mutant_plan_contract.json",
+    "fasta": "docs/result_artifacts/candidate_design/v3_double_mutant_plan_20260825/v3_double_mutant_score_samples103.fasta",
+    "invalid": "docs/result_artifacts/candidate_design/v3_double_mutant_plan_20260825/v3_double_mutant_invalid_same_position_pairs.csv",
+    "manifest": "docs/result_artifacts/candidate_design/v3_double_mutant_plan_20260825/v3_double_mutant_plan_manifest.json",
+    "plot_data": "docs/result_artifacts/candidate_design/v3_double_mutant_plan_20260825/v3_double_mutant_plan_plot_data.csv",
+    "png": "docs/result_artifacts/candidate_design/v3_double_mutant_plan_20260825/v3_double_mutant_plan_overview.png",
+    "run_summary": "docs/run_summaries/candidate_design/v3_double_mutant_plan_20260825/run_summary.json",
+    "samples": "docs/result_artifacts/candidate_design/v3_double_mutant_plan_20260825/v3_double_mutant_score_samples103.csv",
+    "structure_triage": "docs/result_artifacts/candidate_design/v3_double_mutant_plan_20260825/v3_double_mutant_structure_triage.csv",
+    "svg": "docs/result_artifacts/candidate_design/v3_double_mutant_plan_20260825/v3_double_mutant_plan_overview.svg",
+    "word_changes": "docs/result_artifacts/candidate_design/v3_double_mutant_plan_20260825/v3_double_mutant_stable_word_changes.csv"
+  },
+  "parameters": {
+    "active_remote_predictors": [
+      "NetSolP Distilled SU on complete 128-aa constructs",
+      "NanoMelt predicted apparent Tm with observed 126-aa scored domain and terminal GS trimming"
+    ],
+    "antifold_policy": "retain each constituent single-position source/delta/rank/veto; require both vetoes to pass; do not add values and do not claim a double-mutant AntiFold score",
+    "candidate_selection_performed": false,
+    "checkpoint_or_resume": false,
+    "enumeration": "all unordered pairs of released parents",
+    "expected_remote_runtime": "approximately_10_to_30_minutes_under_2_hours",
+    "generated_at": "2026-08-25T18:30:00+08:00",
+    "parent_release": "v3_parent_single_selection_20260825 selected15",
+    "property_prefilter_before_complete_scoring": false,
+    "remote_route": "one non-array batch Slurm job, one GPU, 12 CPUs, sequential NetSolP then NanoMelt then project-environment analysis",
+    "same_position_alternatives": "mutually_exclusive_and_not_generated",
+    "schema_version": 1,
+    "sequence_risk_policy": "recompute on each complete double sequence",
+    "stable_word_policy": "recompute exact overlapping degenerate-word occurrences on each complete double sequence; soft hypothesis only",
+    "structure_triage_policy": "WT-site geometry only; experimental coordinates primary when both sites are observed, otherwise AF3 distances are separately labeled prediction-only; no mutant effect is inferred"
+  },
+  "python": "3.11.15",
+  "schema_version": 1,
+  "status": "pass",
+  "verification": {
+    "all_double_sequences_unique_128aa_exactly_two_substitutions": true,
+    "antifold_component_values_not_combined": true,
+    "complete_sequences_not_prefiltered": true,
+    "invalid_same_position_pair_count": 3,
+    "parent_single_count": 15,
+    "parent_ssgs_and_two_cysteines_preserved": true,
+    "parent_unique_position_count": 12,
+    "score_sample_count_including_wt": 103,
+    "theoretical_pair_count": 105,
+    "upstream_parent_artifacts_are_read_only": true,
+    "valid_double_count": 102
+  },
+  "workflow": "v3_double_mutant_plan"
+}

@@ -138,6 +138,24 @@
 - `antibody_optimization.v3_parent_single_selection_plot`
   - 用途：从31行权威决策审计生成紧凑绘图表，并绘制31条处置构成、15条位置覆盖及U/S/Tm冻结幅度档热图。
   - 算法假设：展示顺序不是效力排名；弱不利、中性和弱有利统一显示为0，避免微小变化驱动视觉；`T99F`和AF3-only证据分别用星号与三角标记。该模块只作结果展示，不改变任何选择、硬排或双突合同。
+- `antibody_optimization.v3_double_mutants`
+  - 用途：实现现行V3从15条已释放父单突到完整双突空间的确定性枚举，并在完整128-aa双突序列上重算序列风险和简并稳定词；远程评分完成后，联接同一WT加102条样本的NetSolP U/S和NanoMelt预测Tm，生成相对WT变化、冻结幅度档和模型非加和诊断。
+  - 输入与返回：接收15行父单突、31行父单突决策审计、1,336条稳定词、reported↔实验/AF3结构映射和两工具103行规范分数；返回105个理论对的审计、3个同位点互斥对、102条唯一双突、103条共同评分样本、稳定词变化、WT位点结构初筛及102行性质矩阵。
+  - 算法假设：只组合不同reported位置且不作评分前性质筛选；AntiFold只保留两个组成单突各自的来源、ΔlogP、位置内排名和否决状态，不相加也不生成双突AntiFold分数。结构初筛只描述WT位点几何，AF3距离保持预测来源标签；U/S/Tm非加和残差只描述模型输出，不能称为物理上位性。
+  - 明确不支持：读取历史V2父集或双突结果生成V3、引入15条父集外替换、组合同位点替换、生成三突、运行Rosetta/TNP/AF3批量预测/新AntiFold推理，或在完整远程评分前选择最终15条双突。
+- `antibody_optimization.v3_double_mutant_plan_plot`
+  - 用途：从V3计划逐候选表生成精确绘图数据，展示105→102枚举、15条父单突的合法配对矩阵、实验/AF3结构初筛来源和后续详细审查触发计数；不改变候选、风险或评分合同。
+- `antibody_optimization.v3_double_mutant_result_plot`
+  - 用途：在两工具103/103覆盖后，从102行完整性质矩阵绘制NetSolP ΔU、NetSolP ΔS、NanoMelt预测ΔTm及模型非加和诊断；只展示实算结果和预声明幅度档，不执行最终15条选择。
+- `scripts/candidate_design/build_v3_double_mutant_plan.py`
+  - 用途：本地一次性读取15条权威父单突并释放102条完整双突、3条互斥审计、103条共同评分CSV/FASTA、风险/稳定词/结构初筛、机器合同与manifest、600 dpi PNG/SVG和轻量run summary。默认拒绝覆盖；本地实测低于1分钟，不运行预测器。
+- `scripts/candidate_design/score_v3_double_mutant_properties.py`
+  - 用途：按`--tool netsolp|nanomelt`在对应冻结远程环境中评分同一103条ID/完整序列；逐ID和序列核对103/103覆盖，并在整批验证通过后安装原始输出、规范分数和模型运行记录。入口不筛选候选、不组合AntiFold证据。
+- `scripts/candidate_design/finalize_v3_double_mutant_matrix.py`
+  - 用途：在项目`ab_optim`环境严格联接两工具通过结果和V3计划，输出102行相对WT性质矩阵、幅度档计数、模型非加和摘要、结构复核优先表、PNG/SVG、manifest与run summary；保持`final_15_double_mutant_selection=not_performed`。
+- `scripts/candidate_design/run_v3_double_mutant_scan.sh`与`submit_v3_double_mutant_scan.slurm`
+  - 用途：现行V3远程唯一执行路线；一个非数组`batch`作业顺序运行NetSolP、NanoMelt和矩阵联接，固定1 GPU、12 CPU、2小时上限，日志写入`logs/v3_double_mutant_scan/`。预计10–30分钟且低于2小时，不使用checkpoint或resume；正式输出路径已存在时拒绝覆盖。
+- V2历史边界：以下`antibody_optimization.expression_parent_panel`、`antibody_optimization.expression_double_mutants`及其19→162评分/终选入口均为只读历史provenance。现行V3不导入其父集、候选、分数、配额或选择结果；共享算法只通过上述V3专用模块和通用底层规范化工具使用。
 - `antibody_optimization.expression_parent_panel`
   - 用途：在不改写现有30条单突试选的前提下，按显式导师/用户决策把它确定性缩减为下一阶段双突枚举所用的19条单突父集。
   - 输入与返回：接收冻结30行试选、按顺序给出的19个紧凑突变代码及逐条理由；返回19行父集、30行保留/淘汰审计和未来组合数。强制F30/Q1/T27各保留3条、其余10个位点各1条，并验证171个无序对中9个同位点互斥对，得到162条合法未来双突。
@@ -477,17 +495,17 @@
 - `scripts/candidate_design/submit_double_mutant_scan.sh`及四个`.slurm`：并行提交NetSolP、NanoMelt、TNP和PyRosetta四条无筛选扫描；均使用`batch`、1 GPU、12 CPU，日志写入`logs/double_mutant_scan/`。
 
 - `antibody_optimization.expression_double_mutants`
-  - 用途：实现现行表达量路线的19条已批准父单突到完整162条不同位置双突的确定性枚举，并在完整双突序列上重算序列风险和简并稳定词变化；联接NetSolP/NanoMelt远程结果时计算相对WT变化、既定幅度档和相对两个组成单突的预测器非加和残差。
+  - 用途：实现历史V2路线的19条已批准父单突到完整162条不同位置双突的确定性枚举，并在完整双突序列上重算序列风险和简并稳定词变化；联接NetSolP/NanoMelt远程结果时计算相对WT变化、既定幅度档和相对两个组成单突的预测器非加和残差。该模块现为只读历史provenance，不参与V3。
   - 主要输入/返回：19条父单突及release gate、1,336条稳定词、WT+162条NetSolP/NanoMelt规范分数；返回162条唯一128-aa双突、9条同位点互斥审计、163条共同评分样本、稳定词长表及完整性质矩阵。
   - 算法假设：只组合不同reported位置；AntiFold沿用两个组成位置各自的冻结WT骨架证据，只有两者来自同一结构视图时才记录可加log-probability差，且该值不代表双突重评分或上位性；NetSolP/NanoMelt interaction residual只描述预测器输出的非加和性，不解释为物理相互作用。
   - 明确不支持：引入19条父集之外的替换、组合同位点替换、生成三突、运行Rosetta/TNP/AF3批量预测、跨实验/AF3视图相加AntiFold值，或在162条评分完成前选择最终11条。
-- `scripts/candidate_design/build_expression_double_mutant_plan.py`：本地生成162条未筛选双突、9条互斥审计、WT+162共同CSV/FASTA、完整序列风险/稳定词证据、合同、gate和run summary；读取旧30条与19条制品但不修改。
-- `scripts/candidate_design/score_expression_double_mutant_properties.py`：以`--tool netsolp|nanomelt`在对应固定远程环境评分同一163条样本，要求163/163覆盖，不包含TNP或候选筛选分支。
-- `scripts/candidate_design/finalize_expression_double_mutant_matrix.py`：在项目环境严格联接两工具结果和组成位点AntiFold证据，输出162行完整矩阵、幅度档计数、概览图及release gate；不选最终11条。
-- `scripts/candidate_design/run_expression_double_mutant_scan.sh`与`submit_expression_double_mutant_scan.slurm`：现行远程单作业顺序路线；`batch`、1 GPU、12 CPU、2小时上限，日志写入`logs/expression_double_mutant_scan/`。预计低于5小时，不使用数组、checkpoint或resume；已有结果目录时拒绝覆盖。
-- `antibody_optimization.expression_final_panel`：从冻结的162行双突矩阵按幅度档、硬风险和三项多样性上限执行词典序整数优化；NetSolP U/S合为一个家族，NanoMelt和组成位点最差AntiFold档各为一个家族。返回162行审计、11条双突、分层替补、19+11最终面板和求解目标记录；原始小数不参与同档排序，也不运行任何预测器。
-- `antibody_optimization.expression_final_panel_plot`：从终选审计与11条双突精确绘制162→84→11漏斗、三家族分类证据和reported位置使用情况；不重新筛选候选。
-- `scripts/candidate_design/select_expression_final_panel.py`：本地一次性终选入口；严格联接完整双突矩阵、19条父单突及机器约束，输出CSV/FASTA、选择合同、gate、PNG/SVG和run summary。预计低于1小时，不需要Slurm、checkpoint或resume，且拒绝覆盖既有结果。
+- `scripts/candidate_design/build_expression_double_mutant_plan.py`：历史V2本地入口；生成162条未筛选双突、9条互斥审计、WT+162共同CSV/FASTA、完整序列风险/稳定词证据、合同、gate和run summary。保留原样，不用于V3。
+- `scripts/candidate_design/score_expression_double_mutant_properties.py`：历史V2远程入口；对同一163条样本要求163/163覆盖。保留原样，不用于V3。
+- `scripts/candidate_design/finalize_expression_double_mutant_matrix.py`：历史V2联接入口；输出162行完整矩阵、幅度档计数、概览图及release gate。保留原样，不用于V3。
+- `scripts/candidate_design/run_expression_double_mutant_scan.sh`与`submit_expression_double_mutant_scan.slurm`：历史V2远程单作业路线；其资源和日志合同仅记录当时运行provenance，不是现行V3提交入口。
+- `antibody_optimization.expression_final_panel`：历史V2终选模块；从冻结的162行矩阵返回11条双突、分层替补和19+11面板。其配额、家族定义和选择结果均不用于V3。
+- `antibody_optimization.expression_final_panel_plot`：历史V2结果图模块；保留162→84→11漏斗，不用于V3选择或报告。
+- `scripts/candidate_design/select_expression_final_panel.py`：历史V2本地终选入口；保留原样，不再作为现行最终面板入口。
 - `antibody_optimization.double_mutant_contacts`：只读取既有258条突变重复和135条位置对WT记录，按`wt_control_id`、重复和seed复算VHH/NK2R配对保持率及逐重复lost/gained source-auth残基；同时产生86条候选汇总和重复一致性，不读取或修改结构、不重新计算几何接触、不筛选候选。
 - `antibody_optimization.double_mutant_analysis`与`scripts/candidate_design/analyze_double_mutant_scan.py`：V2.1仅在四条86候选扫描完整后联接相对WT U/S/预测Tm、TNP flag/PSH、双突PyRosetta能量、实验参考/配对WT接触证据、界面Cα RMSD和化学风险。结构安全主门使用已释放阈值下的配对WT保持率与RMSD；较低实验参考保持率仅标记准备敏感性，不覆盖多目标类别，也不要求接触集合精确一致。输出schema 3的86行联合表、完整258行接触审计、gate和三面板图，不自动选出最终30条。
 - `antibody_optimization.preliminary_panel`
