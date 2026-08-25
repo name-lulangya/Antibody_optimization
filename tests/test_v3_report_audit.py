@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import hashlib
 import importlib.util
+import json
 from pathlib import Path
 
 
@@ -95,7 +97,11 @@ def test_v3_release_audit_records_material_caveats_without_hiding_them() -> None
     assert readiness["existing_delivery_contains_v2_parent19_and_selected11_files"] is True
     assert readiness["existing_report_builder_points_to_historical_v2_inputs"] is True
     assert "current_external_materials_release_blocked" not in readiness
-    assert readiness["v3_report_generation_status"] == "not_started"
+    assert readiness["upstream_final_manifest_report_and_presentation_sync"] == "not_performed"
+    assert readiness["upstream_report_and_presentation_sync_is_not_a_report_only_blocker"] is True
+    assert readiness["presentation_required_for_this_release"] is False
+    assert readiness["delivery_archive_required_for_this_release"] is False
+    assert readiness["presentation_or_archive_absence_is_blocking"] is False
     assert (
         readiness["v3_report_directory"]
         == "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report"
@@ -104,8 +110,91 @@ def test_v3_release_audit_records_material_caveats_without_hiding_them() -> None
     assert readiness["v3_audit_evidence"].endswith("/Nb252_V3_audit_evidence.json")
     assert (ROOT / readiness["v3_audit_report"]).is_file()
     assert readiness["new_v3_report_drafting_allowed"] is True
-    assert readiness["new_v3_report_finalization_allowed"] is False
-    assert (
-        readiness["v3_report_finalization_status"]
-        == "pending_generation_identity_check_and_render_QA"
+    report_manifest = json.loads(
+        (ROOT / readiness["v3_report_manifest"]).read_text(encoding="utf-8")
     )
+    expected_complete = (
+        report_manifest["status"] == "generated_and_bound"
+        and (ROOT / readiness["v3_report_docx"]).is_file()
+        and (ROOT / readiness["v3_report_pdf"]).is_file()
+    )
+    assert readiness["new_v3_report_finalization_allowed"] is expected_complete
+    assert readiness["v3_report_generation_status"] == (
+        "complete" if expected_complete else "pending_artifact_binding"
+    )
+
+
+def _write_report_only_fixture(root: Path, *, bind_pdf: bool) -> None:
+    report_dir = (
+        root
+        / "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report"
+    )
+    template = (
+        root
+        / "docs/result_artifacts/weekly_report_result/"
+        "report_2026_W34_nb252_expression_route/"
+        "Nb252_BL21_expression_optimization_project_report.docx"
+    )
+    report_dir.mkdir(parents=True)
+    template.parent.mkdir(parents=True)
+    template.write_bytes(b"historical-v2-template-test-only")
+    docx = report_dir / "Nb252_BL21_expression_optimization_V3_project_report.docx"
+    pdf = report_dir / "Nb252_BL21_expression_optimization_V3_project_report.pdf"
+    manifest_path = (
+        report_dir / "Nb252_BL21_expression_optimization_V3_report_manifest.json"
+    )
+    docx.write_bytes(b"v3-docx-test-only")
+    if bind_pdf:
+        pdf.write_bytes(b"v3-pdf-test-only")
+    manifest = {
+        "status": "generated_and_bound" if bind_pdf else "generated_pending_or_completed_visual_QA",
+        "historical_template_sha256": hashlib.sha256(template.read_bytes()).hexdigest(),
+        "document": {
+            "output_docx": str(docx),
+            "sha256": hashlib.sha256(docx.read_bytes()).hexdigest(),
+            "candidate_count": 30,
+            "single_count": 15,
+            "double_count": 15,
+            "antifold_role": {
+                "role": "negative_risk_exclusion_only",
+                "positive_candidate_credit": False,
+                "proposes_candidates": False,
+                "ranks_candidates": False,
+                "double_mutant_scoring": "not_performed",
+                "component_values_combined": False,
+            },
+        },
+        "scope": {
+            "ppt_created": False,
+            "delivery_archive_created": False,
+            "historical_v2_assets_modified": False,
+            "antifold_role": "negative_risk_exclusion_only",
+        },
+    }
+    if bind_pdf:
+        manifest["pdf"] = {
+            "path": str(pdf),
+            "sha256": hashlib.sha256(pdf.read_bytes()).hexdigest(),
+        }
+    manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+
+
+def test_report_only_release_finalizes_without_ppt_or_archive(tmp_path: Path) -> None:
+    _write_report_only_fixture(tmp_path, bind_pdf=True)
+    readiness = _module()._v3_report_artifact_readiness(tmp_path)
+
+    assert readiness["new_v3_report_finalization_allowed"] is True
+    assert readiness["v3_report_generation_status"] == "complete"
+    assert readiness["v3_report_finalization_status"] == "report_only_release_complete"
+    assert readiness["presentation_or_archive_absence_is_blocking"] is False
+    assert readiness["required_action"] == "none_report_only_release_complete"
+
+
+def test_report_only_release_stays_pending_until_pdf_is_bound(tmp_path: Path) -> None:
+    _write_report_only_fixture(tmp_path, bind_pdf=False)
+    readiness = _module()._v3_report_artifact_readiness(tmp_path)
+
+    assert readiness["v3_report_docx_bound"] is True
+    assert readiness["v3_report_pdf_bound"] is False
+    assert readiness["new_v3_report_finalization_allowed"] is False
+    assert readiness["presentation_or_archive_absence_is_blocking"] is False

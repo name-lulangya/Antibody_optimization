@@ -1,5 +1,21 @@
 # 可复用源码索引
 
+- `antibody_optimization.v3_report_data`
+  - 用途：只读现行V3权威制品，回接847条允许单突、15条父单突、102条双突、15条终选双突和最终15＋15面板，向报告层提供单一结构化数据合同。
+  - 输入/返回：输入项目根目录；返回亲本身份、硬约束、天然保守性、工具验证、幅度阈值、单/双突审计、最终面板、审计证据和AntiFold角色合同。加载时核对关键manifest哈希与候选身份，不重算预测。
+  - 范围边界：不读取V1/V2报告、不重新选择候选、不修改结果。AntiFold只允许负向风险排除语义；正向提议、奖励、排序、平局处理或双突评分会阻断报告数据验证。
+- `antibody_optimization.v3_report_document`
+  - 用途：复用历史V2报告的页面与样式规范，但清空其正文并仅用V3结构化数据重建导师/合作者可读的DOCX；生成A4页面、严格三线表、候选风险披露和30条完整128-aa序列附录。
+  - 输入/返回：输入只读V2视觉模板、V3报告数据和已验证报告图；输出独立V3 DOCX及内容摘要。V2模板在生成前后必须保持同一SHA-256。
+  - 范围边界：不读取V2候选或数值、不生成PPT/压缩包、不把预测写成实验结果。AntiFold在正文中仅作风险排除，且双突不运行联合AntiFold评分。
+- `antibody_optimization.v3_report_figures`
+  - 用途：仅从现行V3权威CSV/JSON读取已释放的15条父单突、102条已审查双突、最终15条双突及正式工具验证数值，生成适配A4 Word的单突流程图、父单突U/S/Tm分档热图、双突流程图、双突U/S/Tm分档热图与多工具验证/角色图。
+  - 输入/返回：输入项目根目录和显式输出目录；返回5组PNG/SVG路径和1份紧凑长表CSV。加载时审核847→696→61→30→31→15、102→42→15、6/9三指标/两指标计数、工具验证特征和AntiFold角色合同。
+  - 范围边界：不重算预测、不重新排序、不写入DOCX，不读取或修改V1/V2历史资产。AntiFold仅展示为单突负向风险排除；不给予正向加分、不排序、不提议候选，也不构造双突AntiFold分数。
+- `scripts/reporting/build_nb252_expression_v3_report.py`
+  - 用途：现行V3报告唯一生成入口；顺序加载V3数据、生成报告专用图、写入DOCX和manifest，并可用`--finalize_only --bind_pdf`把渲染验收后的PDF哈希绑定到同一manifest。
+  - 输出：V3 DOCX、PDF、报告manifest、5组PNG/SVG及紧凑图源统一位于`docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/`。PPT与压缩包不在本轮范围。
+
 ## 现行表达性质决策合同
 
 - `antibody_optimization.expression_property_completion`
@@ -160,7 +176,8 @@
   - 终选制品：`docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/`是当前15+15候选身份、顺序、理由、合同和gate的唯一权威来源；旧报告、PPT或V1/V2结果不得替代该目录。
 - `scripts/reporting/audit_v3_release.py`
   - 用途：为V3报告建立只读的报告就绪性审计证据；从实体CSV、FASTA、JSON、结构映射和Git状态独立回接847→30→31→15→102→15→最终30，并核对突变重建、硬约束、manifest哈希、工具适用边界和报告版本状态。
-  - 输入与返回：接收项目根、审计起始提交、生成时间和一个不存在的输出路径；返回机器可读JSON，包含18项完整性检查、阶段计数、最终面板风险、预测器证据边界、溯源缺口和报告同步状态。正式人工审计报告与证据位于`docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/`；后续V3项目报告、PPT和交付材料也统一写入该目录。
+  - 输入与返回：接收项目根、审计起始提交、生成时间和显式输出路径；返回机器可读JSON，包含18项完整性检查、阶段计数、最终面板风险、预测器证据边界、溯源缺口和报告同步状态。正式人工审计报告、V3 DOCX/PDF及报告manifest位于`docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/`。
+  - 报告完成门：只有V3 DOCX/PDF与manifest身份、哈希、15＋15计数、AntiFold负向角色、V2模板不变和report-only scope均通过时允许项目报告finalization；PPT和压缩包在未被用户要求时明确为out-of-scope，不构成阻断。
   - 算法假设：当前15＋15 manifest是唯一最终候选权威；历史V1/V2及上游30单突保持只读。自动检查支持但不替代人工科学、结构、风险和图表语义审查。
   - 明确不支持：修改结果、修复历史制品、重新运行预测器、把预测称为实验结果、证明结合保持，或用旧V2报告/PPT生成V3交付。
 - `scripts/candidate_design/build_v3_double_mutant_plan.py`

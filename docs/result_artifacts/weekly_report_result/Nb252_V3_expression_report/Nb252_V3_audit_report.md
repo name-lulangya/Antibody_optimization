@@ -17,9 +17,9 @@
 - 847条单突至最终30条的身份链完整闭合；机器审计18/18项通过。
 - 全套项目验证为320 passed、1 skipped、4 subtests passed；`compileall`、`py_compile`、`pip check`、`git diff --check`及证据JSON重复生成一致性均通过。
 - 当前最终面板包含15条单突和15条双突。展示顺序不是效力排名，全部结果仍是计算优先的实验假设，不是已验证的表达改善。
-- 现有W34报告、PPT及其生成入口对应历史V2的19单突＋11双突，这是预期的历史版本状态，不构成V3审计缺陷。下一步将在本审计所在的V3报告目录中，从现行final manifest、final CSV/FASTA及本审计生成全新的V3项目报告、PPT和交付材料，历史V2材料保持原样。
+- W34报告、PPT及其生成入口对应历史V2的19单突＋11双突，这是预期的历史版本状态，不构成V3审计缺陷。现行V3项目报告已从final manifest、final CSV/FASTA及本审计重新生成DOCX/PDF并完成manifest绑定；历史V2材料保持原样。
 
-本审计的机器可读支持证据为`docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/Nb252_V3_audit_evidence.json`；该JSON由`scripts/reporting/audit_v3_release.py`从实体CSV、FASTA、JSON和结构映射重新联接生成。后续V3项目报告、审计报告、PPT和交付材料统一存放在`docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/`，不另行手抄一份审计结论。
+本审计的机器可读支持证据为`docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/Nb252_V3_audit_evidence.json`；该JSON由`scripts/reporting/audit_v3_release.py`从实体CSV、FASTA、JSON和结构映射重新联接生成。V3项目报告与审计报告统一存放在`docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/`。本轮范围仅包括项目报告DOCX/PDF及审计制品，不制作PPT或压缩交付包，其缺失不构成发布阻断。
 
 ## 2. 审计范围与方法
 
@@ -34,7 +34,7 @@
 5. 30条上游单突短名单、31条专家审查池和15条父单突；
 6. 105个理论父单突对、3个同位点互斥对、102条有效双突、共同评分矩阵和责任基序勘误；
 7. 102条双突统一审查、15条双突终选和最终30条CSV/FASTA；
-8. 各阶段manifest、输入/输出SHA-256、运行门、图表及报告/PPT版本状态。
+8. 各阶段manifest、输入/输出SHA-256、运行门、图表及V3报告DOCX/PDF绑定状态。
 
 ### 2.2 独立复核方法
 
@@ -49,7 +49,7 @@
 - 回读reported-sequence、IMGT、实验结构和AF3映射，检查WT身份与坐标状态；
 - 重算性质幅度档、AntiFold组成门、责任基序和`N76G+F30N`勘误overlay；
 - 复核4个V3阶段manifest中的47个本地可用哈希绑定；
-- 检查当前报告/PPT、delivery及报告生成器的来源合同是否仍为历史版本；
+- 分别检查历史V2材料与现行V3报告生成器的来源合同，并核对V3 DOCX/PDF及manifest绑定；
 - 执行全套项目测试、Python编译、依赖一致性与diff检查，并以相同输入重复生成证据JSON核对字节确定性。
 
 ### 2.3 未验证或未评价事项
@@ -191,10 +191,10 @@ NetSolP U和S作为两个输出指标分别保留，但不是两个独立模型�
 
 #### M-11：部分上游图的标题或分层语义已不适合V3报告直接复用
 
-- **证据**：上游30单突图仍写`Final 30`和`Three independent ordinal selection metrics`，但该30条现在只是父单突上游短名单，U/S又是同一NetSolP模型的两个输出；双突计划图的53/49和性质矩阵图的pre-selection review strata都不是终选阶段58/44。最终父单突与双突总览图虽清晰，但纵向尺寸较高，整图缩入Word/PPT会使标签过小。
+- **证据**：上游30单突图仍写`Final 30`和`Three independent ordinal selection metrics`，但该30条现在只是父单突上游短名单，U/S又是同一NetSolP模型的两个输出；双突计划图的53/49和性质矩阵图的pre-selection review strata都不是终选阶段58/44。最终父单突与双突总览图虽清晰，但纵向尺寸较高，整图缩入Word会使标签过小。
 - **影响**：直接复制整图可能造成版本、指标独立性或复核深度误读，也可能降低对外材料可读性。
-- **行动**：V3报告不得直接复用上游单突“Final 30”整图；终选复核深度只用final manifest的58/44。报告和PPT优先按面板拆图，并在同页解释三角形为AF3-only上下文、叹号为软序列责任；图注说明U/S是分别评价的同模型输出。
-- **状态**：Open report-rendering task；不影响图源数据。
+- **行动**：V3报告不直接复用上游单突“Final 30”整图；终选复核深度只用final manifest的58/44。报告已采用V3专用拆图，并在图注中说明U/S是分别评价的同模型输出及相应结构/责任标记。
+- **状态**：Closed for the V3 report-only release；不影响图源数据。
 
 ### Low
 
@@ -221,7 +221,7 @@ NetSolP U和S作为两个输出指标分别保留，但不是两个独立模型�
 
 ### Observations
 
-- 现有报告、PPT和交付包属于历史V2的19单突＋11双突版本，这是预期的版本沿革，不是V3计算链或报告准备缺陷。它们继续原样保留为历史provenance；下一步在本目录新建V3项目报告、PPT和交付材料，且只读取现行15＋15 final manifest、CSV/FASTA与本审计。
+- 历史报告、PPT和交付包属于V2的19单突＋11双突版本，这是预期的版本沿革，不是V3计算链或报告准备缺陷。它们继续原样保留为历史provenance；本目录中的V3项目报告仅读取现行15＋15 final manifest、CSV/FASTA与本审计，并已完成DOCX/PDF绑定。
 - `N76G+F30N`在源矩阵中因删除旧N76T并新增F30N的NG基序而净计数抵消。post-sync overlay已经正确保留“新增NG”责任信息；该组合未入选最终15双突。
 - 15条入选双突中4条为AF3-only结构距离来源、2条带软责任、0条为局部邻近组合；6条有3个中/强正向性质档，9条有2个。
 - 14条含T99F的双突自然分为2条enhanced和12条standard复核，未设T99F专属奖励、配额或否决；0条入选。
@@ -229,23 +229,23 @@ NetSolP U和S作为两个输出指标分别保留，但不是两个独立模型�
 
 ## 5. V3报告发布门
 
-### 5.1 可以立即开展
+### 5.1 报告制品状态
 
-- 以现行final manifest和最终30条CSV/FASTA为唯一候选来源，开始编写新的V3报告；
-- 复用已经通过哈希和视觉核验的V3图，但图注必须沿用本审计的证据边界；
-- 将本审计和机器证据JSON纳入后续V3报告交付包；
-- 将WT作为独立实验对照列入实验方案，但不计入30条候选。
+- 现行V3项目报告DOCX与渲染PDF已在本目录生成，并由V3 report manifest绑定文件身份与SHA-256；
+- 报告候选身份回读为15条单突＋15条双突，且只使用现行final manifest、final CSV/FASTA和V3审计证据；
+- AntiFold在报告中仅作为负向风险排除：不提议、不奖励、不排序候选，双突不计算AntiFold联合分数；
+- 历史V2模板字节身份保持不变，历史V2报告、PPT和delivery不参与V3生成；
+- 本轮是report-only release，不制作PPT或压缩交付包；二者缺失不是finalization阻断条件。
 
-### 5.2 对外发布前必须完成
+### 5.2 保留的科学披露与实验要求
 
-1. 在本审计所在目录新建V3项目报告、PPT和交付材料，由V3结果源重新生成；历史V2材料原样保留，不参与V3生成。
-2. 首页或方法部分固定声明：当前面板为15单突＋15双突，旧30单突仅为上游短名单。
-3. 逐项披露T99F、A23R、F30缺口边界、AF3-only、F30N脱酰胺和L11M氧化风险。
-4. 明确NetSolP、NanoMelt和AntiFold均为预测/相容性证据，不是Nb252突变产量或实测Tm。
-5. 明确冻结直接界面不能证明结合保持，并提出实验binding/function质控。
-6. 明确15条双突未做双侧链结构建模，最终选择不是唯一全局最优解。
-7. 优先补齐四个远程原始评分文件的受控归档；若未补齐，必须保留本审计的溯源限制说明。
-8. 新报告DOCX、PDF、PPT和交付文件夹完成渲染检查、表格/字体检查、候选身份回读及manifest绑定后，方可将`report_and_presentation_sync`从`not_performed`更新为新阶段的通过状态。
+1. 当前面板为15单突＋15双突，旧30单突仅为不可改写的上游短名单。
+2. 报告逐项披露T99F、A23R、F30缺口边界、AF3-only、F30N脱酰胺和L11M氧化风险。
+3. NetSolP、NanoMelt和AntiFold均为预测/相容性证据，不是Nb252突变产量或实测Tm；AntiFold没有正向入选信用。
+4. 冻结直接界面不能证明结合保持，实验中仍需binding/function质控。
+5. 15条双突未做双侧链结构建模，最终选择不是唯一全局最优解。
+6. 四个远程原始评分文件尚未本地归档；当前派生矩阵和本地输出哈希一致，报告保留该溯源限制。
+7. WT作为独立实验对照，不计入30条候选。
 
 ## 6. 最终审计判定
 
@@ -259,8 +259,8 @@ NetSolP U和S作为两个输出指标分别保留，但不是两个独立模型�
 | 预测器对BL21产量的有效性 | Not validated; hypothesis use only |
 | 原始远程结果本地归档 | Incomplete：51个manifest绑定中47个本地文件通过哈希，4个远程raw文件未归档 |
 | 现有V2报告/PPT/delivery | Expected historical version；不参与V3生成 |
-| 新V3报告/PPT与终选结果同步 | Not performed；下一阶段在本目录完成 |
-| V3报告书写 | Allowed |
-| V3报告对外发布 | Conditional on Section 5.2 |
+| V3报告DOCX/PDF与终选结果同步 | Pass：manifest已绑定，15＋15身份与AntiFold负向范围检查通过 |
+| V3 PPT/压缩交付包 | Out of scope；未制作且不阻断本轮报告finalization |
+| V3报告finalization | Pass：report-only release complete |
 
-本审计没有发现需要回滚或重新生成最终30条序列的工程性错误。后续工作的重点不是再次改变候选，而是用V3权威数据重写报告、完整披露风险与适用边界，并通过实验验证表达量及结合/功能保持。
+本审计没有发现需要回滚或重新生成最终30条序列的工程性错误。V3项目报告已完成，后续工作的重点是通过实验验证表达量及结合/功能保持，并保留正向、中性和负向结果的完整溯源。

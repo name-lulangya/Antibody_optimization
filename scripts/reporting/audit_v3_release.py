@@ -166,6 +166,111 @@ def _manifest_bindings(
     return checked, missing
 
 
+def _v3_report_artifact_readiness(root: Path) -> dict[str, Any]:
+    """Validate the report-only release boundary without requiring a presentation.
+
+    The active V3 reporting scope is one DOCX, its rendered PDF, and their compact
+    manifest.  PPT and delivery archives are deliberately out of scope, so the
+    immutable upstream ``report_and_presentation_sync`` field is provenance rather
+    than a finalization gate for this report-only release.
+    """
+    report_dir = (
+        root
+        / "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report"
+    )
+    report_manifest_path = (
+        report_dir / "Nb252_BL21_expression_optimization_V3_report_manifest.json"
+    )
+    docx_path = (
+        report_dir / "Nb252_BL21_expression_optimization_V3_project_report.docx"
+    )
+    pdf_path = report_dir / "Nb252_BL21_expression_optimization_V3_project_report.pdf"
+    template_path = (
+        root
+        / "docs/result_artifacts/weekly_report_result/"
+        "report_2026_W34_nb252_expression_route/"
+        "Nb252_BL21_expression_optimization_project_report.docx"
+    )
+
+    manifest = _json(report_manifest_path) if report_manifest_path.is_file() else {}
+    document = manifest.get("document", {}) if isinstance(manifest, dict) else {}
+    pdf = manifest.get("pdf", {}) if isinstance(manifest, dict) else {}
+    scope = manifest.get("scope", {}) if isinstance(manifest, dict) else {}
+    antifold = document.get("antifold_role", {}) if isinstance(document, dict) else {}
+
+    docx_bound = (
+        docx_path.is_file()
+        and Path(str(document.get("output_docx", ""))).name == docx_path.name
+        and document.get("sha256") == _sha256(docx_path)
+    )
+    pdf_bound = (
+        pdf_path.is_file()
+        and Path(str(pdf.get("path", ""))).name == pdf_path.name
+        and pdf.get("sha256") == _sha256(pdf_path)
+    )
+    candidate_identity_pass = (
+        document.get("candidate_count") == 30
+        and document.get("single_count") == 15
+        and document.get("double_count") == 15
+    )
+    antifold_scope_pass = (
+        antifold.get("role") == "negative_risk_exclusion_only"
+        and antifold.get("positive_candidate_credit") is False
+        and antifold.get("proposes_candidates") is False
+        and antifold.get("ranks_candidates") is False
+        and antifold.get("double_mutant_scoring") == "not_performed"
+        and antifold.get("component_values_combined") is False
+        and scope.get("antifold_role") == "negative_risk_exclusion_only"
+    )
+    report_only_scope_pass = (
+        scope.get("ppt_created") is False
+        and scope.get("delivery_archive_created") is False
+        and scope.get("historical_v2_assets_modified") is False
+    )
+    template_unchanged = (
+        template_path.is_file()
+        and manifest.get("historical_template_sha256") == _sha256(template_path)
+    )
+    finalization_allowed = all(
+        (
+            manifest.get("status") == "generated_and_bound",
+            docx_bound,
+            pdf_bound,
+            candidate_identity_pass,
+            antifold_scope_pass,
+            report_only_scope_pass,
+            template_unchanged,
+        )
+    )
+    return {
+        "v3_report_manifest": str(report_manifest_path.relative_to(root)).replace("\\", "/"),
+        "v3_report_docx": str(docx_path.relative_to(root)).replace("\\", "/"),
+        "v3_report_pdf": str(pdf_path.relative_to(root)).replace("\\", "/"),
+        "v3_report_manifest_status": manifest.get("status", "missing"),
+        "v3_report_docx_bound": docx_bound,
+        "v3_report_pdf_bound": pdf_bound,
+        "v3_report_candidate_identity_pass": candidate_identity_pass,
+        "v3_report_antifold_negative_only_scope_pass": antifold_scope_pass,
+        "v3_report_only_scope_pass": report_only_scope_pass,
+        "historical_v2_template_unchanged": template_unchanged,
+        "presentation_required_for_this_release": False,
+        "delivery_archive_required_for_this_release": False,
+        "presentation_or_archive_absence_is_blocking": False,
+        "new_v3_report_finalization_allowed": finalization_allowed,
+        "v3_report_generation_status": "complete" if finalization_allowed else "pending_artifact_binding",
+        "v3_report_finalization_status": (
+            "report_only_release_complete"
+            if finalization_allowed
+            else "pending_docx_pdf_manifest_binding_or_scope_check"
+        ),
+        "required_action": (
+            "none_report_only_release_complete"
+            if finalization_allowed
+            else "complete_and_bind_V3_DOCX_PDF_manifest"
+        ),
+    }
+
+
 def build_audit(root: Path, generated_at: str, scope_start: str) -> dict[str, Any]:
     input_baseline = root / "docs/result_artifacts/input_baseline"
     candidate = root / "docs/result_artifacts/candidate_design"
@@ -578,10 +683,7 @@ def build_audit(root: Path, generated_at: str, scope_start: str) -> dict[str, An
     old_report_builder_path = root / "scripts/reporting/build_nb252_expression_final_report.py"
     old_report_builder_text = old_report_builder_path.read_text(encoding="utf-8")
     historical_v2_materials_present = int(old_report.get("source_double_candidate_count", -1)) == 162
-    v3_report_sync_pending = (
-        _json(final_dir / "v3_final_panel_manifest.json")["gate"]["report_and_presentation_sync"]
-        == "not_performed"
-    )
+    v3_report_artifacts = _v3_report_artifact_readiness(root)
 
     parent_expert_counts = Counter(
         (row["expert_structural_assessment"], row["expert_confidence"])
@@ -617,6 +719,14 @@ def build_audit(root: Path, generated_at: str, scope_start: str) -> dict[str, An
     }
 
     failures = [item for item in checks if item["status"] == "fail"]
+    if failures:
+        v3_report_artifacts["new_v3_report_finalization_allowed"] = False
+        v3_report_artifacts["v3_report_finalization_status"] = (
+            "blocked_by_failed_computational_release_checks"
+        )
+        v3_report_artifacts["required_action"] = (
+            "resolve_failed_computational_release_checks_before_report_finalization"
+        )
 
     netsolp_validation_path = (
         candidate
@@ -811,15 +921,15 @@ def build_audit(root: Path, generated_at: str, scope_start: str) -> dict[str, An
                 "expression_final_19plus11_panel_20260822" in old_report_builder_text
                 and "expression_single_mutant_parent19_20260822" in old_report_builder_text
             ),
-            "v3_report_and_presentation_sync": gate_checks["report_and_presentation_sync"],
-            "v3_report_generation_status": "not_started" if v3_report_sync_pending else "complete",
+            "upstream_final_manifest_report_and_presentation_sync": gate_checks[
+                "report_and_presentation_sync"
+            ],
+            "upstream_report_and_presentation_sync_is_not_a_report_only_blocker": True,
             "v3_report_directory": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report",
             "v3_audit_report": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/Nb252_V3_audit_report.md",
             "v3_audit_evidence": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/Nb252_V3_audit_evidence.json",
             "new_v3_report_drafting_allowed": not failures,
-            "new_v3_report_finalization_allowed": False,
-            "v3_report_finalization_status": "pending_generation_identity_check_and_render_QA",
-            "required_action": "generate_new_V3_report_in_shared_V3_report_directory_from_final_manifest",
+            **v3_report_artifacts,
         },
         "machine_checks": checks,
         "machine_check_summary": {
@@ -837,6 +947,11 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--generated-at", required=True)
     parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Replace an existing generated audit-evidence JSON after report finalization.",
+    )
+    parser.add_argument(
         "--scope-start",
         default="862394d78d229618d13048229457f9be1ed2f759",
         help="Commit immediately before the active V3 lineage under review.",
@@ -844,7 +959,7 @@ def main() -> int:
     args = parser.parse_args()
     root = args.root.resolve()
     output = args.output if args.output.is_absolute() else root / args.output
-    if output.exists():
+    if output.exists() and not args.overwrite:
         raise FileExistsError(f"Refusing to overwrite existing audit evidence: {output}")
     result = build_audit(root, args.generated_at, args.scope_start)
     output.parent.mkdir(parents=True, exist_ok=True)

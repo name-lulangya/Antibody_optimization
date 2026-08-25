@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "report": "Nb252_BL21_expression_optimization_V3",
+  "status": "generated_and_bound",
+  "historical_template_sha256": "dc9aafc06dff300d0153f2e85188bc5605baa6c8c55b83ec47e761b0da5677a0",
+  "document": {
+    "output_docx": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/Nb252_BL21_expression_optimization_V3_project_report.docx",
+    "sha256": "88cc793ba2b19fe1d60d5c0625b4563904efcf1acd9898e03e7b5fbb0296d6d0",
+    "candidate_count": 30,
+    "single_count": 15,
+    "double_count": 15,
+    "antifold_role": {
+      "role": "negative_risk_exclusion_only",
+      "positive_candidate_credit": false,
+      "proposes_candidates": false,
+      "ranks_candidates": false,
+      "single_mutant_veto_rule": {
+        "delta_log_probability_maximum": -3.0,
+        "within_position_rank_maximum": 4,
+        "amino_acid_state_count": 20,
+        "rule": "delta_log_probability <= -3 and mutant rank among worst four of 20"
+      },
+      "double_mutant_scoring": "not_performed",
+      "double_mutant_use": "constituent_single_mutant_veto_evidence_only",
+      "component_values_combined": false
+    }
+  },
+  "source_artifacts": {
+    "critical": "docs/result_artifacts/input_baseline/reviews/nb252_critical_residue_sets.json",
+    "conservation_contract": "docs/result_artifacts/input_baseline/vhh_conservation_consensus_v2_20260819/nb252_vhh_conservation_contract.json",
+    "constraints": "docs/result_artifacts/input_baseline/vhh_conservation_consensus_v2_20260819/nb252_expression_design_constraints.json",
+    "conservation_gate": "docs/result_artifacts/input_baseline/vhh_conservation_consensus_v2_20260819/conservation_gate.json",
+    "position_constraints": "docs/result_artifacts/input_baseline/vhh_conservation_consensus_v2_20260819/nb252_expression_position_constraints.csv",
+    "allowed_singles": "docs/result_artifacts/input_baseline/vhh_conservation_consensus_v2_20260819/nb252_allowed_single_mutants.csv",
+    "netsolp_gate": "docs/result_artifacts/candidate_design/netsolp_yield_validation_result_20260814/netsolp_yield_validation_gate.json",
+    "nanomelt_gate": "docs/result_artifacts/candidate_design/nanomelt_yield_validation_result_20260815/nanomelt_yield_validation_gate.json",
+    "nanomelt_classification": "docs/result_artifacts/candidate_design/nanomelt_yield_classification_v2_20260819/nanomelt_yield_classification_gate.json",
+    "antifold_applicability": "docs/result_artifacts/candidate_design/antifold_yield_applicability_20260819/antifold_yield_applicability_contract.json",
+    "rp3net_gate": "docs/result_artifacts/candidate_design/rp3net_yield_validation_result_20260818/rp3net_yield_validation_gate.json",
+    "plm_sol_gate": "docs/result_artifacts/candidate_design/plm_sol_yield_validation_result_20260819/plm_sol_yield_validation_gate.json",
+    "landscape_gate": "docs/result_artifacts/candidate_design/expression_single_mutant_landscape_v1_20260820/expression_single_mutant_landscape_gate.json",
+    "matrix_gate": "docs/result_artifacts/candidate_design/expression_property_complete_matrix_v2_20260819/expression_single_mutant_property_matrix_gate.json",
+    "single_contract": "docs/result_artifacts/candidate_design/expression_single_mutant_selection_v3_20260825/expression_single_mutant_v3_contract.json",
+    "single_gate": "docs/result_artifacts/candidate_design/expression_single_mutant_selection_v3_20260825/expression_single_mutant_v3_gate.json",
+    "single_audit": "docs/result_artifacts/candidate_design/expression_single_mutant_selection_v3_20260825/expression_single_mutant_v3_audit.csv",
+    "parent_manifest": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selection_manifest.json",
+    "parent_audit": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selection_audit.csv",
+    "parent_selected": "docs/result_artifacts/candidate_design/v3_parent_single_selection_20260825/v3_parent_single_selected15.csv",
+    "final_manifest": "docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/v3_final_panel_manifest.json",
+    "double_audit": "docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/v3_double_mutant_final_selection_audit102.csv",
+    "double_selected": "docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/v3_double_mutant_selected15.csv",
+    "final_panel": "docs/result_artifacts/candidate_design/v3_final_15plus15_panel_20260825/v3_final_panel30.csv",
+    "audit_evidence": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/Nb252_V3_audit_evidence.json"
+  },
+  "figures": {
+    "v3_double15_property_heatmap": {
+      "path": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_double15_property_heatmap.png",
+      "sha256": "b6eff924c404019b7b727d14c04de05dd1d5854831470e86efdd56ace10ece03"
+    },
+    "v3_double_selection_flow": {
+      "path": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_double_selection_flow.png",
+      "sha256": "e2481b2994b068970adc8fd68331d1e26a3d84603d3091216bbd61e74d333a3b"
+    },
+    "v3_parent15_property_heatmap": {
+      "path": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_parent15_property_heatmap.png",
+      "sha256": "2e133922f822d2445f063d5e11be582460e8827cbc709fcef1c05cc4a9ec157c"
+    },
+    "v3_single_selection_flow": {
+      "path": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_single_selection_flow.png",
+      "sha256": "fe6b89747ba3eba329b7e470b8c58169dd0941cfdd34d9224ae2816c48bb4c25"
+    },
+    "v3_tool_validation_summary": {
+      "path": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/figures/v3_tool_validation_summary.png",
+      "sha256": "dbb3d1466f3d6b72b6e5564f22d325d5a00512f6575b91594ffdad3e614146d5"
+    }
+  },
+  "scope": {
+    "ppt_created": false,
+    "delivery_archive_created": false,
+    "historical_v2_assets_modified": false,
+    "antifold_role": "negative_risk_exclusion_only"
+  },
+  "pdf": {
+    "path": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/Nb252_BL21_expression_optimization_V3_project_report.pdf",
+    "sha256": "e8675f52190ca06396589cabaec49337a3ea1a9314167f1de2171e7955adddfd"
+  }
+}
