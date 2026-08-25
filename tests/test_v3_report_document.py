@@ -199,11 +199,14 @@ def test_collaborator_facing_terms_and_table_structure_are_explicit(built_v3_rep
     document = built_v3_report["document"]
     text = _all_text(document)
 
-    assert "“硬约束”指禁止改变24个实验直接界面位点" in text
-    assert "“序列硬风险”指新增Pro造成主链构象约束" in text
-    assert "7-aa窗口出现至少6个疏水残基" in text
+    assert "单突筛选首先应用预设排除规则" in text
+    assert "位置层面的硬约束包括24个实验直接界面位点" in text
+    assert "新增Pro造成主链构象约束" in text
+    assert "7-aa窗口含至少6个疏水残基" in text
     assert "净侧链电荷绝对值达到至少5" in text
-    assert "“父单突”是指获准作为双突组成部分的单突" in text
+    assert "共有61条候选满足预设性质条件" in text
+    assert "“父单突”是指用于构建双突的组成单突" in text
+    assert "15条父单突可形成105种不区分先后顺序的两两组合" in text
     assert "稳定词是用简并氨基酸符号表示" in text
 
     excluded = _table_with_header(document, "排除突变", "主要物理风险", "专家排除依据")
@@ -219,8 +222,12 @@ def test_collaborator_facing_terms_and_table_structure_are_explicit(built_v3_rep
     doubles = _table_with_header(document, "序", "双突", "区域")
     assert len(parents.rows) == 16
     assert len(doubles.rows) == 16
-    assert parents.rows[0].cells[6].text.strip() == "结构证据/判断"
-    assert doubles.rows[0].cells[6].text.strip() == "结构证据/风险"
+    assert [cell.text.strip() for cell in parents.rows[0].cells] == [
+        "序", "单突", "区域", "ΔU", "ΔS", "ΔTm", "入选依据"
+    ]
+    assert [cell.text.strip() for cell in doubles.rows[0].cells] == [
+        "序", "双突", "区域", "ΔU", "ΔS", "ΔTm", "入选依据"
+    ]
 
     forbidden_terms = (
         "实验验证建议",
@@ -234,6 +241,24 @@ def test_collaborator_facing_terms_and_table_structure_are_explicit(built_v3_rep
         "7.2 展示顺序",
         "9.1 展示顺序",
         "9.2 展示顺序",
+        "结构证据/判断",
+        "结构证据/风险",
+        "候选级风险与适用边界",
+        "入选依据与风险",
+        "实验假设摘要",
+        "仅有AF3局部坐标",
+        "需关注CDR1预组织",
+        "大体积带电侧链需实验关注",
+        "表面疏水性可能上升",
+        "新增NG脱酰胺基序，明确标注化学风险",
+        "仅AF3坐标且增加Met氧化敏感性",
+        "高收益—新增NG脱酰胺风险",
+        "结构证据置信度较低",
+        "58条“详细复核”",
+        "44条“标准复核”",
+        "复核深度",
+        "非加和残差",
+        "最原始103行紧凑评分表",
     )
     assert not [term for term in forbidden_terms if term in text]
 

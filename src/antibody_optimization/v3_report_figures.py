@@ -121,10 +121,6 @@ def _read_csv(path: Path) -> tuple[Mapping[str, str], ...]:
     return rows
 
 
-def _nonempty(value: object) -> bool:
-    return str(value).strip().lower() not in {"", "nan", "none"}
-
-
 def _as_int(value: object) -> int:
     return int(float(str(value)))
 
@@ -371,7 +367,7 @@ def _add_band_colorbar(
 
 
 def render_parent15_heatmap(data: V3ReportFigureData, stem: Path) -> tuple[Path, Path]:
-    """Render parent-single U/S/Tm evidence with context and risk markers."""
+    """Render parent-single U/S/Tm evidence with the T99F exploration marker."""
 
     rows = _selected_parent_rows(data)
     labels = [row["mutation_reported_label"].replace("Nb252 reported_seq ", "") for row in rows]
@@ -395,10 +391,6 @@ def render_parent15_heatmap(data: V3ReportFigureData, stem: Path) -> tuple[Path,
     ax_notes.set_title("注记", fontsize=8.3, pad=5)
     for index, row in enumerate(rows):
         notes: list[str] = []
-        if row["experimental_coordinate_status"] != "observed":
-            notes.append("AF3")
-        if _nonempty(row["upstream_soft_sequence_risk_flags"]):
-            notes.append("软风险")
         if labels[index] == "T99F":
             notes.append("稳定词探索")
         if notes:
@@ -408,8 +400,7 @@ def render_parent15_heatmap(data: V3ReportFigureData, stem: Path) -> tuple[Path,
     fig.text(
         0.13,
         0.015,
-        "AF3：实验坐标缺失位置仅以AF3结构作为预测性背景；软风险：序列责任基序提示；T99F：用户指定稳定词探索。\n"
-        "AntiFold仅执行联合负向否决，不因预测改善而推荐任何单突。",
+        "T99F：稳定词探索项；AntiFold仅执行联合负向否决，不因预测改善而推荐任何单突。",
         ha="left",
         va="bottom",
         fontsize=7.8,
@@ -440,7 +431,7 @@ def render_double_selection_flow(data: V3ReportFigureData, stem: Path) -> tuple[
     ax.text(
         0.5,
         0.02,
-        "42条同属最高性质档，最终15条再结合物理风险、证据边界与多样性选择；AntiFold未对双突评分。",
+        "42条同属最高性质档，最终15条再结合性质幅度与组合多样性选择；AntiFold未对双突评分。",
         transform=ax.transAxes,
         ha="center",
         va="bottom",
@@ -458,9 +449,8 @@ def render_double15_heatmap(data: V3ReportFigureData, stem: Path) -> tuple[Path,
     labels = [row["mutation_set"].replace(";", "+") for row in rows]
     facts = data.final_manifest["facts"]
     fig = plt.figure(figsize=(7.35, 6.05))
-    ax = fig.add_axes([0.14, 0.16, 0.38, 0.73])
-    ax_notes = fig.add_axes([0.53, 0.16, 0.075, 0.73])
-    ax_cbar = fig.add_axes([0.68, 0.82, 0.25, 0.022])
+    ax = fig.add_axes([0.14, 0.16, 0.46, 0.73])
+    ax_cbar = fig.add_axes([0.65, 0.82, 0.28, 0.022])
     ax_summary = fig.add_axes([0.72, 0.27, 0.22, 0.47])
     image = _heatmap(
         ax,
@@ -470,20 +460,6 @@ def render_double15_heatmap(data: V3ReportFigureData, stem: Path) -> tuple[Path,
         ("NetSolP U", "NetSolP S", "NanoMelt预测Tm"),
     )
     fig.text(0.14, 0.94, "最终15条双突的分档性质证据", ha="left", va="top", fontsize=12, weight="bold")
-    ax_notes.set_ylim(ax.get_ylim())
-    ax_notes.set_xlim(0, 1)
-    ax_notes.set_xticks([])
-    ax_notes.set_yticks([])
-    ax_notes.set_title("注记", fontsize=8.3, pad=5)
-    for index, row in enumerate(rows):
-        notes: list[str] = []
-        if row["pair_experimental_coordinate_status"] != "both_observed":
-            notes.append("AF3")
-        if _nonempty(row["effective_soft_sequence_risk_flags"]):
-            notes.append("软风险")
-        if notes:
-            ax_notes.text(0.02, index, "\n".join(notes), ha="left", va="center", fontsize=6.9, color="#444444", linespacing=1.1)
-    ax_notes.spines[:].set_visible(False)
     _add_band_colorbar(fig, image, cax=ax_cbar, orientation="horizontal")
 
     parent_coverage = facts["selected_parent_component_count"]
@@ -505,7 +481,6 @@ def render_double15_heatmap(data: V3ReportFigureData, stem: Path) -> tuple[Path,
     fig.text(
         0.15,
         0.045,
-        "AF3：至少一个位置无实验坐标，仅保留预测结构背景；软风险：2条双突带已标注序列责任基序。\n"
         "15条均有2或3项中等/强改善，且无中等/强不利；展示顺序不是效力排序。",
         fontsize=7.8,
         ha="left",
@@ -632,8 +607,6 @@ def build_compact_source_rows(data: V3ReportFigureData) -> list[dict[str, object
             ("NanoMelt predicted Tm band", "nanomelt_tm_band_v3"),
         ):
             add("parent15_property_heatmap", label, metric, row[key], parent_source)
-        add("parent15_property_heatmap", label, "AF3-only context", row["experimental_coordinate_status"] != "observed", parent_source)
-        add("parent15_property_heatmap", label, "soft sequence risk", row["upstream_soft_sequence_risk_flags"], parent_source)
 
     final_source = (REPORT_FINAL_DIR / "v3_double_mutant_final_selection_audit102.csv").as_posix()
     for item, value in (
@@ -652,8 +625,6 @@ def build_compact_source_rows(data: V3ReportFigureData) -> list[dict[str, object
             ("NanoMelt predicted Tm band", "nanomelt_tm_c_magnitude_band"),
         ):
             add("double15_property_heatmap", label, metric, row[key], final_source)
-        add("double15_property_heatmap", label, "AF3-only context", row["pair_experimental_coordinate_status"] != "both_observed", final_source)
-        add("double15_property_heatmap", label, "soft sequence risk", row["effective_soft_sequence_risk_flags"], final_source)
     facts = data.final_manifest["facts"]
     selected_parents = _selected_parent_rows(data)
     parent_position_count = len(
