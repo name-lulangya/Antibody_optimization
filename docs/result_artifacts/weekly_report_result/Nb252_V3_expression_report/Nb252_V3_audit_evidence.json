@@ -1,13 +1,13 @@
 {
   "schema_version": 1,
   "audit_name": "nb252_v3_report_readiness_audit_evidence",
-  "generated_at": "2026-08-25T23:35:00+08:00",
+  "generated_at": "2026-08-26T00:30:00+08:00",
   "status": "pass_with_material_caveats",
   "audit_scope": {
     "repository": ".",
     "scope_start_commit": "862394d78d229618d13048229457f9be1ed2f759",
-    "audited_commit": "ca6e8acb10d616d3a85947dd4ccd95cf9b3e6841",
-    "origin_main_commit": "ca6e8acb10d616d3a85947dd4ccd95cf9b3e6841",
+    "audited_commit": "976a521d0f67f51cf1dd09af75c045ed6e697101",
+    "origin_main_commit": "976a521d0f67f51cf1dd09af75c045ed6e697101",
     "active_contract": "V3_15_single_plus_15_double",
     "historical_v1_v2_used_for_active_selection": false
   },

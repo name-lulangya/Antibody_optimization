@@ -5,7 +5,7 @@
   "historical_template_sha256": "dc9aafc06dff300d0153f2e85188bc5605baa6c8c55b83ec47e761b0da5677a0",
   "document": {
     "output_docx": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/Nb252_BL21_expression_optimization_V3_project_report.docx",
-    "sha256": "f02a55473d856031bd208c3fe3707ced7974e0912a59125e09471ebab3c7d1b3",
+    "sha256": "cd22c974ad981fb26eb2fdcce607093ba120c62b6f93573db5d2cb7b78b5ab15",
     "candidate_count": 30,
     "single_count": 15,
     "double_count": 15,
@@ -82,6 +82,6 @@
   },
   "pdf": {
     "path": "docs/result_artifacts/weekly_report_result/Nb252_V3_expression_report/Nb252_BL21_expression_optimization_V3_project_report.pdf",
-    "sha256": "3306b4608148f125f3b03734e8f1f3cbb9c7e85aa11c2005977590f421ca7a96"
+    "sha256": "fbc7971b26aed041d701578a575bd3b805b9cdc15a2bf6fb2eeaae9ff863acd8"
   }
 }

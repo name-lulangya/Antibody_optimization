@@ -52,6 +52,8 @@ def _font(
 ) -> None:
     run.font.name = name
     fonts = run._element.get_or_add_rPr().get_or_add_rFonts()
+    for key in ("asciiTheme", "hAnsiTheme", "eastAsiaTheme", "cstheme"):
+        fonts.attrib.pop(qn(f"w:{key}"), None)
     for key in ("ascii", "hAnsi", "eastAsia", "cs"):
         fonts.set(qn(f"w:{key}"), name)
     run.font.color.rgb = RGBColor.from_string(color)
@@ -91,6 +93,8 @@ def _style_document(doc: Document) -> None:
         style = doc.styles[name]
         style.font.name = FONT
         fonts = style._element.get_or_add_rPr().get_or_add_rFonts()
+        for key in ("asciiTheme", "hAnsiTheme", "eastAsiaTheme", "cstheme"):
+            fonts.attrib.pop(qn(f"w:{key}"), None)
         for key in ("ascii", "hAnsi", "eastAsia", "cs"):
             fonts.set(qn(f"w:{key}"), FONT)
         style.font.color.rgb = RGBColor.from_string(BLACK)
@@ -145,11 +149,15 @@ def _bullet(doc: Document, text: str) -> None:
 
 def _new_section(doc: Document, title: str, *, page_break_before: bool = True) -> None:
     heading = doc.add_heading(title, level=1)
+    for run in heading.runs:
+        _font(run, size=15, bold=True)
     heading.paragraph_format.page_break_before = page_break_before
 
 
 def _heading(doc: Document, title: str, *, page_break_before: bool = False) -> None:
     heading = doc.add_heading(title, level=2)
+    for run in heading.runs:
+        _font(run, size=12.5, bold=True)
     heading.paragraph_format.page_break_before = page_break_before
 
 

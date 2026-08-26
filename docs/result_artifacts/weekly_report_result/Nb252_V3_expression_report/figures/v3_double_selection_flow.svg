@@ -30,7 +30,7 @@ z
   <g id="axes_1">
    <g id="PathCollection_1">
     <defs>
-     <path id="me640381705" d="M 0 12.4499
+     <path id="m6ed3b9f143" d="M 0 12.4499
 C 3.301752 12.4499 6.468717 11.1381 8.803408 8.803408
 C 11.1381 6.468717 12.4499 3.301752 12.4499 0
 C 12.4499 -3.301752 11.1381 -6.468717 8.803408 -8.803408
@@ -42,18 +42,18 @@ C -6.468717 11.1381 -3.301752 12.4499 0 12.4499
 z
 " style="stroke: #ffffff; stroke-width: 1.2"/>
     </defs>
-    <g clip-path="url(#p50e55798d8)">
-     <use xlink:href="#me640381705" x="66.89376" y="84.01325" style="fill: #5b8fb5; stroke: #ffffff; stroke-width: 1.2"/>
+    <g clip-path="url(#p4cebf13118)">
+     <use xlink:href="#m6ed3b9f143" x="66.89376" y="84.01325" style="fill: #5b8fb5; stroke: #ffffff; stroke-width: 1.2"/>
     </g>
    </g>
    <g id="PathCollection_2">
-    <g clip-path="url(#p50e55798d8)">
-     <use xlink:href="#me640381705" x="255.924" y="84.01325" style="fill: #5b8fb5; stroke: #ffffff; stroke-width: 1.2"/>
+    <g clip-path="url(#p4cebf13118)">
+     <use xlink:href="#m6ed3b9f143" x="255.924" y="84.01325" style="fill: #5b8fb5; stroke: #ffffff; stroke-width: 1.2"/>
     </g>
    </g>
    <g id="PathCollection_3">
     <defs>
-     <path id="m6f6dded8b3" d="M 0 12.4499
+     <path id="mbd75ae3e22" d="M 0 12.4499
 C 3.301752 12.4499 6.468717 11.1381 8.803408 8.803408
 C 11.1381 6.468717 12.4499 3.301752 12.4499 0
 C 12.4499 -3.301752 11.1381 -6.468717 8.803408 -8.803408
@@ -65,8 +65,8 @@ C -6.468717 11.1381 -3.301752 12.4499 0 12.4499
 z
 " style="stroke: #ffffff; stroke-width: 1.2"/>
     </defs>
-    <g clip-path="url(#p50e55798d8)">
-     <use xlink:href="#m6f6dded8b3" x="430.0308" y="84.01325" style="fill: #194f7a; stroke: #ffffff; stroke-width: 1.2"/>
+    <g clip-path="url(#p4cebf13118)">
+     <use xlink:href="#mbd75ae3e22" x="430.0308" y="84.01325" style="fill: #194f7a; stroke: #ffffff; stroke-width: 1.2"/>
     </g>
    </g>
    <g id="text_1">
@@ -3051,7 +3051,7 @@ z
   </g>
  </g>
  <defs>
-  <clipPath id="p50e55798d8">
+  <clipPath id="p4cebf13118">
    <rect x="7.2" y="25.26125" width="497.448" height="146.88"/>
   </clipPath>
  </defs>

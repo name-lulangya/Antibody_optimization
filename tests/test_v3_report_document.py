@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import csv
 import hashlib
 import json
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -18,6 +20,11 @@ TEMPLATE = (
     / "docs/result_artifacts/weekly_report_result/"
     "report_2026_W34_nb252_expression_route/"
     "Nb252_BL21_expression_optimization_project_report.docx"
+)
+FINAL_PANEL_DIR = (
+    ROOT
+    / "docs/result_artifacts/candidate_design/"
+    "v3_final_15plus15_panel_20260825"
 )
 
 EXPECTED_SINGLES = [
@@ -165,6 +172,90 @@ def test_report_contains_exact_released_15_plus_15_identities(built_v3_report):
     assert [row.cells[1].text.strip() for row in double_table.rows[1:]] == EXPECTED_DOUBLES
     assert len(single_table.rows) == 16
     assert len(double_table.rows) == 16
+
+
+def test_headings_use_explicit_consistent_font_and_weight(built_v3_report):
+    document = built_v3_report["document"]
+    for style_name in ("Heading 1", "Heading 2"):
+        fonts = document.styles[style_name]._element.get_or_add_rPr().get_or_add_rFonts()
+        for attribute in ("ascii", "hAnsi", "eastAsia", "cs"):
+            assert fonts.get(qn(f"w:{attribute}")) == "Microsoft YaHei"
+        for attribute in ("asciiTheme", "hAnsiTheme", "eastAsiaTheme", "cstheme"):
+            assert fonts.get(qn(f"w:{attribute}")) is None
+
+    headings = [
+        paragraph
+        for paragraph in document.paragraphs
+        if paragraph.style.name in {"Heading 1", "Heading 2"}
+    ]
+    assert headings
+    for heading in headings:
+        expected_size = 15 if heading.style.name == "Heading 1" else 12.5
+        assert len(heading.runs) == 1
+        run = heading.runs[0]
+        fonts = run._element.get_or_add_rPr().get_or_add_rFonts()
+        assert run.bold is True
+        assert run.font.size is not None and run.font.size.pt == expected_size
+        for attribute in ("ascii", "hAnsi", "eastAsia", "cs"):
+            assert fonts.get(qn(f"w:{attribute}")) == "Microsoft YaHei"
+        for attribute in ("asciiTheme", "hAnsiTheme", "eastAsiaTheme", "cstheme"):
+            assert fonts.get(qn(f"w:{attribute}")) is None
+
+
+def test_appendix_sequences_match_csv_fasta_and_exact_parent_rebuild(built_v3_report):
+    document = built_v3_report["document"]
+    with (FINAL_PANEL_DIR / "v3_final_panel30.csv").open(
+        encoding="utf-8-sig", newline=""
+    ) as handle:
+        rows = list(csv.DictReader(handle))
+
+    fasta: dict[str, str] = {}
+    current_id: str | None = None
+    parts: list[str] = []
+    for line in (FINAL_PANEL_DIR / "v3_final_panel30.fasta").read_text(
+        encoding="utf-8"
+    ).splitlines():
+        if line.startswith(">"):
+            if current_id is not None:
+                fasta[current_id] = "".join(parts)
+            current_id = line[1:].split()[0]
+            parts = []
+        elif line.strip():
+            parts.append(line.strip())
+    assert current_id is not None
+    fasta[current_id] = "".join(parts)
+
+    wt_table = _table_with_header(document, "构建", "完整序列（128 aa）")
+    parent = "".join(wt_table.rows[1].cells[1].text.split())
+    single_table = _table_with_header(document, "展示序", "突变", "完整序列（128 aa）")
+    double_table = _table_with_header(document, "展示序", "组合", "完整序列（128 aa）")
+    appendix = {
+        row.cells[1].text.strip(): "".join(row.cells[2].text.split())
+        for table in (single_table, double_table)
+        for row in table.rows[1:]
+    }
+
+    assert len(parent) == 128
+    assert len(rows) == len(fasta) == len(appendix) == 30
+    for row in rows:
+        label = row["mutation_set"]
+        sequence = row["sequence"]
+        assert fasta[row["candidate_id"]] == sequence
+        assert appendix[label] == sequence
+        assert len(sequence) == 128 and sequence.endswith("SSGS")
+
+        rebuilt = list(parent)
+        for mutation in label.split(";"):
+            match = re.fullmatch(r"([A-Z])(\d+)([A-Z])", mutation)
+            assert match is not None
+            wt, position, mutant = match.group(1), int(match.group(2)), match.group(3)
+            assert parent[position - 1] == wt
+            rebuilt[position - 1] = mutant
+        assert "".join(rebuilt) == sequence
+
+        differences = sum(a != b for a, b in zip(parent, sequence))
+        expected = 1 if row["candidate_kind"] == "single_mutant" else 2
+        assert differences == expected
 
 
 def test_report_excludes_historical_v2_panel_semantics(built_v3_report):
